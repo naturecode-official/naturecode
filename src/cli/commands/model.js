@@ -52,12 +52,21 @@ export async function runModelConfiguration() {
         }
         return "Ollama does not require an API key (press Enter to continue):";
       },
-      default: currentConfig.apiKey || undefined,
+      default: (answers) => {
+        // Only show default API key for providers that need it
+        if (
+          answers.provider === "deepseek" ||
+          answers.provider === "openai" ||
+          answers.provider === "anthropic"
+        ) {
+          return currentConfig.apiKey || undefined;
+        }
+        return undefined;
+      },
       when: (answers) =>
         answers.provider === "deepseek" ||
         answers.provider === "openai" ||
-        answers.provider === "anthropic" ||
-        answers.provider === "ollama",
+        answers.provider === "anthropic",
     },
     {
       type: "list",
