@@ -73,9 +73,13 @@ export async function runModelConfiguration() {
         return true;
       },
       filter: (input) => (input ? input.trim() : input),
-      when: (answers) =>
-        (answers.provider === "deepseek" || answers.provider === "openai") &&
-        answers.apiKey,
+      when: (answers) => {
+        if (!answers) return false;
+        return (
+          (answers.provider === "deepseek" || answers.provider === "openai") &&
+          answers.apiKey
+        );
+      },
     },
     {
       type: "list",

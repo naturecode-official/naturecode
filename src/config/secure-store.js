@@ -8,19 +8,19 @@ const MASTER_KEY_FILE = path.join(STORE_DIR, ".master.key");
 const ENCRYPTED_FILE = path.join(STORE_DIR, "data.enc");
 
 class SecureStore {
-  constructor () {
+  constructor() {
     this._ensureStoreDir();
     this._loadOrCreateMasterKey();
   }
 
-  _ensureStoreDir () {
+  _ensureStoreDir() {
     if (!fs.existsSync(STORE_DIR)) {
       fs.mkdirSync(STORE_DIR, { recursive: true });
       fs.chmodSync(STORE_DIR, 0o700);
     }
   }
 
-  _loadOrCreateMasterKey () {
+  _loadOrCreateMasterKey() {
     if (!fs.existsSync(MASTER_KEY_FILE)) {
       // Generate a new master key
       this.masterKey = crypto.randomBytes(32); // 256-bit key
@@ -32,7 +32,7 @@ class SecureStore {
     }
   }
 
-  _encryptData (data) {
+  _encryptData(data) {
     const algorithm = "aes-256-gcm";
     const iv = crypto.randomBytes(16);
 
@@ -51,7 +51,7 @@ class SecureStore {
     };
   }
 
-  _decryptData (encryptedData) {
+  _decryptData(encryptedData) {
     try {
       const algorithm = "aes-256-gcm";
       const decipher = crypto.createDecipheriv(
@@ -68,11 +68,11 @@ class SecureStore {
       return JSON.parse(decrypted);
     } catch (error) {
       console.error("Decryption failed:", error.message);
-      return {};
+      return { keys: [] };
     }
   }
 
-  _loadEncryptedData () {
+  _loadEncryptedData() {
     if (!fs.existsSync(ENCRYPTED_FILE)) {
       return { keys: [] };
     }
@@ -86,7 +86,7 @@ class SecureStore {
     }
   }
 
-  _saveEncryptedData (data) {
+  _saveEncryptedData(data) {
     const encrypted = this._encryptData(data);
     fs.writeFileSync(
       ENCRYPTED_FILE,
@@ -96,8 +96,9 @@ class SecureStore {
     fs.chmodSync(ENCRYPTED_FILE, 0o600);
   }
 
-  saveApiKey (provider, keyId, apiKey) {
+  saveApiKey(provider, keyId, apiKey) {
     const data = this._loadEncryptedData();
+    if (!data.keys) data.keys = [];
 
     // Remove existing key for this provider and keyId
     data.keys = data.keys.filter(
@@ -117,7 +118,7 @@ class SecureStore {
     return true;
   }
 
-  getApiKey (provider, keyId) {
+  getApiKey(provider, keyId) {
     const data = this._loadEncryptedData();
     const key = data.keys.find(
       (k) => k.provider === provider && k.keyId === keyId,
@@ -133,7 +134,7 @@ class SecureStore {
     return null;
   }
 
-  listApiKeys () {
+  listApiKeys() {
     const data = this._loadEncryptedData();
     return data.keys.map((key) => ({
       provider: key.provider,
@@ -143,8 +144,9 @@ class SecureStore {
     }));
   }
 
-  deleteApiKey (provider, keyId) {
+  deleteApiKey(provider, keyId) {
     const data = this._loadEncryptedData();
+    if (!data.keys) data.keys = [];
     const initialLength = data.keys.length;
 
     data.keys = data.keys.filter(
@@ -159,7 +161,7 @@ class SecureStore {
     return false;
   }
 
-  clearAll () {
+  clearAll() {
     if (fs.existsSync(ENCRYPTED_FILE)) {
       fs.unlinkSync(ENCRYPTED_FILE);
     }
