@@ -544,10 +544,10 @@ EOF
             echo ""
             if [ "$COLORS_SUPPORTED" = "true" ]; then
                 printf "%b" "${GREEN}[SUCCESS]${NC} AI assistant setup complete!\n"
-                printf "%b" "You can now use: ${CYAN}naturecode help \"your question\"${NC}\n"
+                printf "%b" "You can now use: ${CYAN}naturecode start${NC} (for AI assistance)\n"
             else
                 echo "[SUCCESS] AI assistant setup complete!"
-                echo "You can now use: naturecode help \"your question\""
+                echo "You can now use: naturecode start (for AI assistance)"
             fi
             
             return 0
