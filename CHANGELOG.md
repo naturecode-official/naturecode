@@ -10,19 +10,27 @@ All notable changes to NatureCode will be documented in this file.
 - DeepSeek-coder model download during installation
 - Comprehensive update guide in whatisthis.md
 - Documentation-based help system for when AI is unavailable
+- Multilingual AI translation support
+- Test script for auto-installation verification
 
 ### Changed
 
+- **Default language changed to English** (AI handles translation)
 - Installation script now installs AI assistant automatically
 - Help command improved with better fallback mechanisms
-- Enhanced user guidance in Chinese for common questions
+- Enhanced user guidance for common questions (English default)
 - Updated docs.md with AI assistant usage instructions
+- Updated whatisthis.md with language guidelines
 
 ### Fixed
 
 - Syntax errors in help command implementation
 - Version consistency across all UI elements
 - Installation process reliability
+- Help command argument handling in main CLI
+- Added -v alias for --version option
+- Ollama model fallback mechanism
+- User experience when Ollama is slow to respond
 
 ## [1.4.5.4] - 2026-02-15
 
