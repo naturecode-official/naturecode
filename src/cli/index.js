@@ -724,12 +724,23 @@ async function startInteractiveMode() {
       return;
     }
 
-    if (command === "help") {
-      // 显示完整的简单帮助
+    if (command.startsWith("help")) {
+      // 处理带参数的help命令
       try {
         const { HelpCommand } = await import("./commands/help.js");
         const helpInstance = new HelpCommand();
-        await helpInstance.showSimpleHelp();
+
+        // 提取问题参数
+        const questionMatch = command.match(/^help\s+(.+)$/i);
+        const question = questionMatch ? questionMatch[1].trim() : null;
+
+        if (question) {
+          // 使用文档帮助模式
+          await helpInstance.showDocsBasedHelp(question);
+        } else {
+          // 显示完整的简单帮助
+          await helpInstance.showSimpleHelp();
+        }
       } catch (error) {
         console.error("Error showing help:", error.message);
         console.log("\n" + getCommandPrompt());
