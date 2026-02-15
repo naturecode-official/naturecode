@@ -17,7 +17,7 @@ const DEFAULT_CONFIG = {
   fallbackModel: undefined,
 };
 
-const VALID_PROVIDERS = ["deepseek", "openai", "ollama"];
+const VALID_PROVIDERS = ["deepseek", "openai", "ollama", "anthropic"];
 const DEEPSEEK_MODELS = ["deepseek-chat", "deepseek-reasoner"];
 const OPENAI_MODELS = [
   // 当前实际可用的OpenAI文本模型
@@ -68,6 +68,14 @@ const OLLAMA_MODELS = [
   "phi:latest",
   "qwen",
   "qwen:latest",
+];
+
+const ANTHROPIC_MODELS = [
+  "claude-3-5-sonnet-20241022",
+  "claude-3-5-haiku-20241022",
+  "claude-3-opus-20240229",
+  "claude-3-sonnet-20240229",
+  "claude-3-haiku-20240307",
 ];
 
 class ConfigManager {
@@ -182,6 +190,12 @@ class ConfigManager {
           `Ollama model must be one of: ${OLLAMA_MODELS.join(", ")}`,
         );
       }
+    } else if (validated.provider === "anthropic") {
+      if (!ANTHROPIC_MODELS.includes(validated.model)) {
+        throw new Error(
+          `Anthropic model must be one of: ${ANTHROPIC_MODELS.join(", ")}`,
+        );
+      }
     }
 
     if (validated.temperature < 0 || validated.temperature > 2) {
@@ -215,6 +229,12 @@ class ConfigManager {
             `Ollama fallback model must be one of: ${OLLAMA_MODELS.join(", ")}`,
           );
         }
+      } else if (validated.provider === "anthropic") {
+        if (!ANTHROPIC_MODELS.includes(validated.fallbackModel)) {
+          throw new Error(
+            `Anthropic fallback model must be one of: ${ANTHROPIC_MODELS.join(", ")}`,
+          );
+        }
       }
     }
 
@@ -237,6 +257,21 @@ class ConfigManager {
       return true;
     } catch (error) {
       throw new Error(`Failed to clear configuration: ${error.message}`);
+    }
+  }
+
+  getModelsForProvider(provider) {
+    switch (provider) {
+      case "deepseek":
+        return DEEPSEEK_MODELS;
+      case "openai":
+        return OPENAI_MODELS;
+      case "ollama":
+        return OLLAMA_MODELS;
+      case "anthropic":
+        return ANTHROPIC_MODELS;
+      default:
+        return [];
     }
   }
 }

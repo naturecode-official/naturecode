@@ -3,6 +3,7 @@ import { configManager } from "../../config/manager.js";
 import { DeepSeekProvider } from "../../providers/deepseek.js";
 import { OpenAIProvider } from "../../providers/openai.js";
 import { OllamaProvider } from "../../providers/ollama.js";
+import { AnthropicProvider } from "../../providers/anthropic.js";
 
 export async function runModelConfiguration() {
   console.log("NatureCode AI Configuration Wizard\n");
@@ -26,6 +27,11 @@ export async function runModelConfiguration() {
           description: "Industry-leading AI models (GPT-4, GPT-3.5, etc.)",
         },
         {
+          name: "Anthropic - Claude models (Claude 3.5, Claude 3, etc.)",
+          value: "anthropic",
+          description: "Claude models (Claude 3.5, Claude 3, etc.)",
+        },
+        {
           name: "Ollama - Local AI models (free, runs on your machine)",
           value: "ollama",
           description: "Local AI models (free, runs on your machine)",
@@ -41,110 +47,16 @@ export async function runModelConfiguration() {
           return "Enter your DeepSeek API key (leave empty to skip):";
         } else if (answers.provider === "openai") {
           return "Enter your OpenAI API key (leave empty to skip):";
+        } else if (answers.provider === "anthropic") {
+          return "Enter your Anthropic API key (leave empty to skip):";
         }
         return "Ollama does not require an API key (press Enter to continue):";
       },
       default: currentConfig.apiKey || undefined,
       when: (answers) =>
-        answers.provider === "deepseek" || answers.provider === "openai",
-    },
-    {
-      type: "input",
-      name: "keyName",
-      message:
-        "Give this configuration a name (optional, helps identify it later):",
-      default: (answers) => {
-        if (currentConfig.apiKeyName) {
-          return currentConfig.apiKeyName;
-        }
-        return `${answers.provider}-${answers.model || "default"}`;
-      },
-      validate: (input) => {
-        if (input && input.trim()) {
-          // Prevent injection attacks, only allow letters, numbers, spaces and basic punctuation
-          const validPattern = /^[a-zA-Z0-9\s\-_.,:;!?()@]+$/;
-          if (!validPattern.test(input)) {
-            return "Name can only contain letters, numbers, spaces, and basic punctuation";
-          }
-          if (input.length > 100) {
-            return "Name must be 100 characters or less";
-          }
-        }
-        return true;
-      },
-      filter: (input) => (input ? input.trim() : input),
-      when: (answers) => {
-        if (!answers) return false;
-        return (
-          (answers.provider === "deepseek" || answers.provider === "openai") &&
-          answers.apiKey
-        );
-      },
-    },
-    {
-      type: "list",
-      name: "model",
-      message: (answers) => {
-        if (answers.provider === "deepseek") {
-          return "Select DeepSeek Model:";
-        } else if (answers.provider === "openai") {
-          return "Select OpenAI Model:";
-        } else if (answers.provider === "ollama") {
-          return "Select Ollama Model:";
-        }
-        return "Select Model:";
-      },
-      choices: (answers) => {
-        if (answers.provider === "deepseek") {
-          const models = DeepSeekProvider.getStaticAvailableModels();
-          const descriptions = {
-            "deepseek-chat":
-              "General purpose chat model (recommended for most tasks)",
-            "deepseek-reasoner":
-              "Specialized for complex reasoning and problem solving",
-          };
-
-          return models.map((model) => ({
-            name: `${model} - ${descriptions[model] || "Unknown model"}`,
-            value: model,
-            short: model,
-          }));
-        } else if (answers.provider === "openai") {
-          // Use static method to get model list, avoid creating provider instance
-          const models = OpenAIProvider.getStaticAvailableModels();
-          const descriptions = OpenAIProvider.getStaticModelDescriptions();
-
-          return models.map((model) => ({
-            name: `${model} - ${descriptions[model] || "OpenAI language model"}`,
-            value: model,
-            short: model,
-          }));
-        } else if (answers.provider === "ollama") {
-          // Use static method to get Ollama model list
-          const models = OllamaProvider.getStaticAvailableModels();
-          const descriptions = OllamaProvider.getStaticModelDescriptions();
-
-          return models.map((model) => ({
-            name: `${model} - ${descriptions[model] || "Ollama language model"}`,
-            value: model,
-            short: model,
-          }));
-        }
-        return [];
-      },
-      default: (answers) => {
-        if (answers.provider === "deepseek") {
-          return currentConfig.model || "deepseek-chat";
-        } else if (answers.provider === "openai") {
-          return currentConfig.model || "gpt-4o";
-        } else if (answers.provider === "ollama") {
-          return currentConfig.model || "llama3.2:latest";
-        }
-        return "deepseek-chat";
-      },
-      when: (answers) =>
         answers.provider === "deepseek" ||
         answers.provider === "openai" ||
+        answers.provider === "anthropic" ||
         answers.provider === "ollama",
     },
     {
@@ -382,7 +294,12 @@ export async function runModelConfiguration() {
         ? answers.stream
         : currentConfig.stream !== false,
     // Add fallback model for OpenAI if selected model fails
-    fallbackModel: answers.provider === "openai" ? "gpt-5" : undefined,
+    fallbackModel:
+      answers.provider === "openai"
+        ? "gpt-5"
+        : answers.provider === "anthropic"
+          ? "claude-3-5-haiku-20241022"
+          : undefined,
   };
 
   try {

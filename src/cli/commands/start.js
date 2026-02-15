@@ -4,6 +4,7 @@ import { secureStore } from "../../config/secure-store.js";
 import { DeepSeekProvider } from "../../providers/deepseek.js";
 import { OpenAIProvider } from "../../providers/openai.js";
 import { OllamaProvider } from "../../providers/ollama.js";
+import { AnthropicProvider } from "../../providers/anthropic.js";
 import {
   formatResponse,
   showWelcome,
@@ -46,6 +47,8 @@ function createProvider(config) {
       return new OpenAIProvider(config);
     case "ollama":
       return new OllamaProvider(config);
+    case "anthropic":
+      return new AnthropicProvider(config);
     default:
       throw new Error(`Unsupported provider: ${config.provider}`);
   }

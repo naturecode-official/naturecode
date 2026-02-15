@@ -52,6 +52,7 @@
 3. **错误处理**: 友好的错误消息和回退机制
 
 ## 已完成的任务
+
 ### 5. 删除Ollama智能help功能
 **文件**: `src/cli/commands/help.js`
 **内容**:
@@ -67,10 +68,94 @@
 - 基本的help命令功能
 - 文档查看功能
 
-## 下一步任务
-- 清理不必要的代码
-- 优化性能
-- 测试所有功能
+### 6. 清理OpenAI模型列表中的"妖魔鬼怪"（重大清理）
+**发现问题**: OpenAI模型列表包含了大量不合理的模型：
+1. **Claude模型** - 这是Anthropic的模型，不是OpenAI的
+2. **过于推测的未来模型** - GPT-4.5系列、GPT-4o 2025增强版等
+3. **不存在的模型** - DALL-E 4、Whisper 3、Codex 2等
+4. **纯非文本模型** - 在NatureCode终端助手上下文中无意义
+
+**清理过程**:
+1. **第一次清理** (提交: 5110cab)
+   - 删除Claude-4和Claude-3.5（Anthropic模型）
+   - 删除过于推测的GPT-4.5系列
+   - 删除GPT-4o 2025增强版系列
+   - 删除不存在的DALL-E 4、Whisper 3、Codex 2
+   - 模型数量: 46个 → 22个
+
+2. **第二次清理** (提交: c4e475b)
+   - 删除所有纯非文本模型（在NatureCode中无意义）：
+     - DALL-E 3（纯图像生成）
+     - Whisper-1（纯语音识别）
+     - GPT-5-vision（视觉专用）
+     - GPT-4-vision-preview（视觉分析）
+   - 只保留有文本生成能力的模型
+   - 模型数量: 22个 → 18个
+
+**最终模型列表** (18个纯文本模型):
+- **GPT-4系列**: gpt-4o, gpt-4o-mini, gpt-4-turbo, gpt-4, gpt-4-32k (5个)
+- **GPT-3.5系列**: gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-instruct (3个)
+- **未来预测**: gpt-5, gpt-5-turbo (2个)
+- **企业版**: gpt-4-enterprise, gpt-4o-enterprise (2个)
+- **特定版本**: 6个历史版本
+
+**关键原则**:
+1. 所有模型必须有文本生成能力（适合终端AI助手）
+2. 只包含OpenAI的实际或合理预测模型
+3. 删除在NatureCode上下文中无意义的模型
+
+### 7. GitHub推送记录
+**今天推送的所有提交**:
+1. **7e2f77d** - feat: enhance configuration wizard with default prompts and OpenAI fallback model support
+   - 配置向导改进：添加默认值提示和故障回退
+   
+2. **14b6e3f** - chore: add push-now.sh script for GitHub deployment
+   - 添加部署脚本
+   
+3. **ef1ce59** - refactor: remove Ollama smart help functionality and simplify help command
+   - 删除Ollama智能help功能（已修改为9bb7041）
+   
+4. **9bb7041** - refactor: remove Ollama smart help functionality and simplify help command
+   - 修复whatisthis文件中的Token泄露问题
+   
+5. **5110cab** - fix: clean up OpenAI model list and remove inappropriate models
+   - 第一次OpenAI模型清理（删除Claude等）
+   
+6. **c4e475b** - refactor: remove non-text models from OpenAI list for NatureCode context
+   - 第二次OpenAI模型清理（删除所有非文本模型）
+
+**总清理效果**:
+- 初始模型数量: 46个（包含各种问题模型）
+- 第一次清理后: 22个（删除Claude、过于推测模型）
+- 最终清理后: 18个（只保留纯文本模型）
+- **清理比例**: 61% 的模型被删除
+
+## 项目现状
+✅ **已完成**:
+1. OpenAI模型全面更新和清理
+2. 配置向导用户体验改进
+3. Ollama智能help功能删除
+4. 所有更改已推送到GitHub
+5. 模型列表现在干净、合理、实用
+
+🎯 **当前状态**:
+- OpenAI模型列表: 18个纯文本模型
+- 配置向导: 支持默认值和故障回退
+- help命令: 简化版，只显示基本帮助
+- GitHub: 所有更改已同步
+
+📊 **技术架构**:
+- 支持DeepSeek、OpenAI、Ollama三个provider
+- 配置系统支持故障回退机制
+- 用户界面友好，支持默认值
+- 代码质量经过多次清理和优化
+
+## 经验教训
+1. **模型选择要合理**: 不要包含不属于该provider的模型
+2. **功能要符合场景**: NatureCode是终端AI助手，不需要纯图像/语音模型
+3. **预测要适度**: 未来模型预测要合理，不要过于具体和推测
+4. **安全要重视**: 永远不要在代码中存储敏感信息
+5. **代码要简洁**: 删除不必要的功能，保持核心功能清晰
 
 ## 安全提醒
 GitHub Token安全注意事项:
