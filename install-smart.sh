@@ -193,50 +193,14 @@ install_pro() {
     if [ "$CURRENT_VERSION" = "1.4.5.3" ]; then
         log_success "NatureCode v1.4.5.3 is already installed"
         echo ""
-        echo "Options:"
-        echo "  1) Reinstall NatureCode"
-        echo "  2) Show help information"
-        echo "  3) Exit"
-        echo ""
-        if [ "$COLORS_SUPPORTED" = "true" ]; then
-            printf "%b" "${YELLOW}Enter choice [1-3]: ${NC}\n"
-        else
-            echo "Enter choice [1-3]: "
-        fi
-        read -r choice
-        
-        case $choice in
-            1)
-                log_info "Reinstalling..."
-                npm uninstall -g naturecode 2>/dev/null || true
-                ;;
-            2)
-                show_post_install
-                exit 0
-                ;;
-            3)
-                log_info "Exiting"
-                exit 0
-                ;;
-            *)
-                log_error "Invalid choice"
-                exit 1
-                ;;
-        esac
+        log_info "Reinstalling latest version..."
+        npm uninstall -g naturecode 2>/dev/null || true
     elif [ "$CURRENT_VERSION" != "not_installed" ]; then
         log_info "Found NatureCode v$CURRENT_VERSION"
         echo ""
-        if [ "$COLORS_SUPPORTED" = "true" ]; then
-            printf "%b" "${YELLOW}Update to v$TARGET_VERSION? [Y/n]: ${NC}\n"
-        else
-            echo "Update to v$TARGET_VERSION? [Y/n]: "
-        fi
-        read -r response
-        if [[ "$response" =~ ^([nN][oO]|[nN])$ ]]; then
-            log_info "Update cancelled"
-            exit 0
-        fi
+        log_info "Auto-updating to v$TARGET_VERSION..."
         
+        # 自动更新，不需要用户确认
         log_info "Removing old version..."
         npm uninstall -g naturecode 2>/dev/null || true
     fi
