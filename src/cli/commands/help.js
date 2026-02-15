@@ -63,7 +63,7 @@ export class HelpCommand {
 
   async showSimpleHelp() {
     const helpText = `
-NatureCode v1.4.5.4 - Cross-platform Terminal AI Assistant
+NatureCode v1.4.5.5 - Cross-platform Terminal AI Assistant
 
 Available Commands:
   start              Start interactive AI session
@@ -162,7 +162,7 @@ For specific questions: naturecode help "your question"
 
   async startDirectAIChat() {
     console.clear();
-    console.log("NatureCode AI Assistant v1.4.5.4\n");
+    console.log("NatureCode AI Assistant v1.4.5.5\n");
     console.log("=".repeat(70));
     console.log("Direct AI Assistance Mode");
     console.log("=".repeat(70));
@@ -220,7 +220,7 @@ For specific questions: naturecode help "your question"
   }
 
   async getDirectAIHelp(question) {
-    console.log("NatureCode AI Assistant v1.4.5.4\n");
+    console.log("NatureCode AI Assistant v1.4.5.5\n");
 
     try {
       // Check if Ollama is available first
@@ -299,7 +299,7 @@ For specific questions: naturecode help "your question"
 
       if (userInput.toLowerCase() === "clear") {
         console.clear();
-        console.log("NatureCode AI Assistant v1.4.5.4\n");
+        console.log("NatureCode AI Assistant v1.4.5.5\n");
         rl.prompt();
         return;
       }
@@ -343,7 +343,7 @@ For specific questions: naturecode help "your question"
   }
 
   createDirectHelpPrompt(question, docsContext) {
-    return `You are NatureCode AI Assistant, an expert guide for NatureCode v1.4.5.4.
+    return `You are NatureCode AI Assistant, an expert guide for NatureCode v1.4.5.5.
 
 You are providing direct AI assistance to a user who needs help with NatureCode.
 Provide clear, practical, and actionable help.
@@ -376,7 +376,7 @@ Answer directly without introductions:`;
       }
     }
 
-    return `You are NatureCode AI Assistant, an expert guide for NatureCode v1.4.5.4.
+    return `You are NatureCode AI Assistant, an expert guide for NatureCode v1.4.5.5.
 
 You are in a direct chat session helping a user with NatureCode.
 
@@ -431,7 +431,7 @@ Answer:`;
   }
 
   createMinimalDocsContext() {
-    return `NatureCode v1.4.5.4 - Cross-platform Terminal AI Assistant
+    return `NatureCode v1.4.5.5 - Cross-platform Terminal AI Assistant
 
 ## Overview
 NatureCode is an AI-powered terminal assistant that helps developers with coding tasks, file operations, and project management.

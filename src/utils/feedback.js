@@ -22,7 +22,7 @@ export class FeedbackCollector {
   async collectSessionFeedback(sessionData) {
     const feedback = {
       timestamp: new Date().toISOString(),
-      version: process.env.NATURECODE_VERSION || "1.4.5.4",
+      version: process.env.NATURECODE_VERSION || "1.4.5.5",
       platform: os.platform(),
       arch: os.arch(),
       nodeVersion: process.version,
@@ -107,7 +107,7 @@ export class FeedbackCollector {
 
     const feedback = {
       timestamp: new Date().toISOString(),
-      version: process.env.NATURECODE_VERSION || "1.4.5.4",
+      version: process.env.NATURECODE_VERSION || "1.4.5.5",
       platform: os.platform(),
       arch: os.arch(),
     };

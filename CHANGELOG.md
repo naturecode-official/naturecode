@@ -2,6 +2,28 @@
 
 All notable changes to NatureCode will be documented in this file.
 
+## [1.4.5.5] - 2026-02-15
+
+### Added
+
+- Automatic Ollama installation during NatureCode setup
+- DeepSeek-coder model download during installation
+- Comprehensive update guide in whatisthis.md
+- Documentation-based help system for when AI is unavailable
+
+### Changed
+
+- Installation script now installs AI assistant automatically
+- Help command improved with better fallback mechanisms
+- Enhanced user guidance in Chinese for common questions
+- Updated docs.md with AI assistant usage instructions
+
+### Fixed
+
+- Syntax errors in help command implementation
+- Version consistency across all UI elements
+- Installation process reliability
+
 ## [1.4.5.4] - 2026-02-15
 
 ### Added

@@ -82,7 +82,7 @@ show_banner() {
     echo "╔══════════════════════════════════════════════════════════════════╗"
     echo "║                NatureCode Professional Installer                 ║"
     echo "║           Cross-platform AI Assistant for Developers             ║"
-    echo "║                       Version: 1.4.5.4                           ║"
+    echo "║                       Version: 1.4.5.5                           ║"
     echo "╚══════════════════════════════════════════════════════════════════╝"
     if [ "$COLORS_SUPPORTED" = "true" ]; then
         printf "%b\n" "${NC}"
@@ -397,19 +397,105 @@ EOF
             fi
         fi
         
-        # Suggest Ollama installation for full AI support
+        # Install Ollama automatically
         echo ""
         if [ "$COLORS_SUPPORTED" = "true" ]; then
-            printf "%b" "${YELLOW}[NOTE]${NC} For full AI assistance, Ollama will be automatically installed when you first run:\n"
-            printf "%b" "        ${CYAN}naturecode help \"your question\"${NC}\n"
-            echo ""
-            printf "%b" "Or install Ollama manually: ${CYAN}curl -fsSL https://ollama.ai/install.sh | sh${NC}\n"
+            printf "%b" "${CYAN}[INFO]${NC} Installing Ollama for AI assistance...\n"
         else
-            echo "[NOTE] For full AI assistance, Ollama will be automatically installed when you first run:"
-            echo "        naturecode help \"your question\""
-            echo ""
-            echo "Or install Ollama manually: curl -fsSL https://ollama.ai/install.sh | sh"
+            echo "[INFO] Installing Ollama for AI assistance..."
         fi
+        
+        install_ollama_and_model() {
+            # Check if Ollama is already installed
+            if command -v ollama >/dev/null 2>&1; then
+                if [ "$COLORS_SUPPORTED" = "true" ]; then
+                    printf "%b" "${GREEN}[SUCCESS]${NC} Ollama is already installed\n"
+                else
+                    echo "[SUCCESS] Ollama is already installed"
+                fi
+            else
+                # Install Ollama
+                if [ "$COLORS_SUPPORTED" = "true" ]; then
+                    printf "%b" "${CYAN}[INFO]${NC} Downloading and installing Ollama...\n"
+                else
+                    echo "[INFO] Downloading and installing Ollama..."
+                fi
+                
+                if curl -fsSL https://ollama.ai/install.sh | sh 2>/dev/null; then
+                    if [ "$COLORS_SUPPORTED" = "true" ]; then
+                        printf "%b" "${GREEN}[SUCCESS]${NC} Ollama installed successfully\n"
+                    else
+                        echo "[SUCCESS] Ollama installed successfully"
+                    fi
+                else
+                    if [ "$COLORS_SUPPORTED" = "true" ]; then
+                        printf "%b" "${YELLOW}[WARNING]${NC} Ollama installation may need manual steps\n"
+                        printf "%b" "Please install from: ${CYAN}https://ollama.ai${NC}\n"
+                    else
+                        echo "[WARNING] Ollama installation may need manual steps"
+                        echo "Please install from: https://ollama.ai"
+                    fi
+                    return 1
+                fi
+            fi
+            
+            # Download DeepSeek model
+            if [ "$COLORS_SUPPORTED" = "true" ]; then
+                printf "%b" "${CYAN}[INFO]${NC} Downloading AI model (deepseek-coder)...\n"
+                printf "%b" "This may take a few minutes depending on your internet speed...\n"
+            else
+                echo "[INFO] Downloading AI model (deepseek-coder)..."
+                echo "This may take a few minutes depending on your internet speed..."
+            fi
+            
+            # Start model download in background
+            (ollama pull deepseek-coder >/dev/null 2>&1 && \
+             if [ "$COLORS_SUPPORTED" = "true" ]; then \
+                 printf "%b" "${GREEN}[SUCCESS]${NC} AI model downloaded successfully\n"; \
+             else \
+                 echo "[SUCCESS] AI model downloaded successfully"; \
+             fi) &
+            
+            local download_pid=$!
+            
+            # Show progress indicator
+            local dots=""
+            for i in {1..10}; do
+                if kill -0 $download_pid 2>/dev/null; then
+                    dots="$dots."
+                    if [ "$COLORS_SUPPORTED" = "true" ]; then
+                        printf "%b" "\r${CYAN}[INFO]${NC} Downloading$dots"
+                    else
+                        printf "\r[INFO] Downloading$dots"
+                    fi
+                    sleep 3
+                else
+                    break
+                fi
+            done
+            
+            echo ""
+            if [ "$COLORS_SUPPORTED" = "true" ]; then
+                printf "%b" "${GREEN}[SUCCESS]${NC} AI assistant setup complete!\n"
+                printf "%b" "You can now use: ${CYAN}naturecode help \"your question\"${NC}\n"
+            else
+                echo "[SUCCESS] AI assistant setup complete!"
+                echo "You can now use: naturecode help \"your question\""
+            fi
+            
+            return 0
+        }
+        
+        # Run Ollama installation
+        install_ollama_and_model || {
+            if [ "$COLORS_SUPPORTED" = "true" ]; then
+                printf "%b" "${YELLOW}[NOTE]${NC} AI assistant will be installed when you first run:\n"
+                printf "%b" "        ${CYAN}naturecode help \"your question\"${NC}\n"
+            else
+                echo "[NOTE] AI assistant will be installed when you first run:"
+                echo "        naturecode help \"your question\""
+            fi
+        }
     }
     
     # Run AI assistant setup
