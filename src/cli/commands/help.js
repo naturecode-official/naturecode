@@ -221,6 +221,16 @@ For specific questions: naturecode help "your question"
 
   async getDirectAIHelp(question) {
     try {
+      // Check for low resource mode
+      const config = await this.loadConfig();
+      if (config.provider === "none" || config.lowResourceMode) {
+        console.log(
+          "📚 Low resource mode enabled - showing documentation help",
+        );
+        await this.showDocsBasedHelp(question);
+        return;
+      }
+
       // Check if Ollama is available first
       const ollamaInstalled = await this.checkOllamaInstalled();
       if (!ollamaInstalled) {
@@ -524,14 +534,21 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
 
   async callOllama(prompt) {
     return new Promise((resolve, reject) => {
-      // Try available models in order
-      const modelsToTry = ["deepseek-coder:latest"];
+      // Try available models in order (lightweight first)
+      const modelsToTry = [
+        "tinyllama:latest", // ~200MB RAM
+        "phi:latest", // ~500MB RAM
+        "deepseek-coder:latest", // ~1GB RAM (fallback)
+      ];
 
       const tryModel = (index) => {
         if (index >= modelsToTry.length) {
           reject(
             new Error(
-              "No Ollama models available. Try: ollama pull deepseek-coder",
+              `No Ollama models responded. Try lighter models:
+  ollama pull tinyllama    # ~200MB RAM
+  ollama pull phi          # ~500MB RAM
+Or use online API: naturecode model (select DeepSeek)`,
             ),
           );
           return;
@@ -546,12 +563,16 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
         let hasOutput = false;
         let timeoutId = null;
 
-        // 90 second timeout for Ollama (needs time to load models)
+        // 60 second timeout for Ollama (reduced for low-spec systems)
         timeoutId = setTimeout(() => {
-          console.log(`Model "${model}" timed out after 90 seconds.`);
+          console.log(`Model "${model}" timed out after 60 seconds.`);
           process.kill("SIGKILL");
-          reject(new Error("Ollama model loading timeout"));
-        }, 90000);
+          reject(
+            new Error(
+              `Model "${model}" timeout. Try lighter model or check system resources.`,
+            ),
+          );
+        }, 60000);
 
         process.stdin.write(prompt);
         process.stdin.end();
@@ -678,19 +699,33 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
     });
   }
 
-  async installOllama() {
-    console.log("Setting up AI assistant...");
+  async loadConfig() {
+    try {
+      const fs = await import("fs");
+      const path = await import("path");
+      const os = await import("os");
 
-    const platform = process.platform;
-
-    if (platform === "win32") {
-      console.log("For Windows:");
-      console.log("1. Download Ollama from https://ollama.ai/download");
-      console.log("2. Install and run: ollama pull deepseek-coder");
-      return;
+      const configPath = path.join(os.homedir(), ".naturecode", "config.json");
+      if (fs.existsSync(configPath)) {
+        const content = fs.readFileSync(configPath, "utf8");
+        return JSON.parse(content);
+      }
+    } catch (error) {
+      // Ignore errors, return default
     }
 
-    // macOS and Linux
+    return {
+      provider: "deepseek",
+      model: "deepseek-chat",
+      modelType: "chat",
+      temperature: 0.7,
+      maxTokens: 2000,
+      stream: true,
+      lowResourceMode: false,
+    };
+  }
+
+  async installOllama() {
     console.log("Installing Ollama...");
 
     const { exec } = await import("child_process");
