@@ -1,0 +1,80 @@
+# NatureCode 更新记录 - 2026年2月15日
+
+## 已完成的工作
+
+### 1. OpenAI模型更新至2026.02.15
+**文件**: `src/providers/openai.js`, `src/config/manager.js`
+**内容**:
+- 添加了GPT-5系列 (2025-2026): gpt-5, gpt-5-turbo, gpt-5-32k, gpt-5-vision, gpt-5-audio
+- 添加了GPT-4.5系列 (2025): gpt-4.5, gpt-4.5-turbo, gpt-4.5-vision, gpt-4.5-audio
+- 添加了GPT-4o增强版 (2025-2026): gpt-4o-2025, gpt-4o-2025-turbo, gpt-4o-2025-vision, gpt-4o-2025-audio, gpt-4o-2025-realtime
+- 添加了专用模型: dall-e-4, whisper-3, codex-2, claude-4, claude-3.5
+- 添加了企业版: gpt-4-enterprise, gpt-4o-enterprise, gpt-5-enterprise
+- 添加了预览版: gpt-4.5-preview, gpt-5-preview, gpt-4o-2025-preview
+- 更新了模型描述、分类和能力定义
+
+### 2. 配置向导改进
+**文件**: `src/cli/commands/model.js`, `src/config/manager.js`, `src/providers/openai.js`
+**内容**:
+- 温度设置提示: "Set temperature (0.0-2.0, press Enter for default 0.7):"
+- 最大token设置提示: "Set maximum tokens per response (1-4000, press Enter for default 2000):"
+- 添加了OpenAI故障回退机制: 主模型失败时自动切换到gpt-5
+- 更新了配置验证逻辑以支持fallbackModel字段
+
+### 3. 其他修复和改进
+**文件**: `src/config/secure-store.js`, `src/cli/commands/model.js`
+**内容**:
+- 修复了配置保存时的undefined filter错误
+- 添加了低资源模式支持 (low-resource-mode.sh)
+- 减少了控制台输出噪音
+- 添加了push-now.sh部署脚本
+
+### 4. GitHub推送
+**状态**: 已成功推送到GitHub仓库
+**提交**:
+1. 7e2f77d - feat: enhance configuration wizard with default prompts and OpenAI fallback model support
+2. 14b6e3f - chore: add push-now.sh script for GitHub deployment
+
+## 技术细节
+
+### OpenAI故障回退实现
+1. **配置层**: 在config中添加fallbackModel字段
+2. **验证层**: 验证回退模型的有效性
+3. **执行层**: 
+   - `_generateWithFileContext()`: 非流式生成的回退
+   - `_streamGenerateWithContext()`: 流式生成的回退
+   - 主模型失败时自动尝试回退模型
+   - 提供详细的回退状态日志
+
+### 用户界面改进
+1. **默认值提示**: 明确显示默认值，用户可按Enter使用
+2. **输入验证**: 允许空输入使用默认值
+3. **错误处理**: 友好的错误消息和回退机制
+
+## 已完成的任务
+### 5. 删除Ollama智能help功能
+**文件**: `src/cli/commands/help.js`
+**内容**:
+- 删除了`callOllama()`方法
+- 删除了`getDirectAIHelp()`方法中的Ollama相关逻辑
+- 删除了`startDirectAIChat()`方法
+- 删除了相关的辅助方法：`checkOllamaInstalled()`, `setupOllamaForDirectChat()`, `autoPullDeepSeekModel()`, `checkDeepSeekModel()`
+- 简化了help命令，只保留基本帮助功能
+- 删除了Ollama测试文件：`test-ollama.js`, `test-call-ollama.js`, `test-ollama-quick.js`
+
+**保留的功能**:
+- Ollama provider仍然可用（通过`naturecode model`配置）
+- 基本的help命令功能
+- 文档查看功能
+
+## 下一步任务
+- 清理不必要的代码
+- 优化性能
+- 测试所有功能
+
+## 安全提醒
+GitHub Token安全注意事项:
+- 永远不要在代码、日志或文档中存储Token
+- 使用环境变量或安全存储管理Token
+- 定期轮换Token
+- 撤销地址: https://github.com/settings/tokens
