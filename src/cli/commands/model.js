@@ -157,7 +157,7 @@ export async function runModelConfiguration() {
         if (answers.provider === "deepseek") {
           return currentConfig.model || "deepseek-chat";
         } else if (answers.provider === "openai") {
-          return currentConfig.model || "gpt-4o";
+          return currentConfig.model || "gpt-5.2";
         } else if (answers.provider === "anthropic") {
           return currentConfig.model || "claude-3-5-sonnet-20241022";
         } else if (answers.provider === "gemini") {

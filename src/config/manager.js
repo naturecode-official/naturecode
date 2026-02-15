@@ -20,27 +20,53 @@ const DEFAULT_CONFIG = {
 const VALID_PROVIDERS = ["deepseek", "openai", "ollama", "anthropic", "gemini"];
 const DEEPSEEK_MODELS = ["deepseek-chat", "deepseek-reasoner"];
 const OPENAI_MODELS = [
-  // 当前实际可用的OpenAI文本模型
+  // GPT-5系列 (最新)
+  "gpt-5.2",
+  "gpt-5.2-pro",
+  "gpt-5",
+  "gpt-5-mini",
+  "gpt-5-nano",
+  "gpt-5.1",
+  "gpt-5.1-codex",
+  "gpt-5.1-codex-extended",
+
+  // GPT-4.1系列
+  "gpt-4.1",
+  "gpt-4.1-mini",
+  "gpt-4.1-nano",
+
+  // GPT-4o系列
   "gpt-4o",
   "gpt-4o-mini",
+
+  // o系列 (优化模型)
+  "o3",
+  "o4-mini",
+  "o4-mini-high",
+  "o3-deep-research",
+  "o4-mini-deep-research",
+
+  // 搜索预览系列
+  "gpt-4o-search-preview",
+  "gpt-4o-mini-search-preview",
+
+  // 计算机使用预览
+  "computer-use-preview",
+
+  // 开源系列
+  "gpt-oss-120b",
+  "gpt-oss-20b",
+
+  // 现有模型 (保持向后兼容)
   "gpt-4-turbo",
   "gpt-4",
   "gpt-4-32k",
-
-  // GPT-3.5系列
   "gpt-3.5-turbo",
   "gpt-3.5-turbo-16k",
   "gpt-3.5-turbo-instruct",
-
-  // 合理的未来预测文本模型 (2025-2026)
-  "gpt-5",
   "gpt-5-turbo",
-
-  // 企业版文本模型
   "gpt-4-enterprise",
   "gpt-4o-enterprise",
-
-  // 特定版本
   "gpt-4o-2024-08-06",
   "gpt-4-turbo-2024-04-09",
   "gpt-4-0613",
