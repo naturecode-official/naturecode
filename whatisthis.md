@@ -203,13 +203,21 @@ git push https://naturecode-official:TOKEN@github.com/naturecode-official/nature
 3. **权限最小化**: Token 只需要 `repo` 权限
 4. **定期更新**: Token 设置合理有效期
 5. **访问日志**: 监控 GitHub 访问记录
+6. **手动Token安全**: 使用 `push-with-manual-token.sh` 时，Token只在内存中使用，不会保存到文件
+
+#### 手动Token推送安全
+
+- Token通过命令行输入，不会保存到磁盘
+- 脚本使用后立即清除Token
+- 建议在GitHub设置Token有效期
+- 推送后可在GitHub撤销Token
 
 #### 成功标志
 
 - 推送命令执行成功
 - 安装命令可正常访问
 - GitHub 仓库显示最新代码
-- 版本号正确显示（当前: 1.4.5.4）
+- 版本号正确显示（当前: 1.4.5.5）
 - 所有功能测试通过
 
 #### 自动化建议
@@ -229,7 +237,7 @@ git commit -m "$1"
 
 ## 项目概述
 
-**NatureCode** 是一个跨平台终端 AI 助手，支持 DeepSeek 和 OpenAI 模型。当前版本：**v1.4.5.4**
+**NatureCode** 是一个跨平台终端 AI 助手，支持 DeepSeek 和 OpenAI 模型。当前版本：**v1.4.5.5**
 
 ### 🚨 必要守则（AI 助手必须遵守）
 
@@ -245,16 +253,19 @@ git commit -m "$1"
 
 3. **代码提交后自动推送至 GitHub**
    - 完成代码修改后必须推送至 GitHub
-   - 推送方法（三选一）:
+   - 推送方法（四选一）:
 
      ```bash
      # 方法 A: 交互式推送（推荐）
      ./push-with-interactive-token.sh
 
-     # 方法 B: 简单推送
+     # 方法 B: 手动Token推送（网络问题时使用）
+     ./push-with-manual-token.sh
+
+     # 方法 C: 简单推送
      ./push-simple.sh
 
-     # 方法 C: 完整推送
+     # 方法 D: 完整推送
      ./push-to-github-final.sh
      ```
 
@@ -262,6 +273,13 @@ git commit -m "$1"
      - 所有文件已添加 `git add .`
      - 有意义的提交信息
      - GitHub Token 已准备好
+
+   - **手动Token推送方法**（当网络或SSL有问题时）:
+     1. 生成GitHub Token: https://github.com/settings/tokens
+     2. 选择 `repo` 权限
+     3. 运行 `./push-with-manual-token.sh`
+     4. 粘贴Token
+     5. 脚本会自动使用Token构造HTTPS URL进行推送
 
 ### 核心特性
 
