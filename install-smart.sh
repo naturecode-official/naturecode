@@ -82,7 +82,7 @@ show_banner() {
     echo "╔══════════════════════════════════════════════════════════════════╗"
     echo "║                NatureCode Professional Installer                 ║"
     echo "║           Cross-platform AI Assistant for Developers             ║"
-    echo "║                       Version: 1.4.5.3                           ║"
+    echo "║                       Version: 1.4.5.4                           ║"
     echo "╚══════════════════════════════════════════════════════════════════╝"
     if [ "$COLORS_SUPPORTED" = "true" ]; then
         printf "%b\n" "${NC}"
@@ -181,7 +181,7 @@ check_prerequisites() {
 
 # Install NatureCode (professional mode)
 install_pro() {
-    local TARGET_VERSION="1.4.5.3"
+    local TARGET_VERSION="1.4.5.4"
     local CURRENT_VERSION=$(get_installed_version)
     
     log_step "Installation Details"
@@ -190,8 +190,8 @@ install_pro() {
     echo -e "  GitHub source: naturecode-official/naturecode"
     echo ""
     
-    if [ "$CURRENT_VERSION" = "1.4.5.3" ]; then
-        log_success "NatureCode v1.4.5.3 is already installed"
+    if [ "$CURRENT_VERSION" = "1.4.5.4" ]; then
+        log_success "NatureCode v1.4.5.4 is already installed"
         echo ""
         log_info "Reinstalling latest version..."
         npm uninstall -g naturecode 2>/dev/null || true

@@ -49,9 +49,9 @@ GIT_URL="https://naturecode-official:${TOKEN}@github.com/naturecode-official/nat
 
 if git push "$GIT_URL" main; then
     echo ""
-    echo "✅ 推送成功！"
+    echo " 推送成功！"
     echo ""
-    echo "🎉 NatureCode 已上传到 GitHub"
+    echo " NatureCode 已上传到 GitHub"
     echo ""
     echo "📥 安装命令:"
     echo "curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash"
@@ -59,7 +59,7 @@ if git push "$GIT_URL" main; then
     echo "🔗 仓库: https://github.com/naturecode-official/naturecode"
 else
     echo ""
-    echo "❌ 推送失败"
+    echo " 推送失败"
     echo "可能原因:"
     echo "  1. Token 权限不足"
     echo "  2. Token 已过期"

@@ -2,21 +2,21 @@
 
 ## 🚨 AI 助手核心守则（必须严格遵守）
 
-### 1. 🚫 禁止使用 Emoji（项目内部）
+### 1.  禁止使用 Emoji（项目内部）
 
 - **代码文件禁止**: .js, .sh, .json 等文件中禁止任何 Emoji
 - **注释禁止**: 代码注释中禁止 Emoji
-- **文档限制**: Markdown 中可使用简单符号（⚡✅❌），避免表情符号
+- **文档限制**: Markdown 中可使用简单符号（），避免表情符号
 - **用户界面**: CLI 输出可适当使用符号增强可读性
 
-### 2. 🌐 语言使用规范
+### 2.  语言使用规范
 
 - **用户对话**: 使用中文回应中文提问
 - **代码编写**: 变量、函数、注释使用英文
 - **错误消息**: 用户界面用中文，技术日志用英文
 - **文档**: 技术文档英文，用户指南中英双语
 
-### 3. 📤 代码提交后自动推送至 GitHub
+### 3.  代码提交后自动推送至 GitHub
 
 #### 核心原则
 
@@ -36,17 +36,17 @@
 #### 提交格式示例
 
 ```bash
-# ✅ 正确 - 英文提交
+#  正确 - 英文提交
 git commit -m "feat: add new AI provider interface"
 
-# ✅ 正确 - 详细英文说明
+#  正确 - 详细英文说明
 git commit -m "fix: resolve color display issue in non-interactive terminals
 
 - Detect terminal type with [ -t 0 ]
 - Auto-select simple mode for curl | bash
 - Add clear non-interactive mode message"
 
-# ❌ 错误 - 中文提交
+#  错误 - 中文提交
 git commit -m "修复: 解决非交互终端颜色显示问题"
 ```
 
@@ -66,7 +66,7 @@ git commit -m "修复: 解决非交互终端颜色显示问题"
 open https://github.com/settings/tokens
 
 # 2. 生成新 Token (classic)
-# 3. 设置权限: ✅ repo (Full control)
+# 3. 设置权限:  repo (Full control)
 # 4. 设置有效期: 90天或无期限
 # 5. 生成并复制 Token
 
@@ -205,11 +205,11 @@ git push https://naturecode-official:TOKEN@github.com/naturecode-official/nature
 
 #### 成功标志
 
-- ✅ 推送命令执行成功
-- ✅ 安装命令可正常访问
-- ✅ GitHub 仓库显示最新代码
-- ✅ 版本号正确显示（当前: 1.4.5.3）
-- ✅ 所有功能测试通过
+-  推送命令执行成功
+-  安装命令可正常访问
+-  GitHub 仓库显示最新代码
+-  版本号正确显示（当前: 1.4.5.4）
+-  所有功能测试通过
 
 #### 自动化建议
 
@@ -226,15 +226,15 @@ git commit -m "$1"
 
 **记住**: 每次代码修改后必须推送，保持 GitHub 仓库同步！
 
-## 📋 项目概述
+##  项目概述
 
-**NatureCode** 是一个跨平台终端 AI 助手，支持 DeepSeek 和 OpenAI 模型。当前版本：**v1.4.5.3**
+**NatureCode** 是一个跨平台终端 AI 助手，支持 DeepSeek 和 OpenAI 模型。当前版本：**v1.4.5.4**
 
 ### 🚨 必要守则（AI 助手必须遵守）
 
 1. **禁止使用 Emoji（项目内部）**
    - 代码、注释、文档中禁止使用任何 Emoji
-   - 用户界面可以使用适当的符号（如 ⚡、✅、❌）
+   - 用户界面可以使用适当的符号（如 、、）
    - 保持代码专业性和可读性
 
 2. **语言使用规范**
@@ -274,12 +274,12 @@ git commit -m "$1"
 
 ### 1. **核心配置文件**
 
-#### `package.json` (v1.4.5.3)
+#### `package.json` (v1.4.5.4)
 
 ```json
 {
   "name": "naturecode",
-  "version": "1.4.5.3",
+  "version": "1.4.5.4",
   "type": "module",
   "main": "src/cli/index.js",
   "bin": { "naturecode": "src/cli/index.js" }
@@ -499,7 +499,7 @@ make dmg        # macOS DMG（仅 macOS）
 └── plugins/           # 插件数据
 ```
 
-## 🔧 系统架构设计
+##  系统架构设计
 
 ### 1. **模块化设计**
 
@@ -528,7 +528,7 @@ CLI 入口 → 命令分发 → 功能模块 → 工具函数
 - **权限控制**: 最小权限原则
 - **审计日志**: 操作记录
 
-## 🚀 详细操作步骤
+##  详细操作步骤
 
 ### 1. **安装 NatureCode**
 
@@ -591,7 +591,7 @@ naturecode --version  # 查看版本
 
 ```bash
 $ naturecode start
-🤖 NatureCode v1.4.5.3 已就绪
+ NatureCode v1.4.5.4 已就绪
 > 帮我写一个 Python 函数计算斐波那契数列
 ```
 
@@ -626,7 +626,7 @@ $ naturecode start
 
 ```bash
 git add .
-git commit -m "NatureCode v1.4.5.3 - Cross-platform AI assistant"
+git commit -m "NatureCode v1.4.5.4 - Cross-platform AI assistant"
 git push https://naturecode-official:TOKEN@github.com/naturecode-official/naturecode.git main
 ```
 
@@ -770,14 +770,14 @@ npm link  # 在项目目录中
 
 ## 📈 项目状态和路线图
 
-### 当前状态 (v1.4.5.3)
+### 当前状态 (v1.4.5.4)
 
-- ✅ 完整的安装系统
-- ✅ 多模型 AI 支持
-- ✅ 团队协作功能
-- ✅ 插件系统
-- ✅ 测试覆盖率 >70%
-- ✅ 跨平台支持
+-  完整的安装系统
+-  多模型 AI 支持
+-  团队协作功能
+-  插件系统
+-  测试覆盖率 >70%
+-  跨平台支持
 
 ### 待完成
 
@@ -794,7 +794,7 @@ npm link  # 在项目目录中
 - **打包**: pkg, DMG 工具
 - **代码质量**: ESLint, Prettier
 
-## 🤖 AI 助手使用指南
+##  AI 助手使用指南
 
 ### 🚨 核心守则（必须遵守）
 
@@ -802,7 +802,7 @@ npm link  # 在项目目录中
 
 - **代码文件** (.js, .sh, .json 等): 禁止任何 Emoji
 - **注释**: 使用英文，禁止 Emoji
-- **文档**: Markdown 文件中可以使用符号（如 ⚡、✅、❌），但避免表情符号
+- **文档**: Markdown 文件中可以使用符号（如 、、），但避免表情符号
 - **用户界面**: CLI 输出可以使用简单符号增强可读性
 - **例外**: 仅限用户可见的友好提示，代码内部严格禁止
 
@@ -912,14 +912,14 @@ npm link  # 在项目目录中
 
 ---
 
-## 📤 GitHub 上传验证指南
+##  GitHub 上传验证指南
 
-### ✅ 当前上传状态
+###  当前上传状态
 
-- **版本**: NatureCode v1.4.5.3 ✅ 已上传
-- **仓库**: https://github.com/naturecode-official/naturecode ✅ 可访问
-- **安装命令**: 工作正常 ✅ 已验证
-- **提交哈希**: `9aa473e` ✅ 最新
+- **版本**: NatureCode v1.4.5.4  已上传
+- **仓库**: https://github.com/naturecode-official/naturecode  可访问
+- **安装命令**: 工作正常  已验证
+- **提交哈希**: `9aa473e`  最新
 
 ### 验证命令
 
@@ -942,11 +942,11 @@ git log --oneline --graph --all
 
 ### 上传成功标志
 
-1. ✅ **GitHub 仓库可访问**: https://github.com/naturecode-official/naturecode
-2. ✅ **安装命令工作**: `curl ... | bash` 可正常执行
-3. ✅ **版本正确**: 显示 `1.4.5.3`
-4. ✅ **代码同步**: 本地和远程代码一致
-5. ✅ **功能完整**: 所有文件已上传
+1.  **GitHub 仓库可访问**: https://github.com/naturecode-official/naturecode
+2.  **安装命令工作**: `curl ... | bash` 可正常执行
+3.  **版本正确**: 显示 `1.4.5.4`
+4.  **代码同步**: 本地和远程代码一致
+5.  **功能完整**: 所有文件已上传
 
 ### 后续上传流程
 
@@ -983,15 +983,15 @@ git log --oneline --graph --all
 
 ### 安全建议
 
-1. 🔒 **删除敏感文件**: `rm key.md`（如果不再需要）
-2. 🔒 **Token 管理**: 保存在安全的地方，定期更新
-3. 🔒 **访问控制**: 监控 GitHub 访问日志
-4. 🔒 **备份策略**: 定期备份重要数据和配置
+1.  **删除敏感文件**: `rm key.md`（如果不再需要）
+2.  **Token 管理**: 保存在安全的地方，定期更新
+3.  **访问控制**: 监控 GitHub 访问日志
+4.  **备份策略**: 定期备份重要数据和配置
 
 ---
 
 **最后更新**: 2026-02-15  
-**版本**: NatureCode v1.4.5.3 ✅ 已部署到 GitHub  
+**版本**: NatureCode v1.4.5.4  已部署到 GitHub  
 **状态**: 完整功能，一键安装系统就绪  
 **安装命令**: `curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash`  
 **仓库**: https://github.com/naturecode-official/naturecode

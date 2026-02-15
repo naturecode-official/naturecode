@@ -33,7 +33,7 @@ echo ""
 echo "步骤 3: 验证"
 echo "-----------"
 if [ $? -eq 0 ]; then
-    echo "✅ 推送成功！"
+    echo " 推送成功！"
     echo ""
     echo "安装命令："
     echo "curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash"
@@ -41,7 +41,7 @@ if [ $? -eq 0 ]; then
     echo "测试命令："
     echo "curl -I https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh"
 else
-    echo "❌ 推送失败"
+    echo " 推送失败"
     echo "可能的原因："
     echo "1. Token 错误或过期"
     echo "2. 没有推送权限"

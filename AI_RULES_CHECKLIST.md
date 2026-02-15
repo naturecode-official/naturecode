@@ -2,12 +2,12 @@
 
 ## 🚨 每次代码修改后必须检查
 
-### 1. Emoji 检查 ✅
+### 1. Emoji 检查 
 
 - [ ] **代码文件**: 确保 .js, .ts, .sh, .json 文件中没有 Emoji
 - [ ] **注释**: 代码注释中禁止 Emoji
 - [ ] **字符串**: 代码字符串中禁止 Emoji
-- [ ] **文档**: Markdown 中仅使用简单符号（⚡✅❌），避免 😀🎉🚀 等表情
+- [ ] **文档**: Markdown 中仅使用简单符号（），避免 😀 等表情
 
 **快速检查命令**:
 
@@ -19,7 +19,7 @@ grep -r "[\U0001F300-\U0001F9FF]" src/ --include="*.js" --include="*.ts" && echo
 grep -r "[\U0001F300-\U0001F9FF]" *.sh && echo "发现 Emoji！" || echo "Shell 脚本干净"
 ```
 
-### 2. 语言规范检查 ✅
+### 2. 语言规范检查 
 
 - [ ] **用户对话**: 使用中文与用户交流
 - [ ] **代码内容**: 变量名、函数名、注释使用英文
@@ -31,20 +31,20 @@ grep -r "[\U0001F300-\U0001F9FF]" *.sh && echo "发现 Emoji！" || echo "Shell 
 **语言检查示例**:
 
 ```javascript
-// ✅ 正确 - 英文注释
+//  正确 - 英文注释
 function calculateTotal(price, quantity) {
   // Calculate total price including tax
   return price * quantity * 1.1;
 }
 
-// ❌ 错误 - 中文注释（代码中）
+//  错误 - 中文注释（代码中）
 function 计算总额(价格, 数量) {
   // 计算含税总价 <- 禁止！
   return 价格 * 数量 * 1.1;
 }
 ```
 
-### 3. GitHub 推送流程 ✅
+### 3. GitHub 推送流程 
 
 - [ ] **添加文件**: `git add .`
 - [ ] **提交更改**: `git commit -m "英文描述性信息"`
@@ -68,35 +68,35 @@ function 计算总额(价格, 数量) {
   curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash --dry-run
   ```
 
-## 📋 详细守则说明
+##  详细守则说明
 
 ### Emoji 政策详解
 
 #### 允许使用的情况:
 
 1. **用户界面符号**: CLI 输出中的简单符号增强可读性
-   - ✅ `⚡` 快速操作
-   - ✅ `✅` 成功提示
-   - ✅ `❌` 错误提示
-   - ✅ `🔧` 工具提示
-   - ✅ `📁` 文件操作
+   -  `` 快速操作
+   -  `` 成功提示
+   -  `` 错误提示
+   -  `` 工具提示
+   -  `📁` 文件操作
 
 2. **文档符号**: Markdown 文档中的分类符号
-   - ✅ `## 🚀 功能特性`
-   - ✅ `## 🔧 安装指南`
-   - ✅ `## 🐛 故障排除`
+   -  `##  功能特性`
+   -  `##  安装指南`
+   -  `## 🐛 故障排除`
 
 #### 禁止使用的情况:
 
 1. **代码内部**: 任何代码文件中禁止
-   - ❌ `console.log("🎉 操作成功！")`
-   - ❌ `// 🚀 这是一个函数`
-   - ❌ `const 🎯 = "target"`
+   -  `console.log(" 操作成功！")`
+   -  `//  这是一个函数`
+   -  `const 🎯 = "target"`
 
 2. **表情符号**: 所有表情符号禁止
-   - ❌ `😀 😃 😄 😁 😆 😅 😂 🤣`
-   - ❌ `🙂 🙃 😉 😊 😇 🥰 😍 🤩`
-   - ❌ `😘 😗 ☺️ 😚 😙 🥲 😋 😛`
+   -  `😀 😃 😄 😁 😆 😅 😂 🤣`
+   -  `🙂 🙃 😉 😊 😇 🥰 😍 🤩`
+   -  `😘 😗 ☺️ 😚 😙 🥲 😋 😛`
 
 ### 语言规范详解
 
@@ -143,7 +143,7 @@ function 计算总额(价格, 数量) {
 3. **测试安装**: 使用 curl 命令测试
 4. **访问仓库**: https://github.com/naturecode-official/naturecode
 
-## 🔧 快速命令参考
+##  快速命令参考
 
 ### Emoji 检查命令
 
@@ -179,14 +179,14 @@ git log --oneline -3
 curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | head -5
 ```
 
-## ⚠️ 常见错误和纠正
+##  常见错误和纠正
 
 ### Emoji 相关错误
 
-- **错误**: 在代码中使用 `🎉` 庆祝成功
-- **纠正**: 使用 `✅` 或文字描述
-- **错误**: 注释中使用 `🚀` 表示快速
-- **纠正**: 使用 `// Fast implementation` 或 `⚡`
+- **错误**: 在代码中使用 `` 庆祝成功
+- **纠正**: 使用 `` 或文字描述
+- **错误**: 注释中使用 `` 表示快速
+- **纠正**: 使用 `// Fast implementation` 或 ``
 
 ### 语言相关错误
 

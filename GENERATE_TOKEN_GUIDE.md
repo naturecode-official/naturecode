@@ -19,14 +19,14 @@
 
 **必选权限：**
 
-- ✅ `repo` (Full control of private repositories)
-- ✅ `workflow` (Update GitHub Action workflows)
+-  `repo` (Full control of private repositories)
+-  `workflow` (Update GitHub Action workflows)
 
 **可选权限（推荐）：**
 
-- ✅ `write:packages` (Upload packages to GitHub Package Registry)
-- ✅ `delete:packages` (Delete packages from GitHub Package Registry)
-- ✅ `admin:org` (Full control of orgs and teams, read and write org projects)
+-  `write:packages` (Upload packages to GitHub Package Registry)
+-  `delete:packages` (Delete packages from GitHub Package Registry)
+-  `admin:org` (Full control of orgs and teams, read and write org projects)
 
 ### 4. 设置 Token 有效期
 
@@ -54,7 +54,7 @@
 git add .
 
 # 提交更改
-git commit -m "NatureCode v1.4.5.3 - Complete installation system"
+git commit -m "NatureCode v1.4.5.4 - Complete installation system"
 
 # 使用 Token 推送（替换 YOUR_TOKEN）
 git push https://naturecode-official:YOUR_TOKEN@github.com/naturecode-official/naturecode.git main
@@ -112,8 +112,8 @@ curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main
 
 ## 完成后的下一步
 
-1. ✅ 生成 Personal Access Token
-2. ✅ 推送代码到 GitHub
-3. ✅ 验证安装命令工作
-4. ✅ 更新项目文档中的安装说明
-5. ✅ 测试完整的安装流程
+1.  生成 Personal Access Token
+2.  推送代码到 GitHub
+3.  验证安装命令工作
+4.  更新项目文档中的安装说明
+5.  测试完整的安装流程

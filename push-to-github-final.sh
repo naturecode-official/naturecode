@@ -196,8 +196,8 @@ push_with_token() {
     echo "  https://github.com/settings/tokens"
     echo ""
     echo "需要的权限:"
-    echo "  ✅ repo (Full control of private repositories)"
-    echo "  ✅ workflow (Update GitHub Action workflows)"
+    echo "   repo (Full control of private repositories)"
+    echo "   workflow (Update GitHub Action workflows)"
     echo ""
     
     read -sp "请输入您的 GitHub Token: " GITHUB_TOKEN
@@ -304,7 +304,7 @@ verify_push() {
 show_installation_command() {
     log_step "安装命令"
     echo ""
-    echo "🎉 NatureCode 已成功推送到 GitHub！"
+    echo " NatureCode 已成功推送到 GitHub！"
     echo ""
     echo "📥 用户可以使用以下命令安装:"
     echo ""
@@ -317,7 +317,7 @@ show_installation_command() {
     echo "🔗 仓库地址:"
     echo "  https://github.com/naturecode-official/naturecode"
     echo ""
-    echo "📋 其他安装方式:"
+    echo " 其他安装方式:"
     echo "  # 智能安装（推荐）"
     echo "  curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-smart.sh | bash"
     echo ""

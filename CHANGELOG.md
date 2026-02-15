@@ -1,13 +1,63 @@
-# NatureCode Changelog
+# Changelog
 
-## 1.4.3 (2026-02-14)
+All notable changes to NatureCode will be documented in this file.
 
-### Third-Party Tool Integration System
+## [1.4.5.4] - 2026-02-15
 
-- **Comprehensive Integration Manager**: Support for 14+ development tools (ESLint, Prettier, TypeScript, Jest, Vitest, Webpack, Vite, npm, Yarn, pnpm, Docker, Docker Compose, AWS CLI, Terraform)
-- **Tool Detection and Validation**: Automatic tool availability checking and version validation
-- **Project Analysis**: Intelligent project structure analysis with tool recommendations
-- **Quality Checks**: Automated code quality checks with detailed reports and recommendations
+### Added
+
+- Professional installation mode only (removed simple mode)
+- Automatic update system with retry mechanism
+- Enhanced error handling and debugging information
+
+### Changed
+
+- Updated all version references from 1.4.5.3 to 1.4.5.4
+- Removed all emoji from project files
+- Standardized GitHub display content to English
+- Improved README.md with professional documentation
+
+### Fixed
+
+- Installation script input prompt display issues
+- Global installation verification
+- Network download retry logic
+
+## [1.4.5.3] - 2026-02-15
+
+### Added
+
+- Complete curl-based one-line installation system
+- Professional installer with automatic mode selection
+- AI assistant rules documentation
+- GitHub commit language规范 (English-only commits)
+
+### Changed
+
+- Restructured installation script hierarchy
+- Improved color compatibility for different terminals
+- Enhanced error messages and user guidance
+
+## [1.4.5.2] - 2026-02-13
+
+### Added
+
+- Initial GitHub deployment system
+- Multiple installation script options
+- Basic AI assistant functionality
+
+### Features
+
+- Cross-platform terminal interface
+- Multiple AI provider support (DeepSeek, OpenAI)
+- File system operations
+- Git integration
+- Code analysis tools
+
+---
+
+**Note**: This project follows [Semantic Versioning](https://semver.org/).
+
 - **Integration Commands**:
   - `integration status` - Show available integrations and status
   - `integration analyze` - Analyze project for tool compatibility

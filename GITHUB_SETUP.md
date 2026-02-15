@@ -39,7 +39,7 @@ npm install -g .
 # Initialize git (if not already)
 git init
 git add .
-git commit -m "NatureCode v1.4.5.3 - Cross-platform AI assistant"
+git commit -m "NatureCode v1.4.5.4 - Cross-platform AI assistant"
 
 # Add remote
 git remote add origin https://github.com/naturecode-official/naturecode.git
@@ -51,7 +51,7 @@ git push -u origin main
 ```bash
 # After users install, they can verify with:
 naturecode --version
-# Should show: 1.4.5.3
+# Should show: 1.4.5.4
 
 naturecode help
 # Should start AI chat

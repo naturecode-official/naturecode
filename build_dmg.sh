@@ -287,7 +287,7 @@ EOF
     <p>跨平台终端AI助手</p>
     
     <div class="feature">
-        <strong>🚀 主要特性：</strong>
+        <strong> 主要特性：</strong>
         <ul>
             <li>支持多种AI提供商（DeepSeek、OpenAI等）</li>
             <li>交互式终端界面</li>
@@ -407,7 +407,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     sudo cp -R "$DMG_MOUNT/NatureCode.app" /Applications/
     
     if [[ $? -eq 0 ]]; then
-        echo "✅ 安装成功！"
+        echo " 安装成功！"
         echo ""
         echo "使用方法:"
         echo "1. 打开终端"
@@ -415,7 +415,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
         echo "3. 按照向导配置 API 密钥"
         echo "4. 输入: naturecode start 开始使用"
     else
-        echo "❌ 安装失败"
+        echo " 安装失败"
         exit 1
     fi
 else
@@ -461,7 +461,7 @@ main() {
     create_dmg
     create_simple_installer
     
-    echo -e "\n${GREEN}🎉 DMG 构建完成！${NC}"
+    echo -e "\n${GREEN} DMG 构建完成！${NC}"
     echo -e "${YELLOW}生成的 DMG 文件在: dmg/ 目录${NC}"
     echo -e "\n${BLUE}下一步:${NC}"
     echo "  1. 打开 dmg/NatureCode-1.0.0-macos.dmg"

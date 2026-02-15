@@ -39,7 +39,7 @@
 git add .
 
 # 2. 提交更改
-git commit -m "NatureCode v1.4.5.3 - Cross-platform AI assistant with smart installer"
+git commit -m "NatureCode v1.4.5.4 - Cross-platform AI assistant with smart installer"
 
 # 3. 使用 Token 推送（替换 YOUR_TOKEN）
 git push https://naturecode-official:YOUR_TOKEN@github.com/naturecode-official/naturecode.git main
@@ -50,8 +50,8 @@ git push https://naturecode-official:YOUR_TOKEN@github.com/naturecode-official/n
 1. **访问 Token 页面**: https://github.com/settings/tokens
 2. **点击**: "Generate new token" → "Generate new token (classic)"
 3. **设置权限**:
-   - ✅ `repo` (Full control of private repositories)
-   - ✅ `workflow` (Update GitHub Action workflows)
+   -  `repo` (Full control of private repositories)
+   -  `workflow` (Update GitHub Action workflows)
 4. **设置有效期**: 选择 "No expiration" 或 90 天
 5. **生成并复制**: 立即复制 Token（页面关闭后无法查看）
 
@@ -65,7 +65,7 @@ curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main
 
 ## 项目信息
 
-- **版本**: 1.4.5.3
+- **版本**: 1.4.5.4
 - **GitHub 用户**: naturecode-official
 - **仓库**: naturecode
 - **分支**: main
@@ -128,14 +128,14 @@ git fetch origin
 
 推送成功后:
 
-1. ✅ 测试安装命令
-2. ✅ 更新项目文档
-3. ✅ 创建 release 版本
-4. ✅ 宣传项目
+1.  测试安装命令
+2.  更新项目文档
+3.  创建 release 版本
+4.  宣传项目
 
 ## 安全提醒
 
-- 🔒 **不要将 Token 提交到代码仓库**
-- 🔒 **不要分享 Token**
-- 🔒 **定期更新 Token**
-- 🔒 \*\*在 `.gitignore` 中排除敏感文件
+-  **不要将 Token 提交到代码仓库**
+-  **不要分享 Token**
+-  **定期更新 Token**
+-  \*\*在 `.gitignore` 中排除敏感文件

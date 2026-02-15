@@ -33,7 +33,7 @@ curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main
 | **npm安装**  | `npm install -g naturecode`                                       | 发布后   |
 | **本地安装** | `./install-local.sh`                                              | 本地测试 |
 
-## 🔧 安装模式说明
+##  安装模式说明
 
 ### 模式选择界面
 
@@ -70,14 +70,14 @@ Enter choice [1-2] (default: 1):
 - **交互**: 有
 - **推荐**: 需要控制或诊断时
 
-## 🚀 快速开始
+##  快速开始
 
 ### 安装后第一步
 
 ```bash
 # 验证安装
 naturecode --version
-# 应该显示: 1.4.5.3
+# 应该显示: 1.4.5.4
 
 # 配置AI模型
 naturecode model
@@ -103,8 +103,8 @@ naturecode project analyze .       # 项目分析
 
 | 特性           | `install.sh` | `install-simple.sh` | `install-universal.sh` |
 | -------------- | ------------ | ------------------- | ---------------------- |
-| **模式选择**   | ✅ 询问用户  | ❌ 直接简单模式     | ❌ 直接专业模式        |
-| **用户交互**   | ✅ 有        | ❌ 无               | ✅ 有                  |
+| **模式选择**   |  询问用户  |  直接简单模式     |  直接专业模式        |
+| **用户交互**   |  有        |  无               |  有                  |
 | **输出详细**   | 根据模式     | 简单                | 详细                   |
 | **GitHub用户** | 固定         | 固定                | 可指定                 |
 | **推荐度**     | ⭐⭐⭐⭐⭐   | ⭐⭐⭐⭐            | ⭐⭐⭐                 |
@@ -134,7 +134,7 @@ Selected: Simple Mode
 [INFO] Checking requirements...
 [SUCCESS] Requirements OK
 [INFO] Installing...
-[SUCCESS] Successfully installed NatureCode v1.4.5.3
+[SUCCESS] Successfully installed NatureCode v1.4.5.4
 
 Quick start:
   naturecode model     # Configure AI model
@@ -192,7 +192,7 @@ rm -rf ~/.naturecode
 ```bash
 # 检查版本
 naturecode --version
-# 应该显示: 1.4.5.3
+# 应该显示: 1.4.5.4
 
 # 测试功能
 naturecode help
@@ -243,13 +243,13 @@ curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main
 curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-simple.sh | bash
 ```
 
-## 🌐 链接
+##  链接
 
 - **GitHub仓库**: https://github.com/naturecode-official/naturecode
 - **问题反馈**: https://github.com/naturecode-official/naturecode/issues
 - **完整文档**: 查看 `docs.md`
 
-## 🚀 一键安装 (复制这个!)
+##  一键安装 (复制这个!)
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash

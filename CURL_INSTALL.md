@@ -29,7 +29,7 @@ curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main
 
    ```bash
    naturecode --version
-   # If installed, shows version like: 1.4.5.3
+   # If installed, shows version like: 1.4.5.4
    ```
 
 2. **Remove old version** (if updating):

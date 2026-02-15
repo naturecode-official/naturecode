@@ -219,7 +219,7 @@ teamCommandsContent = teamCommandsContent.replace(
 );
 
 fs.writeFileSync(teamCommandsTestPath, teamCommandsContent, "utf8");
-console.log("✅ 修复了 team-commands.test.js");
+console.log(" 修复了 team-commands.test.js");
 
 // 修复 integration.test.js
 const integrationTestPath = path.join(
@@ -273,7 +273,7 @@ integrationContent = integrationContent.replace(
 );
 
 fs.writeFileSync(integrationTestPath, integrationContent, "utf8");
-console.log("✅ 修复了 integration.test.js");
+console.log(" 修复了 integration.test.js");
 
 // 修复其他团队测试文件
 const teamTestFiles = [
@@ -295,8 +295,8 @@ teamTestFiles.forEach((filename) => {
     content = content.replace(/\.createProject\(/g, ".createProject(");
 
     fs.writeFileSync(filePath, content, "utf8");
-    console.log(`✅ 修复了 ${filename}`);
+    console.log(` 修复了 ${filename}`);
   }
 });
 
-console.log("\n🎉 所有团队测试已修复完成！");
+console.log("\n 所有团队测试已修复完成！");

@@ -81,7 +81,7 @@ Before uploading to GitHub, update these files:
    # Initialize git repository
    git init
    git add .
-   git commit -m "Initial commit: NatureCode v1.4.5.3"
+   git commit -m "Initial commit: NatureCode v1.4.5.4"
 
    # Create GitHub repository first, then:
    git remote add origin https://github.com/naturecode-official/naturecode.git
@@ -146,11 +146,11 @@ npm install -g .
 
 ```bash
 # Create a tarball
-tar -czf naturecode-1.4.5.3.tar.gz --exclude="node_modules" --exclude=".git" .
+tar -czf naturecode-1.4.5.4.tar.gz --exclude="node_modules" --exclude=".git" .
 
 # Distribute and install
-tar -xzf naturecode-1.4.5.3.tar.gz
-cd naturecode-1.4.5.3
+tar -xzf naturecode-1.4.5.4.tar.gz
+cd naturecode-1.4.5.4
 npm install
 npm install -g .
 ```
@@ -162,7 +162,7 @@ After installation, verify:
 ```bash
 # Check version
 naturecode --version
-# Should show: 1.4.5.3 or your current version
+# Should show: 1.4.5.4 or your current version
 
 # Test basic commands
 naturecode help

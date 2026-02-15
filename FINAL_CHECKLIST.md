@@ -1,10 +1,10 @@
 # NatureCode GitHub 推送最终检查清单
 
-## ✅ 已完成项目
+##  已完成项目
 
 ### 1. 项目准备
 
-- [x] NatureCode v1.4.5.3 功能完整
+- [x] NatureCode v1.4.5.4 功能完整
 - [x] 所有代码测试通过
 - [x] 依赖安装完成
 - [x] 版本信息更新
@@ -83,14 +83,14 @@
 - [ ] 更新 changelog
 - [ ] 宣传项目
 
-## 🚀 立即执行步骤
+##  立即执行步骤
 
 ### 步骤 1: 生成 Token（2分钟）
 
 1. 打开浏览器访问: **https://github.com/settings/tokens**
 2. 点击 "Generate new token" → "Generate new token (classic)"
 3. 设置 Note: "NatureCode Deployment"
-4. 选择权限: ✅ `repo` (Full control)
+4. 选择权限:  `repo` (Full control)
 5. 设置有效期: No expiration
 6. 点击 "Generate token"
 7. **立即复制 Token**（重要！）
@@ -120,7 +120,7 @@ curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main
 ### 版本信息
 
 - **项目名称**: NatureCode
-- **版本号**: v1.4.5.3
+- **版本号**: v1.4.5.4
 - **Node.js**: ES Modules
 - **依赖**: axios, chalk, commander, inquirer, ora, ws
 
@@ -145,28 +145,28 @@ curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main
 curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-simple.sh | bash
 ```
 
-## ⚠️ 注意事项
+##  注意事项
 
 ### 安全
 
-- 🔒 **不要分享 Token**
-- 🔒 **不要提交 Token 到代码**
-- 🔒 **Token 保存在安全地方**
-- 🔒 **定期更新 Token**
+-  **不要分享 Token**
+-  **不要提交 Token 到代码**
+-  **Token 保存在安全地方**
+-  **定期更新 Token**
 
 ### 技术
 
 - 🌈 **终端颜色**: 已处理兼容性
 - 🖥️ **跨平台**: 支持 macOS/Linux/Windows
 - 📦 **依赖**: 需要 Node.js v16+
-- 🔧 **错误处理**: 友好的错误消息
+-  **错误处理**: 友好的错误消息
 
 ### 验证
 
-- ✅ **推送后验证成功**
-- ✅ **安装命令测试**
-- ✅ **功能完整性检查**
-- ✅ **文档准确性验证**
+-  **推送后验证成功**
+-  **安装命令测试**
+-  **功能完整性检查**
+-  **文档准确性验证**
 
 ## 🆘 紧急恢复
 
@@ -216,6 +216,6 @@ git push origin main
 
 1. GitHub 仓库: https://github.com/naturecode-official/naturecode
 2. 安装命令: `curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash`
-3. 版本显示: `naturecode --version` 显示 `1.4.5.3`
+3. 版本显示: `naturecode --version` 显示 `1.4.5.4`
 
 **现在开始执行步骤 1: 生成 GitHub Token**

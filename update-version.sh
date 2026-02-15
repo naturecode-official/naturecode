@@ -1,17 +1,17 @@
 #!/bin/bash
 
-# 更新 NatureCode 版本号到 1.4.5.3
-echo "正在更新版本号到 1.4.5.3..."
+# 更新 NatureCode 版本号到 1.4.5.4
+echo "正在更新版本号到 1.4.5.4..."
 
 # 更新所有文件中的版本号
 OLD_VERSION="1.4.5.2"
-NEW_VERSION="1.4.5.3"
+NEW_VERSION="1.4.5.4"
 
 # 1. 更新 package.json (已手动更新)
-echo "✅ package.json 已更新"
+echo " package.json 已更新"
 
 # 2. 更新 src/cli/index.js (已手动更新)
-echo "✅ src/cli/index.js 已更新"
+echo " src/cli/index.js 已更新"
 
 # 3. 更新 install-smart.sh
 echo "更新 install-smart.sh..."
@@ -79,7 +79,7 @@ for file in *.md; do
 done
 
 echo ""
-echo "✅ 版本号更新完成！"
+echo " 版本号更新完成！"
 echo "旧版本: $OLD_VERSION"
 echo "新版本: $NEW_VERSION"
 echo ""

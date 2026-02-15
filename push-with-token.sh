@@ -8,7 +8,7 @@ echo ""
 
 # 检查是否已配置远程仓库
 if ! git remote -v | grep -q "naturecode-official/naturecode"; then
-    echo "❌ 错误: 远程仓库未正确配置"
+    echo " 错误: 远程仓库未正确配置"
     echo "请运行: git remote add origin https://github.com/naturecode-official/naturecode.git"
     exit 1
 fi
@@ -22,11 +22,11 @@ git status --short
 echo ""
 
 # 询问用户是否有 Token
-read -p "🔑 您有 GitHub Personal Access Token 吗？(y/n): " has_token
+read -p " 您有 GitHub Personal Access Token 吗？(y/n): " has_token
 
 if [[ "$has_token" != "y" && "$has_token" != "Y" ]]; then
     echo ""
-    echo "📋 请按照以下步骤生成 Token:"
+    echo " 请按照以下步骤生成 Token:"
     echo "1. 访问: https://github.com/settings/tokens"
     echo "2. 点击 'Generate new token (classic)'"
     echo "3. 选择权限: repo (Full control)"
@@ -47,13 +47,13 @@ else
 fi
 
 if [[ -z "$TOKEN" ]]; then
-    echo "❌ 错误: Token 不能为空"
+    echo " 错误: Token 不能为空"
     exit 1
 fi
 
 # 尝试推送
 echo ""
-echo "🚀 正在推送代码到 GitHub..."
+echo " 正在推送代码到 GitHub..."
 echo "使用 Token 认证..."
 
 # 使用 Token 推送
@@ -61,16 +61,16 @@ GIT_URL="https://naturecode-official:${TOKEN}@github.com/naturecode-official/nat
 
 if git push "$GIT_URL" main; then
     echo ""
-    echo "✅ 推送成功！"
+    echo " 推送成功！"
     echo ""
-    echo "🎉 NatureCode 已上传到 GitHub！"
+    echo " NatureCode 已上传到 GitHub！"
     echo "📥 安装命令:"
     echo "curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash"
     echo ""
     echo "🔗 仓库地址: https://github.com/naturecode-official/naturecode"
 else
     echo ""
-    echo "❌ 推送失败"
+    echo " 推送失败"
     echo "可能的原因:"
     echo "1. Token 权限不足（需要 repo 权限）"
     echo "2. Token 已过期"

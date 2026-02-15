@@ -2,13 +2,13 @@
 
 ## 🎯 当前状态
 
-- ✅ 所有文件已添加到暂存区
-- ✅ 详细的提交信息已创建
-- ✅ Git 配置正确 (naturecode-official)
-- ✅ 远程仓库已配置
+-  所有文件已添加到暂存区
+-  详细的提交信息已创建
+-  Git 配置正确 (naturecode-official)
+-  远程仓库已配置
 - 🔄 等待推送代码到 GitHub
 
-## 🚀 完整推送步骤
+##  完整推送步骤
 
 ### 步骤 1: 生成 GitHub Personal Access Token
 
@@ -25,11 +25,11 @@
 
 **必须权限:**
 
-- ✅ `repo` (Full control of private repositories)
+-  `repo` (Full control of private repositories)
 
 **可选权限（推荐）:**
 
-- ✅ `workflow` (Update GitHub Action workflows)
+-  `workflow` (Update GitHub Action workflows)
 
 #### 1.4 设置有效期
 
@@ -109,7 +109,7 @@ curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main
 curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-simple.sh | bash
 ```
 
-## 🔧 故障排除
+##  故障排除
 
 ### 常见错误和解决方案
 
@@ -153,11 +153,11 @@ security delete-internet-password -s github.com
 git config --global credential.helper store
 ```
 
-## 📋 推送内容概览
+##  推送内容概览
 
 ### 本次推送包含:
 
-1. **NatureCode v1.4.5.3** - 核心应用
+1. **NatureCode v1.4.5.4** - 核心应用
 2. **智能安装系统** - 完整的 curl 安装
 3. **GitHub 推送工具** - 多种推送脚本
 4. **详细文档** - AI 指南、操作手册
@@ -172,7 +172,7 @@ git config --global credential.helper store
 ### 提交信息:
 
 ```
-NatureCode v1.4.5.3 - Complete GitHub deployment system
+NatureCode v1.4.5.4 - Complete GitHub deployment system
 
 ## 新增功能
 - 完整的 AI 助手指南 (whatisthis.md)
@@ -184,14 +184,14 @@ NatureCode v1.4.5.3 - Complete GitHub deployment system
 curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash
 ```
 
-## 🎉 成功标志
+##  成功标志
 
 完成推送后，您应该看到:
 
-1. ✅ **推送成功消息**
-2. ✅ **安装命令显示**
-3. ✅ **仓库地址显示**
-4. ✅ **验证成功提示**
+1.  **推送成功消息**
+2.  **安装命令显示**
+3.  **仓库地址显示**
+4.  **验证成功提示**
 
 ## 📞 紧急情况处理
 

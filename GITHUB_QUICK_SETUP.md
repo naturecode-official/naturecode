@@ -8,7 +8,7 @@
 curl: (56) The requested URL returned error: 404
 ```
 
-## 📋 快速设置步骤
+##  快速设置步骤
 
 ### 步骤 1: 创建 GitHub 仓库
 
@@ -47,7 +47,7 @@ git add *.md
 git add docs/
 
 # 提交
-git commit -m "NatureCode v1.4.5.3 - Cross-platform AI assistant"
+git commit -m "NatureCode v1.4.5.4 - Cross-platform AI assistant"
 
 # 添加远程仓库 (替换为您的实际用户名)
 git remote add origin https://github.com/naturecode-official/naturecode.git
@@ -65,7 +65,7 @@ git push -u origin main
 curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash
 ```
 
-## 🔧 备选方案
+##  备选方案
 
 ### 方案 A: 使用现有用户名
 
@@ -176,7 +176,7 @@ FINAL_INSTALL_COMMANDS.md # 最终命令
 3. **检查文件名**: 确保 `install.sh` 在仓库根目录
 4. **等待几分钟**: GitHub 可能需要时间处理
 
-## 🚀 立即行动
+##  立即行动
 
 1. **先测试本地**:
 
