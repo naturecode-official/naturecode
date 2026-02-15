@@ -213,28 +213,55 @@ install_pro() {
     
     cd "$TEMP_DIR"
     
-    # Download from GitHub
+    # Download from GitHub with retry
     log_info "Downloading from GitHub..."
-    curl -fsSL https://github.com/naturecode-official/naturecode/archive/refs/heads/main.tar.gz -o naturecode.tar.gz || {
-        log_error "Failed to download from GitHub"
-        exit 1
-    }
+    MAX_RETRIES=3
+    RETRY_COUNT=0
+    
+    while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+        if curl -fsSL https://github.com/naturecode-official/naturecode/archive/refs/heads/main.tar.gz -o naturecode.tar.gz; then
+            log_success "Download successful"
+            break
+        fi
+        
+        RETRY_COUNT=$((RETRY_COUNT + 1))
+        if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+            log_warning "Download failed, retrying ($RETRY_COUNT/$MAX_RETRIES)..."
+            sleep 2
+        else
+            log_error "Failed to download from GitHub after $MAX_RETRIES attempts"
+            log_info "Alternative: Install from local source if available"
+            exit 1
+        fi
+    done
+    
     tar -xzf naturecode.tar.gz --strip-components=1
     rm -f naturecode.tar.gz
     
     log_info "Installing dependencies..."
-    if npm install --silent; then
+    if npm install; then
         log_success "Dependencies installed"
     else
         log_error "Failed to install dependencies"
+        echo "Debug info:"
+        echo "  Current directory: $(pwd)"
+        echo "  Node.js version: $(node --version)"
+        echo "  npm version: $(npm --version)"
         exit 1
     fi
     
     log_info "Installing globally..."
-    if npm install -g . --silent; then
+    echo "Installing from: $(pwd)"
+    if npm install -g .; then
         log_success "NatureCode installed globally"
+        echo "Global installation location:"
+        npm root -g
     else
         log_error "Failed to install globally"
+        echo "Troubleshooting tips:"
+        echo "  1. Try: sudo npm install -g ."
+        echo "  2. Check npm permissions: npm config get prefix"
+        echo "  3. Or use: npm install -g . --unsafe-perm"
         exit 1
     fi
     
