@@ -8,13 +8,13 @@ import { existsSync } from "fs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export function createHelpCommand () {
+export function createHelpCommand() {
   const helpCommand = new HelpCommand();
   return helpCommand.getCommand();
 }
 
 export class HelpCommand {
-  constructor () {
+  constructor() {
     this.command = new Command("help")
       .description("Get direct AI assistance for NatureCode")
       .argument("[question]", "Your question about NatureCode")
@@ -24,11 +24,11 @@ export class HelpCommand {
       .action(this.handleCommand.bind(this));
   }
 
-  getCommand () {
+  getCommand() {
     return this.command;
   }
 
-  async handleCommand (question, options) {
+  async handleCommand(question, options) {
     try {
       if (options.docs) {
         await this.showFullDocs();
@@ -61,9 +61,9 @@ export class HelpCommand {
     }
   }
 
-  async showSimpleHelp () {
+  async showSimpleHelp() {
     const helpText = `
-NatureCode v1.4.5.2 - Cross-platform Terminal AI Assistant
+NatureCode v1.4.5.4 - Cross-platform Terminal AI Assistant
 
 Available Commands:
   start              Start interactive AI session
@@ -144,7 +144,7 @@ For specific questions: naturecode help "your question"
     console.log(helpText);
   }
 
-  async showFullDocs () {
+  async showFullDocs() {
     try {
       const docsPath = join(__dirname, "../../../docs.md");
       if (existsSync(docsPath)) {
@@ -160,9 +160,9 @@ For specific questions: naturecode help "your question"
     }
   }
 
-  async startDirectAIChat () {
+  async startDirectAIChat() {
     console.clear();
-    console.log("NatureCode AI Assistant v1.4.5.2\n");
+    console.log("NatureCode AI Assistant v1.4.5.4\n");
     console.log("=".repeat(70));
     console.log("Direct AI Assistance Mode");
     console.log("=".repeat(70));
@@ -184,7 +184,7 @@ For specific questions: naturecode help "your question"
     await this.startDirectChatLoop(docsContext);
   }
 
-  async setupOllamaForDirectChat () {
+  async setupOllamaForDirectChat() {
     try {
       // Check if Ollama is installed
       const ollamaInstalled = await this.checkOllamaInstalled();
@@ -219,8 +219,8 @@ For specific questions: naturecode help "your question"
     }
   }
 
-  async getDirectAIHelp (question) {
-    console.log("NatureCode AI Assistant v1.4.5.2\n");
+  async getDirectAIHelp(question) {
+    console.log("NatureCode AI Assistant v1.4.5.4\n");
 
     try {
       // Setup Ollama if needed
@@ -252,7 +252,7 @@ For specific questions: naturecode help "your question"
     }
   }
 
-  async startDirectChatLoop (docsContext) {
+  async startDirectChatLoop(docsContext) {
     const readline = await import("readline");
     const rl = readline.createInterface({
       input: process.stdin,
@@ -280,7 +280,7 @@ For specific questions: naturecode help "your question"
 
       if (userInput.toLowerCase() === "clear") {
         console.clear();
-        console.log("NatureCode AI Assistant v1.4.5.2\n");
+        console.log("NatureCode AI Assistant v1.4.5.4\n");
         rl.prompt();
         return;
       }
@@ -323,8 +323,8 @@ For specific questions: naturecode help "your question"
     });
   }
 
-  createDirectHelpPrompt (question, docsContext) {
-    return `You are NatureCode AI Assistant, an expert guide for NatureCode v1.4.5.2.
+  createDirectHelpPrompt(question, docsContext) {
+    return `You are NatureCode AI Assistant, an expert guide for NatureCode v1.4.5.4.
 
 You are providing direct AI assistance to a user who needs help with NatureCode.
 Provide clear, practical, and actionable help.
@@ -344,7 +344,7 @@ Provide a direct answer with:
 Answer directly without introductions:`;
   }
 
-  createDirectChatPrompt (question, docsContext, history) {
+  createDirectChatPrompt(question, docsContext, history) {
     // Limit history to last 3 exchanges
     const recentHistory = history.slice(-3);
 
@@ -357,7 +357,7 @@ Answer directly without introductions:`;
       }
     }
 
-    return `You are NatureCode AI Assistant, an expert guide for NatureCode v1.4.5.2.
+    return `You are NatureCode AI Assistant, an expert guide for NatureCode v1.4.5.4.
 
 You are in a direct chat session helping a user with NatureCode.
 
@@ -376,7 +376,7 @@ Answer concisely but completely.
 Answer:`;
   }
 
-  async getDocsContext () {
+  async getDocsContext() {
     try {
       const docsPath = join(__dirname, "../../../docs.md");
       if (existsSync(docsPath)) {
@@ -411,8 +411,8 @@ Answer:`;
     }
   }
 
-  createMinimalDocsContext () {
-    return `NatureCode v1.4.5.2 - Cross-platform Terminal AI Assistant
+  createMinimalDocsContext() {
+    return `NatureCode v1.4.5.4 - Cross-platform Terminal AI Assistant
 
 ## Overview
 NatureCode is an AI-powered terminal assistant that helps developers with coding tasks, file operations, and project management.
@@ -453,7 +453,7 @@ NatureCode is an AI-powered terminal assistant that helps developers with coding
 NatureCode can use Ollama for local AI processing. When you run 'help' command, it will automatically install Ollama and download AI models if needed.`;
   }
 
-  async checkOllamaInstalled () {
+  async checkOllamaInstalled() {
     return new Promise((resolve) => {
       const process = spawn("which", ["ollama"], { stdio: "ignore" });
       process.on("close", (code) => {
@@ -462,7 +462,7 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
     });
   }
 
-  async checkDeepSeekModel () {
+  async checkDeepSeekModel() {
     return new Promise((resolve) => {
       const process = spawn("ollama", ["list"], { stdio: "pipe" });
       let output = "";
@@ -492,7 +492,7 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
     });
   }
 
-  async callOllama (prompt) {
+  async callOllama(prompt) {
     return new Promise((resolve, reject) => {
       // Try deepseek-coder first, fall back to deepseek-chat
       const model = "deepseek-coder";
@@ -546,7 +546,7 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
     });
   }
 
-  async fallbackToDeepSeekChat (prompt) {
+  async fallbackToDeepSeekChat(prompt) {
     return new Promise((resolve, reject) => {
       const process = spawn("ollama", ["run", "deepseek-chat"], {
         stdio: "pipe",
@@ -599,7 +599,7 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
     });
   }
 
-  async autoInstallOllama () {
+  async autoInstallOllama() {
     console.log("Setting up AI assistant...");
 
     const platform = process.platform;
@@ -645,7 +645,7 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
     });
   }
 
-  async autoPullDeepSeekModel () {
+  async autoPullDeepSeekModel() {
     console.log("Downloading AI model...");
 
     const { exec } = await import("child_process");
@@ -694,7 +694,7 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
     });
   }
 
-  async installOllama () {
+  async installOllama() {
     console.log("Setting up AI assistant...");
 
     const platform = process.platform;
