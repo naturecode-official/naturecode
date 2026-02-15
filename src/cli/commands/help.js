@@ -228,8 +228,10 @@ For specific questions: naturecode help "your question"
       if (!ollamaInstalled) {
         console.log("🤖 Setting up AI assistant for the first time...");
         console.log("This will install Ollama and download an AI model.");
-        console.log("It may take a few minutes depending on your internet speed.\n");
-        
+        console.log(
+          "It may take a few minutes depending on your internet speed.\n",
+        );
+
         const setupSuccess = await this.setupOllamaForDirectChat();
         if (!setupSuccess) {
           console.log("\n📚 Showing documentation-based help instead...");
@@ -266,29 +268,6 @@ For specific questions: naturecode help "your question"
       console.error("\nError:", error.message);
       console.log("\n📚 Showing documentation-based help instead...");
       await this.showDocsBasedHelp(question);
-    }
-  }
-
-      // Get documentation context
-      const docsContext = await this.getDocsContext();
-
-      // Prepare prompt
-      const prompt = this.createDirectHelpPrompt(question, docsContext);
-
-      // Get AI response
-      console.log("Thinking...");
-      const answer = await this.callOllama(prompt);
-
-      console.log("\n" + "=".repeat(70));
-      console.log("AI Assistance:");
-      console.log("=".repeat(70));
-      console.log(answer);
-      console.log("=".repeat(70));
-      console.log("\nNeed more help? Run: naturecode help");
-    } catch (error) {
-      console.error("\nError:", error.message);
-      console.log("\nShowing simple help instead...");
-      await this.showSimpleHelp();
     }
   }
 
@@ -777,15 +756,19 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
   async showDocsBasedHelp(question) {
     try {
       const docsContext = await this.getDocsContext();
-      
+
       // Simple keyword matching for common questions
       const lowerQuestion = question.toLowerCase();
-      
+
       console.log("\n" + "=".repeat(70));
       console.log("Documentation Help:");
       console.log("=".repeat(70));
-      
-      if (lowerQuestion.includes("如何开始") || lowerQuestion.includes("how to start") || lowerQuestion.includes("getting started")) {
+
+      if (
+        lowerQuestion.includes("如何开始") ||
+        lowerQuestion.includes("how to start") ||
+        lowerQuestion.includes("getting started")
+      ) {
         console.log(`
 🚀 如何开始使用 NatureCode：
 
@@ -813,7 +796,11 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
    naturecode help "怎么使用 Git 功能"
    naturecode help "代码分析怎么用"
 `);
-      } else if (lowerQuestion.includes("配置") || lowerQuestion.includes("configure") || lowerQuestion.includes("model")) {
+      } else if (
+        lowerQuestion.includes("配置") ||
+        lowerQuestion.includes("configure") ||
+        lowerQuestion.includes("model")
+      ) {
         console.log(`
 🤖 配置 AI 模型：
 
@@ -836,7 +823,10 @@ NatureCode 支持三种 AI 提供商：
 
 📝 配置文件位置：~/.naturecode/config.json
 `);
-      } else if (lowerQuestion.includes("git") || lowerQuestion.includes("版本控制")) {
+      } else if (
+        lowerQuestion.includes("git") ||
+        lowerQuestion.includes("版本控制")
+      ) {
         console.log(`
 🔧 Git 集成功能：
 
@@ -852,7 +842,11 @@ NatureCode 支持三种 AI 提供商：
   naturecode git commit -m "修复了bug"
   naturecode git push origin main
 `);
-      } else if (lowerQuestion.includes("代码") || lowerQuestion.includes("code") || lowerQuestion.includes("分析")) {
+      } else if (
+        lowerQuestion.includes("代码") ||
+        lowerQuestion.includes("code") ||
+        lowerQuestion.includes("分析")
+      ) {
         console.log(`
 📊 代码分析功能：
 
@@ -872,7 +866,7 @@ NatureCode 支持三种 AI 提供商：
         if (introMatch) {
           console.log(introMatch[1]);
         }
-        
+
         console.log(`
 🔍 根据您的问题 "${question}"，建议：
 
@@ -889,7 +883,7 @@ NatureCode 支持三种 AI 提供商：
   • 代码分析？ → naturecode help "代码分析"
 `);
       }
-      
+
       console.log("=".repeat(70));
       console.log("\n需要完整 AI 帮助？运行: naturecode help");
       console.log("（首次运行会自动安装 Ollama 和 AI 模型）");
