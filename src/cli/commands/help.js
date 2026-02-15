@@ -748,183 +748,183 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
       const lowerQuestion = question.toLowerCase();
 
       console.log("\n" + "=".repeat(70));
-      console.log("NatureCode AI 助手 - 文档帮助");
+      console.log("NatureCode AI Assistant - Documentation Help");
       console.log("=".repeat(70));
 
-      // Handle "who are you" questions in Chinese
+      // Handle common questions in English (AI will handle translation)
       if (
-        lowerQuestion.includes("你是谁") ||
         lowerQuestion.includes("who are you") ||
-        lowerQuestion.includes("what are you")
+        lowerQuestion.includes("what are you") ||
+        lowerQuestion.includes("你是谁")
       ) {
         console.log(`
- 🤖 我是 NatureCode AI 助手！
+ 🤖 I am NatureCode AI Assistant!
 
- 我是 NatureCode v1.4.5.5 的智能助手，专门帮助开发者：
- • 使用 NatureCode 的各种功能
- • 解决编程问题
- • 管理项目和代码
- • 提供 AI 驱动的开发建议
+ I am NatureCode v1.4.5.5's intelligent assistant, specialized in helping developers:
+ • Use NatureCode's various features
+ • Solve programming problems
+ • Manage projects and code
+ • Provide AI-driven development advice
 
- 🚀 我能做什么：
- 1. 回答 NatureCode 使用问题
- 2. 提供代码分析和审查
- 3. 帮助配置 AI 模型
- 4. 指导 Git 操作
- 5. 协助项目管理
+ 🚀 What I can do:
+ 1. Answer NatureCode usage questions
+ 2. Provide code analysis and review
+ 3. Help configure AI models
+ 4. Guide Git operations
+ 5. Assist with project management
 
- 💡 如何与我互动：
- • 直接提问：naturecode help "你的问题"
- • 启动对话：naturecode help
- • 查看命令：naturecode --help
+ 💡 How to interact with me:
+ • Direct questions: naturecode help "your question"
+ • Start conversation: naturecode help
+ • View commands: naturecode --help
 
- 📚 了解更多：
- • 完整文档：naturecode help --docs
- • 简单帮助：naturecode help --simple
- • 安装 AI：naturecode help --install-ollama
+ 📚 Learn more:
+ • Full documentation: naturecode help --docs
+ • Simple help: naturecode help --simple
+ • Install AI: naturecode help --install-ollama
 `);
       } else if (
-        lowerQuestion.includes("如何开始") ||
         lowerQuestion.includes("how to start") ||
-        lowerQuestion.includes("getting started")
+        lowerQuestion.includes("getting started") ||
+        lowerQuestion.includes("如何开始")
       ) {
         console.log(`
- 🚀 如何开始使用 NatureCode：
+ 🚀 How to get started with NatureCode:
 
- 1. 配置 AI 模型：
+ 1. Configure AI model:
     naturecode model
 
- 2. 启动交互会话：
+ 2. Start interactive session:
     naturecode start
 
- 3. 获取帮助：
-    naturecode help "你的问题"
+ 3. Get help:
+    naturecode help "your question"
 
- 4. 查看所有命令：
+ 4. View all commands:
     naturecode --help
 
- 📦 自动安装 AI 助手：
- 首次运行 naturecode help 时，会自动安装 Ollama 和 DeepSeek 模型。
+ 📦 Automatic AI assistant installation:
+ When you first run naturecode help, it will automatically install Ollama and DeepSeek models.
 
- 🔧 手动安装 AI：
+ 🔧 Manual AI installation:
  - Ollama: curl -fsSL https://ollama.ai/install.sh | sh
- - DeepSeek 模型: ollama pull deepseek-coder
+ - DeepSeek model: ollama pull deepseek-coder
 
- 💡 示例：
-    naturecode help "如何配置 DeepSeek API"
-    naturecode help "怎么使用 Git 功能"
-    naturecode help "代码分析怎么用"
+ 💡 Examples:
+    naturecode help "how to configure DeepSeek API"
+    naturecode help "how to use Git features"
+    naturecode help "how to use code analysis"
 `);
       } else if (
-        lowerQuestion.includes("配置") ||
         lowerQuestion.includes("configure") ||
-        lowerQuestion.includes("model")
+        lowerQuestion.includes("model") ||
+        lowerQuestion.includes("配置")
       ) {
         console.log(`
- 🤖 配置 AI 模型：
+ 🤖 Configure AI Models:
 
- NatureCode 支持三种 AI 提供商：
+ NatureCode supports three AI providers:
 
- 1. DeepSeek (推荐)
-    - 需要 API 密钥：https://platform.deepseek.com/
-    - 运行：naturecode model
-    - 选择 DeepSeek，输入 API 密钥
+ 1. DeepSeek (Recommended)
+    - Requires API key: https://platform.deepseek.com/
+    - Run: naturecode model
+    - Select DeepSeek, enter API key
 
  2. OpenAI
-    - 需要 API 密钥：https://platform.openai.com/
-    - 运行：naturecode model
-    - 选择 OpenAI，输入 API 密钥
+    - Requires API key: https://platform.openai.com/
+    - Run: naturecode model
+    - Select OpenAI, enter API key
 
- 3. Ollama (本地，免费)
-    - 自动安装：运行 naturecode help 时自动安装
-    - 或手动：curl -fsSL https://ollama.ai/install.sh | sh
-    - 模型：ollama pull deepseek-coder
+ 3. Ollama (Local, Free)
+    - Automatic installation: runs when you first use naturecode help
+    - Or manual: curl -fsSL https://ollama.ai/install.sh | sh
+    - Model: ollama pull deepseek-coder
 
- 📝 配置文件位置：~/.naturecode/config.json
+ 📝 Configuration file location: ~/.naturecode/config.json
 `);
       } else if (
         lowerQuestion.includes("git") ||
         lowerQuestion.includes("版本控制")
       ) {
         console.log(`
- 🔧 Git 集成功能：
+ 🔧 Git Integration Features:
 
- 可用命令：
-   naturecode git status      # 查看 Git 状态
-   naturecode git diff        # 查看更改
-   naturecode git commit      # 提交更改
-   naturecode git push        # 推送到远程仓库
-   naturecode git pull        # 从远程拉取
+ Available commands:
+   naturecode git status      # Show Git status
+   naturecode git diff        # Show changes
+   naturecode git commit      # Commit changes
+   naturecode git push        # Push to remote repository
+   naturecode git pull        # Pull from remote
 
- 💡 示例：
+ 💡 Examples:
    naturecode git status
-   naturecode git commit -m "修复了bug"
+   naturecode git commit -m "Fixed bug"
    naturecode git push origin main
 `);
       } else if (
-        lowerQuestion.includes("代码") ||
         lowerQuestion.includes("code") ||
-        lowerQuestion.includes("分析")
+        lowerQuestion.includes("分析") ||
+        lowerQuestion.includes("代码")
       ) {
         console.log(`
- 📊 代码分析功能：
+ 📊 Code Analysis Features:
 
- 可用命令：
-   naturecode code analyze    # 分析代码质量
-   naturecode code review     # AI 代码审查
-   naturecode code metrics    # 显示代码指标
+ Available commands:
+   naturecode code analyze    # Analyze code quality
+   naturecode code review     # AI code review
+   naturecode code metrics    # Show code metrics
 
- 💡 示例：
+ 💡 Examples:
    naturecode code analyze src/
    naturecode code review main.js
    naturecode code metrics .
 `);
       } else if (
-        lowerQuestion.includes("命令") ||
         lowerQuestion.includes("commands") ||
-        lowerQuestion.includes("功能")
+        lowerQuestion.includes("功能") ||
+        lowerQuestion.includes("命令")
       ) {
         console.log(`
- 📋 NatureCode 主要功能：
+ 📋 NatureCode Main Features:
 
- 🎯 核心功能：
- • AI 助手：naturecode help
- • 交互会话：naturecode start
- • 模型配置：naturecode model
+ 🎯 Core Features:
+ • AI Assistant: naturecode help
+ • Interactive Session: naturecode start
+ • Model Configuration: naturecode model
 
- 📁 文件操作：
- • 读取文件：naturecode read <file>
- • 编辑文件：naturecode edit <file>
- • 创建文件：naturecode create <file>
- • 删除文件：naturecode delete <file>
- • 列出目录：naturecode list <dir>
+ 📁 File Operations:
+ • Read file: naturecode read <file>
+ • Edit file: naturecode edit <file>
+ • Create file: naturecode create <file>
+ • Delete file: naturecode delete <file>
+ • List directory: naturecode list <dir>
 
- 🔧 Git 操作：
- • 状态查看：naturecode git status
- • 差异对比：naturecode git diff
- • 提交更改：naturecode git commit
- • 推送代码：naturecode git push
- • 拉取更新：naturecode git pull
+ 🔧 Git Operations:
+ • Status view: naturecode git status
+ • Diff view: naturecode git diff
+ • Commit changes: naturecode git commit
+ • Push code: naturecode git push
+ • Pull updates: naturecode git pull
 
- 📊 代码分析：
- • 质量分析：naturecode code analyze
- • AI 审查：naturecode code review
- • 指标统计：naturecode code metrics
+ 📊 Code Analysis:
+ • Quality analysis: naturecode code analyze
+ • AI review: naturecode code review
+ • Metrics: naturecode code metrics
 
- 🏗️ 项目管理：
- • 项目分析：naturecode project analyze
- • 创建项目：naturecode project create
- • 依赖分析：naturecode project deps
+ 🏗️ Project Management:
+ • Project analysis: naturecode project analyze
+ • Create project: naturecode project create
+ • Dependency analysis: naturecode project deps
 
- 🔌 插件系统：
- • 插件列表：naturecode plugin list
- • 插件信息：naturecode plugin info <id>
- • 安装插件：naturecode plugin install <source>
+ 🔌 Plugin System:
+ • Plugin list: naturecode plugin list
+ • Plugin info: naturecode plugin info <id>
+ • Install plugin: naturecode plugin install <source>
 
- 💡 更多帮助：
- • 查看所有命令：naturecode --help
- • 完整文档：naturecode help --docs
- • AI 对话：naturecode help
+ 💡 More help:
+ • View all commands: naturecode --help
+ • Full documentation: naturecode help --docs
+ • AI conversation: naturecode help
 `);
       } else if (
         lowerQuestion.includes("hello") ||
@@ -932,30 +932,30 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
         lowerQuestion.includes("你好")
       ) {
         console.log(`
- 👋 你好！我是 NatureCode AI 助手！
+ 👋 Hello! I am NatureCode AI Assistant!
 
- 很高兴见到你！我是 NatureCode v1.4.5.5 的智能助手。
+ Nice to meet you! I am NatureCode v1.4.5.5's intelligent assistant.
 
- 🚀 我能帮助你：
- • 回答 NatureCode 使用问题
- • 提供编程帮助和代码分析
- • 管理文件和项目
- • 配置 AI 模型和工具
+ 🚀 How I can help you:
+ • Answer NatureCode usage questions
+ • Provide programming help and code analysis
+ • Manage files and projects
+ • Configure AI models and tools
 
- 💡 试试这些命令：
-   naturecode start          # 启动交互会话
-   naturecode help "如何开始" # 获取入门指南
-   naturecode model          # 配置 AI 模型
-   naturecode --help         # 查看所有命令
+ 💡 Try these commands:
+   naturecode start          # Start interactive session
+   naturecode help "how to start" # Get getting started guide
+   naturecode model          # Configure AI model
+   naturecode --help         # View all commands
 
- 📚 了解更多：
- • 完整文档：naturecode help --docs
- • AI 帮助：naturecode help (需要 Ollama)
- • 简单帮助：naturecode help --simple
+ 📚 Learn more:
+ • Full documentation: naturecode help --docs
+ • AI help: naturecode help (requires Ollama)
+ • Simple help: naturecode help --simple
 
- 🤖 AI 助手状态：
- 系统检测到 Ollama 已安装，但 AI 模型可能需要一些时间加载。
- 首次使用或长时间未使用后，模型加载可能需要 1-2 分钟。
+ 🤖 AI Assistant Status:
+ System detects Ollama is installed, but AI model may need time to load.
+ First use or after long idle time, model loading may take 1-2 minutes.
 `);
       } else {
         // General help from docs
@@ -965,28 +965,30 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
         }
 
         console.log(`
- 🔍 根据您的问题 "${question}"，建议：
+ 🔍 Based on your question "${question}", we suggest:
 
- 1. 查看完整文档：运行 naturecode help --docs
- 2. 获取 AI 帮助（需要安装 Ollama）：
-    - 自动安装：运行 naturecode help
-    - 手动安装：curl -fsSL https://ollama.ai/install.sh | sh
- 3. 查看简单帮助：naturecode help --simple
+ 1. View full documentation: run naturecode help --docs
+ 2. Get AI help (requires Ollama installation):
+    - Automatic installation: run naturecode help
+    - Manual installation: curl -fsSL https://ollama.ai/install.sh | sh
+ 3. View simple help: naturecode help --simple
 
- 💡 常见问题：
-   • 你是谁？ → naturecode help "你是谁"
-   • 如何开始？ → naturecode help "如何开始"
-   • 怎么配置 AI？ → naturecode help "配置 AI"
-   • Git 怎么用？ → naturecode help "Git 功能"
-   • 代码分析？ → naturecode help "代码分析"
-   • 有哪些命令？ → naturecode help "命令"
-   • Hello/你好 → naturecode help "hello"
+ 💡 Common questions:
+   • Who are you? → naturecode help "who are you"
+   • How to start? → naturecode help "how to start"
+   • How to configure AI? → naturecode help "configure model"
+   • How to use Git? → naturecode help "git features"
+   • Code analysis? → naturecode help "code analysis"
+   • What commands are available? → naturecode help "commands"
+   • Hello → naturecode help "hello"
 `);
       }
 
       console.log("=".repeat(70));
-      console.log("\n需要完整 AI 帮助？运行: naturecode help");
-      console.log("（首次运行会自动安装 Ollama 和 AI 模型）");
+      console.log("\nNeed full AI help? Run: naturecode help");
+      console.log(
+        "(First run will automatically install Ollama and AI models)",
+      );
     } catch (error) {
       console.log("\n显示简单帮助...");
       await this.showSimpleHelp();
