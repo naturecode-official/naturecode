@@ -159,7 +159,7 @@ export async function runModelConfiguration() {
         } else if (answers.provider === "openai") {
           return currentConfig.model || "gpt-5.2";
         } else if (answers.provider === "anthropic") {
-          return currentConfig.model || "claude-3-5-sonnet-20241022";
+          return currentConfig.model || "claude-sonnet-4.5";
         } else if (answers.provider === "gemini") {
           return currentConfig.model || "gemini-3-pro";
         } else if (answers.provider === "ollama") {

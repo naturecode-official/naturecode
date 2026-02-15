@@ -97,6 +97,31 @@ const OLLAMA_MODELS = [
 ];
 
 const ANTHROPIC_MODELS = [
+  // Claude 4.6 系列
+  "claude-opus-4.6",
+
+  // Claude 4.5 系列
+  "claude-opus-4.5",
+  "claude-sonnet-4.5",
+  "claude-haiku-4.5",
+
+  // Claude 4.1 系列
+  "claude-opus-4.1",
+
+  // Claude 4 系列
+  "claude-opus-4",
+  "claude-sonnet-4",
+
+  // Claude 3.7 系列
+  "claude-3.7-sonnet",
+
+  // Claude 3.5 系列
+  "claude-3.5-haiku",
+
+  // Claude 3 系列
+  "claude-3-haiku",
+
+  // 现有模型 (保持向后兼容)
   "claude-3-5-sonnet-20241022",
   "claude-3-5-haiku-20241022",
   "claude-3-opus-20240229",
