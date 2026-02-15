@@ -201,7 +201,7 @@ install_pro() {
         if [ "$COLORS_SUPPORTED" = "true" ]; then
             printf "%b" "${YELLOW}Enter choice [1-3]: ${NC}\n"
         else
-            echo -n "Enter choice [1-3]: "
+            echo "Enter choice [1-3]: "
         fi
         read -r choice
         
@@ -229,7 +229,7 @@ install_pro() {
         if [ "$COLORS_SUPPORTED" = "true" ]; then
             printf "%b" "${YELLOW}Update to v$TARGET_VERSION? [Y/n]: ${NC}\n"
         else
-            echo -n "Update to v$TARGET_VERSION? [Y/n]: "
+            echo "Update to v$TARGET_VERSION? [Y/n]: "
         fi
         read -r response
         if [[ "$response" =~ ^([nN][oO]|[nN])$ ]]; then
