@@ -20,29 +20,23 @@ const DEFAULT_CONFIG = {
 const VALID_PROVIDERS = ["deepseek", "openai", "ollama"];
 const DEEPSEEK_MODELS = ["deepseek-chat", "deepseek-reasoner"];
 const OPENAI_MODELS = [
-  // 当前实际可用的OpenAI模型
+  // 当前实际可用的OpenAI文本模型
   "gpt-4o",
   "gpt-4o-mini",
   "gpt-4-turbo",
   "gpt-4",
   "gpt-4-32k",
-  "gpt-4-vision-preview",
 
   // GPT-3.5系列
   "gpt-3.5-turbo",
   "gpt-3.5-turbo-16k",
   "gpt-3.5-turbo-instruct",
 
-  // 专用模型
-  "dall-e-3",
-  "whisper-1",
-
-  // 合理的未来预测模型 (2025-2026)
+  // 合理的未来预测文本模型 (2025-2026)
   "gpt-5",
   "gpt-5-turbo",
-  "gpt-5-vision",
 
-  // 企业版
+  // 企业版文本模型
   "gpt-4-enterprise",
   "gpt-4o-enterprise",
 

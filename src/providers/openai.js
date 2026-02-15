@@ -32,29 +32,23 @@ export class OpenAIProvider extends AIProvider {
 
   static getStaticAvailableModels() {
     return [
-      // 当前实际可用的OpenAI模型
+      // 当前实际可用的OpenAI文本模型
       "gpt-4o",
       "gpt-4o-mini",
       "gpt-4-turbo",
       "gpt-4",
       "gpt-4-32k",
-      "gpt-4-vision-preview",
 
       // GPT-3.5系列
       "gpt-3.5-turbo",
       "gpt-3.5-turbo-16k",
       "gpt-3.5-turbo-instruct",
 
-      // 专用模型
-      "dall-e-3",
-      "whisper-1", // 实际版本
-
-      // 合理的未来预测模型 (2025-2026)
+      // 合理的未来预测文本模型 (2025-2026)
       "gpt-5",
       "gpt-5-turbo",
-      "gpt-5-vision",
 
-      // 企业版
+      // 企业版文本模型
       "gpt-4-enterprise",
       "gpt-4o-enterprise",
 
@@ -70,29 +64,23 @@ export class OpenAIProvider extends AIProvider {
 
   getModelCategory(model) {
     const categories = {
-      // GPT-4系列 (当前)
+      // GPT-4系列 (当前文本模型)
       "gpt-4o": "GPT-4 Omni (最新旗舰模型)",
       "gpt-4o-mini": "GPT-4 Omni Mini (轻量高效)",
       "gpt-4-turbo": "GPT-4 Turbo (高性价比)",
       "gpt-4": "GPT-4 (标准版)",
       "gpt-4-32k": "GPT-4 32K (长上下文)",
-      "gpt-4-vision-preview": "GPT-4 Vision (视觉分析)",
 
       // GPT-3.5系列
       "gpt-3.5-turbo": "GPT-3.5 Turbo (经济实用)",
       "gpt-3.5-turbo-16k": "GPT-3.5 Turbo 16K (长对话)",
       "gpt-3.5-turbo-instruct": "GPT-3.5 Turbo Instruct (指令优化)",
 
-      // 专用模型
-      "dall-e-3": "DALL-E 3 (图像生成)",
-      "whisper-1": "Whisper (语音识别)",
-
-      // 未来预测模型
+      // 未来预测文本模型
       "gpt-5": "GPT-5 (下一代旗舰模型)",
       "gpt-5-turbo": "GPT-5 Turbo (高性能优化)",
-      "gpt-5-vision": "GPT-5 Vision (视觉增强)",
 
-      // 企业版
+      // 企业版文本模型
       "gpt-4-enterprise": "GPT-4 Enterprise (企业版)",
       "gpt-4o-enterprise": "GPT-4o Enterprise (企业版)",
 
@@ -194,7 +182,7 @@ export class OpenAIProvider extends AIProvider {
 
   static getStaticModelDescriptions() {
     return {
-      // 当前实际模型
+      // 当前实际文本模型
       "gpt-4o":
         "Latest flagship model, supports text, image, audio multimodal, 128K context",
       "gpt-4o-mini":
@@ -203,7 +191,6 @@ export class OpenAIProvider extends AIProvider {
         "GPT-4 Turbo version, supports vision, 128K context, knowledge cutoff 2023-12",
       "gpt-4": "Standard GPT-4 model, 8K context, knowledge cutoff 2023-04",
       "gpt-4-32k": "GPT-4 long context version, 32K context",
-      "gpt-4-vision-preview": "GPT-4 visual analysis preview",
 
       // GPT-3.5系列
       "gpt-3.5-turbo":
@@ -211,16 +198,11 @@ export class OpenAIProvider extends AIProvider {
       "gpt-3.5-turbo-16k": "GPT-3.5 Turbo long context version, 16K context",
       "gpt-3.5-turbo-instruct": "Specialized instruction-following model",
 
-      // 专用模型
-      "dall-e-3": "DALL-E 3 image generation model",
-      "whisper-1": "Whisper speech recognition and transcription model",
-
-      // 未来预测模型
+      // 未来预测文本模型
       "gpt-5": "Next-generation flagship model (predicted 2025-2026)",
       "gpt-5-turbo": "Optimized GPT-5 version (predicted)",
-      "gpt-5-vision": "GPT-5 with visual capabilities (predicted)",
 
-      // 企业版
+      // 企业版文本模型
       "gpt-4-enterprise": "GPT-4 Enterprise edition with advanced features",
       "gpt-4o-enterprise": "GPT-4o Enterprise edition with business tools",
 
@@ -240,13 +222,12 @@ export class OpenAIProvider extends AIProvider {
 
   static getStaticModelCapabilities(model) {
     const capabilities = {
-      // GPT-4系列
+      // GPT-4系列文本模型
       "gpt-4o": ["text", "vision", "audio", "128k-context", "reasoning"],
       "gpt-4o-mini": ["text", "vision", "audio", "128k-context", "fast"],
       "gpt-4-turbo": ["text", "vision", "128k-context", "knowledge-2023-12"],
       "gpt-4": ["text", "8k-context", "knowledge-2023-04"],
       "gpt-4-32k": ["text", "32k-context"],
-      "gpt-4-vision-preview": ["text", "vision", "image-understanding"],
 
       // GPT-3.5系列
       "gpt-3.5-turbo": [
@@ -258,11 +239,7 @@ export class OpenAIProvider extends AIProvider {
       "gpt-3.5-turbo-16k": ["text", "16k-context", "long-conversation"],
       "gpt-3.5-turbo-instruct": ["text", "instruction-following"],
 
-      // 专用模型
-      "dall-e-3": ["image-generation"],
-      "whisper-1": ["speech-recognition"],
-
-      // 未来预测模型
+      // 未来预测文本模型
       "gpt-5": [
         "text",
         "vision",
@@ -271,9 +248,8 @@ export class OpenAIProvider extends AIProvider {
         "advanced-reasoning",
       ],
       "gpt-5-turbo": ["text", "vision", "audio", "256k-context", "fast"],
-      "gpt-5-vision": ["text", "vision", "advanced-vision"],
 
-      // 企业版
+      // 企业版文本模型
       "gpt-4-enterprise": ["text", "vision", "enterprise", "advanced-features"],
       "gpt-4o-enterprise": [
         "text",
