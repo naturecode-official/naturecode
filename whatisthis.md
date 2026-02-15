@@ -237,7 +237,7 @@ git commit -m "$1"
 
 ## 项目概述
 
-**NatureCode** 是一个跨平台终端 AI 助手，支持 DeepSeek、OpenAI 和 Ollama 模型。当前版本：**v1.4.7.1**
+**NatureCode** 是一个跨平台终端 AI 助手，支持 DeepSeek、OpenAI 和 Ollama 模型。当前版本：**v1.4.7.2**
 
 ### 🚨 必要守则（AI 助手必须遵守）
 
@@ -1127,6 +1127,13 @@ npm run typecheck
    - 统一日志函数名称为 `log_warning`
    - 确保安装过程无错误
 
+#### 1.4.7.2 版本更新内容：
+
+1. **安装消息修复**：
+   - 修复安装成功消息中的错误指引
+   - 将 "naturecode help 'your question'" 改为 "naturecode start (for AI assistance)"
+   - 准确反映实际可用功能
+
 #### 技术细节：
 
 - **推送方式**: 使用 HTTPS + Token 推送（SSL 验证临时禁用）
@@ -1135,8 +1142,9 @@ npm run typecheck
 
 #### 当前状态：
 
-- ✅ 版本 1.4.7.1 已准备发布
+- ✅ 版本 1.4.7.2 已准备发布
 - ✅ 安装系统正常工作
+- ✅ 安装消息准确无误
 - ✅ 所有版本引用一致
 - ✅ GitHub 仓库同步完成
 
