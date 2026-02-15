@@ -347,6 +347,75 @@ show_post_install() {
     echo ""
     echo "For more information, visit:"
     echo "  https://github.com/naturecode-official/naturecode"
+    
+    # Setup AI assistant automatically
+    echo ""
+    if [ "$COLORS_SUPPORTED" = "true" ]; then
+        printf "%b" "${CYAN}[INFO]${NC} Setting up AI assistant...\n"
+    else
+        echo "[INFO] Setting up AI assistant..."
+    fi
+    
+    # Create minimal configuration for AI assistance
+    setup_ai_assistant() {
+        local install_dir="$1"
+        local config_dir="$HOME/.naturecode"
+        
+        # Ensure config directory exists
+        mkdir -p "$config_dir"
+        
+        # Create minimal config if it doesn't exist
+        if [ ! -f "$config_dir/config.json" ]; then
+            cat > "$config_dir/config.json" << 'EOF'
+{
+  "provider": "ollama",
+  "model": "deepseek-coder",
+  "temperature": 0.7,
+  "maxTokens": 2000,
+  "stream": true
+}
+EOF
+            if [ "$COLORS_SUPPORTED" = "true" ]; then
+                printf "%b" "${GREEN}[SUCCESS]${NC} Created AI assistant configuration\n"
+            else
+                echo "[SUCCESS] Created AI assistant configuration"
+            fi
+        fi
+        
+        # Download latest docs.md for AI context
+        if [ -d "$install_dir" ]; then
+            cd "$install_dir"
+            if command -v curl >/dev/null 2>&1; then
+                curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/docs.md -o docs.md 2>/dev/null || true
+                if [ -f "docs.md" ]; then
+                    if [ "$COLORS_SUPPORTED" = "true" ]; then
+                        printf "%b" "${GREEN}[SUCCESS]${NC} Downloaded latest documentation\n"
+                    else
+                        echo "[SUCCESS] Downloaded latest documentation"
+                    fi
+                fi
+            fi
+        fi
+        
+        # Suggest Ollama installation for full AI support
+        echo ""
+        if [ "$COLORS_SUPPORTED" = "true" ]; then
+            printf "%b" "${YELLOW}[NOTE]${NC} For full AI assistance, Ollama will be automatically installed when you first run:\n"
+            printf "%b" "        ${CYAN}naturecode help \"your question\"${NC}\n"
+            echo ""
+            printf "%b" "Or install Ollama manually: ${CYAN}curl -fsSL https://ollama.ai/install.sh | sh${NC}\n"
+        else
+            echo "[NOTE] For full AI assistance, Ollama will be automatically installed when you first run:"
+            echo "        naturecode help \"your question\""
+            echo ""
+            echo "Or install Ollama manually: curl -fsSL https://ollama.ai/install.sh | sh"
+        fi
+    }
+    
+    # Run AI assistant setup
+    if [ -n "$PERMANENT_DIR" ]; then
+        setup_ai_assistant "$PERMANENT_DIR"
+    fi
     echo ""
 }
 

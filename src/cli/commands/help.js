@@ -223,11 +223,51 @@ For specific questions: naturecode help "your question"
     console.log("NatureCode AI Assistant v1.4.5.4\n");
 
     try {
+      // Check if Ollama is available first
+      const ollamaInstalled = await this.checkOllamaInstalled();
+      if (!ollamaInstalled) {
+        console.log("🤖 Setting up AI assistant for the first time...");
+        console.log("This will install Ollama and download an AI model.");
+        console.log("It may take a few minutes depending on your internet speed.\n");
+        
+        const setupSuccess = await this.setupOllamaForDirectChat();
+        if (!setupSuccess) {
+          console.log("\n📚 Showing documentation-based help instead...");
+          await this.showDocsBasedHelp(question);
+          return;
+        }
+      }
+
       // Setup Ollama if needed
       const setupSuccess = await this.setupOllamaForDirectChat();
       if (!setupSuccess) {
+        console.log("\n📚 Showing documentation-based help instead...");
+        await this.showDocsBasedHelp(question);
         return;
       }
+
+      // Get documentation context
+      const docsContext = await this.getDocsContext();
+
+      // Prepare prompt
+      const prompt = this.createDirectHelpPrompt(question, docsContext);
+
+      console.log("Thinking...\n");
+
+      const answer = await this.callOllama(prompt);
+
+      console.log("\n" + "=".repeat(70));
+      console.log("AI Assistance:");
+      console.log("=".repeat(70));
+      console.log(answer);
+      console.log("=".repeat(70));
+      console.log("\nNeed more help? Run: naturecode help");
+    } catch (error) {
+      console.error("\nError:", error.message);
+      console.log("\n📚 Showing documentation-based help instead...");
+      await this.showDocsBasedHelp(question);
+    }
+  }
 
       // Get documentation context
       const docsContext = await this.getDocsContext();
@@ -732,6 +772,131 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
         });
       },
     );
+  }
+
+  async showDocsBasedHelp(question) {
+    try {
+      const docsContext = await this.getDocsContext();
+      
+      // Simple keyword matching for common questions
+      const lowerQuestion = question.toLowerCase();
+      
+      console.log("\n" + "=".repeat(70));
+      console.log("Documentation Help:");
+      console.log("=".repeat(70));
+      
+      if (lowerQuestion.includes("如何开始") || lowerQuestion.includes("how to start") || lowerQuestion.includes("getting started")) {
+        console.log(`
+🚀 如何开始使用 NatureCode：
+
+1. 配置 AI 模型：
+   naturecode model
+
+2. 启动交互会话：
+   naturecode start
+
+3. 获取帮助：
+   naturecode help "你的问题"
+
+4. 查看所有命令：
+   naturecode --help
+
+📦 自动安装 AI 助手：
+首次运行 naturecode help 时，会自动安装 Ollama 和 DeepSeek 模型。
+
+🔧 手动安装 AI：
+- Ollama: curl -fsSL https://ollama.ai/install.sh | sh
+- DeepSeek 模型: ollama pull deepseek-coder
+
+💡 示例：
+   naturecode help "如何配置 DeepSeek API"
+   naturecode help "怎么使用 Git 功能"
+   naturecode help "代码分析怎么用"
+`);
+      } else if (lowerQuestion.includes("配置") || lowerQuestion.includes("configure") || lowerQuestion.includes("model")) {
+        console.log(`
+🤖 配置 AI 模型：
+
+NatureCode 支持三种 AI 提供商：
+
+1. DeepSeek (推荐)
+   - 需要 API 密钥：https://platform.deepseek.com/
+   - 运行：naturecode model
+   - 选择 DeepSeek，输入 API 密钥
+
+2. OpenAI
+   - 需要 API 密钥：https://platform.openai.com/
+   - 运行：naturecode model
+   - 选择 OpenAI，输入 API 密钥
+
+3. Ollama (本地，免费)
+   - 自动安装：运行 naturecode help 时自动安装
+   - 或手动：curl -fsSL https://ollama.ai/install.sh | sh
+   - 模型：ollama pull deepseek-coder
+
+📝 配置文件位置：~/.naturecode/config.json
+`);
+      } else if (lowerQuestion.includes("git") || lowerQuestion.includes("版本控制")) {
+        console.log(`
+🔧 Git 集成功能：
+
+可用命令：
+  naturecode git status      # 查看 Git 状态
+  naturecode git diff        # 查看更改
+  naturecode git commit      # 提交更改
+  naturecode git push        # 推送到远程仓库
+  naturecode git pull        # 从远程拉取
+
+💡 示例：
+  naturecode git status
+  naturecode git commit -m "修复了bug"
+  naturecode git push origin main
+`);
+      } else if (lowerQuestion.includes("代码") || lowerQuestion.includes("code") || lowerQuestion.includes("分析")) {
+        console.log(`
+📊 代码分析功能：
+
+可用命令：
+  naturecode code analyze    # 分析代码质量
+  naturecode code review     # AI 代码审查
+  naturecode code metrics    # 显示代码指标
+
+💡 示例：
+  naturecode code analyze src/
+  naturecode code review main.js
+  naturecode code metrics .
+`);
+      } else {
+        // General help from docs
+        const introMatch = docsContext.match(/(^.*?##.*?\n)/s);
+        if (introMatch) {
+          console.log(introMatch[1]);
+        }
+        
+        console.log(`
+🔍 根据您的问题 "${question}"，建议：
+
+1. 查看完整文档：运行 naturecode help --docs
+2. 获取 AI 帮助（需要安装 Ollama）：
+   - 自动安装：运行 naturecode help
+   - 手动安装：curl -fsSL https://ollama.ai/install.sh | sh
+3. 查看简单帮助：naturecode help --simple
+
+💡 常见问题：
+  • 如何开始？ → naturecode help "如何开始"
+  • 怎么配置 AI？ → naturecode help "配置 AI"
+  • Git 怎么用？ → naturecode help "Git 功能"
+  • 代码分析？ → naturecode help "代码分析"
+`);
+      }
+      
+      console.log("=".repeat(70));
+      console.log("\n需要完整 AI 帮助？运行: naturecode help");
+      console.log("（首次运行会自动安装 Ollama 和 AI 模型）");
+    } catch (error) {
+      console.log("\n显示简单帮助...");
+      await this.showSimpleHelp();
+    }
   }
 }
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-NatureCode is a cross-platform terminal AI assistant that provides intelligent development tools, collaboration features, and performance monitoring. Version 1.4.3 includes comprehensive third-party tool integration and real-time performance monitoring systems.
+NatureCode is a cross-platform terminal AI assistant that provides intelligent development tools, collaboration features, and performance monitoring. Version 1.4.5.4 includes comprehensive AI assistance, automatic Ollama installation, and real-time documentation support.
 
 ## Table of Contents
 
@@ -21,36 +21,80 @@ NatureCode is a cross-platform terminal AI assistant that provides intelligent d
 
 ## Installation
 
-### Prerequisites
+### 一键安装（推荐）
 
-- Node.js 18 or higher
-- npm 8 or higher
-- Git (optional, for Git integration features)
+```bash
+curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash
+```
 
-### Installation Methods
+### 安装特性
 
-#### Method 1: Global Installation
+1. **自动 AI 助手设置**：安装时会自动配置 AI 助手
+2. **文档下载**：自动下载最新使用文档
+3. **智能检测**：检测系统环境并优化安装
+
+### 手动安装
+
+#### 前提条件
+
+- Node.js 18 或更高版本
+- npm 8 或更高版本
+- Git（可选，用于 Git 集成功能）
+
+#### 方法 1: 全局安装
 
 ```bash
 npm install -g naturecode
 ```
 
-#### Method 2: From Source
+#### 方法 2: 从源码安装
 
 ```bash
-git clone https://github.com/yourusername/naturecode.git
+git clone https://github.com/naturecode-official/naturecode.git
 cd naturecode
 npm install
 npm link
 ```
 
-#### Method 3: Using Release Packages
+## 🚀 AI 助手快速开始
 
-Download the appropriate package for your system from the releases directory:
+### 智能帮助系统
 
-- `naturecode-macos` for macOS
-- `naturecode-linux` for Linux
-- `naturecode-win.exe` for Windows
+NatureCode 内置智能 AI 助手，首次使用时会自动安装所需组件：
+
+```bash
+# 首次运行会自动安装 Ollama 和 AI 模型
+naturecode help "如何开始使用"
+
+# 直接提问获取帮助
+naturecode help "怎么配置 DeepSeek API"
+
+# 启动交互式 AI 对话
+naturecode help
+```
+
+### 自动安装流程
+
+1. **首次运行 `naturecode help` 时**：
+   - 自动检测是否安装 Ollama
+   - 如未安装，自动下载并安装 Ollama
+   - 自动下载 DeepSeek-coder 模型
+   - 配置本地 AI 助手
+
+2. **安装内容**：
+   - Ollama 本地 AI 运行时
+   - DeepSeek-coder 代码专用模型
+   - 最新使用文档
+
+3. **手动安装选项**：
+
+   ```bash
+   # 手动安装 Ollama
+   curl -fsSL https://ollama.ai/install.sh | sh
+
+   # 手动下载模型
+   ollama pull deepseek-coder
+   ```
 
 ## Quick Start
 
