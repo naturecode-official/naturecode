@@ -79,8 +79,31 @@ const ANTHROPIC_MODELS = [
 ];
 
 const GEMINI_MODELS = [
-  "gemini-2.0-flash-exp",
+  // Gemini 3 Series (Latest)
+  "gemini-3-pro",
+  "gemini-3-deep-think",
+  "gemini-3-flash",
+
+  // Gemini 2.5 Series
+  "gemini-2.5-pro",
+  "gemini-2.5-flash",
+  "gemini-2.5-flash-lite",
+  "gemini-2.5-computer-use",
+
+  // Gemini 2.0 Series
   "gemini-2.0-flash",
+  "gemini-2.0-pro",
+  "gemini-2.0-flash-thinking",
+
+  // Open Source Gemma Series
+  "gemma-3n",
+  "gemma-3",
+  "gemini-2",
+  "codegemma",
+  "shieldgemma-2",
+
+  // Legacy models (keep for backward compatibility)
+  "gemini-2.0-flash-exp",
   "gemini-1.5-flash",
   "gemini-1.5-pro",
   "gemini-1.0-pro",

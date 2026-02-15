@@ -137,29 +137,31 @@
   - claude-3-sonnet-20240229 - 平衡的通用模型
   - claude-3-haiku-20240307 - 最快的简单查询模型
 
-### 8. Google Gemini 模型支持添加
+### 8. Google Gemini 模型支持添加和更新
 **新增功能**:
 1. **Gemini provider实现**: `src/providers/gemini.js`
-   - 支持Gemini 2.0系列 (Flash Experimental, Flash)
-   - 支持Gemini 1.5系列 (Flash, Pro)
-   - 支持Gemini 1.0 Pro
+   - 支持Gemini 3系列 (Pro, Deep Think, Flash)
+   - 支持Gemini 2.5系列 (Pro, Flash, Flash-Lite, Computer Use)
+   - 支持Gemini 2.0系列 (Flash, Pro, Flash Thinking)
+   - 支持开源Gemma系列 (Gemma 3n, Gemma 3, Gemini 2, CodeGemma, ShieldGemma 2)
    - 完整的文件系统集成
    - 流式和非流式生成支持
    - Google API格式适配
+   - 高级能力分类 (text, chat, vision, code, security)
 
 2. **配置系统更新**: `src/config/manager.js`
    - 添加Gemini到VALID_PROVIDERS
-   - 添加GEMINI_MODELS常量 (5个模型)
+   - 更新GEMINI_MODELS常量 (19个模型)
    - 添加模型验证逻辑
-   - 支持Gemini故障回退模型
+   - 支持Gemini故障回退模型 (gemini-3-pro)
 
 3. **配置向导更新**: `src/cli/commands/model.js`
    - 添加Gemini provider选项
    - 添加Gemini API key输入
-   - 添加Gemini模型选择 (5个模型)
-   - 添加Gemini模型类型选择 (text, chat, vision)
-   - 添加Gemini故障回退支持 (gemini-1.5-flash)
-   - 修复模型选择字段缺失的问题
+   - 更新Gemini模型选择 (19个模型)
+   - 更新Gemini模型类型选择 (text, chat, vision, code, security)
+   - 更新Gemini故障回退支持 (gemini-3-pro)
+   - 更新默认模型为gemini-3-pro
 
 4. **启动系统更新**: `src/cli/commands/start.js`
    - 导入GeminiProvider
@@ -169,15 +171,40 @@
    - 修复Ollama API key输入问题 (移除when条件中的ollama)
    - 修复模型选择字段缺失的问题
 
-**Gemini模型列表** (5个模型):
+**Gemini模型列表** (19个模型):
+- **Gemini 3系列** (最新):
+  - gemini-3-pro (默认) - 最先进的复杂推理和分析模型 (推荐)
+  - gemini-3-deep-think - 专为深度分析思维和问题解决
+  - gemini-3-flash - 快速高效的最新代模型
+
+- **Gemini 2.5系列**:
+  - gemini-2.5-pro - 高性能专业用途模型
+  - gemini-2.5-flash - 平衡的速度和能力
+  - gemini-2.5-flash-lite - 轻量版简单任务模型
+  - gemini-2.5-computer-use - 专为计算机交互和自动化
+
 - **Gemini 2.0系列**:
-  - gemini-2.0-flash-exp (实验版) - 最新实验模型，增强能力
-  - gemini-2.0-flash (默认) - 快速高效的通用模型
-- **Gemini 1.5系列**:
-  - gemini-1.5-flash (故障回退) - 平衡的性能和速度
-  - gemini-1.5-pro - 最强大的复杂推理模型
-- **Gemini 1.0系列**:
-  - gemini-1.0-pro - 原始专业模型，强大能力
+  - gemini-2.0-flash - 快速高效的通用模型
+  - gemini-2.0-pro - 专业级强大能力模型
+  - gemini-2.0-flash-thinking - 增强推理能力
+
+- **开源Gemma系列**:
+  - gemma-3n - 最新开源增强能力模型
+  - gemma-3 - 通用开源模型
+  - gemini-2 - Gemini 2开源版本
+  - codegemma - 专为代码生成和分析
+  - shieldgemma-2 - 安全重点增强安全特性
+
+- **遗留模型** (向后兼容):
+  - gemini-2.0-flash-exp - 实验性增强能力模型
+  - gemini-1.5-flash - 平衡的性能和速度
+  - gemini-1.5-pro - 复杂推理能力模型
+  - gemini-1.0-pro - 原始专业强大能力模型
+
+**故障回退机制**:
+- 默认故障回退模型: `gemini-3-pro`
+- 当选择的Gemini模型失效时自动切换到gemini-3-pro
+- 确保服务的高可用性
 
 ### 8. GitHub推送记录
 **今天推送的所有提交**:

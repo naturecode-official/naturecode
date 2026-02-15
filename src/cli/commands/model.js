@@ -161,7 +161,7 @@ export async function runModelConfiguration() {
         } else if (answers.provider === "anthropic") {
           return currentConfig.model || "claude-3-5-sonnet-20241022";
         } else if (answers.provider === "gemini") {
-          return currentConfig.model || "gemini-2.0-flash";
+          return currentConfig.model || "gemini-3-pro";
         } else if (answers.provider === "ollama") {
           return currentConfig.model || "llama3.2:latest";
         }
@@ -262,31 +262,58 @@ export async function runModelConfiguration() {
 
           return choices;
         } else if (answers.provider === "gemini") {
-          // Gemini models support text and chat
+          // Use static method to get Gemini model capabilities
+          const capabilities = GeminiProvider.getStaticModelCapabilities(
+            answers.model,
+          );
+
           const choices = [];
 
-          choices.push({
-            name: "Chat - Interactive conversation (recommended for Gemini)",
-            value: "chat",
-            short: "Chat",
-          });
+          if (capabilities.includes("text")) {
+            choices.push({
+              name: "Text Generation - Standard text completion",
+              value: "text",
+              short: "Text",
+            });
+          }
 
-          choices.push({
-            name: "Text - Standard text generation",
-            value: "text",
-            short: "Text",
-          });
+          if (capabilities.includes("chat")) {
+            choices.push({
+              name: "Chat - Interactive conversation (recommended for Gemini)",
+              value: "chat",
+              short: "Chat",
+            });
+          }
 
-          // Check if model has vision capabilities
-          if (
-            (answers.model && answers.model.includes("vision")) ||
-            answers.model === "gemini-1.5-pro" ||
-            answers.model === "gemini-1.5-flash"
-          ) {
+          if (capabilities.includes("vision")) {
             choices.push({
               name: "Vision - Image analysis and understanding",
               value: "vision",
               short: "Vision",
+            });
+          }
+
+          if (capabilities.includes("code")) {
+            choices.push({
+              name: "Code - Code generation and analysis",
+              value: "code",
+              short: "Code",
+            });
+          }
+
+          if (capabilities.includes("security")) {
+            choices.push({
+              name: "Security - Security-focused analysis and protection",
+              value: "security",
+              short: "Security",
+            });
+          }
+
+          if (choices.length === 0) {
+            choices.push({
+              name: "Text - Default text generation",
+              value: "text",
+              short: "Text",
             });
           }
 
@@ -468,7 +495,7 @@ export async function runModelConfiguration() {
         : answers.provider === "anthropic"
           ? "claude-3-5-haiku-20241022"
           : answers.provider === "gemini"
-            ? "gemini-1.5-flash"
+            ? "gemini-3-pro"
             : undefined,
   };
 
