@@ -4,6 +4,14 @@
 
 NatureCode is a cross-platform terminal AI assistant that provides intelligent development tools, collaboration features, and performance monitoring. Version 1.4.5.5 includes comprehensive AI assistance, automatic Ollama installation, and real-time documentation support.
 
+### Language Support
+
+- **Default Language**: English (all interfaces and documentation)
+- **AI Translation**: The AI assistant handles multilingual translation automatically
+- **User Input**: Users can ask questions in any language (Chinese, English, etc.)
+- **System Response**: Default responses in English, AI provides translation when needed
+- **Code & Comments**: Always in English for consistency
+
 ## Table of Contents
 
 1. [Installation](#installation)
@@ -21,17 +29,19 @@ NatureCode is a cross-platform terminal AI assistant that provides intelligent d
 
 ## Installation
 
-### 一键安装（推荐）
+### One-Command Installation (Recommended)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-smart.sh | bash
 ```
 
-### 安装特性
+### Installation Features
 
-1. **自动 AI 助手设置**：安装时会自动配置 AI 助手
-2. **文档下载**：自动下载最新使用文档
-3. **智能检测**：检测系统环境并优化安装
+1. **Automatic AI Assistant Setup**: Automatically configures AI assistant during installation
+2. **Documentation Download**: Downloads latest usage documentation
+3. **Smart Detection**: Detects system environment and optimizes installation
+4. **English Default**: Installs with English as default language interface
+5. **Multilingual AI**: AI assistant handles translation for non-English questions
 
 ### 手动安装
 
@@ -56,43 +66,60 @@ npm install
 npm link
 ```
 
-## 🚀 AI 助手快速开始
+## 🚀 AI Assistant Quick Start
 
-### 智能帮助系统
+### Intelligent Help System
 
-NatureCode 内置智能 AI 助手，首次使用时会自动安装所需组件：
+NatureCode includes a built-in intelligent AI assistant that automatically installs required components on first use:
 
 ```bash
-# 首次运行会自动安装 Ollama 和 AI 模型
-naturecode help "如何开始使用"
+# First run will automatically install Ollama and AI models
+naturecode help "how to get started"
 
-# 直接提问获取帮助
-naturecode help "怎么配置 DeepSeek API"
+# Ask direct questions for help
+naturecode help "how to configure DeepSeek API"
 
-# 启动交互式 AI 对话
+# Start interactive AI conversation
 naturecode help
 ```
 
-### 自动安装流程
+### Multilingual Support
 
-1. **首次运行 `naturecode help` 时**：
-   - 自动检测是否安装 Ollama
-   - 如未安装，自动下载并安装 Ollama
-   - 自动下载 DeepSeek-coder 模型
-   - 配置本地 AI 助手
+The system defaults to English, but the AI assistant handles translation:
 
-2. **安装内容**：
-   - Ollama 本地 AI 运行时
-   - DeepSeek-coder 代码专用模型
-   - 最新使用文档
+```bash
+# English questions (default)
+naturecode help "who are you"
+naturecode help "how to start"
 
-3. **手动安装选项**：
+# Chinese questions (AI will translate)
+naturecode help "你是谁"
+naturecode help "如何开始"
+
+# Mixed language questions
+naturecode help "configure 模型"
+```
+
+### Automatic Installation Process
+
+1. **On first run of `naturecode help`**:
+   - Automatically detects if Ollama is installed
+   - If not installed, automatically downloads and installs Ollama
+   - Automatically downloads DeepSeek-coder model
+   - Configures local AI assistant
+
+2. **Installation includes**:
+   - Ollama local AI runtime
+   - DeepSeek-coder code-specific model
+   - Latest usage documentation
+
+3. **Manual installation options**:
 
    ```bash
-   # 手动安装 Ollama
+   # Manual Ollama installation
    curl -fsSL https://ollama.ai/install.sh | sh
 
-   # 手动下载模型
+   # Manual model download
    ollama pull deepseek-coder
    ```
 
