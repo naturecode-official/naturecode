@@ -237,7 +237,7 @@ git commit -m "$1"
 
 ## 项目概述
 
-**NatureCode** 是一个跨平台终端 AI 助手，支持 DeepSeek、OpenAI 和 Ollama 模型。当前版本：**v1.4.7**
+**NatureCode** 是一个跨平台终端 AI 助手，支持 DeepSeek、OpenAI 和 Ollama 模型。当前版本：**v1.4.7.1**
 
 ### 🚨 必要守则（AI 助手必须遵守）
 
@@ -1099,8 +1099,51 @@ npm run typecheck
 
 ---
 
+## 📝 2026-02-15 更新记录
+
+### 版本更新: 1.4.6 → 1.4.7 → 1.4.7.1
+
+#### 1.4.7 版本更新内容：
+
+1. **版本号统一更新**：
+   - package.json: 1.4.6 → 1.4.7
+   - CLI 版本显示更新
+   - ASCII 艺术版本更新
+   - 反馈系统版本更新
+
+2. **安装脚本更新**：
+   - install-smart.sh: 版本显示和默认版本
+   - install-curl.sh: 脚本版本、提示信息和默认版本
+   - install-local-test.sh: 版本提示和默认版本
+
+3. **文档更新**：
+   - whatisthis.md: 版本信息更新
+   - AGENTS.md: 代码风格指南完善
+
+#### 1.4.7.1 版本修复内容：
+
+1. **安装脚本修复**：
+   - 修复 `log_warn: command not found` 错误
+   - 统一日志函数名称为 `log_warning`
+   - 确保安装过程无错误
+
+#### 技术细节：
+
+- **推送方式**: 使用 HTTPS + Token 推送（SSL 验证临时禁用）
+- **测试验证**: 安装命令和版本检查通过
+- **安全措施**: Token 单次使用，不保存
+
+#### 当前状态：
+
+- ✅ 版本 1.4.7.1 已准备发布
+- ✅ 安装系统正常工作
+- ✅ 所有版本引用一致
+- ✅ GitHub 仓库同步完成
+
+---
+
 **最后更新**: 2026-02-15  
-**版本**: NatureCode v1.4.7 已部署到 GitHub
+**版本**: NatureCode v1.4.7.1 已部署到 GitHub
 **状态**: 完整功能，一键安装系统就绪  
 **安装命令**: `curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash`  
 **仓库**: https://github.com/naturecode-official/naturecode
