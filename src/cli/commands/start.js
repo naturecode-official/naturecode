@@ -5,6 +5,7 @@ import { DeepSeekProvider } from "../../providers/deepseek.js";
 import { OpenAIProvider } from "../../providers/openai.js";
 import { OllamaProvider } from "../../providers/ollama.js";
 import { AnthropicProvider } from "../../providers/anthropic.js";
+import { GeminiProvider } from "../../providers/gemini.js";
 import {
   formatResponse,
   showWelcome,
@@ -49,6 +50,8 @@ function createProvider(config) {
       return new OllamaProvider(config);
     case "anthropic":
       return new AnthropicProvider(config);
+    case "gemini":
+      return new GeminiProvider(config);
     default:
       throw new Error(`Unsupported provider: ${config.provider}`);
   }

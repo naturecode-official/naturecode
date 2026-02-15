@@ -17,7 +17,7 @@ const DEFAULT_CONFIG = {
   fallbackModel: undefined,
 };
 
-const VALID_PROVIDERS = ["deepseek", "openai", "ollama", "anthropic"];
+const VALID_PROVIDERS = ["deepseek", "openai", "ollama", "anthropic", "gemini"];
 const DEEPSEEK_MODELS = ["deepseek-chat", "deepseek-reasoner"];
 const OPENAI_MODELS = [
   // 当前实际可用的OpenAI文本模型
@@ -76,6 +76,14 @@ const ANTHROPIC_MODELS = [
   "claude-3-opus-20240229",
   "claude-3-sonnet-20240229",
   "claude-3-haiku-20240307",
+];
+
+const GEMINI_MODELS = [
+  "gemini-2.0-flash-exp",
+  "gemini-2.0-flash",
+  "gemini-1.5-flash",
+  "gemini-1.5-pro",
+  "gemini-1.0-pro",
 ];
 
 class ConfigManager {
@@ -196,6 +204,12 @@ class ConfigManager {
           `Anthropic model must be one of: ${ANTHROPIC_MODELS.join(", ")}`,
         );
       }
+    } else if (validated.provider === "gemini") {
+      if (!GEMINI_MODELS.includes(validated.model)) {
+        throw new Error(
+          `Gemini model must be one of: ${GEMINI_MODELS.join(", ")}`,
+        );
+      }
     }
 
     if (validated.temperature < 0 || validated.temperature > 2) {
@@ -235,6 +249,12 @@ class ConfigManager {
             `Anthropic fallback model must be one of: ${ANTHROPIC_MODELS.join(", ")}`,
           );
         }
+      } else if (validated.provider === "gemini") {
+        if (!GEMINI_MODELS.includes(validated.fallbackModel)) {
+          throw new Error(
+            `Gemini fallback model must be one of: ${GEMINI_MODELS.join(", ")}`,
+          );
+        }
       }
     }
 
@@ -270,6 +290,8 @@ class ConfigManager {
         return OLLAMA_MODELS;
       case "anthropic":
         return ANTHROPIC_MODELS;
+      case "gemini":
+        return GEMINI_MODELS;
       default:
         return [];
     }

@@ -137,6 +137,48 @@
   - claude-3-sonnet-20240229 - 平衡的通用模型
   - claude-3-haiku-20240307 - 最快的简单查询模型
 
+### 8. Google Gemini 模型支持添加
+**新增功能**:
+1. **Gemini provider实现**: `src/providers/gemini.js`
+   - 支持Gemini 2.0系列 (Flash Experimental, Flash)
+   - 支持Gemini 1.5系列 (Flash, Pro)
+   - 支持Gemini 1.0 Pro
+   - 完整的文件系统集成
+   - 流式和非流式生成支持
+   - Google API格式适配
+
+2. **配置系统更新**: `src/config/manager.js`
+   - 添加Gemini到VALID_PROVIDERS
+   - 添加GEMINI_MODELS常量 (5个模型)
+   - 添加模型验证逻辑
+   - 支持Gemini故障回退模型
+
+3. **配置向导更新**: `src/cli/commands/model.js`
+   - 添加Gemini provider选项
+   - 添加Gemini API key输入
+   - 添加Gemini模型选择 (5个模型)
+   - 添加Gemini模型类型选择 (text, chat, vision)
+   - 添加Gemini故障回退支持 (gemini-1.5-flash)
+   - 修复模型选择字段缺失的问题
+
+4. **启动系统更新**: `src/cli/commands/start.js`
+   - 导入GeminiProvider
+   - 更新createProvider函数支持Gemini
+
+5. **Bug修复**:
+   - 修复Ollama API key输入问题 (移除when条件中的ollama)
+   - 修复模型选择字段缺失的问题
+
+**Gemini模型列表** (5个模型):
+- **Gemini 2.0系列**:
+  - gemini-2.0-flash-exp (实验版) - 最新实验模型，增强能力
+  - gemini-2.0-flash (默认) - 快速高效的通用模型
+- **Gemini 1.5系列**:
+  - gemini-1.5-flash (故障回退) - 平衡的性能和速度
+  - gemini-1.5-pro - 最强大的复杂推理模型
+- **Gemini 1.0系列**:
+  - gemini-1.0-pro - 原始专业模型，强大能力
+
 ### 8. GitHub推送记录
 **今天推送的所有提交**:
 1. **7e2f77d** - feat: enhance configuration wizard with default prompts and OpenAI fallback model support
@@ -169,18 +211,20 @@
 2. 配置向导用户体验改进
 3. Ollama智能help功能删除
 4. Anthropic (Claude) 模型支持添加
-5. 所有更改已推送到GitHub
-6. 模型列表现在干净、合理、实用
+5. Google Gemini 模型支持添加
+6. 所有更改已推送到GitHub
+7. 模型列表现在干净、合理、实用
 
 🎯 **当前状态**:
 - OpenAI模型列表: 18个纯文本模型
 - Anthropic模型列表: 5个Claude模型
+- Gemini模型列表: 5个Google模型
 - 配置向导: 支持默认值和故障回退
 - help命令: 简化版，只显示基本帮助
 - GitHub: 所有更改已同步
 
 📊 **技术架构**:
-- 支持DeepSeek、OpenAI、Anthropic、Ollama四个provider
+- 支持DeepSeek、OpenAI、Anthropic、Gemini、Ollama五个provider
 - 配置系统支持故障回退机制
 - 用户界面友好，支持默认值
 - 代码质量经过多次清理和优化

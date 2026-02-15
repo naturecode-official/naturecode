@@ -2,9 +2,10 @@ import axios from "axios";
 import { AIProvider } from "./base.js";
 import { formatFileList } from "../utils/filesystem.js";
 
-const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
+const GEMINI_API_URL =
+  "https://generativelanguage.googleapis.com/v1beta/models";
 
-export class AnthropicProvider extends AIProvider {
+export class GeminiProvider extends AIProvider {
   constructor(config) {
     super(config);
     // Only validate if model is provided
@@ -18,12 +19,12 @@ export class AnthropicProvider extends AIProvider {
 
   validateConfig(config) {
     if (!config.apiKey || typeof config.apiKey !== "string") {
-      throw new Error("Anthropic API key is required");
+      throw new Error("Google Gemini API key is required");
     }
 
     if (config.model && !this.getAvailableModels().includes(config.model)) {
       throw new Error(
-        `Anthropic model must be one of: ${this.getAvailableModels().join(", ")}`,
+        `Gemini model must be one of: ${this.getAvailableModels().join(", ")}`,
       );
     }
 
@@ -31,42 +32,55 @@ export class AnthropicProvider extends AIProvider {
   }
 
   getAvailableModels() {
-    return AnthropicProvider.getStaticAvailableModels();
+    return GeminiProvider.getStaticAvailableModels();
   }
 
   static getStaticAvailableModels() {
     return [
-      "claude-3-5-sonnet-20241022",
-      "claude-3-5-haiku-20241022",
-      "claude-3-opus-20240229",
-      "claude-3-sonnet-20240229",
-      "claude-3-haiku-20240307",
+      "gemini-2.0-flash-exp",
+      "gemini-2.0-flash",
+      "gemini-1.5-flash",
+      "gemini-1.5-pro",
+      "gemini-1.0-pro",
     ];
   }
 
   static getStaticModelDescriptions() {
     return {
-      "claude-3-5-sonnet-20241022":
-        "Claude 3.5 Sonnet - Most capable model for complex tasks",
-      "claude-3-5-haiku-20241022":
-        "Claude 3.5 Haiku - Fast and efficient for simple tasks",
-      "claude-3-opus-20240229":
-        "Claude 3 Opus - Most powerful model for highly complex tasks",
-      "claude-3-sonnet-20240229":
-        "Claude 3 Sonnet - Balanced model for most use cases",
-      "claude-3-haiku-20240307":
-        "Claude 3 Haiku - Fastest model for simple queries",
+      "gemini-2.0-flash-exp":
+        "Gemini 2.0 Flash Experimental - Latest experimental model with enhanced capabilities",
+      "gemini-2.0-flash":
+        "Gemini 2.0 Flash - Fast and efficient model for most tasks",
+      "gemini-1.5-flash": "Gemini 1.5 Flash - Balanced performance and speed",
+      "gemini-1.5-pro":
+        "Gemini 1.5 Pro - Most capable model for complex reasoning",
+      "gemini-1.0-pro":
+        "Gemini 1.0 Pro - Original pro model with strong capabilities",
     };
   }
 
-  getModelDescription(model) {
-    const descriptions = AnthropicProvider.getStaticModelDescriptions();
-    return descriptions[model] || "Unknown model";
+  static getStaticModelCapabilities(model) {
+    // All Gemini models support text and chat
+    const capabilities = ["text", "chat"];
+
+    // Models with vision capabilities
+    const visionModels = [
+      "gemini-1.5-flash",
+      "gemini-1.5-pro",
+      "gemini-2.0-flash-exp",
+      "gemini-2.0-flash",
+    ];
+
+    if (visionModels.includes(model)) {
+      capabilities.push("vision");
+    }
+
+    return capabilities;
   }
 
-  static getStaticModelCapabilities(model) {
-    // All Anthropic Claude models support text and chat
-    return ["text", "chat"];
+  getModelDescription(model) {
+    const descriptions = GeminiProvider.getStaticModelDescriptions();
+    return descriptions[model] || "Unknown model";
   }
 
   // Enhanced generate method that handles file system operations
@@ -160,31 +174,66 @@ export class AnthropicProvider extends AIProvider {
       "For file operations, be precise and follow the user's instructions carefully.";
 
     try {
+      const modelName = this.config.model || "gemini-2.0-flash";
+      const apiUrl = `${GEMINI_API_URL}/${modelName}:generateContent?key=${this.config.apiKey}`;
+
       const response = await axios.post(
-        ANTHROPIC_API_URL,
+        apiUrl,
         {
-          model: this.config.model || "claude-3-5-sonnet-20241022",
-          max_tokens: mergedOptions.max_tokens,
-          temperature: mergedOptions.temperature,
-          system: systemPrompt,
-          messages: [
+          contents: [
             {
-              role: "user",
-              content: prompt,
+              parts: [
+                {
+                  text: systemPrompt + "\n\nUser: " + prompt + "\n\nAssistant:",
+                },
+              ],
+            },
+          ],
+          generationConfig: {
+            temperature: mergedOptions.temperature,
+            maxOutputTokens: mergedOptions.max_tokens,
+            topP: 0.95,
+            topK: 40,
+          },
+          safetySettings: [
+            {
+              category: "HARM_CATEGORY_HARASSMENT",
+              threshold: "BLOCK_MEDIUM_AND_ABOVE",
+            },
+            {
+              category: "HARM_CATEGORY_HATE_SPEECH",
+              threshold: "BLOCK_MEDIUM_AND_ABOVE",
+            },
+            {
+              category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+              threshold: "BLOCK_MEDIUM_AND_ABOVE",
+            },
+            {
+              category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+              threshold: "BLOCK_MEDIUM_AND_ABOVE",
             },
           ],
         },
         {
           headers: {
-            "x-api-key": this.config.apiKey,
-            "anthropic-version": "2023-06-01",
             "Content-Type": "application/json",
           },
           timeout: 60000,
         },
       );
 
-      return response.data.content[0].text;
+      // Extract response text from Gemini API response
+      const candidates = response.data.candidates;
+      if (!candidates || candidates.length === 0) {
+        throw new Error("No response from Gemini API");
+      }
+
+      const parts = candidates[0].content.parts;
+      if (!parts || parts.length === 0) {
+        throw new Error("Empty response from Gemini API");
+      }
+
+      return parts[0].text;
     } catch (error) {
       this._handleError(error);
     }
@@ -216,25 +265,48 @@ export class AnthropicProvider extends AIProvider {
       "For file operations, be precise and follow the user's instructions carefully.";
 
     try {
+      const modelName = this.config.model || "gemini-2.0-flash";
+      const apiUrl = `${GEMINI_API_URL}/${modelName}:streamGenerateContent?key=${this.config.apiKey}`;
+
       const response = await axios.post(
-        ANTHROPIC_API_URL,
+        apiUrl,
         {
-          model: this.config.model || "claude-3-5-sonnet-20241022",
-          max_tokens: mergedOptions.max_tokens,
-          temperature: mergedOptions.temperature,
-          system: systemPrompt,
-          messages: [
+          contents: [
             {
-              role: "user",
-              content: prompt,
+              parts: [
+                {
+                  text: systemPrompt + "\n\nUser: " + prompt + "\n\nAssistant:",
+                },
+              ],
             },
           ],
-          stream: true,
+          generationConfig: {
+            temperature: mergedOptions.temperature,
+            maxOutputTokens: mergedOptions.max_tokens,
+            topP: 0.95,
+            topK: 40,
+          },
+          safetySettings: [
+            {
+              category: "HARM_CATEGORY_HARASSMENT",
+              threshold: "BLOCK_MEDIUM_AND_ABOVE",
+            },
+            {
+              category: "HARM_CATEGORY_HATE_SPEECH",
+              threshold: "BLOCK_MEDIUM_AND_ABOVE",
+            },
+            {
+              category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+              threshold: "BLOCK_MEDIUM_AND_ABOVE",
+            },
+            {
+              category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+              threshold: "BLOCK_MEDIUM_AND_ABOVE",
+            },
+          ],
         },
         {
           headers: {
-            "x-api-key": this.config.apiKey,
-            "anthropic-version": "2023-06-01",
             "Content-Type": "application/json",
           },
           responseType: "stream",
@@ -269,5 +341,45 @@ export class AnthropicProvider extends AIProvider {
 
     // Otherwise, proceed with normal stream generation
     return await this._streamGenerateWithContext(prompt, options);
+  }
+
+  // Custom error handling for Gemini API
+  _handleError(error) {
+    if (error.response) {
+      const status = error.response.status;
+      const data = error.response.data;
+
+      switch (status) {
+        case 400:
+          if (data.error?.message?.includes("API key")) {
+            throw new Error(
+              'Invalid API key. Please reconfigure with "naturecode model"',
+            );
+          }
+          throw new Error(
+            `Gemini API error: ${data.error?.message || "Bad request"}`,
+          );
+        case 401:
+          throw new Error(
+            'Invalid API key. Please reconfigure with "naturecode model"',
+          );
+        case 403:
+          throw new Error("Access denied. Check API key permissions");
+        case 429:
+          throw new Error("Rate limit exceeded. Please try again later");
+        case 500:
+          throw new Error("Gemini service internal error");
+        case 503:
+          throw new Error("Gemini service temporarily unavailable");
+        default:
+          throw new Error(
+            `Gemini service error: ${data?.error?.message || error.message}`,
+          );
+      }
+    } else if (error.request) {
+      throw new Error("Network error: Cannot connect to Gemini service");
+    } else {
+      throw new Error(`Request error: ${error.message}`);
+    }
   }
 }
