@@ -251,11 +251,26 @@ install_pro() {
     fi
     
     log_info "Installing globally..."
-    echo "Installing from: $(pwd)"
+    
+    # 创建永久安装目录
+    PERMANENT_DIR="$HOME/.naturecode-install"
+    log_info "Copying to permanent directory: $PERMANENT_DIR"
+    
+    # 清理旧目录并复制
+    rm -rf "$PERMANENT_DIR"
+    mkdir -p "$PERMANENT_DIR"
+    cp -r . "$PERMANENT_DIR/"
+    
+    # 从永久目录安装
+    cd "$PERMANENT_DIR"
+    echo "Installing from permanent directory: $(pwd)"
+    
     if npm install -g .; then
         log_success "NatureCode installed globally"
         echo "Global installation location:"
         npm root -g
+        echo ""
+        echo "Symbolic link created to permanent directory"
     else
         log_error "Failed to install globally"
         echo "Troubleshooting tips:"
