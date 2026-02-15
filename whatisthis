@@ -104,23 +104,56 @@
 2. 只包含OpenAI的实际或合理预测模型
 3. 删除在NatureCode上下文中无意义的模型
 
-### 7. GitHub推送记录
+### 7. Anthropic (Claude) 模型支持添加
+**新增功能**:
+1. **Anthropic provider实现**: `src/providers/anthropic.js`
+   - 支持Claude 3.5系列 (Sonnet, Haiku)
+   - 支持Claude 3系列 (Opus, Sonnet, Haiku)
+   - 完整的文件系统集成
+   - 流式和非流式生成支持
+
+2. **配置系统更新**: `src/config/manager.js`
+   - 添加Anthropic到VALID_PROVIDERS
+   - 添加ANTHROPIC_MODELS常量 (5个模型)
+   - 添加模型验证逻辑
+   - 支持Anthropic故障回退模型
+
+3. **配置向导更新**: `src/cli/commands/model.js`
+   - 添加Anthropic provider选项
+   - 添加Anthropic API key输入
+   - 添加Anthropic模型选择 (5个模型)
+   - 添加Anthropic故障回退支持 (claude-3-5-haiku-20241022)
+
+4. **启动系统更新**: `src/cli/commands/start.js`
+   - 导入AnthropicProvider
+   - 更新createProvider函数支持Anthropic
+
+**Anthropic模型列表** (5个模型):
+- **Claude 3.5系列**:
+  - claude-3-5-sonnet-20241022 (默认) - 最强大的复杂任务模型
+  - claude-3-5-haiku-20241022 (故障回退) - 快速高效的简单任务模型
+- **Claude 3系列**:
+  - claude-3-opus-20240229 - 最强大的高度复杂任务模型
+  - claude-3-sonnet-20240229 - 平衡的通用模型
+  - claude-3-haiku-20240307 - 最快的简单查询模型
+
+### 8. GitHub推送记录
 **今天推送的所有提交**:
 1. **7e2f77d** - feat: enhance configuration wizard with default prompts and OpenAI fallback model support
    - 配置向导改进：添加默认值提示和故障回退
-   
+    
 2. **14b6e3f** - chore: add push-now.sh script for GitHub deployment
    - 添加部署脚本
-   
+    
 3. **ef1ce59** - refactor: remove Ollama smart help functionality and simplify help command
    - 删除Ollama智能help功能（已修改为9bb7041）
-   
+    
 4. **9bb7041** - refactor: remove Ollama smart help functionality and simplify help command
    - 修复whatisthis文件中的Token泄露问题
-   
+    
 5. **5110cab** - fix: clean up OpenAI model list and remove inappropriate models
    - 第一次OpenAI模型清理（删除Claude等）
-   
+    
 6. **c4e475b** - refactor: remove non-text models from OpenAI list for NatureCode context
    - 第二次OpenAI模型清理（删除所有非文本模型）
 
@@ -135,17 +168,19 @@
 1. OpenAI模型全面更新和清理
 2. 配置向导用户体验改进
 3. Ollama智能help功能删除
-4. 所有更改已推送到GitHub
-5. 模型列表现在干净、合理、实用
+4. Anthropic (Claude) 模型支持添加
+5. 所有更改已推送到GitHub
+6. 模型列表现在干净、合理、实用
 
 🎯 **当前状态**:
 - OpenAI模型列表: 18个纯文本模型
+- Anthropic模型列表: 5个Claude模型
 - 配置向导: 支持默认值和故障回退
 - help命令: 简化版，只显示基本帮助
 - GitHub: 所有更改已同步
 
 📊 **技术架构**:
-- 支持DeepSeek、OpenAI、Ollama三个provider
+- 支持DeepSeek、OpenAI、Anthropic、Ollama四个provider
 - 配置系统支持故障回退机制
 - 用户界面友好，支持默认值
 - 代码质量经过多次清理和优化
