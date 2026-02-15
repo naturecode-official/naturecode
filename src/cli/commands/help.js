@@ -63,7 +63,7 @@ export class HelpCommand {
 
   async showSimpleHelp() {
     const helpText = `
-NatureCode v1.4.6 - Cross-platform Terminal AI Assistant
+NatureCode - Cross-platform Terminal AI Assistant
 
 Available Commands:
   start              Start interactive AI session
@@ -220,8 +220,6 @@ For specific questions: naturecode help "your question"
   }
 
   async getDirectAIHelp(question) {
-    console.log("NatureCode AI Assistant v1.4.6\n");
-
     try {
       // Check if Ollama is available first
       const ollamaInstalled = await this.checkOllamaInstalled();
@@ -313,7 +311,6 @@ For specific questions: naturecode help "your question"
 
       if (userInput.toLowerCase() === "clear") {
         console.clear();
-        console.log("NatureCode AI Assistant v1.4.6\n");
         rl.prompt();
         return;
       }

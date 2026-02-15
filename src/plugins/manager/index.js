@@ -117,10 +117,8 @@ export class PluginManager {
       return this.stats;
     }
 
-    this.getLogger().info("Discovering plugins...");
+    // Silent plugin discovery
     const discovered = await this.discoverPlugins();
-
-    this.getLogger().info(`Found ${discovered.length} plugin(s)`);
 
     for (const plugin of discovered) {
       try {
@@ -138,10 +136,6 @@ export class PluginManager {
     this.loaded = true;
     this.stats.lastLoad = new Date().toISOString();
     this.stats.commands = this.commands.size;
-
-    this.getLogger().info(
-      `Loaded ${this.stats.loaded} plugin(s) with ${this.stats.commands} command(s)`,
-    );
 
     return this.stats;
   }
@@ -197,9 +191,7 @@ export class PluginManager {
     this.plugins.set(pluginId, pluginInstance);
     this.manifests.set(pluginId, manifest);
 
-    this.getLogger().info(
-      `Loaded plugin: ${manifest.name} v${manifest.version}`,
-    );
+    // Silent plugin loading
 
     // Emit event
     this.getEventEmitter().emit("plugin:loaded", {
