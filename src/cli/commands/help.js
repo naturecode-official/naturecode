@@ -256,14 +256,28 @@ For specific questions: naturecode help "your question"
 
       console.log("Thinking...\n");
 
-      const answer = await this.callOllama(prompt);
+      try {
+        const answer = await this.callOllama(prompt);
 
-      console.log("\n" + "=".repeat(70));
-      console.log("AI Assistance:");
-      console.log("=".repeat(70));
-      console.log(answer);
-      console.log("=".repeat(70));
-      console.log("\nNeed more help? Run: naturecode help");
+        console.log("\n" + "=".repeat(70));
+        console.log("AI Assistance:");
+        console.log("=".repeat(70));
+        console.log(answer);
+        console.log("=".repeat(70));
+        console.log("\nNeed more help? Run: naturecode help");
+      } catch (ollamaError) {
+        console.log(
+          "\n⚠️  AI assistant is taking longer than expected to respond.",
+        );
+        console.log("This could be because:");
+        console.log("  1. The AI model is still loading (first time use)");
+        console.log("  2. Your system needs more resources");
+        console.log("  3. Network connectivity issues\n");
+
+        console.log("📚 In the meantime, here's documentation-based help:");
+        console.log("=".repeat(70));
+        await this.showDocsBasedHelp(question);
+      }
     } catch (error) {
       console.error("\nError:", error.message);
       console.log("\n📚 Showing documentation-based help instead...");
@@ -912,6 +926,37 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
  • 完整文档：naturecode help --docs
  • AI 对话：naturecode help
 `);
+      } else if (
+        lowerQuestion.includes("hello") ||
+        lowerQuestion.includes("hi") ||
+        lowerQuestion.includes("你好")
+      ) {
+        console.log(`
+ 👋 你好！我是 NatureCode AI 助手！
+
+ 很高兴见到你！我是 NatureCode v1.4.5.5 的智能助手。
+
+ 🚀 我能帮助你：
+ • 回答 NatureCode 使用问题
+ • 提供编程帮助和代码分析
+ • 管理文件和项目
+ • 配置 AI 模型和工具
+
+ 💡 试试这些命令：
+   naturecode start          # 启动交互会话
+   naturecode help "如何开始" # 获取入门指南
+   naturecode model          # 配置 AI 模型
+   naturecode --help         # 查看所有命令
+
+ 📚 了解更多：
+ • 完整文档：naturecode help --docs
+ • AI 帮助：naturecode help (需要 Ollama)
+ • 简单帮助：naturecode help --simple
+
+ 🤖 AI 助手状态：
+ 系统检测到 Ollama 已安装，但 AI 模型可能需要一些时间加载。
+ 首次使用或长时间未使用后，模型加载可能需要 1-2 分钟。
+`);
       } else {
         // General help from docs
         const introMatch = docsContext.match(/(^.*?##.*?\n)/s);
@@ -935,6 +980,7 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
    • Git 怎么用？ → naturecode help "Git 功能"
    • 代码分析？ → naturecode help "代码分析"
    • 有哪些命令？ → naturecode help "命令"
+   • Hello/你好 → naturecode help "hello"
 `);
       }
 
