@@ -82,7 +82,7 @@ show_banner() {
     echo "╔══════════════════════════════════════════════════════════════════╗"
     echo "║                NatureCode Professional Installer                 ║"
     echo "║           Cross-platform AI Assistant for Developers             ║"
-    echo "║                       Version: 1.4.6                             ║"
+    echo "║                       Version: 1.4.7                             ║"
     echo "╚══════════════════════════════════════════════════════════════════╝"
     if [ "$COLORS_SUPPORTED" = "true" ]; then
         printf "%b\n" "${NC}"
@@ -136,6 +136,58 @@ get_installed_version() {
     fi
 }
 
+# 从 GitHub 获取最新版本号
+get_latest_version() {
+    local version
+    # 尝试从 package.json 获取版本号
+    version=$(curl -s https://raw.githubusercontent.com/naturecode-official/naturecode/main/package.json 2>/dev/null | \
+        grep '"version"' | head -1 | cut -d'"' -f4)
+    
+    if [ -z "$version" ]; then
+        # 如果无法获取，使用默认版本
+        echo "1.4.7"
+    else
+        echo "$version"
+    fi
+}
+
+# 版本比较函数：如果 version1 < version2 返回 true (0)
+version_compare() {
+    local v1=$1
+    local v2=$2
+    
+    # 将版本号转换为可比较的数字
+    local v1_num=$(echo "$v1" | tr '.' ' ')
+    local v2_num=$(echo "$v2" | tr '.' ' ')
+    
+    # 比较每个部分
+    local v1_part1=$(echo "$v1_num" | awk '{print $1}')
+    local v1_part2=$(echo "$v1_num" | awk '{print $2}')
+    local v1_part3=$(echo "$v1_num" | awk '{print $3}')
+    local v1_part4=$(echo "$v1_num" | awk '{print $4}')
+    
+    local v2_part1=$(echo "$v2_num" | awk '{print $1}')
+    local v2_part2=$(echo "$v2_num" | awk '{print $2}')
+    local v2_part3=$(echo "$v2_num" | awk '{print $3}')
+    local v2_part4=$(echo "$v2_num" | awk '{print $4}')
+    
+    # 逐级比较
+    if [ "$v1_part1" -lt "$v2_part1" ]; then return 0; fi
+    if [ "$v1_part1" -gt "$v2_part1" ]; then return 1; fi
+    
+    if [ "$v1_part2" -lt "$v2_part2" ]; then return 0; fi
+    if [ "$v1_part2" -gt "$v2_part2" ]; then return 1; fi
+    
+    if [ "$v1_part3" -lt "$v2_part3" ]; then return 0; fi
+    if [ "$v1_part3" -gt "$v2_part3" ]; then return 1; fi
+    
+    if [ "$v1_part4" -lt "$v2_part4" ]; then return 0; fi
+    if [ "$v1_part4" -gt "$v2_part4" ]; then return 1; fi
+    
+    # 版本相同
+    return 1
+}
+
 # Show system info
 show_system_info() {
     log_step "System Information"
@@ -181,7 +233,8 @@ check_prerequisites() {
 
 # Install NatureCode (professional mode)
 install_pro() {
-    local TARGET_VERSION="1.4.5.4"
+    # 从 GitHub 获取最新版本号
+    local TARGET_VERSION=$(get_latest_version)
     local CURRENT_VERSION=$(get_installed_version)
     
     log_step "Installation Details"
@@ -190,19 +243,33 @@ install_pro() {
     echo -e "  GitHub source: naturecode-official/naturecode"
     echo ""
     
-    if [ "$CURRENT_VERSION" = "1.4.5.4" ]; then
-        log_success "NatureCode v1.4.5.4 is already installed"
+    if [ "$CURRENT_VERSION" = "not_installed" ]; then
+        log_info "Installing NatureCode v$TARGET_VERSION..."
+    elif [ "$CURRENT_VERSION" = "$TARGET_VERSION" ]; then
+        log_success "NatureCode v$TARGET_VERSION is already installed"
         echo ""
-        log_info "Reinstalling latest version..."
-        npm uninstall -g naturecode 2>/dev/null || true
-    elif [ "$CURRENT_VERSION" != "not_installed" ]; then
-        log_info "Found NatureCode v$CURRENT_VERSION"
+        log_info "Checking for updates..."
+        # 版本相同，不需要重新安装
+        return 0
+    elif [ "$CURRENT_VERSION" = "unknown" ]; then
+        log_warn "Unable to determine current version"
         echo ""
-        log_info "Auto-updating to v$TARGET_VERSION..."
-        
-        # 自动更新，不需要用户确认
-        log_info "Removing old version..."
+        log_info "Reinstalling to ensure clean installation..."
         npm uninstall -g naturecode 2>/dev/null || true
+    else
+        # 版本比较：如果当前版本比目标版本旧，则更新
+        if version_compare "$CURRENT_VERSION" "$TARGET_VERSION"; then
+            log_info "Found NatureCode v$CURRENT_VERSION"
+            echo ""
+            log_info "Updating to v$TARGET_VERSION..."
+            log_info "Removing old version..."
+            npm uninstall -g naturecode 2>/dev/null || true
+        else
+            log_success "NatureCode v$CURRENT_VERSION is up to date (newer than v$TARGET_VERSION)"
+            echo ""
+            log_info "No update needed."
+            return 0
+        fi
     fi
     
     log_step "Downloading NatureCode..."

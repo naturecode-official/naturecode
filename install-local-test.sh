@@ -50,7 +50,7 @@ if command -v naturecode &> /dev/null; then
     echo "Found existing NatureCode installation: v$CURRENT_VERSION"
     echo ""
     
-    read -p "Update to v1.4.5.2? [Y/n]: " response
+    read -p "Update to v1.4.7? [Y/n]: " response
     if [[ "$response" =~ ^([nN][oO]|[nN])$ ]]; then
         echo "Installation cancelled"
         exit 0
@@ -60,7 +60,10 @@ if command -v naturecode &> /dev/null; then
     npm uninstall -g naturecode 2>/dev/null || true
 fi
 
-echo "Installing NatureCode v1.4.5.2..."
+# 获取当前版本
+CURRENT_VERSION=$(node -p "require('./package.json').version" 2>/dev/null || echo "1.4.7")
+
+echo "Installing NatureCode v$CURRENT_VERSION..."
 echo ""
 
 # Install locally
@@ -101,7 +104,7 @@ echo ""
 echo "2. Upload your code:"
 echo "   git init"
 echo "   git add ."
-echo "   git commit -m 'NatureCode v1.4.5.2'"
+echo "   git commit -m 'NatureCode v1.4.7'"
 echo "   git remote add origin https://github.com/naturecode-official/naturecode.git"
 echo "   git push -u origin main"
 echo ""

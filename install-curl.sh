@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # NatureCode Curl Installation Script
-# Version: 1.4.5.2
+# Version: 1.4.7
 # One-line install: curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-curl.sh | bash
 
 set -e
@@ -55,13 +55,29 @@ get_installed_version() {
     fi
 }
 
+# 从 GitHub 获取最新版本号
+get_latest_version() {
+    local version
+    # 尝试从 package.json 获取版本号
+    version=$(curl -s https://raw.githubusercontent.com/naturecode-official/naturecode/main/package.json 2>/dev/null | \
+        grep '"version"' | head -1 | cut -d'"' -f4)
+    
+    if [ -z "$version" ]; then
+        # 如果无法获取，使用默认版本
+        echo "1.4.7"
+    else
+        echo "$version"
+    fi
+}
+
 # Show banner
 show_banner() {
+    local version=$(get_latest_version)
     echo -e "${BLUE}${BOLD}"
     echo "╔══════════════════════════════════════════════════════════════════╗"
     echo "║                   NatureCode Installer                          ║"
     echo "║           Cross-platform AI Assistant for Terminal              ║"
-    echo "║                       Version: 1.4.5.2                          ║"
+    echo "║                       Version: $version                          ║"
     echo "╚══════════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
 }
@@ -112,7 +128,7 @@ check_prerequisites() {
 # Download and install NatureCode
 install_naturecode() {
     local INSTALL_TYPE="$1"
-    local TARGET_VERSION="1.4.5.2"
+    local TARGET_VERSION=$(get_latest_version)
     
     log_step "Installing NatureCode v$TARGET_VERSION"
     
@@ -166,7 +182,7 @@ install_naturecode() {
 # Update existing installation
 update_naturecode() {
     local CURRENT_VERSION=$(get_installed_version)
-    local TARGET_VERSION="1.4.5.2"
+    local TARGET_VERSION=$(get_latest_version)
     
     if [ "$CURRENT_VERSION" = "not_installed" ]; then
         log_error "NatureCode is not installed. Please install first."
@@ -237,7 +253,7 @@ main() {
     if [ "$CURRENT_VERSION" = "not_installed" ]; then
         log_info "NatureCode is not currently installed"
         echo ""
-        echo -e "${YELLOW}This will install NatureCode v1.4.5.2 globally.${NC}"
+        echo -e "${YELLOW}This will install NatureCode v1.4.7 globally.${NC}"
         echo -e "${YELLOW}Continue? [y/N]: ${NC}"
         read -r response
         if [[ ! "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
@@ -249,7 +265,7 @@ main() {
         install_naturecode "fresh"
         show_post_install
         
-    elif [ "$CURRENT_VERSION" = "1.4.5.2" ]; then
+    elif [ "$CURRENT_VERSION" = "1.4.7" ]; then
         log_success "NatureCode v$CURRENT_VERSION is already installed"
         echo ""
         echo "What would you like to do?"
@@ -282,7 +298,7 @@ main() {
     else
         log_info "Found NatureCode v$CURRENT_VERSION"
         echo ""
-        echo -e "${YELLOW}Update to v1.4.5.2? [Y/n]: ${NC}"
+        echo -e "${YELLOW}Update to v1.4.7? [Y/n]: ${NC}"
         read -r response
         if [[ "$response" =~ ^([nN][oO]|[nN])$ ]]; then
             log_info "Update cancelled"
