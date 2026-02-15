@@ -513,108 +513,81 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
 
   async callOllama(prompt) {
     return new Promise((resolve, reject) => {
-      // Try deepseek-coder first, fall back to deepseek-chat
-      const model = "deepseek-coder";
-      const process = spawn("ollama", ["run", model], {
-        stdio: "pipe",
-        timeout: 30000, // 30 second timeout
-      });
+      // Try available models in order
+      const modelsToTry = [
+        "deepseek-coder",
+        "deepseek-chat",
+        "llama3.2",
+        "llama3.1",
+        "llama3",
+        "mistral",
+        "codellama",
+      ];
 
-      let output = "";
-      let errorOutput = "";
-      let timeoutId = null;
-
-      // Set timeout
-      timeoutId = setTimeout(() => {
-        if (process && !process.killed) {
-          process.kill("SIGTERM");
-        }
-        reject(new Error("Ollama request timeout (30 seconds)"));
-      }, 30000);
-
-      process.stdin.write(prompt);
-      process.stdin.end();
-
-      process.stdout.on("data", (data) => {
-        output += data.toString();
-      });
-
-      process.stderr.on("data", (data) => {
-        errorOutput += data.toString();
-      });
-
-      process.on("close", (code) => {
-        if (timeoutId) clearTimeout(timeoutId);
-
-        if (code === 0 && output.trim()) {
-          resolve(output.trim());
-        } else {
-          // Log error for debugging
-          if (errorOutput) {
-            console.error("Ollama stderr:", errorOutput);
-          }
-          // Try with deepseek-chat if deepseek-coder fails
-          this.fallbackToDeepSeekChat(prompt).then(resolve).catch(reject);
-        }
-      });
-
-      process.on("error", (error) => {
-        if (timeoutId) clearTimeout(timeoutId);
-        reject(new Error(`Ollama error: ${error.message}`));
-      });
-    });
-  }
-
-  async fallbackToDeepSeekChat(prompt) {
-    return new Promise((resolve, reject) => {
-      const process = spawn("ollama", ["run", "deepseek-chat"], {
-        stdio: "pipe",
-        timeout: 30000,
-      });
-
-      let output = "";
-      let errorOutput = "";
-      let timeoutId = null;
-
-      // Set timeout
-      timeoutId = setTimeout(() => {
-        if (process && !process.killed) {
-          process.kill("SIGTERM");
-        }
-        reject(new Error("Ollama request timeout (30 seconds)"));
-      }, 30000);
-
-      process.stdin.write(prompt);
-      process.stdin.end();
-
-      process.stdout.on("data", (data) => {
-        output += data.toString();
-      });
-
-      process.stderr.on("data", (data) => {
-        errorOutput += data.toString();
-      });
-
-      process.on("close", (code) => {
-        if (timeoutId) clearTimeout(timeoutId);
-
-        if (code === 0 && output.trim()) {
-          resolve(output.trim());
-        } else {
-          // Log error for debugging
-          if (errorOutput) {
-            console.error("Ollama fallback stderr:", errorOutput);
-          }
+      const tryModel = (index) => {
+        if (index >= modelsToTry.length) {
           reject(
-            new Error("Failed to get response from Ollama with any model"),
+            new Error(
+              "No available Ollama models found. Please install a model with: ollama pull deepseek-coder",
+            ),
           );
+          return;
         }
-      });
 
-      process.on("error", (error) => {
-        if (timeoutId) clearTimeout(timeoutId);
-        reject(new Error(`Ollama error: ${error.message}`));
-      });
+        const model = modelsToTry[index];
+        const process = spawn("ollama", ["run", model], {
+          stdio: "pipe",
+          timeout: 30000, // 30 second timeout
+        });
+
+        let output = "";
+        let errorOutput = "";
+        let timeoutId = null;
+
+        // Set timeout
+        timeoutId = setTimeout(() => {
+          if (process && !process.killed) {
+            process.kill("SIGTERM");
+          }
+          // Try next model on timeout
+          tryModel(index + 1);
+        }, 30000);
+
+        process.stdin.write(prompt);
+        process.stdin.end();
+
+        process.stdout.on("data", (data) => {
+          output += data.toString();
+        });
+
+        process.stderr.on("data", (data) => {
+          errorOutput += data.toString();
+        });
+
+        process.on("close", (code) => {
+          if (timeoutId) clearTimeout(timeoutId);
+
+          if (code === 0 && output.trim()) {
+            resolve(output.trim());
+          } else {
+            // Log error for debugging
+            if (errorOutput && errorOutput.includes("model")) {
+              console.log(`Model "${model}" not found, trying next...`);
+            }
+            // Try next model
+            tryModel(index + 1);
+          }
+        });
+
+        process.on("error", (error) => {
+          if (timeoutId) clearTimeout(timeoutId);
+          // Try next model on error
+          tryModel(index + 1);
+        });
+      };
+
+      // Start with first model
+      tryModel(0);
     });
   }
 
@@ -761,40 +734,72 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
       const lowerQuestion = question.toLowerCase();
 
       console.log("\n" + "=".repeat(70));
-      console.log("Documentation Help:");
+      console.log("NatureCode AI 助手 - 文档帮助");
       console.log("=".repeat(70));
 
+      // Handle "who are you" questions in Chinese
       if (
+        lowerQuestion.includes("你是谁") ||
+        lowerQuestion.includes("who are you") ||
+        lowerQuestion.includes("what are you")
+      ) {
+        console.log(`
+ 🤖 我是 NatureCode AI 助手！
+
+ 我是 NatureCode v1.4.5.5 的智能助手，专门帮助开发者：
+ • 使用 NatureCode 的各种功能
+ • 解决编程问题
+ • 管理项目和代码
+ • 提供 AI 驱动的开发建议
+
+ 🚀 我能做什么：
+ 1. 回答 NatureCode 使用问题
+ 2. 提供代码分析和审查
+ 3. 帮助配置 AI 模型
+ 4. 指导 Git 操作
+ 5. 协助项目管理
+
+ 💡 如何与我互动：
+ • 直接提问：naturecode help "你的问题"
+ • 启动对话：naturecode help
+ • 查看命令：naturecode --help
+
+ 📚 了解更多：
+ • 完整文档：naturecode help --docs
+ • 简单帮助：naturecode help --simple
+ • 安装 AI：naturecode help --install-ollama
+`);
+      } else if (
         lowerQuestion.includes("如何开始") ||
         lowerQuestion.includes("how to start") ||
         lowerQuestion.includes("getting started")
       ) {
         console.log(`
-🚀 如何开始使用 NatureCode：
+ 🚀 如何开始使用 NatureCode：
 
-1. 配置 AI 模型：
-   naturecode model
+ 1. 配置 AI 模型：
+    naturecode model
 
-2. 启动交互会话：
-   naturecode start
+ 2. 启动交互会话：
+    naturecode start
 
-3. 获取帮助：
-   naturecode help "你的问题"
+ 3. 获取帮助：
+    naturecode help "你的问题"
 
-4. 查看所有命令：
-   naturecode --help
+ 4. 查看所有命令：
+    naturecode --help
 
-📦 自动安装 AI 助手：
-首次运行 naturecode help 时，会自动安装 Ollama 和 DeepSeek 模型。
+ 📦 自动安装 AI 助手：
+ 首次运行 naturecode help 时，会自动安装 Ollama 和 DeepSeek 模型。
 
-🔧 手动安装 AI：
-- Ollama: curl -fsSL https://ollama.ai/install.sh | sh
-- DeepSeek 模型: ollama pull deepseek-coder
+ 🔧 手动安装 AI：
+ - Ollama: curl -fsSL https://ollama.ai/install.sh | sh
+ - DeepSeek 模型: ollama pull deepseek-coder
 
-💡 示例：
-   naturecode help "如何配置 DeepSeek API"
-   naturecode help "怎么使用 Git 功能"
-   naturecode help "代码分析怎么用"
+ 💡 示例：
+    naturecode help "如何配置 DeepSeek API"
+    naturecode help "怎么使用 Git 功能"
+    naturecode help "代码分析怎么用"
 `);
       } else if (
         lowerQuestion.includes("配置") ||
@@ -802,45 +807,45 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
         lowerQuestion.includes("model")
       ) {
         console.log(`
-🤖 配置 AI 模型：
+ 🤖 配置 AI 模型：
 
-NatureCode 支持三种 AI 提供商：
+ NatureCode 支持三种 AI 提供商：
 
-1. DeepSeek (推荐)
-   - 需要 API 密钥：https://platform.deepseek.com/
-   - 运行：naturecode model
-   - 选择 DeepSeek，输入 API 密钥
+ 1. DeepSeek (推荐)
+    - 需要 API 密钥：https://platform.deepseek.com/
+    - 运行：naturecode model
+    - 选择 DeepSeek，输入 API 密钥
 
-2. OpenAI
-   - 需要 API 密钥：https://platform.openai.com/
-   - 运行：naturecode model
-   - 选择 OpenAI，输入 API 密钥
+ 2. OpenAI
+    - 需要 API 密钥：https://platform.openai.com/
+    - 运行：naturecode model
+    - 选择 OpenAI，输入 API 密钥
 
-3. Ollama (本地，免费)
-   - 自动安装：运行 naturecode help 时自动安装
-   - 或手动：curl -fsSL https://ollama.ai/install.sh | sh
-   - 模型：ollama pull deepseek-coder
+ 3. Ollama (本地，免费)
+    - 自动安装：运行 naturecode help 时自动安装
+    - 或手动：curl -fsSL https://ollama.ai/install.sh | sh
+    - 模型：ollama pull deepseek-coder
 
-📝 配置文件位置：~/.naturecode/config.json
+ 📝 配置文件位置：~/.naturecode/config.json
 `);
       } else if (
         lowerQuestion.includes("git") ||
         lowerQuestion.includes("版本控制")
       ) {
         console.log(`
-🔧 Git 集成功能：
+ 🔧 Git 集成功能：
 
-可用命令：
-  naturecode git status      # 查看 Git 状态
-  naturecode git diff        # 查看更改
-  naturecode git commit      # 提交更改
-  naturecode git push        # 推送到远程仓库
-  naturecode git pull        # 从远程拉取
+ 可用命令：
+   naturecode git status      # 查看 Git 状态
+   naturecode git diff        # 查看更改
+   naturecode git commit      # 提交更改
+   naturecode git push        # 推送到远程仓库
+   naturecode git pull        # 从远程拉取
 
-💡 示例：
-  naturecode git status
-  naturecode git commit -m "修复了bug"
-  naturecode git push origin main
+ 💡 示例：
+   naturecode git status
+   naturecode git commit -m "修复了bug"
+   naturecode git push origin main
 `);
       } else if (
         lowerQuestion.includes("代码") ||
@@ -848,17 +853,64 @@ NatureCode 支持三种 AI 提供商：
         lowerQuestion.includes("分析")
       ) {
         console.log(`
-📊 代码分析功能：
+ 📊 代码分析功能：
 
-可用命令：
-  naturecode code analyze    # 分析代码质量
-  naturecode code review     # AI 代码审查
-  naturecode code metrics    # 显示代码指标
+ 可用命令：
+   naturecode code analyze    # 分析代码质量
+   naturecode code review     # AI 代码审查
+   naturecode code metrics    # 显示代码指标
 
-💡 示例：
-  naturecode code analyze src/
-  naturecode code review main.js
-  naturecode code metrics .
+ 💡 示例：
+   naturecode code analyze src/
+   naturecode code review main.js
+   naturecode code metrics .
+`);
+      } else if (
+        lowerQuestion.includes("命令") ||
+        lowerQuestion.includes("commands") ||
+        lowerQuestion.includes("功能")
+      ) {
+        console.log(`
+ 📋 NatureCode 主要功能：
+
+ 🎯 核心功能：
+ • AI 助手：naturecode help
+ • 交互会话：naturecode start
+ • 模型配置：naturecode model
+
+ 📁 文件操作：
+ • 读取文件：naturecode read <file>
+ • 编辑文件：naturecode edit <file>
+ • 创建文件：naturecode create <file>
+ • 删除文件：naturecode delete <file>
+ • 列出目录：naturecode list <dir>
+
+ 🔧 Git 操作：
+ • 状态查看：naturecode git status
+ • 差异对比：naturecode git diff
+ • 提交更改：naturecode git commit
+ • 推送代码：naturecode git push
+ • 拉取更新：naturecode git pull
+
+ 📊 代码分析：
+ • 质量分析：naturecode code analyze
+ • AI 审查：naturecode code review
+ • 指标统计：naturecode code metrics
+
+ 🏗️ 项目管理：
+ • 项目分析：naturecode project analyze
+ • 创建项目：naturecode project create
+ • 依赖分析：naturecode project deps
+
+ 🔌 插件系统：
+ • 插件列表：naturecode plugin list
+ • 插件信息：naturecode plugin info <id>
+ • 安装插件：naturecode plugin install <source>
+
+ 💡 更多帮助：
+ • 查看所有命令：naturecode --help
+ • 完整文档：naturecode help --docs
+ • AI 对话：naturecode help
 `);
       } else {
         // General help from docs
@@ -868,19 +920,21 @@ NatureCode 支持三种 AI 提供商：
         }
 
         console.log(`
-🔍 根据您的问题 "${question}"，建议：
+ 🔍 根据您的问题 "${question}"，建议：
 
-1. 查看完整文档：运行 naturecode help --docs
-2. 获取 AI 帮助（需要安装 Ollama）：
-   - 自动安装：运行 naturecode help
-   - 手动安装：curl -fsSL https://ollama.ai/install.sh | sh
-3. 查看简单帮助：naturecode help --simple
+ 1. 查看完整文档：运行 naturecode help --docs
+ 2. 获取 AI 帮助（需要安装 Ollama）：
+    - 自动安装：运行 naturecode help
+    - 手动安装：curl -fsSL https://ollama.ai/install.sh | sh
+ 3. 查看简单帮助：naturecode help --simple
 
-💡 常见问题：
-  • 如何开始？ → naturecode help "如何开始"
-  • 怎么配置 AI？ → naturecode help "配置 AI"
-  • Git 怎么用？ → naturecode help "Git 功能"
-  • 代码分析？ → naturecode help "代码分析"
+ 💡 常见问题：
+   • 你是谁？ → naturecode help "你是谁"
+   • 如何开始？ → naturecode help "如何开始"
+   • 怎么配置 AI？ → naturecode help "配置 AI"
+   • Git 怎么用？ → naturecode help "Git 功能"
+   • 代码分析？ → naturecode help "代码分析"
+   • 有哪些命令？ → naturecode help "命令"
 `);
       }
 
