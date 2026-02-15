@@ -252,7 +252,7 @@ install_pro() {
         # 版本相同，不需要重新安装
         return 0
     elif [ "$CURRENT_VERSION" = "unknown" ]; then
-        log_warn "Unable to determine current version"
+        log_warning "Unable to determine current version"
         echo ""
         log_info "Reinstalling to ensure clean installation..."
         npm uninstall -g naturecode 2>/dev/null || true
