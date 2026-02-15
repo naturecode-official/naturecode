@@ -1,0 +1,39 @@
+{
+  "name": "naturecode-example",
+  "version": "1.0.0",
+  "description": "Example plugin for NatureCode",
+  "author": "NatureCode Team",
+  "license": "MIT",
+  "type": "command",
+  "main": "index.js",
+  "dependencies": {},
+  "naturecode": {
+    "minVersion": "1.4.0",
+    "maxVersion": "2.0.0",
+    "permissions": ["read", "write"]
+  },
+  "commands": [
+    {
+      "name": "hello",
+      "description": "Say hello from the example plugin",
+      "options": [
+        {
+          "name": "name",
+          "description": "Name to greet",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "files",
+      "description": "List files in current directory",
+      "options": [
+        {
+          "name": "path",
+          "description": "Directory path",
+          "required": false
+        }
+      ]
+    }
+  ]
+}
