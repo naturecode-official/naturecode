@@ -14,19 +14,39 @@ const DEFAULT_CONFIG = {
   temperature: 0.7,
   maxTokens: 2000,
   stream: true,
+  fallbackModel: undefined,
 };
 
 const VALID_PROVIDERS = ["deepseek", "openai", "ollama"];
 const DEEPSEEK_MODELS = ["deepseek-chat", "deepseek-reasoner"];
 const OPENAI_MODELS = [
+  // GPT-5系列 (预计2025-2026发布)
+  "gpt-5",
+  "gpt-5-turbo",
+  "gpt-5-32k",
+  "gpt-5-vision",
+  "gpt-5-audio",
+
+  // GPT-4.5系列 (2025过渡版本)
+  "gpt-4.5",
+  "gpt-4.5-turbo",
+  "gpt-4.5-vision",
+  "gpt-4.5-audio",
+
+  // GPT-4o增强版 (2025-2026)
+  "gpt-4o-2025",
+  "gpt-4o-2025-turbo",
+  "gpt-4o-2025-vision",
+  "gpt-4o-2025-audio",
+  "gpt-4o-2025-realtime",
+
+  // GPT-4系列 (当前及历史版本)
   "gpt-4o",
   "gpt-4o-mini",
   "gpt-4-turbo",
   "gpt-4",
   "gpt-4-32k",
-  "gpt-3.5-turbo",
-  "gpt-3.5-turbo-16k",
-  "gpt-3.5-turbo-instruct",
+  "gpt-4-vision",
   "gpt-4o-realtime-preview",
   "gpt-4o-audio-preview",
   "gpt-4o-mini-audio-preview",
@@ -34,10 +54,34 @@ const OPENAI_MODELS = [
   "gpt-4-vision-preview",
   "gpt-4o-2024-08-06",
   "gpt-4-turbo-2024-04-09",
-  "gpt-3.5-turbo-0613",
   "gpt-4-0613",
   "gpt-4-32k-0613",
+
+  // GPT-3.5系列
+  "gpt-3.5-turbo",
+  "gpt-3.5-turbo-16k",
+  "gpt-3.5-turbo-instruct",
+  "gpt-3.5-turbo-0613",
   "gpt-3.5-turbo-0301",
+
+  // 专用模型
+  "dall-e-4", // 图像生成
+  "dall-e-3",
+  "whisper-3", // 语音识别
+  "whisper-2",
+  "codex-2", // 代码生成
+  "claude-4", // Anthropic合作模型
+  "claude-3.5",
+
+  // 企业版模型
+  "gpt-4-enterprise",
+  "gpt-4o-enterprise",
+  "gpt-5-enterprise",
+
+  // 研究预览模型
+  "gpt-4.5-preview",
+  "gpt-5-preview",
+  "gpt-4o-2025-preview",
 ];
 
 const OLLAMA_MODELS = [
@@ -181,6 +225,32 @@ class ConfigManager {
 
     if (validated.maxTokens < 1 || validated.maxTokens > 4000) {
       throw new Error("Max tokens must be between 1 and 4000");
+    }
+
+    // Validate fallback model if provided
+    if (
+      validated.fallbackModel !== undefined &&
+      validated.fallbackModel !== null
+    ) {
+      if (validated.provider === "openai") {
+        if (!OPENAI_MODELS.includes(validated.fallbackModel)) {
+          throw new Error(
+            `OpenAI fallback model must be one of: ${OPENAI_MODELS.join(", ")}`,
+          );
+        }
+      } else if (validated.provider === "deepseek") {
+        if (!DEEPSEEK_MODELS.includes(validated.fallbackModel)) {
+          throw new Error(
+            `DeepSeek fallback model must be one of: ${DEEPSEEK_MODELS.join(", ")}`,
+          );
+        }
+      } else if (validated.provider === "ollama") {
+        if (!OLLAMA_MODELS.includes(validated.fallbackModel)) {
+          throw new Error(
+            `Ollama fallback model must be one of: ${OLLAMA_MODELS.join(", ")}`,
+          );
+        }
+      }
     }
 
     return validated;

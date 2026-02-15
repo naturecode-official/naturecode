@@ -294,31 +294,48 @@ export async function runModelConfiguration() {
     {
       type: "number",
       name: "temperature",
-      message: "Set temperature (0.0-2.0):",
+      message: "Set temperature (0.0-2.0, press Enter for default 0.7):",
       default: currentConfig.temperature || 0.7,
       validate: (input) => {
+        if (input === "" || input === undefined) {
+          return true; // Allow empty input to use default
+        }
         const value = parseFloat(input);
         if (isNaN(value) || value < 0 || value > 2) {
           return "Temperature must be between 0.0 and 2.0";
         }
         return true;
       },
-      filter: (input) => parseFloat(input),
+      filter: (input) => {
+        if (input === "" || input === undefined) {
+          return currentConfig.temperature || 0.7;
+        }
+        return parseFloat(input);
+      },
       when: (answers) => answers.advancedSettings,
     },
     {
       type: "number",
       name: "maxTokens",
-      message: "Set maximum tokens per response (1-4000):",
+      message:
+        "Set maximum tokens per response (1-4000, press Enter for default 2000):",
       default: currentConfig.maxTokens || 2000,
       validate: (input) => {
+        if (input === "" || input === undefined) {
+          return true; // Allow empty input to use default
+        }
         const value = parseInt(input);
         if (isNaN(value) || value < 1 || value > 4000) {
           return "Max tokens must be between 1 and 4000";
         }
         return true;
       },
-      filter: (input) => parseInt(input),
+      filter: (input) => {
+        if (input === "" || input === undefined) {
+          return currentConfig.maxTokens || 2000;
+        }
+        return parseInt(input);
+      },
       when: (answers) => answers.advancedSettings,
     },
     {
@@ -364,6 +381,8 @@ export async function runModelConfiguration() {
       answers.stream !== undefined
         ? answers.stream
         : currentConfig.stream !== false,
+    // Add fallback model for OpenAI if selected model fails
+    fallbackModel: answers.provider === "openai" ? "gpt-5" : undefined,
   };
 
   try {
