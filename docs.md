@@ -2,7 +2,7 @@
 
 ## Overview
 
-NatureCode is a cross-platform terminal AI assistant that provides intelligent development tools, collaboration features, and performance monitoring. Version 1.4.5.5 includes comprehensive AI assistance, automatic Ollama installation, and real-time documentation support.
+NatureCode is a cross-platform terminal AI assistant that provides intelligent development tools, collaboration features, and performance monitoring. Version 1.4.6 includes comprehensive AI assistance, Ollama provider support, enhanced error handling, and improved plugin management.
 
 ### Language Support
 

@@ -82,7 +82,7 @@ show_banner() {
     echo "╔══════════════════════════════════════════════════════════════════╗"
     echo "║                NatureCode Professional Installer                 ║"
     echo "║           Cross-platform AI Assistant for Developers             ║"
-    echo "║                       Version: 1.4.5.5                           ║"
+    echo "║                       Version: 1.4.6                             ║"
     echo "╚══════════════════════════════════════════════════════════════════╝"
     if [ "$COLORS_SUPPORTED" = "true" ]; then
         printf "%b\n" "${NC}"

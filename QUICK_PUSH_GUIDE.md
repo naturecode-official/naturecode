@@ -1,90 +1,117 @@
-# NatureCode GitHub 推送快速指南
+# NatureCode GitHub 推送快速指南 (v1.4.6)
 
-## 已创建的推送脚本
+## 🚀 一键推送方法
 
-1. **`push-to-github-final.sh`** - 完整功能推送脚本
-   - 检查 Git 状态
-   - 显示项目信息
-   - 支持多种认证方式
-   - 验证推送结果
-   - 显示安装命令
+### 方法1：手动Token推送（推荐，解决网络/SSL问题）
 
-2. **`push-simple.sh`** - 简单推送脚本
-   - 快速添加和提交
-   - 使用 Token 认证
-   - 显示安装命令
+```bash
+./push-with-manual-token.sh
+```
 
-3. **`push-with-token.sh`** - Token 专用推送脚本
-   - 交互式 Token 输入
-   - 详细的错误处理
+**特点**：
 
-## 快速开始
+- 安全：Token只在内存中使用
+- 可靠：解决SSL/TLS连接问题
+- 简单：粘贴Token即可
 
-### 方法 1: 使用简单脚本（推荐）
+### 方法2：交互式推送
+
+```bash
+./push-with-interactive-token.sh
+```
+
+### 方法3：简单推送
 
 ```bash
 ./push-simple.sh
 ```
 
-### 方法 2: 使用完整脚本
+### 方法4：完整推送
 
 ```bash
 ./push-to-github-final.sh
 ```
 
-### 方法 3: 手动推送
+## 📋 当前状态 (v1.4.6)
 
-```bash
-# 1. 添加所有文件
-git add .
+### 待推送的提交：
 
-# 2. 提交更改
-git commit -m "NatureCode v1.4.5.4 - Cross-platform AI assistant with smart installer"
-
-# 3. 使用 Token 推送（替换 YOUR_TOKEN）
-git push https://naturecode-official:YOUR_TOKEN@github.com/naturecode-official/naturecode.git main
+```
+b322866 feat: add manual token push script and update documentation
+bb6d943 docs: add update completion summary and push script
+f7dc867 chore: update changelog with English default language changes
+31ee074 docs: update documentation for English default language and v1.4.5.5 features
+ee67445 test: update test script for English default language
+e3b9b0f feat: change default language to English, let AI handle Chinese translation
+56ccf93 test: add auto-install test script
 ```
 
-## GitHub Token 生成步骤
+### 主要更新内容：
 
-1. **访问 Token 页面**: https://github.com/settings/tokens
-2. **点击**: "Generate new token" → "Generate new token (classic)"
-3. **设置权限**:
-   -  `repo` (Full control of private repositories)
-   -  `workflow` (Update GitHub Action workflows)
-4. **设置有效期**: 选择 "No expiration" 或 90 天
-5. **生成并复制**: 立即复制 Token（页面关闭后无法查看）
+1. **默认语言改为英文** - AI处理翻译
+2. **文档全面更新** - 英文文档，中文指南
+3. **手动Token推送** - 解决网络问题
+4. **帮助系统改进** - 更好的用户体验
 
-## 推送后验证
+## 🔧 快速步骤
 
-推送成功后，测试安装命令:
+### 如果你有GitHub Token：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash
+# 一步完成推送
+./push-with-manual-token.sh
+# 然后粘贴你的Token
 ```
 
-## 项目信息
+### 如果没有Token：
 
-- **版本**: 1.4.5.4
-- **GitHub 用户**: naturecode-official
-- **仓库**: naturecode
-- **分支**: main
-- **远程地址**: https://github.com/naturecode-official/naturecode.git
+1. 访问 https://github.com/settings/tokens
+2. 生成新Token（classic）
+3. 选择 `repo` 权限
+4. 运行 `./push-with-manual-token.sh`
+5. 粘贴Token
 
-## 安装命令汇总
+## 🎯 推送后验证
+
+### 检查GitHub仓库
 
 ```bash
-# 主安装命令
-curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash
+# 验证安装脚本
+curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-smart.sh | head -5
 
+# 验证版本
+curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/package.json | grep version
+
+# 验证文档
+curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/docs.md | grep -i "default language"
+```
+
+### 本地功能测试
+
+```bash
+# 测试版本
+naturecode -v  # 应该显示 1.4.6
+
+# 测试英文帮助
+naturecode help "hello"
+
+# 测试中文问题
+naturecode help "你是谁"
+
+# 测试配置帮助
+naturecode help "how to configure"
+```
+
+## 📦 安装命令汇总
+
+```bash
 # 智能安装（推荐）
 curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-smart.sh | bash
 
-# 简单安装
-curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-simple.sh | bash
-
-# 通用安装
-curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-universal.sh | bash
+# 安装后测试
+naturecode -v
+naturecode help "hello"
+naturecode help "who are you"
 ```
 
 ## 故障排除
@@ -135,7 +162,7 @@ git fetch origin
 
 ## 安全提醒
 
--  **不要将 Token 提交到代码仓库**
--  **不要分享 Token**
--  **定期更新 Token**
--  \*\*在 `.gitignore` 中排除敏感文件
+- **不要将 Token 提交到代码仓库**
+- **不要分享 Token**
+- **定期更新 Token**
+- \*\*在 `.gitignore` 中排除敏感文件

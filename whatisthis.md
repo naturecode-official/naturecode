@@ -217,7 +217,7 @@ git push https://naturecode-official:TOKEN@github.com/naturecode-official/nature
 - 推送命令执行成功
 - 安装命令可正常访问
 - GitHub 仓库显示最新代码
-- 版本号正确显示（当前: 1.4.5.5）
+- 版本号正确显示（当前: 1.4.6）
 - 所有功能测试通过
 
 #### 自动化建议
@@ -237,7 +237,7 @@ git commit -m "$1"
 
 ## 项目概述
 
-**NatureCode** 是一个跨平台终端 AI 助手，支持 DeepSeek 和 OpenAI 模型。当前版本：**v1.4.5.5**
+**NatureCode** 是一个跨平台终端 AI 助手，支持 DeepSeek、OpenAI 和 Ollama 模型。当前版本：**v1.4.6**
 
 ### 🚨 必要守则（AI 助手必须遵守）
 
@@ -1100,7 +1100,7 @@ npm run typecheck
 ---
 
 **最后更新**: 2026-02-15  
-**版本**: NatureCode v1.4.5.5 已部署到 GitHub
+**版本**: NatureCode v1.4.6 已部署到 GitHub
 **状态**: 完整功能，一键安装系统就绪  
 **安装命令**: `curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash`  
 **仓库**: https://github.com/naturecode-official/naturecode

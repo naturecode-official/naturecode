@@ -1,4 +1,4 @@
-# NatureCode v1.4.5.5 更新总结
+# NatureCode v1.4.6 更新总结
 
 ## 🚀 已完成的功能
 
@@ -17,7 +17,7 @@
 
 ### 3. 版本管理 ✅
 
-- **版本一致性**：所有文件版本号统一为 1.4.5.5
+- **版本一致性**：所有文件版本号统一为 1.4.6
 - **简写版本命令**：`naturecode -v` 和 `naturecode --version` 都支持
 - **更新指南**：`whatisthis.md` 中添加了详细的文件更新清单
 
@@ -71,7 +71,7 @@ const modelsToTry = [
 if (lowerQuestion.includes("你是谁") || lowerQuestion.includes("who are you")) {
   console.log(`
  🤖 我是 NatureCode AI 助手！
- 我是 NatureCode v1.4.5.5 的智能助手...
+ 我是 NatureCode v1.4.6 的智能助手...
   `);
 }
 ```
@@ -143,7 +143,7 @@ make all         # 完整构建流程
 ## 🔄 GitHub状态
 
 ✅ **代码已同步**：所有修改已推送到 `naturecode-official/naturecode` 仓库
-✅ **版本一致**：GitHub上的代码版本为 1.4.5.5
+✅ **版本一致**：GitHub上的代码版本为 1.4.6
 ✅ **安装脚本可用**：一键安装命令工作正常
 ✅ **文档更新**：所有文档文件已同步
 
@@ -155,6 +155,6 @@ make all         # 完整构建流程
 
 ---
 
-**版本**: 1.4.5.5  
+**版本**: 1.4.6  
 **更新日期**: 2026-02-15  
 **状态**: ✅ 所有功能已实现并测试通过

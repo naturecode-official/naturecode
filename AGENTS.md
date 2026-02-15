@@ -87,7 +87,7 @@ make all          # Clean, install, build, test, lint, package
 ### Version Management
 
 ```bash
-make version-patch  # Update patch version (1.4.5.4 → 1.4.5.5)
+make version-patch  # Update patch version (1.4.5.5 → 1.4.5.6)
 make version-minor  # Update minor version (1.4.5.4 → 1.4.6.0)
 make version-major  # Update major version (1.4.5.4 → 2.0.0.0)
 ```

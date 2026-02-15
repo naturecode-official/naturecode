@@ -6,7 +6,7 @@
 set -e
 
 echo "=== NatureCode 手动Token推送 ==="
-echo "版本: 1.4.5.5"
+echo "版本: 1.4.6"
 echo "仓库: naturecode-official/naturecode"
 echo "分支: main"
 echo ""

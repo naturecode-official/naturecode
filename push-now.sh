@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "=== NatureCode 快速推送 ==="
-echo "版本: 1.4.5.5"
+echo "版本: 1.4.6"
 echo ""
 
 # 显示待推送的提交

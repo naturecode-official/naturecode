@@ -2,6 +2,32 @@
 
 All notable changes to NatureCode will be documented in this file.
 
+## [1.4.6] - 2026-02-15
+
+### Added
+
+- Ollama provider support in configuration manager
+- Enhanced error handling for Ollama model loading
+- Manual token push method for network/SSL issues
+- Improved plugin system with temporary disable option
+
+### Changed
+
+- **Updated to version 1.4.6 with major improvements**
+- Enhanced help command with better Ollama integration
+- Increased timeout for Ollama model loading (90 seconds)
+- Simplified model selection in help command
+- Disabled plugin loading for cleaner output
+
+### Fixed
+
+- Configuration validation for Ollama provider
+- Ollama provider model name handling
+- Help command timeout and error handling
+- Plugin example interference removed
+- Syntax errors in help command implementation
+- Network/SSL push issues with manual token method
+
 ## [1.4.5.5] - 2026-02-15
 
 ### Added

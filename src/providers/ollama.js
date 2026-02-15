@@ -154,7 +154,9 @@ export class OllamaProvider extends AIProvider {
     }
 
     return new Promise((resolve, reject) => {
-      const process = spawn("ollama", ["run", model], { stdio: "pipe" });
+      const process = spawn("ollama", ["run", model, "--nowordwrap"], {
+        stdio: "pipe",
+      });
 
       let output = "";
       let errorOutput = "";
@@ -230,7 +232,9 @@ export class OllamaProvider extends AIProvider {
       );
     }
 
-    const process = spawn("ollama", ["run", model], { stdio: "pipe" });
+    const process = spawn("ollama", ["run", model, "--nowordwrap"], {
+      stdio: "pipe",
+    });
 
     // Prepare the prompt with system message if provided
     let fullPrompt = prompt;

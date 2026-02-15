@@ -63,7 +63,7 @@ export class HelpCommand {
 
   async showSimpleHelp() {
     const helpText = `
-NatureCode v1.4.5.5 - Cross-platform Terminal AI Assistant
+NatureCode v1.4.6 - Cross-platform Terminal AI Assistant
 
 Available Commands:
   start              Start interactive AI session
@@ -162,7 +162,7 @@ For specific questions: naturecode help "your question"
 
   async startDirectAIChat() {
     console.clear();
-    console.log("NatureCode AI Assistant v1.4.5.5\n");
+    console.log("NatureCode AI Assistant v1.4.6\n");
     console.log("=".repeat(70));
     console.log("Direct AI Assistance Mode");
     console.log("=".repeat(70));
@@ -220,7 +220,7 @@ For specific questions: naturecode help "your question"
   }
 
   async getDirectAIHelp(question) {
-    console.log("NatureCode AI Assistant v1.4.5.5\n");
+    console.log("NatureCode AI Assistant v1.4.6\n");
 
     try {
       // Check if Ollama is available first
@@ -313,7 +313,7 @@ For specific questions: naturecode help "your question"
 
       if (userInput.toLowerCase() === "clear") {
         console.clear();
-        console.log("NatureCode AI Assistant v1.4.5.5\n");
+        console.log("NatureCode AI Assistant v1.4.6\n");
         rl.prompt();
         return;
       }
@@ -357,7 +357,7 @@ For specific questions: naturecode help "your question"
   }
 
   createDirectHelpPrompt(question, docsContext) {
-    return `You are NatureCode AI Assistant, an expert guide for NatureCode v1.4.5.5.
+    return `You are NatureCode AI Assistant, an expert guide for NatureCode v1.4.6.
 
 You are providing direct AI assistance to a user who needs help with NatureCode.
 Provide clear, practical, and actionable help.
@@ -390,7 +390,7 @@ Answer directly without introductions:`;
       }
     }
 
-    return `You are NatureCode AI Assistant, an expert guide for NatureCode v1.4.5.5.
+    return `You are NatureCode AI Assistant, an expert guide for NatureCode v1.4.6.
 
 You are in a direct chat session helping a user with NatureCode.
 
@@ -445,7 +445,7 @@ Answer:`;
   }
 
   createMinimalDocsContext() {
-    return `NatureCode v1.4.5.5 - Cross-platform Terminal AI Assistant
+    return `NatureCode v1.4.6 - Cross-platform Terminal AI Assistant
 
 ## Overview
 NatureCode is an AI-powered terminal assistant that helps developers with coding tasks, file operations, and project management.
@@ -528,83 +528,64 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
   async callOllama(prompt) {
     return new Promise((resolve, reject) => {
       // Try available models in order
-      const modelsToTry = [
-        "deepseek-coder",
-        "deepseek-chat",
-        "llama3.2",
-        "llama3.1",
-        "llama3",
-        "mistral",
-        "codellama",
-      ];
+      const modelsToTry = ["deepseek-coder:latest"];
 
       const tryModel = (index) => {
         if (index >= modelsToTry.length) {
           reject(
             new Error(
-              "No available Ollama models found. Please install a model with: ollama pull deepseek-coder",
+              "No Ollama models available. Try: ollama pull deepseek-coder",
             ),
           );
           return;
         }
 
         const model = modelsToTry[index];
-        const process = spawn("ollama", ["run", model], {
+        const process = spawn("ollama", ["run", model, "--nowordwrap"], {
           stdio: "pipe",
-          timeout: 30000, // 30 second timeout
         });
 
         let output = "";
-        let errorOutput = "";
+        let hasOutput = false;
         let timeoutId = null;
 
-        // Set timeout
+        // 90 second timeout for Ollama (needs time to load models)
         timeoutId = setTimeout(() => {
-          if (process && !process.killed) {
-            process.kill("SIGTERM");
-          }
-          // Try next model on timeout
-          tryModel(index + 1);
-        }, 30000);
+          console.log(`Model "${model}" timed out after 90 seconds.`);
+          process.kill("SIGKILL");
+          reject(new Error("Ollama model loading timeout"));
+        }, 90000);
 
         process.stdin.write(prompt);
         process.stdin.end();
 
         process.stdout.on("data", (data) => {
+          hasOutput = true;
           output += data.toString();
         });
 
-        process.stderr.on("data", (data) => {
-          errorOutput += data.toString();
-        });
+        // Completely ignore stderr
+        process.stderr.on("data", () => {});
 
         process.on("close", (code) => {
           if (timeoutId) clearTimeout(timeoutId);
 
-          if (code === 0 && output.trim()) {
+          if (hasOutput && output.trim()) {
             resolve(output.trim());
           } else {
-            // Log error for debugging
-            if (errorOutput && errorOutput.includes("model")) {
-              console.log(`Model "${model}" not found, trying next...`);
-            }
-            // Try next model
-            tryModel(index + 1);
+            reject(new Error("Ollama process closed without output"));
           }
         });
 
         process.on("error", (error) => {
           if (timeoutId) clearTimeout(timeoutId);
-          // Try next model on error
           tryModel(index + 1);
         });
       };
 
-      // Start with first model
       tryModel(0);
     });
   }
-
   async autoInstallOllama() {
     console.log("Setting up AI assistant...");
 
@@ -760,7 +741,7 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
         console.log(`
  🤖 I am NatureCode AI Assistant!
 
- I am NatureCode v1.4.5.5's intelligent assistant, specialized in helping developers:
+ I am NatureCode v1.4.6's intelligent assistant, specialized in helping developers:
  • Use NatureCode's various features
  • Solve programming problems
  • Manage projects and code
@@ -934,7 +915,7 @@ NatureCode can use Ollama for local AI processing. When you run 'help' command, 
         console.log(`
  👋 Hello! I am NatureCode AI Assistant!
 
- Nice to meet you! I am NatureCode v1.4.5.5's intelligent assistant.
+ Nice to meet you! I am NatureCode v1.4.6's intelligent assistant.
 
  🚀 How I can help you:
  • Answer NatureCode usage questions

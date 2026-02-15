@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export class PluginManager {
-  constructor (config = {}) {
+  constructor(config = {}) {
     this.config = config;
     this.plugins = new Map(); // pluginId -> plugin instance
     this.manifests = new Map(); // pluginId -> manifest
@@ -17,13 +17,14 @@ export class PluginManager {
 
     // Default plugin directories
     this.pluginDirs = [
-      path.join(
-        process.env.HOME || process.env.USERPROFILE,
-        ".naturecode",
-        "plugins",
-      ),
-      path.join(process.cwd(), ".naturecode", "plugins"),
-      path.join(__dirname, "..", "..", "..", "plugins"), // Built-in plugins
+      // Temporarily disable plugins for debugging
+      // path.join(
+      //   process.env.HOME || process.env.USERPROFILE,
+      //   ".naturecode",
+      //   "plugins",
+      // ),
+      // path.join(process.cwd(), ".naturecode", "plugins"),
+      // path.join(__dirname, "..", "..", "..", "plugins"), // Built-in plugins
     ];
 
     // Services
@@ -42,31 +43,31 @@ export class PluginManager {
   }
 
   // Set services
-  setFileSystem (fileSystem) {
+  setFileSystem(fileSystem) {
     this.fileSystem = fileSystem;
   }
 
-  setAIProvider (aiProvider) {
+  setAIProvider(aiProvider) {
     this.aiProvider = aiProvider;
   }
 
-  setLogger (logger) {
+  setLogger(logger) {
     this.logger = logger;
   }
 
-  setEventEmitter (eventEmitter) {
+  setEventEmitter(eventEmitter) {
     this.eventEmitter = eventEmitter;
   }
 
-  getLogger () {
+  getLogger() {
     return this.logger || console;
   }
 
-  getConfig () {
+  getConfig() {
     return this.config;
   }
 
-  getEventEmitter () {
+  getEventEmitter() {
     return (
       this.eventEmitter || {
         on: () => {},
@@ -76,7 +77,7 @@ export class PluginManager {
   }
 
   // Plugin discovery and loading
-  async discoverPlugins () {
+  async discoverPlugins() {
     const discovered = [];
 
     for (const pluginDir of this.pluginDirs) {
@@ -111,7 +112,7 @@ export class PluginManager {
     return discovered;
   }
 
-  async loadPlugins () {
+  async loadPlugins() {
     if (this.loaded) {
       return this.stats;
     }
@@ -145,7 +146,7 @@ export class PluginManager {
     return this.stats;
   }
 
-  async loadPlugin (pluginInfo) {
+  async loadPlugin(pluginInfo) {
     const { path: pluginPath, name: pluginName, manifestPath } = pluginInfo;
 
     // Load manifest
@@ -210,7 +211,7 @@ export class PluginManager {
     return pluginInstance;
   }
 
-  async registerCommands (pluginId, commands) {
+  async registerCommands(pluginId, commands) {
     if (!commands || typeof commands !== "object") {
       return;
     }
@@ -239,7 +240,7 @@ export class PluginManager {
   }
 
   // Plugin management
-  async unloadPlugin (pluginId) {
+  async unloadPlugin(pluginId) {
     const plugin = this.plugins.get(pluginId);
 
     if (!plugin) {
@@ -268,7 +269,7 @@ export class PluginManager {
     this.getLogger().info(`Unloaded plugin: ${pluginId}`);
   }
 
-  async reloadPlugin (pluginId) {
+  async reloadPlugin(pluginId) {
     const manifest = this.manifests.get(pluginId);
 
     if (!manifest) {
@@ -299,7 +300,7 @@ export class PluginManager {
   }
 
   // Command execution
-  async executeCommand (commandName, args = {}, subcommand = null) {
+  async executeCommand(commandName, args = {}, subcommand = null) {
     const commandInfo = this.commands.get(commandName);
 
     if (!commandInfo) {
@@ -319,15 +320,15 @@ export class PluginManager {
   }
 
   // Plugin information
-  getPlugin (pluginId) {
+  getPlugin(pluginId) {
     return this.plugins.get(pluginId);
   }
 
-  getManifest (pluginId) {
+  getManifest(pluginId) {
     return this.manifests.get(pluginId);
   }
 
-  listPlugins () {
+  listPlugins() {
     return Array.from(this.plugins.keys()).map((pluginId) => ({
       id: pluginId,
       manifest: this.manifests.get(pluginId),
@@ -335,7 +336,7 @@ export class PluginManager {
     }));
   }
 
-  listCommands () {
+  listCommands() {
     const commands = [];
 
     for (const [commandName, commandInfo] of this.commands.entries()) {
@@ -353,7 +354,7 @@ export class PluginManager {
   }
 
   // Permission checking
-  hasPermission (pluginId, permission) {
+  hasPermission(pluginId, permission) {
     const manifest = this.manifests.get(pluginId);
 
     if (!manifest) {
@@ -372,11 +373,11 @@ export class PluginManager {
   }
 
   // Utility methods
-  generatePluginId (name, version) {
+  generatePluginId(name, version) {
     return `${name}@${version}`;
   }
 
-  async directoryExists (dirPath) {
+  async directoryExists(dirPath) {
     try {
       const stat = await fs.stat(dirPath);
       return stat.isDirectory();
@@ -385,7 +386,7 @@ export class PluginManager {
     }
   }
 
-  async fileExists (filePath) {
+  async fileExists(filePath) {
     try {
       const stat = await fs.stat(filePath);
       return stat.isFile();
@@ -394,7 +395,7 @@ export class PluginManager {
     }
   }
 
-  async isDirectory (dirPath) {
+  async isDirectory(dirPath) {
     try {
       const stat = await fs.stat(dirPath);
       return stat.isDirectory();
@@ -404,7 +405,7 @@ export class PluginManager {
   }
 
   // Manifest validation
-  validateManifest (manifest) {
+  validateManifest(manifest) {
     const errors = [];
 
     // Required fields
@@ -440,7 +441,7 @@ export class PluginManager {
   }
 
   // Plugin information
-  getPluginInfo (pluginId) {
+  getPluginInfo(pluginId) {
     const manifest = this.manifests.get(pluginId);
 
     if (!manifest) {
@@ -474,7 +475,7 @@ export class PluginManager {
   }
 
   // Cleanup
-  async cleanup () {
+  async cleanup() {
     for (const pluginId of this.plugins.keys()) {
       try {
         await this.unloadPlugin(pluginId);

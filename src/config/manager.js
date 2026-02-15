@@ -16,7 +16,7 @@ const DEFAULT_CONFIG = {
   stream: true,
 };
 
-const VALID_PROVIDERS = ["deepseek", "openai"];
+const VALID_PROVIDERS = ["deepseek", "openai", "ollama"];
 const DEEPSEEK_MODELS = ["deepseek-chat", "deepseek-reasoner"];
 const OPENAI_MODELS = [
   "gpt-4o",
@@ -40,18 +40,39 @@ const OPENAI_MODELS = [
   "gpt-3.5-turbo-0301",
 ];
 
+const OLLAMA_MODELS = [
+  "llama3.2",
+  "llama3.2:latest",
+  "llama3.1",
+  "llama3.1:latest",
+  "mistral",
+  "mistral:latest",
+  "mixtral",
+  "mixtral:latest",
+  "codellama",
+  "codellama:latest",
+  "deepseek-coder",
+  "deepseek-coder:latest",
+  "deepseek-chat",
+  "deepseek-chat:latest",
+  "phi",
+  "phi:latest",
+  "qwen",
+  "qwen:latest",
+];
+
 class ConfigManager {
-  constructor () {
+  constructor() {
     this._ensureConfigDir();
   }
 
-  _ensureConfigDir () {
+  _ensureConfigDir() {
     if (!fs.existsSync(CONFIG_DIR)) {
       fs.mkdirSync(CONFIG_DIR, { recursive: true });
     }
   }
 
-  load () {
+  load() {
     try {
       if (!fs.existsSync(CONFIG_FILE)) {
         return { ...DEFAULT_CONFIG };
@@ -81,7 +102,7 @@ class ConfigManager {
     }
   }
 
-  save (config) {
+  save(config) {
     try {
       const validatedConfig = this._validateConfig(config);
 
@@ -118,7 +139,7 @@ class ConfigManager {
     }
   }
 
-  _validateConfig (config) {
+  _validateConfig(config) {
     const validated = { ...DEFAULT_CONFIG, ...config };
 
     // API key can be empty if it will be loaded from secure storage
@@ -146,6 +167,12 @@ class ConfigManager {
           `OpenAI model must be one of: ${OPENAI_MODELS.join(", ")}`,
         );
       }
+    } else if (validated.provider === "ollama") {
+      if (!OLLAMA_MODELS.includes(validated.model)) {
+        throw new Error(
+          `Ollama model must be one of: ${OLLAMA_MODELS.join(", ")}`,
+        );
+      }
     }
 
     if (validated.temperature < 0 || validated.temperature > 2) {
@@ -159,15 +186,15 @@ class ConfigManager {
     return validated;
   }
 
-  exists () {
+  exists() {
     return fs.existsSync(CONFIG_FILE);
   }
 
-  getConfigPath () {
+  getConfigPath() {
     return CONFIG_FILE;
   }
 
-  clear () {
+  clear() {
     try {
       if (fs.existsSync(CONFIG_FILE)) {
         fs.unlinkSync(CONFIG_FILE);
