@@ -158,7 +158,7 @@ export async function runModelConfiguration() {
         if (answers.provider === "deepseek") {
           return currentConfig.model || "deepseek-chat";
         } else if (answers.provider === "openai") {
-          return currentConfig.model || "gpt-5.2";
+          return currentConfig.model || "gpt-4o";
         } else if (answers.provider === "anthropic") {
           return currentConfig.model || "claude-sonnet-4.5";
         } else if (answers.provider === "gemini") {
@@ -508,7 +508,7 @@ export async function runModelConfiguration() {
     // Add fallback model for providers if selected model fails
     fallbackModel:
       answers.provider === "openai"
-        ? "gpt-5"
+        ? "gpt-4o"
         : answers.provider === "anthropic"
           ? "claude-3-5-haiku-20241022"
           : answers.provider === "gemini"

@@ -29,55 +29,29 @@ const SMART_DEFAULT_MODELS = {
 const VALID_PROVIDERS = ["deepseek", "openai", "ollama", "anthropic", "gemini"];
 const DEEPSEEK_MODELS = ["deepseek-chat", "deepseek-reasoner"];
 const OPENAI_MODELS = [
-  // GPT-5系列 (最新)
-  "gpt-5-preview",
-  "gpt-5-mini-preview",
-  "gpt-5.2-preview",
-  "gpt-5.2-pro-preview",
-
-  // GPT-4.1系列
-  "gpt-4.1",
-  "gpt-4.1-mini",
-  "gpt-4.1-nano",
-
-  // GPT-4o系列
+  // GPT-4o系列 (当前最新)
   "gpt-4o",
   "gpt-4o-mini",
+  "gpt-4o-2024-08-06",
 
-  // o系列 (优化模型)
-  "o3",
-  "o4-mini",
-  "o4-mini-high",
-  "o3-deep-research",
-  "o4-mini-deep-research",
-
-  // 搜索预览系列
-  "gpt-4o-search-preview",
-  "gpt-4o-mini-search-preview",
-
-  // 计算机使用预览
-  "computer-use-preview",
-
-  // 开源系列
-  "gpt-oss-120b",
-  "gpt-oss-20b",
-
-  // 现有模型 (保持向后兼容)
+  // GPT-4系列
   "gpt-4-turbo",
+  "gpt-4-turbo-2024-04-09",
   "gpt-4",
   "gpt-4-32k",
+  "gpt-4-0613",
+  "gpt-4-32k-0613",
+
+  // GPT-3.5系列
   "gpt-3.5-turbo",
   "gpt-3.5-turbo-16k",
   "gpt-3.5-turbo-instruct",
-  "gpt-5-turbo",
-  "gpt-4-enterprise",
-  "gpt-4o-enterprise",
-  "gpt-4o-2024-08-06",
-  "gpt-4-turbo-2024-04-09",
-  "gpt-4-0613",
-  "gpt-4-32k-0613",
   "gpt-3.5-turbo-0613",
   "gpt-3.5-turbo-0301",
+
+  // 搜索预览系列 (需要特定权限)
+  "gpt-4o-search-preview",
+  "gpt-4o-mini-search-preview",
 ];
 
 const OLLAMA_MODELS = [

@@ -354,22 +354,12 @@ You are empowered to directly interact with the file system. Use these tools to 
       detailedMessage += "   - Get a valid key from platform.openai.com\n\n";
     }
 
-    // 检查模型名称
+    // 检查模型名称（保留验证逻辑但移除虚构模型检查）
     const model = config.model || "";
-    const invalidModels = ["gpt-5", "gpt-4.1", "gpt-5.1", "gpt-5.2"];
-    const isInvalidModel = invalidModels.some((invalid) =>
-      model.includes(invalid),
-    );
 
-    if (isInvalidModel) {
-      detailedMessage += "2. **Invalid Model Name**:\n";
-      detailedMessage += `   - You're trying to use: "${model}"\n`;
-      detailedMessage +=
-        "   - This model may not exist or require special access\n";
-      detailedMessage += "   - Try these valid models instead:\n";
-      detailedMessage += "     • gpt-4o (recommended)\n";
-      detailedMessage += "     • gpt-4o-mini (faster, cheaper)\n";
-      detailedMessage += "     • gpt-3.5-turbo (most compatible)\n\n";
+    // 可以添加其他验证逻辑，但不再检查虚构模型
+    if (!model || typeof model !== "string") {
+      throw new Error("Model name is required and must be a string");
     }
 
     // 检查错误类型
