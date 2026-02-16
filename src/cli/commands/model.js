@@ -80,93 +80,37 @@ export async function runModelConfiguration() {
         answers.provider === "gemini",
     },
     {
-      type: "list",
+      type: "input",
       name: "model",
       message: (answers) => {
-        if (answers.provider === "deepseek") {
-          return "Select DeepSeek Model:";
-        } else if (answers.provider === "openai") {
-          return "Select OpenAI Model:";
-        } else if (answers.provider === "anthropic") {
-          return "Select Anthropic Model:";
-        } else if (answers.provider === "gemini") {
-          return "Select Gemini Model:";
-        } else if (answers.provider === "ollama") {
-          return "Select Ollama Model:";
-        }
-        return "Select Model:";
-      },
-      choices: (answers) => {
-        if (answers.provider === "deepseek") {
-          const models = DeepSeekProvider.getStaticAvailableModels();
-          const descriptions = {
-            "deepseek-chat":
-              "General purpose chat model (recommended for most tasks)",
-            "deepseek-reasoner":
-              "Specialized for complex reasoning and problem solving",
-          };
+        const providerNames = {
+          deepseek: "DeepSeek",
+          openai: "OpenAI",
+          anthropic: "Anthropic (Claude)",
+          gemini: "Google Gemini",
+          ollama: "Ollama",
+        };
+        const providerName =
+          providerNames[answers.provider] || answers.provider;
 
-          return models.map((model) => ({
-            name: `${model} - ${descriptions[model] || "Unknown model"}`,
-            value: model,
-            short: model,
-          }));
-        } else if (answers.provider === "openai") {
-          // Use static method to get model list, avoid creating provider instance
-          const models = OpenAIProvider.getStaticAvailableModels();
-          const descriptions = OpenAIProvider.getStaticModelDescriptions();
-
-          return models.map((model) => ({
-            name: `${model} - ${descriptions[model] || "OpenAI language model"}`,
-            value: model,
-            short: model,
-          }));
-        } else if (answers.provider === "anthropic") {
-          // Use static method to get Anthropic model list
-          const models = AnthropicProvider.getStaticAvailableModels();
-          const descriptions = AnthropicProvider.getStaticModelDescriptions();
-
-          return models.map((model) => ({
-            name: `${model} - ${descriptions[model] || "Anthropic language model"}`,
-            value: model,
-            short: model,
-          }));
-        } else if (answers.provider === "gemini") {
-          // Use static method to get Gemini model list
-          const models = GeminiProvider.getStaticAvailableModels();
-          const descriptions = GeminiProvider.getStaticModelDescriptions();
-
-          return models.map((model) => ({
-            name: `${model} - ${descriptions[model] || "Gemini language model"}`,
-            value: model,
-            short: model,
-          }));
-        } else if (answers.provider === "ollama") {
-          // Use static method to get Ollama model list
-          const models = OllamaProvider.getStaticAvailableModels();
-          const descriptions = OllamaProvider.getStaticModelDescriptions();
-
-          return models.map((model) => ({
-            name: `${model} - ${descriptions[model] || "Ollama language model"}`,
-            value: model,
-            short: model,
-          }));
-        }
-        return [];
+        return `Enter ${providerName} Model Name (check ${providerName} website for available models):`;
       },
       default: (answers) => {
-        if (answers.provider === "deepseek") {
-          return currentConfig.model || "deepseek-chat";
-        } else if (answers.provider === "openai") {
-          return currentConfig.model || "gpt-5-mini";
-        } else if (answers.provider === "anthropic") {
-          return currentConfig.model || "claude-haiku-4-5-20251001";
-        } else if (answers.provider === "gemini") {
-          return currentConfig.model || "gemini-2.5-flash";
-        } else if (answers.provider === "ollama") {
-          return currentConfig.model || "llama3.2:latest";
+        // 提供智能默认值，但用户可以修改
+        const smartDefaults = {
+          deepseek: "deepseek-chat",
+          openai: "gpt-5-mini",
+          anthropic: "claude-3-5-haiku-20241022",
+          gemini: "gemini-2.5-flash",
+          ollama: "llama3.2:latest",
+        };
+        return currentConfig.model || smartDefaults[answers.provider] || "";
+      },
+      validate: (input) => {
+        if (!input || input.trim() === "") {
+          return "Model name is required";
         }
-        return "deepseek-chat";
+        return true;
       },
       when: (answers) =>
         answers.provider === "deepseek" ||

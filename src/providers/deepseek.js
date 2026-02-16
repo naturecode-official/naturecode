@@ -22,26 +22,15 @@ export class DeepSeekProvider extends AIProvider {
       throw new Error("DeepSeek API key is required");
     }
 
-    if (config.model && !this.getAvailableModels().includes(config.model)) {
-      throw new Error(
-        `DeepSeek model must be one of: ${this.getAvailableModels().join(", ")}`,
-      );
+    // 只检查模型名是否存在，不验证是否在预定义列表中
+    if (!config.model || typeof config.model !== "string") {
+      throw new Error("DeepSeek model name is required");
     }
 
+    console.log(`ℹ️  Using model: ${config.model}`);
+    console.log("ℹ️  Check platform.deepseek.com for available models");
+
     return true;
-  }
-
-  getAvailableModels() {
-    return DeepSeekProvider.getStaticAvailableModels();
-  }
-
-  static getStaticAvailableModels() {
-    return ["deepseek-chat", "deepseek-reasoner"];
-  }
-
-  getModelDescription(model) {
-    const descriptions = DeepSeekProvider.getStaticModelDescriptions();
-    return descriptions[model] || "Unknown model";
   }
 
   // 获取 API URL

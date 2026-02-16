@@ -15,12 +15,16 @@ export class OllamaProvider extends AIProvider {
 
   validateConfig(config) {
     // For Ollama, API key is not required
-    // But we need to validate the model
-    if (config.model && !this.getAvailableModels().includes(config.model)) {
-      throw new Error(
-        `Ollama model must be one of: ${this.getAvailableModels().join(", ")}`,
-      );
+    // 只检查模型名是否存在，不验证是否在预定义列表中
+    if (!config.model || typeof config.model !== "string") {
+      throw new Error("Ollama model name is required");
     }
+
+    console.log(`ℹ️  Using model: ${config.model}`);
+    console.log("ℹ️  Run 'ollama list' to see available models");
+
+    return true;
+  }
 
     return true;
   }

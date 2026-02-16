@@ -1,55 +1,44 @@
-# NatureCode 更新记录 - 2026年2月15日
+# NatureCode 更新记录 - 2026年2月16日
 
-## 已完成的工作
+## 版本 1.5.0 重大更新
 
-### 1. OpenAI模型更新至2026.02.15
-**文件**: `src/providers/openai.js`, `src/config/manager.js`
+### 1. 配置系统重构：移除预制模型名，支持用户自定义输入
+**文件**: `src/cli/commands/model.js`, `src/providers/*.js`
 **内容**:
-- 添加了GPT-5系列 (2025-2026): gpt-5, gpt-5-turbo, gpt-5-32k, gpt-5-vision, gpt-5-audio
-- 添加了GPT-4.5系列 (2025): gpt-4.5, gpt-4.5-turbo, gpt-4.5-vision, gpt-4.5-audio
-- 添加了GPT-4o增强版 (2025-2026): gpt-4o-2025, gpt-4o-2025-turbo, gpt-4o-2025-vision, gpt-4o-2025-audio, gpt-4o-2025-realtime
-- 添加了专用模型: dall-e-4, whisper-3, codex-2, claude-4, claude-3.5
-- 添加了企业版: gpt-4-enterprise, gpt-4o-enterprise, gpt-5-enterprise
-- 添加了预览版: gpt-4.5-preview, gpt-5-preview, gpt-4o-2025-preview
-- 更新了模型描述、分类和能力定义
+- **配置向导改进**: 将模型选择从列表改为输入框，用户可以输入任意模型名
+- **移除预制模型列表**: 删除所有provider中的静态模型列表，避免模型上下线导致的更新问题
+- **智能提示**: 配置时提示用户查看各AI服务商官网获取可用模型列表
+- **验证简化**: 只验证模型名是否存在，不验证是否在预定义列表中
 
-### 2. 配置向导改进
-**文件**: `src/cli/commands/model.js`, `src/config/manager.js`, `src/providers/openai.js`
+### 2. 错误处理优化
+**文件**: `src/providers/base.js`
 **内容**:
-- 温度设置提示: "Set temperature (0.0-2.0, press Enter for default 0.7):"
-- 最大token设置提示: "Set maximum tokens per response (1-4000, press Enter for default 2000):"
-- 添加了OpenAI故障回退机制: 主模型失败时自动切换到gpt-5
-- 更新了配置验证逻辑以支持fallbackModel字段
+- **简化400错误信息**: 移除冗长的包装错误信息，只显示核心错误
+- **更好的错误诊断**: 提供简洁的错误信息和关键诊断提示
 
-### 3. 其他修复和改进
-**文件**: `src/config/secure-store.js`, `src/cli/commands/model.js`
+### 3. API端点简化：只使用官方API
+**文件**: `src/providers/openai.js`, `src/providers/deepseek.js`, `src/providers/anthropic.js`, `src/providers/gemini.js`
 **内容**:
-- 修复了配置保存时的undefined filter错误
-- 添加了低资源模式支持 (low-resource-mode.sh)
-- 减少了控制台输出噪音
-- 添加了push-now.sh部署脚本
+- **移除自定义base_url支持**: 所有provider现在只使用官方API端点
+- **简化代码**: 移除base_url配置逻辑，减少复杂性
+- **提高稳定性**: 确保用户始终使用官方、稳定的API服务
 
-### 4. GitHub推送
-**状态**: 已成功推送到GitHub仓库
-**提交**:
-1. 7e2f77d - feat: enhance configuration wizard with default prompts and OpenAI fallback model support
-2. 14b6e3f - chore: add push-now.sh script for GitHub deployment
+### 4. 技术实现细节
+**配置向导改进**:
+- 将模型选择从下拉列表改为文本输入框
+- 添加智能默认值提示（可修改）
+- 提示用户查看各AI服务商官网获取可用模型
+- 简化验证逻辑，只检查模型名是否存在
 
-## 技术细节
+**Provider验证简化**:
+- 移除所有静态模型列表和验证
+- 只验证API密钥格式和模型名存在性
+- 添加控制台提示，指导用户查看官方文档
 
-### OpenAI故障回退实现
-1. **配置层**: 在config中添加fallbackModel字段
-2. **验证层**: 验证回退模型的有效性
-3. **执行层**: 
-   - `_generateWithFileContext()`: 非流式生成的回退
-   - `_streamGenerateWithContext()`: 流式生成的回退
-   - 主模型失败时自动尝试回退模型
-   - 提供详细的回退状态日志
-
-### 用户界面改进
-1. **默认值提示**: 明确显示默认值，用户可按Enter使用
-2. **输入验证**: 允许空输入使用默认值
-3. **错误处理**: 友好的错误消息和回退机制
+**错误处理优化**:
+- 简化400错误信息，移除冗长包装
+- 提供核心错误信息和关键诊断
+- 保持错误信息简洁易读
 
 ## 已完成的任务
 
@@ -262,6 +251,46 @@
 3. **预测要适度**: 未来模型预测要合理，不要过于具体和推测
 4. **安全要重视**: 永远不要在代码中存储敏感信息
 5. **代码要简洁**: 删除不必要的功能，保持核心功能清晰
+
+## 版本 1.5.0 更新总结
+
+### 🎯 核心改进
+1. **灵活的模型配置**: 用户可输入任意模型名，无需等待软件更新
+2. **简化的验证逻辑**: 只验证基本格式，不限制具体模型
+3. **官方API专用**: 所有provider只使用官方API端点
+4. **更好的用户体验**: 配置时提示查看官方文档获取可用模型
+
+### 🔧 技术架构
+- **配置系统**: 输入框替代下拉列表，支持自定义模型名
+- **验证系统**: 简化验证，移除静态模型列表
+- **错误处理**: 简洁的错误信息，更好的问题诊断
+- **API端点**: 只使用官方API，提高稳定性
+
+### 📊 项目现状
+✅ **已完成**:
+1. 配置向导重构：支持自定义模型名输入
+2. Provider验证简化：移除静态模型列表
+3. API端点简化：只使用官方API
+4. 错误处理优化：简洁的错误信息
+5. 版本更新：v1.4.9 → v1.5.0
+
+🎯 **当前状态**:
+- OpenAI配置：用户输入模型名，提示查看platform.openai.com
+- DeepSeek配置：用户输入模型名，提示查看platform.deepseek.com
+- Anthropic配置：用户输入模型名，提示查看console.anthropic.com
+- Gemini配置：用户输入模型名，提示查看ai.google.dev
+- Ollama配置：用户输入模型名，提示运行'ollama list'
+
+### 🚀 使用指南
+1. **配置模型**: `naturecode model`
+2. **查看可用模型**: 访问各AI服务商官网
+3. **开始使用**: `naturecode start`
+4. **获取帮助**: `naturecode --help`
+
+### 🔄 向后兼容性
+- 现有配置继续工作
+- 新配置更灵活，支持任意模型名
+- 错误信息更简洁，便于问题诊断
 
 ## 安全提醒
 GitHub Token安全注意事项:

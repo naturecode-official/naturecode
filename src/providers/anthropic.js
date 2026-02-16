@@ -22,6 +22,17 @@ export class AnthropicProvider extends AIProvider {
       throw new Error("Anthropic API key is required");
     }
 
+    // 只检查模型名是否存在，不验证是否在预定义列表中
+    if (!config.model || typeof config.model !== "string") {
+      throw new Error("Anthropic model name is required");
+    }
+
+    console.log(`ℹ️  Using model: ${config.model}`);
+    console.log("ℹ️  Check console.anthropic.com for available models");
+
+    return true;
+  }
+
     if (config.model && !this.getAvailableModels().includes(config.model)) {
       throw new Error(
         `Anthropic model must be one of: ${this.getAvailableModels().join(", ")}`,

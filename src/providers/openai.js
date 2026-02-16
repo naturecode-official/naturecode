@@ -24,35 +24,21 @@ export class OpenAIProvider extends AIProvider {
       console.warn("   Valid OpenAI keys start with 'sk-' or 'sk-proj-'");
     }
 
-    if (!config.model || !this.getAvailableModels().includes(config.model)) {
-      const availableModels = this.getAvailableModels();
-      const recommendedModels = ["gpt-5-mini", "gpt-5.2", "gpt-4.1"];
-
-      let errorMessage = `Invalid OpenAI model: "${config.model}"\n\n`;
-      errorMessage += "✅ **Recommended models (guaranteed to work):**\n";
-      recommendedModels.forEach((model) => {
-        errorMessage += `   • ${model}\n`;
-      });
-
-      errorMessage += "\n📋 **All available models:**\n";
-      availableModels.slice(0, 10).forEach((model) => {
-        errorMessage += `   • ${model}\n`;
-      });
-
-      if (availableModels.length > 10) {
-        errorMessage += `   • ... and ${availableModels.length - 10} more\n`;
-      }
-
-      errorMessage += "\n💡 **Tip**: Run 'naturecode model' to reconfigure";
-
-      throw new Error(errorMessage);
+    // 只检查模型名是否存在，不验证是否在预定义列表中
+    if (!config.model || typeof config.model !== "string") {
+      throw new Error("OpenAI model name is required");
     }
+
+    console.log(`ℹ️  Using model: ${config.model}`);
+    console.log("ℹ️  Check platform.openai.com for available models");
 
     return true;
   }
 
-  getAvailableModels() {
-    return OpenAIProvider.getStaticAvailableModels();
+  // 获取 API URL
+  _getApiUrl() {
+    // 只使用 OpenAI 官方 API
+    return `${DEFAULT_OPENAI_BASE_URL}${CHAT_COMPLETIONS_ENDPOINT}`;
   }
 
   // 获取 API URL
