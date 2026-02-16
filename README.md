@@ -363,12 +363,23 @@ NatureCode fully supports Windows 10/11 with:
 - [AGENTS.md](AGENTS.md) - Development guide for AI assistants
 - [whatisthis.md](whatisthis.md) - Comprehensive project documentation and guidelines
 
-### Key Features in v1.5.0
+### Key Features in v1.5.1
 
+- **n1n.ai Provider Support**: New OpenAI-compatible API provider with custom endpoint (https://api.n1n.top/v1)
 - **Flexible Model Configuration**: Input any model name manually instead of selecting from pre-defined lists
 - **Custom Provider**: Connect to any AI API with custom base URL, API key, and configuration
-- **Simplified Validation**: Removed model list validation from all providers (OpenAI, DeepSeek, Anthropic, Google Gemini, Ollama, Custom)
+- **Simplified Validation**: Removed model list validation from all providers (OpenAI, n1n.ai, DeepSeek, Anthropic, Google Gemini, Ollama, Zhipu AI, Custom)
 - **Smart User Guidance**: Provider-specific prompts guide users to check official websites for available models
+- **Enhanced User Experience**: More intuitive configuration wizard with text input fields
+- **Backward Compatibility**: Maintains all existing functionality while providing more flexibility
+
+### Previous Version Highlights (v1.5.0)
+
+- **Zhipu AI (智谱AI) Support**: Added Chinese AI models with GLM series support
+- **Flexible Model Configuration**: Input any model name manually instead of selecting from pre-defined lists
+- **Custom Provider**: Connect to any AI API with custom base URL, API key, and configuration
+- **Simplified Validation**: Removed model list validation from all providers
+- **Smart User Guidance**: Provider-specific prompts guide users to check official websites
 - **Enhanced User Experience**: More intuitive configuration wizard with text input fields
 - **Backward Compatibility**: Maintains all existing functionality while providing more flexibility
 
