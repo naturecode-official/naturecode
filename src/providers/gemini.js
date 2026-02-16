@@ -2,8 +2,9 @@ import axios from "axios";
 import { AIProvider } from "./base.js";
 import { formatFileList } from "../utils/filesystem.js";
 
-const GEMINI_API_URL =
-  "https://generativelanguage.googleapis.com/v1beta/models";
+const DEFAULT_GEMINI_BASE_URL =
+  "https://generativelanguage.googleapis.com/v1beta";
+const MODELS_ENDPOINT = "/models";
 
 export class GeminiProvider extends AIProvider {
   constructor(config) {
@@ -104,6 +105,25 @@ export class GeminiProvider extends AIProvider {
     return descriptions[model] || "Unknown model";
   }
 
+  // 获取 API URL
+  _getApiUrl() {
+    // 支持自定义 base_url，默认为标准的 Gemini API
+    const baseUrl = this.config.base_url || DEFAULT_GEMINI_BASE_URL;
+    let apiBaseUrl = baseUrl.trim();
+
+    // 移除末尾的斜杠
+    if (apiBaseUrl.endsWith("/")) {
+      apiBaseUrl = apiBaseUrl.slice(0, -1);
+    }
+
+    // 确保有 /v1beta
+    if (!apiBaseUrl.endsWith("/v1beta")) {
+      apiBaseUrl += "/v1beta";
+    }
+
+    return `${apiBaseUrl}${MODELS_ENDPOINT}`;
+  }
+
   // Enhanced generate method that handles file system operations
   async generate(prompt, options = {}) {
     // Check if this is a file system operation
@@ -196,7 +216,7 @@ export class GeminiProvider extends AIProvider {
 
     try {
       const modelName = this.config.model || "gemini-2.5-flash";
-      const apiUrl = `${GEMINI_API_URL}/${modelName}:generateContent?key=${this.config.apiKey}`;
+      const apiUrl = `${this._getApiUrl()}/${modelName}:generateContent?key=${this.config.apiKey}`;
 
       const response = await axios.post(
         apiUrl,
@@ -287,7 +307,7 @@ export class GeminiProvider extends AIProvider {
 
     try {
       const modelName = this.config.model || "gemini-2.5-flash";
-      const apiUrl = `${GEMINI_API_URL}/${modelName}:streamGenerateContent?key=${this.config.apiKey}`;
+      const apiUrl = `${this._getApiUrl()}/${modelName}:streamGenerateContent?key=${this.config.apiKey}`;
 
       const response = await axios.post(
         apiUrl,

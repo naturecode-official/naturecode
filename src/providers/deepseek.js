@@ -2,7 +2,8 @@ import axios from "axios";
 import { AIProvider } from "./base.js";
 import { formatFileList } from "../utils/filesystem.js";
 
-const DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
+const DEFAULT_DEEPSEEK_BASE_URL = "https://api.deepseek.com/v1";
+const CHAT_COMPLETIONS_ENDPOINT = "/chat/completions";
 
 export class DeepSeekProvider extends AIProvider {
   constructor(config) {
@@ -39,14 +40,27 @@ export class DeepSeekProvider extends AIProvider {
   }
 
   getModelDescription(model) {
-    const descriptions = {
-      "deepseek-chat":
-        "General purpose chat model (recommended for most tasks)",
-      "deepseek-reasoner":
-        "Specialized for complex reasoning and problem solving",
-    };
-
+    const descriptions = DeepSeekProvider.getStaticModelDescriptions();
     return descriptions[model] || "Unknown model";
+  }
+
+  // 获取 API URL
+  _getApiUrl() {
+    // 支持自定义 base_url，默认为标准的 DeepSeek API
+    const baseUrl = this.config.base_url || DEFAULT_DEEPSEEK_BASE_URL;
+    let apiBaseUrl = baseUrl.trim();
+
+    // 移除末尾的斜杠
+    if (apiBaseUrl.endsWith("/")) {
+      apiBaseUrl = apiBaseUrl.slice(0, -1);
+    }
+
+    // 确保有 /v1（对于 OpenAI 兼容的 API）
+    if (!apiBaseUrl.endsWith("/v1")) {
+      apiBaseUrl += "/v1";
+    }
+
+    return `${apiBaseUrl}${CHAT_COMPLETIONS_ENDPOINT}`;
   }
 
   // Enhanced generate method that handles file system operations
@@ -132,7 +146,7 @@ export class DeepSeekProvider extends AIProvider {
       const mergedOptions = this._mergeOptions(options);
 
       const response = await axios.post(
-        DEEPSEEK_API_URL,
+        this._getApiUrl(),
         {
           model: this.config.model,
           messages: [
@@ -330,7 +344,7 @@ Please help with this request. If it involves file operations, provide the neces
       const mergedOptions = this._mergeOptions(options);
 
       const response = await axios.post(
-        DEEPSEEK_API_URL,
+        this._getApiUrl(),
         {
           model: this.config.model,
           messages: [

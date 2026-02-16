@@ -57,8 +57,8 @@ export class OpenAIProvider extends AIProvider {
 
   // 获取 API URL
   _getApiUrl() {
-    // 只支持标准的 OpenAI API
-    const baseUrl = DEFAULT_OPENAI_BASE_URL;
+    // 支持自定义 base_url，默认为标准的 OpenAI API
+    const baseUrl = this.config.base_url || DEFAULT_OPENAI_BASE_URL;
     let apiBaseUrl = baseUrl.trim();
 
     // 移除末尾的斜杠
@@ -66,7 +66,7 @@ export class OpenAIProvider extends AIProvider {
       apiBaseUrl = apiBaseUrl.slice(0, -1);
     }
 
-    // 确保有 /v1
+    // 确保有 /v1（对于 OpenAI 兼容的 API）
     if (!apiBaseUrl.endsWith("/v1")) {
       apiBaseUrl += "/v1";
     }

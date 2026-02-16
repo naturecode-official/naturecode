@@ -1605,3 +1605,109 @@ brew upgrade curl
 - **专注核心**: 专注于标准 OpenAI API，提供更稳定、更简单的用户体验
 - **易于维护**: 减少代码复杂度，提高可维护性
 - **明确边界**: 明确 NatureCode 的定位 - 简单、易用的终端 AI 助手
+
+## 🔧 **自定义 API 端点配置 (v1.4.9)**
+
+NatureCode 现在支持自定义 API 端点配置，允许用户使用不同的 API 提供商或自托管服务。
+
+### **支持的提供商和默认配置**
+
+```yaml
+# OpenAI 兼容 API (包括 OpenAI、DeepSeek 等)
+openai:
+  provider: openai
+  base_url: https://api.openai.com/v1
+
+# DeepSeek API (OpenAI 兼容)
+deepseek:
+  provider: openai
+  base_url: https://api.deepseek.com/v1
+
+# Anthropic Claude API
+claude:
+  provider: anthropic
+  base_url: https://api.anthropic.com/v1
+
+# Google Gemini API
+gemini:
+  provider: google-gemini
+  base_url: https://generativelanguage.googleapis.com/v1beta
+```
+
+### **配置方法**
+
+1. **通过环境变量配置**:
+
+   ```bash
+   # 设置自定义 OpenAI 兼容 API
+   export OPENAI_BASE_URL="https://your-custom-api.com/v1"
+
+   # 设置自定义 DeepSeek API
+   export DEEPSEEK_BASE_URL="https://api.deepseek.com/v1"
+
+   # 设置自定义 Anthropic API
+   export ANTHROPIC_BASE_URL="https://api.anthropic.com/v1"
+
+   # 设置自定义 Gemini API
+   export GEMINI_BASE_URL="https://generativelanguage.googleapis.com/v1beta"
+   ```
+
+2. **通过配置文件配置**:
+   编辑 `~/.naturecode/config.json`:
+
+   ```json
+   {
+     "provider": "openai",
+     "base_url": "https://your-custom-api.com/v1",
+     "apiKey": "your-api-key",
+     "model": "gpt-5-mini"
+   }
+   ```
+
+3. **通过 CLI 配置**:
+
+   ```bash
+   # 运行配置向导
+   naturecode model
+
+   # 在配置过程中，可以指定自定义 base_url
+   ```
+
+### **使用场景**
+
+1. **自托管 OpenAI 兼容 API**:
+   - 使用 LocalAI、Ollama 等自托管服务
+   - 配置: `base_url: http://localhost:8080/v1`
+
+2. **企业私有 API**:
+   - 使用公司内部的 AI 服务
+   - 配置: `base_url: https://ai.internal.company.com/v1`
+
+3. **不同区域的 API 端点**:
+   - 使用特定区域的 API 服务
+   - 配置: `base_url: https://api.us.openai.com/v1`
+
+### **兼容性说明**
+
+- **OpenAI 兼容 API**: 所有使用 OpenAI 格式的 API 都支持
+- **DeepSeek**: 完全兼容 OpenAI API 格式
+- **Anthropic**: 使用 Claude API 格式
+- **Gemini**: 使用 Google Gemini API 格式
+
+### **故障排除**
+
+如果遇到 API 连接问题:
+
+1. 检查 `base_url` 格式是否正确
+2. 确保 API 端点支持相应的模型
+3. 验证 API 密钥权限
+4. 检查网络连接和防火墙设置
+
+### **版本更新说明**
+
+**v1.4.9 更新内容**:
+
+1. 添加自定义 `base_url` 配置支持
+2. 更新所有提供商支持自定义 API 端点
+3. 修复模型兼容性问题
+4. 改进错误处理和诊断信息

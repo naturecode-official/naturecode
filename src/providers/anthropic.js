@@ -2,7 +2,8 @@ import axios from "axios";
 import { AIProvider } from "./base.js";
 import { formatFileList } from "../utils/filesystem.js";
 
-const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
+const DEFAULT_ANTHROPIC_BASE_URL = "https://api.anthropic.com/v1";
+const MESSAGES_ENDPOINT = "/messages";
 
 export class AnthropicProvider extends AIProvider {
   constructor(config) {
@@ -205,6 +206,25 @@ export class AnthropicProvider extends AIProvider {
     return recommendations[useCase] || "claude-haiku-4-5-20251001";
   }
 
+  // 获取 API URL
+  _getApiUrl() {
+    // 支持自定义 base_url，默认为标准的 Anthropic API
+    const baseUrl = this.config.base_url || DEFAULT_ANTHROPIC_BASE_URL;
+    let apiBaseUrl = baseUrl.trim();
+
+    // 移除末尾的斜杠
+    if (apiBaseUrl.endsWith("/")) {
+      apiBaseUrl = apiBaseUrl.slice(0, -1);
+    }
+
+    // 确保有 /v1
+    if (!apiBaseUrl.endsWith("/v1")) {
+      apiBaseUrl += "/v1";
+    }
+
+    return `${apiBaseUrl}${MESSAGES_ENDPOINT}`;
+  }
+
   // Enhanced generate method that handles file system operations
   async generate(prompt, options = {}) {
     // Check if this is a file system operation
@@ -297,7 +317,7 @@ export class AnthropicProvider extends AIProvider {
 
     try {
       const response = await axios.post(
-        ANTHROPIC_API_URL,
+        this._getApiUrl(),
         {
           model: this.config.model || "claude-haiku-4-5-20251001",
           max_tokens: mergedOptions.max_tokens,
@@ -353,7 +373,7 @@ export class AnthropicProvider extends AIProvider {
 
     try {
       const response = await axios.post(
-        ANTHROPIC_API_URL,
+        this._getApiUrl(),
         {
           model: this.config.model || "claude-haiku-4-5-20251001",
           max_tokens: mergedOptions.max_tokens,
