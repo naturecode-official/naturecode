@@ -2,6 +2,7 @@
 
 import fs from "fs/promises";
 import path from "path";
+import os from "os";
 
 export class PluginSecurityManager {
   constructor(config = {}) {
@@ -191,18 +192,30 @@ export class PluginSecurityManager {
 
   getBlockedPaths(pluginId) {
     const config = this.config.plugins?.[pluginId]?.paths || {};
+    const isWindows = os.platform() === "win32";
 
-    return (
-      config.blocked || [
-        "/",
-        "/etc",
-        "/usr",
-        "/bin",
-        "/sbin",
-        "/var",
-        path.join(process.env.HOME || process.env.USERPROFILE, ".*"), // Hidden files
-      ]
-    );
+    // 平台特定的阻塞路径
+    const defaultBlockedPaths = isWindows
+      ? [
+          "C:\\Windows",
+          "C:\\Program Files",
+          "C:\\Program Files (x86)",
+          "C:\\ProgramData",
+          "C:\\System32",
+          path.join(process.env.USERPROFILE || "", "AppData", ".*"),
+          path.join(process.env.USERPROFILE || "", ".*"), // Hidden files
+        ]
+      : [
+          "/",
+          "/etc",
+          "/usr",
+          "/bin",
+          "/sbin",
+          "/var",
+          path.join(process.env.HOME || "", ".*"), // Hidden files
+        ];
+
+    return config.blocked || defaultBlockedPaths;
   }
 
   getAllowedHosts(pluginId) {

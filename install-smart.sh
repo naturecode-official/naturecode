@@ -6,6 +6,21 @@
 
 set -e
 
+# Detect Windows environment
+detect_windows() {
+    if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]] || [[ "$(uname -s)" == "MINGW"* ]] || [[ "$(uname -s)" == "CYGWIN"* ]]; then
+        echo "Windows"
+    elif [[ "$(uname -s)" == "Darwin" ]]; then
+        echo "macOS"
+    elif [[ "$(uname -s)" == "Linux" ]]; then
+        echo "Linux"
+    else
+        echo "Unknown"
+    fi
+}
+
+OS_TYPE=$(detect_windows)
+
 # Color definitions - use tput only, no color if not supported
 COLORS_SUPPORTED=false
 RED=""
@@ -191,8 +206,10 @@ version_compare() {
 # Show system info
 show_system_info() {
     log_step "System Information"
-    echo -e "  OS: $(uname -s)"
-    echo -e "  Architecture: $(uname -m)"
+    echo -e "  OS: $OS_TYPE"
+    if [[ "$OS_TYPE" != "Windows" ]]; then
+        echo -e "  Details: $(uname -s) $(uname -m)"
+    fi
     echo -e "  Shell: $(basename "$SHELL")"
     echo -e "  Node.js: $(node --version 2>/dev/null || echo "Not installed")"
     echo -e "  npm: $(npm --version 2>/dev/null || echo "Not installed")"
@@ -226,6 +243,13 @@ check_prerequisites() {
         log_error "Node.js version $NODE_VERSION is too old. Minimum required: v16+"
         log_info "Please upgrade Node.js from: https://nodejs.org/"
         exit 1
+    fi
+    
+    # Windows-specific recommendations
+    if [[ "$OS_TYPE" == "Windows" ]]; then
+        log_info "Windows detected - using Git Bash or WSL is recommended"
+        log_info "For native Windows support, download the .exe from GitHub Releases"
+        log_info "See WINDOWS_INSTALL.md for detailed instructions"
     fi
     
     log_success "All prerequisites satisfied"
