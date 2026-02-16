@@ -1,8 +1,18 @@
 # NatureCode 更新记录 - 2026年2月16日
 
-## 版本 1.5.1 更新
+## 版本 1.5.2 更新
 
-### 1. 添加n1n.ai提供者支持
+### 1. 添加Azure OpenAI提供者支持
+**文件**: `src/providers/azure-openai.js`, `src/cli/commands/model.js`, `src/cli/commands/start.js`
+**内容**:
+- **Azure OpenAI集成**: 添加Azure OpenAI作为新的AI提供者选项
+- **Azure特定配置**: 需要Azure OpenAI资源名称和API版本
+- **URL格式**: `https://{resource-name}.openai.azure.com/` (必须包含结尾斜杠)
+- **模型支持**: 支持所有Azure OpenAI部署的模型 (gpt-35-turbo, gpt-4, gpt-4o等)
+- **配置向导**: 添加Azure OpenAI特定配置问题
+- **认证**: 使用API密钥认证，与标准OpenAI兼容但URL格式不同
+
+### 2. 添加n1n.ai提供者支持
 **文件**: `src/providers/n1n.js`, `src/cli/commands/model.js`, `src/cli/commands/start.js`
 **内容**:
 - **n1n.ai集成**: 添加n1n.ai作为新的AI提供者选项
@@ -247,9 +257,11 @@
 5. Google Gemini 模型支持添加
 6. Zhipu AI (智谱AI) 模型支持添加
 7. n1n.ai OpenAI兼容API支持添加
-8. 自定义提供者支持添加
-9. 所有更改已推送到GitHub
-10. 模型列表现在干净、合理、实用
+8. Azure OpenAI Microsoft Azure托管模型支持添加
+9. 自定义提供者支持添加
+10. 版本升级到1.5.2
+11. 所有更改已推送到GitHub
+12. 模型列表现在干净、合理、实用
 
 🎯 **当前状态**:
 - OpenAI模型列表: 18个纯文本模型
@@ -260,13 +272,14 @@
 - GitHub: 所有更改已同步
 
 **技术架构**:
-- 支持DeepSeek、OpenAI、n1n.ai、Anthropic、Google Gemini、Ollama、Zhipu AI、Custom Provider八个provider
+- 支持DeepSeek、OpenAI、Azure OpenAI、n1n.ai、Anthropic、Google Gemini、Ollama、Zhipu AI、Custom Provider九个provider
 - 配置系统支持故障回退机制
 - 用户界面友好，支持默认值
 - 代码质量经过多次清理和优化
 
 **当前状态**:
 - OpenAI配置：用户输入模型名，提示查看platform.openai.com
+- Azure OpenAI配置：需要Azure资源名称、API版本和模型名，提示查看Azure OpenAI门户
 - n1n.ai配置：用户输入模型名，使用OpenAI兼容API (https://api.n1n.top/v1)
 - DeepSeek配置：用户输入模型名，提示查看platform.deepseek.com
 - Anthropic配置：用户输入模型名，提示查看console.anthropic.com

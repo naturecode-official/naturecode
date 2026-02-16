@@ -3,6 +3,7 @@ import { configManager } from "../../config/manager.js";
 import { secureStore } from "../../config/secure-store.js";
 import { DeepSeekProvider } from "../../providers/deepseek.js";
 import { OpenAIProvider } from "../../providers/openai.js";
+import { AzureOpenAIProvider } from "../../providers/azure-openai.js";
 import { N1NProvider } from "../../providers/n1n.js";
 import { OllamaProvider } from "../../providers/ollama.js";
 import { AnthropicProvider } from "../../providers/anthropic.js";
@@ -59,6 +60,8 @@ function createProvider(config) {
       return new DeepSeekProvider(config);
     case "openai":
       return new OpenAIProvider(config);
+    case "azure-openai":
+      return new AzureOpenAIProvider(config);
     case "n1n":
       return new N1NProvider(config);
     case "ollama":

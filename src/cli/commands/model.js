@@ -1,6 +1,9 @@
 import inquirer from "inquirer";
 import { configManager } from "../../config/manager.js";
 import { secureStore } from "../../config/secure-store.js";
+import { OpenAIProvider } from "../../providers/openai.js";
+import { GeminiProvider } from "../../providers/gemini.js";
+import { OllamaProvider } from "../../providers/ollama.js";
 import { ZhipuAIProvider } from "../../providers/zhipuai.js";
 
 export async function runModelConfiguration() {
@@ -23,6 +26,18 @@ export async function runModelConfiguration() {
           name: "OpenAI - Industry-leading AI models (GPT-4, GPT-3.5, etc.)",
           value: "openai",
           description: "Industry-leading AI models (GPT-4, GPT-3.5, etc.)",
+        },
+        {
+          name: "Azure OpenAI - Microsoft Azure hosted OpenAI models",
+          value: "azure-openai",
+          description:
+            "Microsoft Azure hosted OpenAI models with custom resource name",
+        },
+        {
+          name: "n1n.ai - OpenAI-compatible API with custom endpoint",
+          value: "n1n",
+          description:
+            "OpenAI-compatible API with custom endpoint (https://api.n1n.top/v1)",
         },
         {
           name: "n1n.ai - OpenAI-compatible API with custom endpoint",
@@ -66,6 +81,8 @@ export async function runModelConfiguration() {
           return "Enter your DeepSeek API key (leave empty to skip):";
         } else if (answers.provider === "openai") {
           return "Enter your OpenAI API key (leave empty to skip):";
+        } else if (answers.provider === "azure-openai") {
+          return "Enter your Azure OpenAI API key (leave empty to skip):";
         } else if (answers.provider === "n1n") {
           return "Enter your n1n.ai API key (leave empty to skip):";
         } else if (answers.provider === "anthropic") {
@@ -84,6 +101,7 @@ export async function runModelConfiguration() {
         if (
           answers.provider === "deepseek" ||
           answers.provider === "openai" ||
+          answers.provider === "azure-openai" ||
           answers.provider === "n1n" ||
           answers.provider === "anthropic" ||
           answers.provider === "gemini" ||
@@ -96,10 +114,61 @@ export async function runModelConfiguration() {
       when: (answers) =>
         answers.provider === "deepseek" ||
         answers.provider === "openai" ||
+        answers.provider === "azure-openai" ||
         answers.provider === "n1n" ||
         answers.provider === "anthropic" ||
         answers.provider === "gemini" ||
         answers.provider === "zhipuai",
+    },
+    {
+      type: "input",
+      name: "azureResourceName",
+      message: "Enter your Azure OpenAI Resource Name:",
+      default: (_answers) => {
+        // Try to extract from existing baseUrl or use default
+        if (
+          currentConfig.baseUrl &&
+          currentConfig.baseUrl.includes(".openai.azure.com")
+        ) {
+          const match = currentConfig.baseUrl.match(
+            /https:\/\/([^.]+)\.openai\.azure\.com/,
+          );
+          if (match) {
+            return match[1];
+          }
+        }
+        return currentConfig.azureResourceName || "";
+      },
+      validate: (input) => {
+        if (!input || input.trim() === "") {
+          return "Azure OpenAI resource name is required";
+        }
+        // Azure resource names can only contain lowercase letters, numbers, and hyphens
+        if (!/^[a-z0-9-]+$/.test(input)) {
+          return "Azure resource name can only contain lowercase letters, numbers, and hyphens";
+        }
+        return true;
+      },
+      when: (answers) => answers.provider === "azure-openai",
+    },
+    {
+      type: "input",
+      name: "azureApiVersion",
+      message: "Enter Azure OpenAI API version:",
+      default: (_answers) => {
+        return currentConfig.azureApiVersion || "2024-08-01-preview";
+      },
+      validate: (input) => {
+        if (!input || input.trim() === "") {
+          return "Azure OpenAI API version is required";
+        }
+        // Validate API version format (YYYY-MM-DD or YYYY-MM-DD-preview)
+        if (!/^\d{4}-\d{2}-\d{2}(-preview)?$/.test(input)) {
+          return "API version must be in format YYYY-MM-DD or YYYY-MM-DD-preview";
+        }
+        return true;
+      },
+      when: (answers) => answers.provider === "azure-openai",
     },
     {
       type: "input",
@@ -108,6 +177,7 @@ export async function runModelConfiguration() {
         const providerNames = {
           deepseek: "DeepSeek",
           openai: "OpenAI",
+          "azure-openai": "Azure OpenAI",
           n1n: "n1n.ai",
           anthropic: "Anthropic (Claude)",
           gemini: "Google Gemini",
@@ -125,6 +195,7 @@ export async function runModelConfiguration() {
         const smartDefaults = {
           deepseek: "deepseek-chat",
           openai: "gpt-5-mini",
+          "azure-openai": "gpt-35-turbo",
           n1n: "gpt-4o-mini",
           anthropic: "claude-3-5-haiku-20241022",
           gemini: "gemini-2.5-flash",
@@ -143,6 +214,7 @@ export async function runModelConfiguration() {
       when: (answers) =>
         answers.provider === "deepseek" ||
         answers.provider === "openai" ||
+        answers.provider === "azure-openai" ||
         answers.provider === "n1n" ||
         answers.provider === "anthropic" ||
         answers.provider === "gemini" ||
@@ -172,9 +244,10 @@ export async function runModelConfiguration() {
           ];
         } else if (
           answers.provider === "openai" ||
+          answers.provider === "azure-openai" ||
           answers.provider === "n1n"
         ) {
-          // OpenAI/n1n.ai model type based on selected model
+          // OpenAI/Azure OpenAI/n1n.ai model type based on selected model
           // Use static method to get model capabilities, avoid creating provider instance
           const capabilities = OpenAIProvider.getStaticModelCapabilities(
             answers.model,
@@ -432,6 +505,7 @@ export async function runModelConfiguration() {
           return answers.model === "deepseek-reasoner" ? "reasoner" : "chat";
         } else if (
           answers.provider === "openai" ||
+          answers.provider === "azure-openai" ||
           answers.provider === "n1n"
         ) {
           return currentConfig.modelType || "text";
@@ -451,6 +525,7 @@ export async function runModelConfiguration() {
       when: (answers) =>
         answers.provider === "deepseek" ||
         answers.provider === "openai" ||
+        answers.provider === "azure-openai" ||
         answers.provider === "n1n" ||
         answers.provider === "anthropic" ||
         answers.provider === "gemini" ||
@@ -542,7 +617,7 @@ export async function runModelConfiguration() {
       name: "customBaseUrl",
       message:
         "Enter Custom API Base URL (e.g., https://api.custom-provider.com/v1):",
-      default: (answers) => currentConfig.baseUrl || "",
+      default: (_answers) => currentConfig.baseUrl || "",
       validate: (input) => {
         if (!input || input.trim() === "") {
           return "Base URL is required for custom provider";
@@ -560,14 +635,14 @@ export async function runModelConfiguration() {
       type: "input",
       name: "customApiVersion",
       message: "Enter API Version (press Enter for default '2024-01-01'):",
-      default: (answers) => currentConfig.apiVersion || "2024-01-01",
+      default: (_answers) => currentConfig.apiVersion || "2024-01-01",
       when: (answers) => answers.provider === "custom",
     },
     {
       type: "input",
       name: "customOrganization",
       message: "Enter Organization ID (optional, press Enter to skip):",
-      default: (answers) => currentConfig.organization || "",
+      default: (_answers) => currentConfig.organization || "",
       when: (answers) => answers.provider === "custom",
     },
     {
@@ -609,11 +684,16 @@ export async function runModelConfiguration() {
     fallbackModel:
       answers.provider === "openai"
         ? "gpt-5-mini"
-        : answers.provider === "anthropic"
-          ? "claude-haiku-4-5-20251001"
-          : answers.provider === "gemini"
-            ? "gemini-2.5-flash"
-            : undefined,
+        : answers.provider === "azure-openai"
+          ? "gpt-35-turbo"
+          : answers.provider === "anthropic"
+            ? "claude-haiku-4-5-20251001"
+            : answers.provider === "gemini"
+              ? "gemini-2.5-flash"
+              : undefined,
+    // Azure OpenAI specific fields
+    azureResourceName: answers.azureResourceName || undefined,
+    azureApiVersion: answers.azureApiVersion || undefined,
     // Custom provider specific fields
     baseUrl: answers.customBaseUrl || undefined,
     apiVersion: answers.customApiVersion || undefined,
