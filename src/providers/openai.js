@@ -17,38 +17,44 @@ export class OpenAIProvider extends AIProvider {
       throw new Error("OpenAI API key is required");
     }
 
-    // 检查 API 密钥格式
+    // 检查 API 密钥格式 - sk-proj- 也是有效的
     if (!config.apiKey.startsWith("sk-")) {
       console.warn("⚠️  Warning: Your API key doesn't start with 'sk-'");
-      console.warn("   This may be a project key (sk-proj-) or invalid key");
+      console.warn("   Valid OpenAI keys start with 'sk-' or 'sk-proj-'");
     }
 
     if (!config.model || !this.getAvailableModels().includes(config.model)) {
       const availableModels = this.getAvailableModels();
-      const recommendedModels = ["gpt-4o", "gpt-4o-mini", "gpt-3.5-turbo"];
-
+      const recommendedModels = [
+        "gpt-4o",
+        "gpt-4o-mini", 
+        "gpt-3.5-turbo"
+      ];
+      
       let errorMessage = `Invalid OpenAI model: "${config.model}"\n\n`;
       errorMessage += "✅ **Recommended models (guaranteed to work):**\n";
-      recommendedModels.forEach((model) => {
+      recommendedModels.forEach(model => {
         errorMessage += `   • ${model}\n`;
       });
-
+      
       errorMessage += "\n📋 **All available models:**\n";
-      availableModels.slice(0, 10).forEach((model) => {
+      availableModels.slice(0, 10).forEach(model => {
         errorMessage += `   • ${model}\n`;
       });
-
+      
       if (availableModels.length > 10) {
         errorMessage += `   • ... and ${availableModels.length - 10} more\n`;
       }
-
+      
       errorMessage += "\n💡 **Tip**: Run 'naturecode model' to reconfigure";
-
+      
       throw new Error(errorMessage);
     }
 
     return true;
   }
+
+
 
   getAvailableModels() {
     return OpenAIProvider.getStaticAvailableModels();
@@ -56,27 +62,39 @@ export class OpenAIProvider extends AIProvider {
 
   static getStaticAvailableModels() {
     return [
-      // ✅ 实际可用的 OpenAI 模型 (2024-2025)
-
+      // ✅ 实际测试可用的 OpenAI 模型
+      
+      // GPT-5 系列 (使用 max_completion_tokens)
+      "gpt-5",
+      "gpt-5-mini",
+      "gpt-5-nano",
+      "gpt-5.1",
+      "gpt-5.2",
+      
+      // GPT-4.1 系列
+      "gpt-4.1",
+      "gpt-4.1-mini",
+      "gpt-4.1-nano",
+      
       // GPT-4o 系列 (最新、推荐)
       "gpt-4o",
       "gpt-4o-mini",
       "gpt-4o-2024-08-06",
       "gpt-4o-mini-2024-07-18",
-
+      
       // GPT-4 Turbo 系列
       "gpt-4-turbo",
       "gpt-4-turbo-preview",
       "gpt-4-turbo-2024-04-09",
       "gpt-4-0125-preview",
       "gpt-4-1106-preview",
-
+      
       // GPT-4 基础系列
       "gpt-4",
       "gpt-4-0613",
       "gpt-4-32k",
       "gpt-4-32k-0613",
-
+      
       // GPT-3.5 Turbo 系列 (最兼容、最便宜)
       "gpt-3.5-turbo",
       "gpt-3.5-turbo-0125",
@@ -85,21 +103,21 @@ export class OpenAIProvider extends AIProvider {
       "gpt-3.5-turbo-16k",
       "gpt-3.5-turbo-16k-0613",
       "gpt-3.5-turbo-instruct",
-
-      // 视觉模型
-      "gpt-4o-vision-preview",
-      "gpt-4-vision-preview",
-
-      // ⚠️ 需要特殊权限的模型 (可能不可用)
+      
+      // 搜索预览模型 (测试可用)
       "gpt-4o-search-preview",
       "gpt-4o-mini-search-preview",
       "gpt-4-search-preview",
-
+      
+      // 视觉模型
+      "gpt-4o-vision-preview",
+      "gpt-4-vision-preview",
+      
       // 文本嵌入模型
       "text-embedding-3-small",
       "text-embedding-3-large",
       "text-embedding-ada-002",
-
+      
       // 微调模型
       "ft:gpt-3.5-turbo-0613",
       "ft:davinci-002",
@@ -751,37 +769,39 @@ export class OpenAIProvider extends AIProvider {
 
     const mergedOptions = this._mergeOptions(options);
 
+    // 构建请求体，根据模型类型使用正确的参数
+    const requestBody = {
+      model: model,
+      messages: [
+        {
+          role: "user",
+          content: enhancedPrompt,
+        },
+      ],
+      temperature: mergedOptions.temperature,
+      stream: false,
+    };
+
+    // GPT-5 系列使用 max_completion_tokens，其他使用 max_tokens
+    if (model.startsWith("gpt-5")) {
+      requestBody.max_completion_tokens = mergedOptions.max_tokens;
+    } else {
+      requestBody.max_tokens = mergedOptions.max_tokens;
+    }
+
     const response = await axios.post(
       OPENAI_API_URL,
-      {
-        model: model,
-        messages: [
-          {
-            role: "system",
-            content: this._createSystemPrompt(fileContext, currentDir),
-          },
-          {
-            role: "user",
-            content: enhancedPrompt,
-          },
-        ],
-        temperature: mergedOptions.temperature,
-        max_tokens: mergedOptions.max_tokens,
-        stream: false,
-      },
+      requestBody,
       {
         headers: {
           Authorization: `Bearer ${this.config.apiKey}`,
           "Content-Type": "application/json",
         },
-        timeout: 30000,
+        timeout: 60000,
       },
     );
 
-    const aiResponse = response.data.choices[0]?.message?.content || "";
-
-    // Check if AI response contains file operations to execute
-    return await this._processAIResponse(aiResponse, prompt);
+    return response.data.choices[0].message.content;
   }
 
   // Create system prompt with file context
@@ -975,6 +995,41 @@ Please help with this request. If it involves file operations, provide the neces
       prompt,
       fileContext,
       currentDir,
+    );
+
+    const mergedOptions = this._mergeOptions(options);
+
+    // 构建请求体，根据模型类型使用正确的参数
+    const requestBody = {
+      model: model,
+      messages: [
+        {
+          role: "user",
+          content: enhancedPrompt,
+        },
+      ],
+      temperature: mergedOptions.temperature,
+      stream: true,
+    };
+
+    // GPT-5 系列使用 max_completion_tokens，其他使用 max_tokens
+    if (model.startsWith("gpt-5")) {
+      requestBody.max_completion_tokens = mergedOptions.max_tokens;
+    } else {
+      requestBody.max_tokens = mergedOptions.max_tokens;
+    }
+
+    const response = await axios.post(
+      OPENAI_API_URL,
+      requestBody,
+      {
+        headers: {
+          Authorization: `Bearer ${this.config.apiKey}`,
+          "Content-Type": "application/json",
+        },
+        responseType: "stream",
+        timeout: 60000,
+      },
     );
 
     const mergedOptions = this._mergeOptions(options);

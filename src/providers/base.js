@@ -341,17 +341,11 @@ You are empowered to directly interact with the file system. Use these tools to 
     detailedMessage += "🔍 **Common causes and solutions:**\n\n";
 
     // 检查 API 密钥格式
-    if (apiKey.startsWith("sk-proj-")) {
-      detailedMessage += "1. **Project API Key Issue**:\n";
-      detailedMessage +=
-        "   - Your key starts with 'sk-proj-' (OpenAI project key)\n";
-      detailedMessage +=
-        "   - Project keys may have restrictions on model access\n";
-      detailedMessage += "   - Check project settings at platform.openai.com\n";
-      detailedMessage += "   - Try a personal API key (starts with 'sk-')\n\n";
-    } else if (!apiKey.startsWith("sk-")) {
+    if (!apiKey.startsWith("sk-")) {
       detailedMessage += "1. **Invalid API Key Format**:\n";
       detailedMessage += "   - Your key doesn't start with 'sk-'\n";
+      detailedMessage +=
+        "   - Valid OpenAI keys start with 'sk-' or 'sk-proj-'\n";
       detailedMessage += "   - Get a valid key from platform.openai.com\n\n";
     }
 
@@ -382,6 +376,32 @@ You are empowered to directly interact with the file system. Use these tools to 
       detailedMessage += "   - The model name is incorrect or unavailable\n";
       detailedMessage +=
         "   - Check available models at platform.openai.com\n\n";
+    }
+
+    if (
+      errorMessage.includes("max_tokens") &&
+      errorMessage.includes("not supported")
+    ) {
+      detailedMessage += "4. **GPT-5 Parameter Issue**:\n";
+      detailedMessage +=
+        "   - GPT-5 models use 'max_completion_tokens' instead of 'max_tokens'\n";
+      detailedMessage +=
+        "   - This has been automatically fixed in the latest version\n";
+      detailedMessage +=
+        "   - Update NatureCode: curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash\n\n";
+    }
+
+    if (errorMessage.includes("insufficient_quota")) {
+      detailedMessage += "5. **Insufficient Quota**:\n";
+      detailedMessage += "   - Your account has no remaining credits\n";
+      detailedMessage += "   - Add payment method at platform.openai.com\n";
+      detailedMessage += "   - Or try DeepSeek (free): naturecode model\n\n";
+    }
+
+    if (errorMessage.includes("invalid_api_key")) {
+      detailedMessage += "6. **Invalid API Key**:\n";
+      detailedMessage += "   - Your API key is incorrect or revoked\n";
+      detailedMessage += "   - Get a new key from platform.openai.com\n\n";
     }
 
     if (errorMessage.includes("insufficient_quota")) {
