@@ -50,7 +50,7 @@ if command -v naturecode &> /dev/null; then
     echo "Found existing NatureCode installation: v$CURRENT_VERSION"
     echo ""
     
-    read -p "Update to v1.4.7.2? [Y/n]: " response
+    read -p "Update to v1.4.8? [Y/n]: " response
     if [[ "$response" =~ ^([nN][oO]|[nN])$ ]]; then
         echo "Installation cancelled"
         exit 0
@@ -61,7 +61,7 @@ if command -v naturecode &> /dev/null; then
 fi
 
 # 获取当前版本
-CURRENT_VERSION=$(node -p "require('./package.json').version" 2>/dev/null || echo "1.4.7.2")
+CURRENT_VERSION=$(node -p "require('./package.json').version" 2>/dev/null || echo "1.4.8")
 
 echo "Installing NatureCode v$CURRENT_VERSION..."
 echo ""
