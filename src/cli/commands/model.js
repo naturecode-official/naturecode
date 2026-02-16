@@ -25,6 +25,12 @@ export async function runModelConfiguration() {
           description: "Industry-leading AI models (GPT-4, GPT-3.5, etc.)",
         },
         {
+          name: "n1n.ai - OpenAI-compatible API with custom endpoint",
+          value: "n1n",
+          description:
+            "OpenAI-compatible API with custom endpoint (https://api.n1n.top/v1)",
+        },
+        {
           name: "Anthropic - Claude models (Claude 3.5, Claude 3, etc.)",
           value: "anthropic",
           description: "Claude models (Claude 3.5, Claude 3, etc.)",
@@ -60,6 +66,8 @@ export async function runModelConfiguration() {
           return "Enter your DeepSeek API key (leave empty to skip):";
         } else if (answers.provider === "openai") {
           return "Enter your OpenAI API key (leave empty to skip):";
+        } else if (answers.provider === "n1n") {
+          return "Enter your n1n.ai API key (leave empty to skip):";
         } else if (answers.provider === "anthropic") {
           return "Enter your Anthropic API key (leave empty to skip):";
         } else if (answers.provider === "gemini") {
@@ -76,6 +84,7 @@ export async function runModelConfiguration() {
         if (
           answers.provider === "deepseek" ||
           answers.provider === "openai" ||
+          answers.provider === "n1n" ||
           answers.provider === "anthropic" ||
           answers.provider === "gemini" ||
           answers.provider === "zhipuai"
@@ -87,6 +96,7 @@ export async function runModelConfiguration() {
       when: (answers) =>
         answers.provider === "deepseek" ||
         answers.provider === "openai" ||
+        answers.provider === "n1n" ||
         answers.provider === "anthropic" ||
         answers.provider === "gemini" ||
         answers.provider === "zhipuai",
@@ -98,6 +108,7 @@ export async function runModelConfiguration() {
         const providerNames = {
           deepseek: "DeepSeek",
           openai: "OpenAI",
+          n1n: "n1n.ai",
           anthropic: "Anthropic (Claude)",
           gemini: "Google Gemini",
           ollama: "Ollama",
@@ -114,6 +125,7 @@ export async function runModelConfiguration() {
         const smartDefaults = {
           deepseek: "deepseek-chat",
           openai: "gpt-5-mini",
+          n1n: "gpt-4o-mini",
           anthropic: "claude-3-5-haiku-20241022",
           gemini: "gemini-2.5-flash",
           ollama: "llama3.2:latest",
@@ -131,6 +143,7 @@ export async function runModelConfiguration() {
       when: (answers) =>
         answers.provider === "deepseek" ||
         answers.provider === "openai" ||
+        answers.provider === "n1n" ||
         answers.provider === "anthropic" ||
         answers.provider === "gemini" ||
         answers.provider === "ollama" ||
@@ -157,8 +170,11 @@ export async function runModelConfiguration() {
               short: modelType,
             },
           ];
-        } else if (answers.provider === "openai") {
-          // OpenAI model type based on selected model
+        } else if (
+          answers.provider === "openai" ||
+          answers.provider === "n1n"
+        ) {
+          // OpenAI/n1n.ai model type based on selected model
           // Use static method to get model capabilities, avoid creating provider instance
           const capabilities = OpenAIProvider.getStaticModelCapabilities(
             answers.model,
@@ -414,7 +430,10 @@ export async function runModelConfiguration() {
       default: (answers) => {
         if (answers.provider === "deepseek") {
           return answers.model === "deepseek-reasoner" ? "reasoner" : "chat";
-        } else if (answers.provider === "openai") {
+        } else if (
+          answers.provider === "openai" ||
+          answers.provider === "n1n"
+        ) {
           return currentConfig.modelType || "text";
         } else if (answers.provider === "anthropic") {
           return currentConfig.modelType || "chat";
@@ -432,6 +451,7 @@ export async function runModelConfiguration() {
       when: (answers) =>
         answers.provider === "deepseek" ||
         answers.provider === "openai" ||
+        answers.provider === "n1n" ||
         answers.provider === "anthropic" ||
         answers.provider === "gemini" ||
         answers.provider === "ollama" ||

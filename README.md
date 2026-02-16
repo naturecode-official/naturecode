@@ -2,7 +2,7 @@
 
 ## Features
 
-- **Multi-model AI Support**: DeepSeek, OpenAI, Anthropic, Google Gemini, Ollama, Zhipu AI, Custom Provider with flexible model input
+- **Multi-model AI Support**: DeepSeek, OpenAI, n1n.ai, Anthropic, Google Gemini, Ollama, Zhipu AI, Custom Provider with flexible model input
 - **One-line Installation**: Simple curl-based installation system
 - **Cross-platform**: Native support for macOS, Linux, and Windows
 - **Professional Mode**: Advanced diagnostics and developer tools
@@ -116,7 +116,7 @@ NatureCode is a cross-platform terminal AI assistant with:
 #### Core Features
 
 - **Direct AI Chat**: `naturecode help` for immediate AI assistance
-- **Multiple AI Models**: DeepSeek, OpenAI, Anthropic, Google Gemini, Ollama, Zhipu AI, Custom Provider support
+- **Multiple AI Models**: DeepSeek, OpenAI, n1n.ai, Anthropic, Google Gemini, Ollama, Zhipu AI, Custom Provider support
 - **File Operations**: Read, edit, create, delete files
 - **Git Integration**: Status, commit, push, pull operations
 - **Code Analysis**: Code review, metrics, refactoring suggestions
@@ -408,7 +408,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ## Support
 
 - **GitHub Issues**: https://github.com/naturecode-official/naturecode/issues
-- **Current Version**: 1.5.0
+- **Current Version**: 1.5.1
 - **Installation Verification**:
   ```bash
   curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash --dry-run
