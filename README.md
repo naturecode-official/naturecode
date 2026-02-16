@@ -2,15 +2,15 @@
 
 ## Features
 
-- 🤖 **Multi-model AI Support**: DeepSeek, OpenAI, Anthropic, Google Gemini, Ollama, Custom AI with flexible model input
-- 🚀 **One-line Installation**: Simple curl-based installation system
-- 📦 **Cross-platform**: Native support for macOS, Linux, and Windows
-- 🔧 **Professional Mode**: Advanced diagnostics and developer tools
-- 🛡️ **Secure Configuration**: Encrypted storage for API keys and settings
-- 🔌 **Plugin System**: Extensible architecture for custom functionality
-- 👥 **Team Collaboration**: Shared projects, member management, and role-based access
-- 🎯 **Flexible Model Input**: Input any model name manually instead of selecting from pre-defined lists
-- 📚 **Provider Guidance**: Smart prompts guide users to check official websites for available models
+- **Multi-model AI Support**: DeepSeek, OpenAI, Anthropic, Google Gemini, Ollama, Custom AI with flexible model input
+- **One-line Installation**: Simple curl-based installation system
+- **Cross-platform**: Native support for macOS, Linux, and Windows
+- **Professional Mode**: Advanced diagnostics and developer tools
+- **Secure Configuration**: Encrypted storage for API keys and settings
+- **Plugin System**: Extensible architecture for custom functionality
+- **Team Collaboration**: Shared projects, member management, and role-based access
+- **Flexible Model Input**: Input any model name manually instead of selecting from pre-defined lists
+- **Provider Guidance**: Smart prompts guide users to check official websites for available models
 
 ## Quick Install
 

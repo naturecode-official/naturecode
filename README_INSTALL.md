@@ -10,7 +10,7 @@ curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main
 
 NatureCode is a cross-platform terminal AI assistant with:
 
-### 🎯 Core Features
+### Core Features
 
 - **Direct AI Chat**: `naturecode help` for immediate AI assistance
 - **Multiple AI Models**: DeepSeek, Ollama, OpenAI support
@@ -21,7 +21,7 @@ NatureCode is a cross-platform terminal AI assistant with:
 - **Plugin System**: Extensible with custom plugins
 - **Session Management**: Save and restore chat sessions
 
-### 🆕 Version 1.4.5.4 Highlights
+### Version 1.4.5.4 Highlights
 
 - **Improved Help Command**: Direct AI chat without intermediate steps
 - **Multi-model Support**: Fallback to various AI models
@@ -29,7 +29,7 @@ NatureCode is a cross-platform terminal AI assistant with:
 - **Ollama Optimization**: Automatic installation and setup
 - **Emoji-free Codebase**: Clean, professional interface
 
-## 📥 Installation Options
+## Installation Options
 
 ### Option 1: One-line Install (Recommended)
 
@@ -86,7 +86,7 @@ After installation:
    naturecode start                   # Start AI session
    ```
 
-## 📚 Available Commands
+## Available Commands
 
 ```bash
 naturecode --help
@@ -111,7 +111,7 @@ naturecode code analyze src/
 naturecode project analyze .
 ```
 
-## 🛠️ Advanced Features
+## Advanced Features
 
 ### File System Operations
 
@@ -137,7 +137,7 @@ naturecode plugin list
 naturecode plugin install <plugin-url>
 ```
 
-## 🔄 Updating
+## Updating
 
 ### Update from Any Version
 
@@ -221,7 +221,7 @@ MIT License - see LICENSE file
 - **Issues**: https://github.com/naturecode-official/naturecode/issues
 - **Releases**: https://github.com/naturecode-official/naturecode/releases
 
-## 🎯 One More Time - Install Now!
+## One More Time - Install Now!
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-simple.sh | bash
