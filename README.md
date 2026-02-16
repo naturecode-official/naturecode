@@ -1,5 +1,7 @@
 # NatureCode - Cross-platform Terminal AI Assistant
 
+## → [agentname.md](agentname.md)
+
 ## Features
 
 - **Multi-model AI Support**: DeepSeek, OpenAI, Azure OpenAI, n1n.ai, Anthropic, Google Gemini, Ollama, Zhipu AI, Custom Provider with flexible model input
