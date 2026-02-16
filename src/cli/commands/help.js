@@ -15,7 +15,7 @@ export function createHelpCommand() {
 export class HelpCommand {
   constructor() {
     this.command = new Command("help")
-      .description("Show help information for NatureCode")
+      .description("Show help information for NatureCode (Professional Mode)")
       .option("-s, --simple", "Use simple help")
       .option("-d, --docs", "Show full documentation")
       .action(this.handleCommand.bind(this));
@@ -46,7 +46,7 @@ export class HelpCommand {
 
   async showSimpleHelp() {
     const helpText = `
-NatureCode - Cross-platform Terminal AI Assistant
+NatureCode - Cross-platform Terminal AI Assistant (Professional Mode)
 
 Available Commands:
   start              Start interactive AI session
