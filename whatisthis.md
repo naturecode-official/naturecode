@@ -1746,7 +1746,8 @@ gemini:
 
 - Meta 系列: `llama3.2`, `llama3.1`
 - Mistral 系列: `mistral`, `mixtral`
-- 代码生成系列: `codellama`, `deepseek-coder`, `deepseek-chat`
+- 代码生成系列: `codellama`
+- DeepSeek 系列: `deepseek-coder`, `deepseek-chat`, `deepseek-math`, `deepseek-reasoner`, `deepseek-v2`, `deepseek-v2-lite`
 - 其他模型: `phi`, `qwen`
 - **新增**: GPT 开源系列 (`gpt-oss-120b`, `gpt-oss-20b`)
 - **新增**: Google Gemma 系列 (8个模型)
@@ -1763,8 +1764,52 @@ gemini:
 2. **新用户**: 可以直接在 Ollama 中选择这些开源模型
 3. **向后兼容**: 配置管理器会自动处理模型验证
 
+### **DeepSeek 离线模型支持**
+
+NatureCode 现在支持完整的 DeepSeek 离线模型系列，可以在本地通过 Ollama 运行：
+
+#### **可用的 DeepSeek 模型**:
+
+- **`deepseek-coder`**: 代码生成专用模型，擅长编程任务
+- **`deepseek-chat`**: 通用聊天模型，适合日常对话和问答
+- **`deepseek-math`**: 数学推理模型，专为数学问题优化
+- **`deepseek-reasoner`**: 复杂推理模型，适合逻辑分析和问题解决
+- **`deepseek-v2`**: 最新一代模型，综合能力最强
+- **`deepseek-v2-lite`**: 轻量版 V2 模型，资源消耗更少
+
+#### **DeepSeek 模型特点**:
+
+1. **中文优化**: 所有 DeepSeek 模型都对中文有良好支持
+2. **代码能力**: DeepSeek Coder 专门为编程任务训练
+3. **数学推理**: DeepSeek Math 在数学问题上表现优异
+4. **本地运行**: 完全离线，保护隐私和数据安全
+5. **免费使用**: 无需 API 密钥，完全免费
+
+#### **安装和使用**:
+
+```bash
+# 1. 安装 Ollama (如果尚未安装)
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# 2. 拉取 DeepSeek 模型
+ollama pull deepseek-chat
+ollama pull deepseek-coder
+ollama pull deepseek-math
+
+# 3. 配置 NatureCode 使用 Ollama
+naturecode model
+# 选择 Ollama 提供商，然后选择 deepseek-chat 或其他 DeepSeek 模型
+```
+
 ### **使用建议**
 
 1. **云端服务**: 使用 OpenAI、DeepSeek、Anthropic、Gemini 提供商
 2. **本地运行**: 使用 Ollama 提供商运行开源模型
-3. **性能考虑**: 大模型需要更多计算资源，请根据硬件选择合适模型
+3. **DeepSeek 选择**:
+   - 编程任务: `deepseek-coder`
+   - 日常聊天: `deepseek-chat`
+   - 数学问题: `deepseek-math`
+   - 复杂推理: `deepseek-reasoner`
+   - 最佳性能: `deepseek-v2`
+   - 资源有限: `deepseek-v2-lite`
+4. **性能考虑**: 大模型需要更多计算资源，请根据硬件选择合适模型

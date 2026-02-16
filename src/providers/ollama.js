@@ -46,10 +46,20 @@ export class OllamaProvider extends AIProvider {
       // 代码生成系列
       "codellama",
       "codellama:latest",
+
+      // DeepSeek 系列
       "deepseek-coder",
       "deepseek-coder:latest",
       "deepseek-chat",
       "deepseek-chat:latest",
+      "deepseek-math",
+      "deepseek-math:latest",
+      "deepseek-reasoner",
+      "deepseek-reasoner:latest",
+      "deepseek-v2",
+      "deepseek-v2:latest",
+      "deepseek-v2-lite",
+      "deepseek-v2-lite:latest",
 
       // 其他模型
       "phi",
@@ -90,10 +100,20 @@ export class OllamaProvider extends AIProvider {
       // 代码生成系列
       codellama: "Code Llama - Specialized for code generation",
       "codellama:latest": "Code Llama (latest)",
+
+      // DeepSeek 系列
       "deepseek-coder": "DeepSeek Coder - Code generation model",
       "deepseek-coder:latest": "DeepSeek Coder (latest)",
       "deepseek-chat": "DeepSeek Chat - General chat model",
       "deepseek-chat:latest": "DeepSeek Chat (latest)",
+      "deepseek-math": "DeepSeek Math - Mathematical reasoning model",
+      "deepseek-math:latest": "DeepSeek Math (latest)",
+      "deepseek-reasoner": "DeepSeek Reasoner - Complex reasoning model",
+      "deepseek-reasoner:latest": "DeepSeek Reasoner (latest)",
+      "deepseek-v2": "DeepSeek V2 - Latest generation model",
+      "deepseek-v2:latest": "DeepSeek V2 (latest)",
+      "deepseek-v2-lite": "DeepSeek V2 Lite - Lightweight version",
+      "deepseek-v2-lite:latest": "DeepSeek V2 Lite (latest)",
 
       // 其他模型
       phi: "Microsoft Phi - Small but capable model",
@@ -132,7 +152,8 @@ export class OllamaProvider extends AIProvider {
       model.includes("coder") ||
       model.includes("code") ||
       model.includes("phi") ||
-      model.includes("gemma") // Gemma 模型通常有代码能力
+      model.includes("gemma") || // Gemma 模型通常有代码能力
+      model.includes("deepseek-coder") // DeepSeek Coder 专门用于代码
     ) {
       capabilities.push("code");
     }
@@ -152,6 +173,35 @@ export class OllamaProvider extends AIProvider {
       } else if (model.includes("20b")) {
         capabilities.push("lightweight");
         capabilities.push("64k-context");
+      }
+    }
+
+    // DeepSeek 模型特定能力
+    if (model.includes("deepseek")) {
+      capabilities.push("deepseek");
+      capabilities.push("chinese-optimized");
+
+      if (model.includes("coder")) {
+        capabilities.push("code-specialized");
+        capabilities.push("programming");
+      } else if (model.includes("chat")) {
+        capabilities.push("general-purpose");
+        capabilities.push("conversation");
+      } else if (model.includes("math")) {
+        capabilities.push("mathematical");
+        capabilities.push("reasoning");
+      } else if (model.includes("reasoner")) {
+        capabilities.push("complex-reasoning");
+        capabilities.push("problem-solving");
+      } else if (model.includes("v2")) {
+        capabilities.push("latest-generation");
+        if (model.includes("lite")) {
+          capabilities.push("lightweight");
+          capabilities.push("efficient");
+        } else {
+          capabilities.push("full-capability");
+          capabilities.push("advanced");
+        }
       }
     }
 

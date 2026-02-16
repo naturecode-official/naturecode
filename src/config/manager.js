@@ -63,10 +63,20 @@ const OLLAMA_MODELS = [
   // 代码生成系列
   "codellama",
   "codellama:latest",
+
+  // DeepSeek 系列
   "deepseek-coder",
   "deepseek-coder:latest",
   "deepseek-chat",
   "deepseek-chat:latest",
+  "deepseek-math",
+  "deepseek-math:latest",
+  "deepseek-reasoner",
+  "deepseek-reasoner:latest",
+  "deepseek-v2",
+  "deepseek-v2:latest",
+  "deepseek-v2-lite",
+  "deepseek-v2-lite:latest",
 
   // 其他模型
   "phi",
