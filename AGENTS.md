@@ -168,22 +168,142 @@ Use `file_path:line_number` pattern for code references.
 
 Example: `src/config/manager.js:45`
 
-## GitHub Push Requirements
+## GitHub Integration
 
-**CRITICAL**: After code changes, MUST push to GitHub.
-
-### Push Scripts
+### Push Commands
 
 ```bash
-./push-with-key-md.sh        # Read token from key.md
-./push-with-interactive-token.sh  # Interactive token input
-./push-simple.sh             # Simple push for small changes
+# Standard git push
+git push
+
+# Push with specific branch
+git push origin main
+
+# Push with tags
+git push --tags
 ```
 
-### Push Workflow
+### Verification
 
-1. Generate GitHub Token with `repo` permissions
-2. Save to `key.md` (temporary)
-3. Run `./push-with-key-md.sh`
-4. Verify: `curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash --dry-run`
-5. Delete `key.md`
+After pushing changes, you can verify the installation script works:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash --dry-run
+```
+
+## Project Architecture
+
+### Core Components
+
+1. **Providers**: `src/providers/` - AI service integrations (DeepSeek, OpenAI, Anthropic, Gemini, Ollama)
+2. **Config**: `src/config/` - Configuration management and secure storage
+3. **CLI**: `src/cli/` - Command-line interface and commands
+4. **Utils**: `src/utils/` - Shared utilities and helpers
+5. **Sessions**: `src/sessions/` - Session management and storage
+6. **Plugins**: `src/plugins/` - Plugin system and management
+
+### Provider Pattern
+
+All AI providers extend the `AIProvider` base class in `src/providers/base.js`. New providers must implement:
+
+- `generate(prompt, options)` - Non-streaming generation
+- `streamGenerate(prompt, options)` - Streaming generation
+- File system integration methods
+
+## Testing Details
+
+### Jest Configuration (jest.config.js)
+
+- **Test pattern**: `**/tests/**/*.test.js`
+- **Coverage threshold**: 70% for branches, functions, lines, statements
+- **ES module support**: `NODE_OPTIONS=--experimental-vm-modules`
+- **Test environment**: Node.js
+- **Transform**: None (ES modules)
+
+### ESLint Rules (.eslintrc.json)
+
+Key rules enforced:
+
+- `no-console`: off (allowed for CLI applications)
+- `no-unused-vars`: error (ignore args starting with `_`)
+- `semi`: error (always)
+- `quotes`: error (double quotes)
+- `indent`: error (2 spaces)
+- `comma-dangle`: error (always-multiline)
+- `object-curly-spacing`: error (always)
+- `array-bracket-spacing`: error (never)
+- `space-before-function-paren`: error (always)
+- `keyword-spacing`: error (before: true, after: true)
+
+## File Structure Conventions
+
+### Directory Organization
+
+```
+src/
+├── cli/              # CLI interface and commands
+│   ├── commands/     # Individual command implementations
+│   └── index.js      # CLI entry point
+├── config/           # Configuration management
+├── providers/        # AI service providers
+├── utils/            # Shared utilities
+├── sessions/         # Session management
+└── plugins/          # Plugin system
+```
+
+### Naming Conventions
+
+- **Files**: `kebab-case.js` for multi-word filenames
+- **Directories**: `kebab-case` for multi-word directory names
+- **Test files**: `filename.test.js` in same directory as source
+- **Constants**: `UPPER_SNAKE_CASE` in config files
+
+## Development Workflow
+
+### Adding New Features
+
+1. **Understand existing patterns**: Review similar features in codebase
+2. **Follow provider pattern**: Extend `AIProvider` for new AI services
+3. **Update configuration**: Add to `src/config/manager.js` if needed
+4. **Add CLI command**: Create new file in `src/cli/commands/`
+5. **Test thoroughly**: Use existing test patterns
+6. **Update documentation**: Add to relevant docs if APIs change
+
+### Code Review Checklist
+
+- [ ] Follows existing code style and patterns
+- [ ] Includes proper error handling
+- [ ] No hardcoded secrets or API keys
+- [ ] Backward compatible with existing configs
+- [ ] Tests pass with coverage requirements
+- [ ] Linting passes without errors
+- [ ] Type checking passes (if applicable)
+
+## Performance Considerations
+
+- **File operations**: Use async/await for all file system operations
+- **API calls**: Implement timeout and retry logic
+- **Memory usage**: Clean up large objects and streams properly
+- **Network**: Use streaming for large responses when possible
+
+## Troubleshooting
+
+### Common Issues
+
+1. **ES module issues**: Ensure `NODE_OPTIONS=--experimental-vm-modules` is set for tests
+2. **Configuration errors**: Check `~/.naturecode/config.json` format and permissions
+3. **Provider failures**: Verify API keys and network connectivity
+4. **Build failures**: Clean build directory and reinstall dependencies
+
+### Debug Commands
+
+```bash
+# Debug configuration loading
+DEBUG=config node src/cli/index.js start
+
+# Run specific test with verbose output
+npm test -- --testPathPattern="config" --verbose
+
+# Check ESLint issues
+npx eslint src/ --format=codeframe
+```

@@ -341,88 +341,22 @@ You are empowered to directly interact with the file system. Use these tools to 
   _getDetailed400Error(errorMessage, data) {
     const config = this.config || {};
     const apiKey = config.apiKey || "";
-
-    let detailedMessage = `Bad Request (400): ${errorMessage}\n\n`;
-    detailedMessage += "🔍 **Common causes and solutions:**\n\n";
-
-    // 检查 API 密钥格式
-    if (!apiKey.startsWith("sk-")) {
-      detailedMessage += "1. **Invalid API Key Format**:\n";
-      detailedMessage += "   - Your key doesn't start with 'sk-'\n";
-      detailedMessage +=
-        "   - Valid OpenAI keys start with 'sk-' or 'sk-proj-'\n";
-      detailedMessage += "   - Get a valid key from platform.openai.com\n\n";
-    }
-
-    // 检查模型名称（保留验证逻辑但移除虚构模型检查）
     const model = config.model || "";
 
-    // 可以添加其他验证逻辑，但不再检查虚构模型
-    if (!model || typeof model !== "string") {
-      throw new Error("Model name is required and must be a string");
-    }
+    // 简洁的错误信息，只包含核心问题
+    let detailedMessage = `Bad Request (400): ${errorMessage}`;
 
-    // 检查错误类型
+    // 只添加最关键的诊断信息
     if (
       errorMessage.includes("model") &&
       errorMessage.includes("does not exist")
     ) {
-      detailedMessage += "3. **Model Does Not Exist**:\n";
-      detailedMessage += "   - The model name is incorrect or unavailable\n";
-      detailedMessage +=
-        "   - Check available models at platform.openai.com\n\n";
+      detailedMessage += `\nModel "${model}" may not exist or be accessible with your API key.`;
+    } else if (errorMessage.includes("invalid_api_key")) {
+      detailedMessage += `\nAPI key format: ${apiKey.substring(0, 15)}...`;
+    } else if (errorMessage.includes("insufficient_quota")) {
+      detailedMessage += "\nAccount has insufficient quota.";
     }
-
-    if (
-      errorMessage.includes("max_tokens") &&
-      errorMessage.includes("not supported")
-    ) {
-      detailedMessage += "4. **GPT-5 Parameter Issue**:\n";
-      detailedMessage +=
-        "   - GPT-5 models use 'max_completion_tokens' instead of 'max_tokens'\n";
-      detailedMessage +=
-        "   - This has been automatically fixed in the latest version\n";
-      detailedMessage +=
-        "   - Update NatureCode: curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash\n\n";
-    }
-
-    if (errorMessage.includes("insufficient_quota")) {
-      detailedMessage += "5. **Insufficient Quota**:\n";
-      detailedMessage += "   - Your account has no remaining credits\n";
-      detailedMessage += "   - Add payment method at platform.openai.com\n";
-      detailedMessage += "   - Or try DeepSeek (free): naturecode model\n\n";
-    }
-
-    if (errorMessage.includes("invalid_api_key")) {
-      detailedMessage += "6. **Invalid API Key**:\n";
-      detailedMessage += "   - Your API key is incorrect or revoked\n";
-      detailedMessage += "   - Get a new key from platform.openai.com\n\n";
-    }
-
-    if (errorMessage.includes("insufficient_quota")) {
-      detailedMessage += "4. **Insufficient Quota**:\n";
-      detailedMessage += "   - Your account has no remaining credits\n";
-      detailedMessage += "   - Add payment method at platform.openai.com\n";
-      detailedMessage += "   - Or try DeepSeek (free): naturecode model\n\n";
-    }
-
-    if (errorMessage.includes("invalid_api_key")) {
-      detailedMessage += "5. **Invalid API Key**:\n";
-      detailedMessage += "   - Your API key is incorrect or revoked\n";
-      detailedMessage += "   - Get a new key from platform.openai.com\n\n";
-    }
-
-    // 通用建议
-    detailedMessage += "💡 **Quick Fixes**:\n";
-    detailedMessage += "   • Run: naturecode model (reconfigure)\n";
-    detailedMessage += "   • Choose DeepSeek (free, no API key issues)\n";
-    detailedMessage += "   • Use model: gpt-5-mini (most compatible)\n";
-    detailedMessage += "   • Check: platform.openai.com for account status\n\n";
-
-    detailedMessage += "📋 **Your Current Config**:\n";
-    detailedMessage += `   • Provider: ${config.provider || "unknown"}\n`;
-    detailedMessage += `   • Model: ${model || "unknown"}\n`;
-    detailedMessage += `   • Key Format: ${apiKey.substring(0, 15)}...\n`;
 
     return detailedMessage;
   }
