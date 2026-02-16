@@ -1568,10 +1568,12 @@ brew upgrade curl
 **项目状态**: 完整功能，一键安装系统就绪，所有改进已完成  
 **安装命令**: `curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash`  
 **GitHub 仓库**: https://github.com/naturecode-official/naturecode  
-**主要功能**: 跨平台终端 AI 助手，支持 DeepSeek、OpenAI、Ollama  
+**主要功能**: 跨平台终端 AI 助手，支持 DeepSeek、OpenAI、Ollama（专注于标准 API，简单易用）  
 **核心改进**: 模型自定义命名、AI 系统提示增强、帮助系统修复、网络问题解决方案、sk-proj API 兼容、GPT-5 模型支持、详细错误诊断
 
 ## 🎉 v1.4.8 版本亮点
+
+> **设计理念更新**: 为了提供更简单、更稳定的用户体验，v1.4.8 移除了 Azure OpenAI、OpenRouter、自定义 API 等过于复杂的功能。NatureCode 现在专注于标准 OpenAI API，提供更简洁、更易维护的代码库。
 
 ### 🔑 **sk-proj API 密钥完全兼容**
 
@@ -1596,3 +1598,10 @@ brew upgrade curl
 - 修复 openai.js 重复代码问题
 - 改进的错误处理流程
 - 性能优化
+
+### 🎯 **简化设计原则**
+
+- **移除复杂功能**: 删除了 Azure OpenAI、OpenRouter、自定义 API 等过于复杂的功能
+- **专注核心**: 专注于标准 OpenAI API，提供更稳定、更简单的用户体验
+- **易于维护**: 减少代码复杂度，提高可维护性
+- **明确边界**: 明确 NatureCode 的定位 - 简单、易用的终端 AI 助手
