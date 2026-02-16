@@ -5,6 +5,7 @@ import { DeepSeekProvider } from "../../providers/deepseek.js";
 import { OpenAIProvider } from "../../providers/openai.js";
 import { AzureOpenAIProvider } from "../../providers/azure-openai.js";
 import { N1NProvider } from "../../providers/n1n.js";
+import { FourSAPIProvider } from "../../providers/4sapi.js";
 import { OllamaProvider } from "../../providers/ollama.js";
 import { AnthropicProvider } from "../../providers/anthropic.js";
 import { GeminiProvider } from "../../providers/gemini.js";
@@ -64,6 +65,8 @@ function createProvider(config) {
       return new AzureOpenAIProvider(config);
     case "n1n":
       return new N1NProvider(config);
+    case "4sapi":
+      return new FourSAPIProvider(config);
     case "ollama":
       return new OllamaProvider(config);
     case "anthropic":

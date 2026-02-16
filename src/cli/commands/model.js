@@ -40,10 +40,10 @@ export async function runModelConfiguration() {
             "OpenAI-compatible API with custom endpoint (https://api.n1n.top/v1)",
         },
         {
-          name: "n1n.ai - OpenAI-compatible API with custom endpoint",
-          value: "n1n",
+          name: "4SAPI - OpenAI-compatible API (https://4sapi.com/v1)",
+          value: "4sapi",
           description:
-            "OpenAI-compatible API with custom endpoint (https://api.n1n.top/v1)",
+            "OpenAI-compatible API with fixed endpoint (https://4sapi.com/v1)",
         },
         {
           name: "Anthropic - Claude models (Claude 3.5, Claude 3, etc.)",
@@ -179,6 +179,7 @@ export async function runModelConfiguration() {
           openai: "OpenAI",
           "azure-openai": "Azure OpenAI",
           n1n: "n1n.ai",
+          "4sapi": "4SAPI",
           anthropic: "Anthropic (Claude)",
           gemini: "Google Gemini",
           ollama: "Ollama",
@@ -197,6 +198,7 @@ export async function runModelConfiguration() {
           openai: "gpt-5-mini",
           "azure-openai": "gpt-35-turbo",
           n1n: "gpt-4o-mini",
+          "4sapi": "gpt-4o-mini",
           anthropic: "claude-3-5-haiku-20241022",
           gemini: "gemini-2.5-flash",
           ollama: "llama3.2:latest",
@@ -216,6 +218,7 @@ export async function runModelConfiguration() {
         answers.provider === "openai" ||
         answers.provider === "azure-openai" ||
         answers.provider === "n1n" ||
+        answers.provider === "4sapi" ||
         answers.provider === "anthropic" ||
         answers.provider === "gemini" ||
         answers.provider === "ollama" ||
@@ -245,9 +248,10 @@ export async function runModelConfiguration() {
         } else if (
           answers.provider === "openai" ||
           answers.provider === "azure-openai" ||
-          answers.provider === "n1n"
+          answers.provider === "n1n" ||
+          answers.provider === "4sapi"
         ) {
-          // OpenAI/Azure OpenAI/n1n.ai model type based on selected model
+          // OpenAI/Azure OpenAI/n1n.ai/4SAPI model type based on selected model
           // Use static method to get model capabilities, avoid creating provider instance
           const capabilities = OpenAIProvider.getStaticModelCapabilities(
             answers.model,
@@ -506,7 +510,8 @@ export async function runModelConfiguration() {
         } else if (
           answers.provider === "openai" ||
           answers.provider === "azure-openai" ||
-          answers.provider === "n1n"
+          answers.provider === "n1n" ||
+          answers.provider === "4sapi"
         ) {
           return currentConfig.modelType || "text";
         } else if (answers.provider === "anthropic") {
@@ -527,6 +532,7 @@ export async function runModelConfiguration() {
         answers.provider === "openai" ||
         answers.provider === "azure-openai" ||
         answers.provider === "n1n" ||
+        answers.provider === "4sapi" ||
         answers.provider === "anthropic" ||
         answers.provider === "gemini" ||
         answers.provider === "ollama" ||
@@ -686,11 +692,13 @@ export async function runModelConfiguration() {
         ? "gpt-5-mini"
         : answers.provider === "azure-openai"
           ? "gpt-35-turbo"
-          : answers.provider === "anthropic"
-            ? "claude-haiku-4-5-20251001"
-            : answers.provider === "gemini"
-              ? "gemini-2.5-flash"
-              : undefined,
+          : answers.provider === "4sapi"
+            ? "gpt-4o-mini"
+            : answers.provider === "anthropic"
+              ? "claude-haiku-4-5-20251001"
+              : answers.provider === "gemini"
+                ? "gemini-2.5-flash"
+                : undefined,
     // Azure OpenAI specific fields
     azureResourceName: answers.azureResourceName || undefined,
     azureApiVersion: answers.azureApiVersion || undefined,
