@@ -33,15 +33,6 @@ export class AnthropicProvider extends AIProvider {
     return true;
   }
 
-    if (!config.model || config.model.trim() === "") {
-      throw new Error(
-        "Anthropic model name is required. Please check https://console.anthropic.com for available models.",
-      );
-    }
-
-    return true;
-  }
-
   getAvailableModels() {
     return AnthropicProvider.getStaticAvailableModels();
   }

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # NatureCode Curl Installation Script
-# Version: 1.4.8
+# Version: 1.5.5
 # One-line install: curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-curl.sh | bash
 
 set -e
@@ -64,7 +64,7 @@ get_latest_version() {
     
     if [ -z "$version" ]; then
         # 如果无法获取，使用默认版本
-        echo "1.4.8"
+        echo "1.5.5"
     else
         echo "$version"
     fi
@@ -253,7 +253,7 @@ main() {
     if [ "$CURRENT_VERSION" = "not_installed" ]; then
         log_info "NatureCode is not currently installed"
         echo ""
-        echo -e "${YELLOW}This will install NatureCode v1.4.8 globally.${NC}"
+        echo -e "${YELLOW}This will install NatureCode v$TARGET_VERSION globally.${NC}"
         echo -e "${YELLOW}Continue? [y/N]: ${NC}"
         read -r response
         if [[ ! "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
@@ -298,7 +298,7 @@ main() {
     else
         log_info "Found NatureCode v$CURRENT_VERSION"
         echo ""
-        echo -e "${YELLOW}Update to v1.4.8? [Y/n]: ${NC}"
+        echo -e "${YELLOW}Update to v$TARGET_VERSION? [Y/n]: ${NC}"
         read -r response
         if [[ "$response" =~ ^([nN][oO]|[nN])$ ]]; then
             log_info "Update cancelled"
