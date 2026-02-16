@@ -1,12 +1,12 @@
 # NatureCode - Cross-platform Terminal AI Assistant
 
-**Version: 1.5.5**
+**Version: 1.5.6**
 
 ## → [agentname.md](agentname.md)
 
 ## Features
 
-- **Multi-model AI Support**: DeepSeek, OpenAI, Azure OpenAI, n1n.ai, 4SAPI, Qwen (DashScope), Anthropic, Google Gemini, Ollama, Zhipu AI, Custom Provider - 11 providers total with flexible model input
+- **Multi-model AI Support**: DeepSeek, OpenAI, Azure OpenAI, n1n.ai, 4SAPI, Qwen (DashScope), Anthropic, Google Gemini, Ollama, Zhipu AI, Tencent Hunyuan, Custom Provider - 12 providers total with flexible model input
 - **One-line Installation**: Simple curl-based installation system
 - **Cross-platform**: Native support for macOS, Linux, and Windows
 - **Professional Mode**: Advanced diagnostics and developer tools

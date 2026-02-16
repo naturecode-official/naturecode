@@ -1363,8 +1363,10 @@ npm run typecheck
 ## 版本 1.5.5 更新
 
 ### 1. 架构一致性修复：移除DashScope静态模型列表
+
 **文件**: `src/providers/dashscope.js`, `whatisthis`
 **内容**:
+
 - **架构一致性**: 修复DashScopeProvider以符合项目在版本1.5.0中确立的架构
 - **移除静态列表**: 删除`getStaticAvailableModels()`和`getStaticModelDescriptions()`中的静态模型列表
 - **简化验证**: `validateConfig()`现在只检查模型名是否存在，不验证是否在预定义列表中
@@ -1372,14 +1374,17 @@ npm run typecheck
 - **保持能力检测**: 保留基于模型名模式的能力检测功能 (vision, audio, code)
 
 **修复原则**:
+
 - 遵循版本1.5.0架构：移除预制模型名，支持用户自定义输入
 - 配置向导使用文本输入框，用户可以输入任意模型名
 - 只验证模型名是否存在，不验证是否在预定义列表中
 - 智能提示用户查看各AI服务商官网获取可用模型列表
 
 ### 2. 文档更新
+
 **文件**: `README.md`, `whatisthis`
 **内容**:
+
 - **版本更新**: README.md版本号更新到1.5.5
 - **功能列表**: 更新provider总数到11个
 - **文档完善**: 更新whatisthis文件中的版本记录
@@ -1387,8 +1392,10 @@ npm run typecheck
 ## 版本 1.5.4 更新
 
 ### 1. 添加Qwen (DashScope) 提供者支持
+
 **文件**: `src/providers/dashscope.js`, `src/cli/commands/model.js`, `src/cli/commands/start.js`
 **内容**:
+
 - **DashScope集成**: 添加Qwen (DashScope) 作为新的AI提供者选项
 - **固定base URL**: `https://dashscope.aliyuncs.com/` (必须包含结尾斜杠)
 - **API端点**: `/compatible-mode/v1/chat/completions` (OpenAI兼容API)
@@ -1398,6 +1405,7 @@ npm run typecheck
 - **智能默认值**: 默认模型为`qwen-turbo` (极速版)
 
 **Qwen模型支持**:
+
 - **无静态模型列表**: 遵循项目架构，不提供静态模型列表
 - **用户自定义输入**: 用户可以输入任意Qwen模型名
 - **智能提示**: 配置时提示用户查看DashScope控制台获取可用模型
@@ -1405,6 +1413,7 @@ npm run typecheck
 - **默认模型**: qwen-turbo (极速版，可修改)
 
 **技术实现细节**:
+
 - **提供者类**: 创建`DashScopeProvider`类，继承自`AIProvider`
 - **API兼容性**: 使用OpenAI兼容的API格式
 - **模型能力检测**: 基于模型名自动检测能力 (vision, audio, code)
@@ -1414,15 +1423,19 @@ npm run typecheck
 ## 版本 1.5.3 更新
 
 ### 1. 移除默认回退模型配置
+
 **文件**: `src/cli/commands/model.js`
 **内容**:
+
 - **简化配置**: 移除配置向导中的默认回退模型设置
 - **自动处理**: 回退模型现在由系统自动处理，无需用户配置
 - **减少复杂度**: 简化配置流程，减少用户决策点
 
 ### 2. 添加4SAPI提供者支持
+
 **文件**: `src/providers/4sapi.js`, `src/cli/commands/model.js`, `src/cli/commands/start.js`
 **内容**:
+
 - **4SAPI集成**: 添加4SAPI作为新的AI提供者选项
 - **固定base URL**: `https://4sapi.com/v1` (OpenAI兼容API)
 - **模型支持**: 支持所有OpenAI兼容模型 (GPT-4o, GPT-4, GPT-3.5, DALL-E, TTS, Whisper等)
@@ -1431,8 +1444,10 @@ npm run typecheck
 ## 版本 1.5.2 更新
 
 ### 1. 添加Azure OpenAI提供者支持
+
 **文件**: `src/providers/azure-openai.js`, `src/cli/commands/model.js`, `src/cli/commands/start.js`
 **内容**:
+
 - **Azure OpenAI集成**: 添加Azure OpenAI作为新的AI提供者选项
 - **Azure特定配置**: 需要Azure OpenAI资源名称和API版本
 - **URL格式**: `https://{resource-name}.openai.azure.com/` (必须包含结尾斜杠)
@@ -1441,8 +1456,10 @@ npm run typecheck
 - **认证**: 使用API密钥认证，与标准OpenAI兼容但URL格式不同
 
 ### 2. 添加n1n.ai提供者支持
+
 **文件**: `src/providers/n1n.js`, `src/cli/commands/model.js`, `src/cli/commands/start.js`
 **内容**:
+
 - **n1n.ai集成**: 添加n1n.ai作为新的AI提供者选项
 - **OpenAI兼容API**: n1n.ai使用OpenAI兼容的API接口
 - **固定base URL**: `https://api.n1n.top/v1`
@@ -1450,6 +1467,7 @@ npm run typecheck
 - **配置向导**: 在提供者选择中添加n1n.ai选项
 
 ### 2. 技术实现细节
+
 - **提供者类**: 创建`N1NProvider`类，继承自`OpenAIProvider`
 - **API兼容性**: 完全兼容OpenAI API格式
 - **模型能力**: 支持文本、聊天、视觉、音频等多种模型类型
@@ -1458,39 +1476,49 @@ npm run typecheck
 ## 版本 1.5.0 重大更新
 
 ### 1. 配置系统重构：移除预制模型名，支持用户自定义输入
+
 **文件**: `src/cli/commands/model.js`, `src/providers/*.js`
 **内容**:
+
 - **配置向导改进**: 将模型选择从列表改为输入框，用户可以输入任意模型名
 - **移除预制模型列表**: 删除所有provider中的静态模型列表，避免模型上下线导致的更新问题
 - **智能提示**: 配置时提示用户查看各AI服务商官网获取可用模型列表
 - **验证简化**: 只验证模型名是否存在，不验证是否在预定义列表中
 
 ### 2. 错误处理优化
+
 **文件**: `src/providers/base.js`
 **内容**:
+
 - **简化400错误信息**: 移除冗长的包装错误信息，只显示核心错误
 - **更好的错误诊断**: 提供简洁的错误信息和关键诊断提示
 
 ### 3. API端点简化：只使用官方API
+
 **文件**: `src/providers/openai.js`, `src/providers/deepseek.js`, `src/providers/anthropic.js`, `src/providers/gemini.js`
 **内容**:
+
 - **移除自定义base_url支持**: 所有provider现在只使用官方API端点
 - **简化代码**: 移除base_url配置逻辑，减少复杂性
 - **提高稳定性**: 确保用户始终使用官方、稳定的API服务
 
 ### 4. 技术实现细节
+
 **配置向导改进**:
+
 - 将模型选择从下拉列表改为文本输入框
 - 添加智能默认值提示（可修改）
 - 提示用户查看各AI服务商官网获取可用模型
 - 简化验证逻辑，只检查模型名是否存在
 
 **Provider验证简化**:
+
 - 移除所有静态模型列表和验证
 - 只验证API密钥格式和模型名存在性
 - 添加控制台提示，指导用户查看官方文档
 
 **错误处理优化**:
+
 - 简化400错误信息，移除冗长包装
 - 提供核心错误信息和关键诊断
 - 保持错误信息简洁易读
@@ -1498,8 +1526,10 @@ npm run typecheck
 ## 已完成的任务
 
 ### 5. 删除Ollama智能help功能
+
 **文件**: `src/cli/commands/help.js`
 **内容**:
+
 - 删除了`callOllama()`方法
 - 删除了`getDirectAIHelp()`方法中的Ollama相关逻辑
 - 删除了`startDirectAIChat()`方法
@@ -1508,18 +1538,22 @@ npm run typecheck
 - 删除了Ollama测试文件：`test-ollama.js`, `test-call-ollama.js`, `test-ollama-quick.js`
 
 **保留的功能**:
+
 - Ollama provider仍然可用（通过`naturecode model`配置）
 - 基本的help命令功能
 - 文档查看功能
 
 ### 6. 清理OpenAI模型列表中的"妖魔鬼怪"（重大清理）
+
 **发现问题**: OpenAI模型列表包含了大量不合理的模型：
+
 1. **Claude模型** - 这是Anthropic的模型，不是OpenAI的
 2. **过于推测的未来模型** - GPT-4.5系列、GPT-4o 2025增强版等
 3. **不存在的模型** - DALL-E 4、Whisper 3、Codex 2等
 4. **纯非文本模型** - 在NatureCode终端助手上下文中无意义
 
 **清理过程**:
+
 1. **第一次清理** (提交: 5110cab)
    - 删除Claude-4和Claude-3.5（Anthropic模型）
    - 删除过于推测的GPT-4.5系列
@@ -1537,6 +1571,7 @@ npm run typecheck
    - 模型数量: 22个 → 18个
 
 **最终模型列表** (18个纯文本模型):
+
 - **GPT-4系列**: gpt-4o, gpt-4o-mini, gpt-4-turbo, gpt-4, gpt-4-32k (5个)
 - **GPT-3.5系列**: gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-instruct (3个)
 - **未来预测**: gpt-5, gpt-5-turbo (2个)
@@ -1544,12 +1579,15 @@ npm run typecheck
 - **特定版本**: 6个历史版本
 
 **关键原则**:
+
 1. 所有模型必须有文本生成能力（适合终端AI助手）
 2. 只包含OpenAI的实际或合理预测模型
 3. 删除在NatureCode上下文中无意义的模型
 
 ### 7. Anthropic (Claude) 模型支持添加
+
 **新增功能**:
+
 1. **Anthropic provider实现**: `src/providers/anthropic.js`
    - 支持Claude 3.5系列 (Sonnet, Haiku)
    - 支持Claude 3系列 (Opus, Sonnet, Haiku)
@@ -1573,6 +1611,7 @@ npm run typecheck
    - 更新createProvider函数支持Anthropic
 
 **Anthropic模型列表** (5个模型):
+
 - **Claude 3.5系列**:
   - claude-3-5-sonnet-20241022 (默认) - 最强大的复杂任务模型
   - claude-3-5-haiku-20241022 (故障回退) - 快速高效的简单任务模型
@@ -1582,7 +1621,9 @@ npm run typecheck
   - claude-3-haiku-20240307 - 最快的简单查询模型
 
 ### 8. Google Gemini 模型支持添加和更新
+
 **新增功能**:
+
 1. **Gemini provider实现**: `src/providers/gemini.js`
    - 支持Gemini 3系列 (Pro, Deep Think, Flash)
    - 支持Gemini 2.5系列 (Pro, Flash, Flash-Lite, Computer Use)
@@ -1616,6 +1657,7 @@ npm run typecheck
    - 修复模型选择字段缺失的问题
 
 **Gemini模型列表** (19个模型):
+
 - **Gemini 3系列** (最新):
   - gemini-3-pro (默认) - 最先进的复杂推理和分析模型 (推荐)
   - gemini-3-deep-think - 专为深度分析思维和问题解决
@@ -1646,38 +1688,39 @@ npm run typecheck
   - gemini-1.0-pro - 原始专业强大能力模型
 
 **故障回退机制**:
+
 - 默认故障回退模型: `gemini-3-pro`
 - 当选择的Gemini模型失效时自动切换到gemini-3-pro
 - 确保服务的高可用性
 
 ### 8. GitHub推送记录
+
 **今天推送的所有提交**:
+
 1. **7e2f77d** - feat: enhance configuration wizard with default prompts and OpenAI fallback model support
    - 配置向导改进：添加默认值提示和故障回退
-     
 2. **14b6e3f** - chore: add push-now.sh script for GitHub deployment
    - 添加部署脚本
-     
 3. **ef1ce59** - refactor: remove Ollama smart help functionality and simplify help command
    - 删除Ollama智能help功能（已修改为9bb7041）
-     
 4. **9bb7041** - refactor: remove Ollama smart help functionality and simplify help command
    - 修复whatisthis文件中的Token泄露问题
-     
 5. **5110cab** - fix: clean up OpenAI model list and remove inappropriate models
    - 第一次OpenAI模型清理（删除Claude等）
-     
 6. **c4e475b** - refactor: remove non-text models from OpenAI list for NatureCode context
    - 第二次OpenAI模型清理（删除所有非文本模型）
 
 **总清理效果**:
+
 - 初始模型数量: 46个（包含各种问题模型）
 - 第一次清理后: 22个（删除Claude、过于推测模型）
 - 最终清理后: 18个（只保留纯文本模型）
 - **清理比例**: 61% 的模型被删除
 
 ## 项目现状
+
 **已完成**:
+
 1. OpenAI模型全面更新和清理
 2. 配置向导用户体验改进
 3. Ollama智能help功能删除
@@ -1689,13 +1732,14 @@ npm run typecheck
 9. 4SAPI OpenAI兼容API支持添加
 10. 自定义提供者支持添加
 11. 移除默认回退模型配置
- 12. 版本升级到1.5.5
+12. 版本升级到1.5.5
 13. Qwen (DashScope) 提供者支持添加
 14. DashScope架构一致性修复（移除静态模型列表）
 15. 所有更改已推送到GitHub
 16. 模型列表现在干净、合理、实用
 
 🎯 **当前状态 (v1.5.5)**:
+
 - OpenAI模型列表: 18个纯文本模型
 - Anthropic模型列表: 5个Claude模型
 - Gemini模型列表: 5个Google模型
@@ -1704,12 +1748,14 @@ npm run typecheck
 - GitHub: 所有更改已同步
 
 **技术架构**:
+
 - 支持DeepSeek、OpenAI、Azure OpenAI、n1n.ai、4SAPI、Qwen (DashScope)、Anthropic、Google Gemini、Ollama、Zhipu AI、Custom Provider十一个provider
 - 配置系统支持故障回退机制
 - 用户界面友好，支持默认值
 - 代码质量经过多次清理和优化
 
 **当前状态**:
+
 - OpenAI配置：用户输入模型名，提示查看platform.openai.com
 - Azure OpenAI配置：需要Azure资源名称、API版本和模型名，提示查看Azure OpenAI门户
 - n1n.ai配置：用户输入模型名，使用OpenAI兼容API (https://api.n1n.top/v1)
@@ -1722,24 +1768,113 @@ npm run typecheck
 - 自定义提供者配置：支持任何AI API，需要提供base URL和API密钥
 
 ### 使用指南
+
 1. **配置模型**: `naturecode model`
 2. **查看可用模型**: 访问各AI服务商官网
 3. **开始使用**: `naturecode start`
 4. **获取帮助**: `naturecode --help`
 5. **删除模型配置**: `naturecode delmodel <name>` 或 `naturecode delmodel all`
+
+## 📝 2026-02-16 更新记录
+
+### 版本更新: 1.5.5 → 1.5.6
+
+#### 1. 添加Tencent Hunyuan (腾讯混元) 提供者支持
+
+**文件**: `src/providers/tencent.js`, `src/cli/commands/model.js`, `src/cli/commands/start.js`
+**内容**:
+
+- **Tencent Cloud集成**: 添加Tencent Hunyuan作为新的AI提供者选项
+- **固定base URL**: `https://hunyuan.tencentcloudapi.com` (Tencent Cloud API格式)
+- **API端点**: 使用Tencent Cloud API格式，非OpenAI兼容API
+- **模型支持**: 支持所有腾讯混元模型 (hunyuan-pro, hunyuan-standard, hunyuan-lite等)
+- **配置向导**: 在提供者选择中添加Tencent Hunyuan选项
+- **模型能力**: 支持文本、聊天、视觉、代码等多种模型类型
+- **智能默认值**: 默认模型为`hunyuan-pro`
+- **必需配置**: Tencent Cloud API密钥，区域（默认：ap-guangzhou）
+
+**Tencent Hunyuan模型支持**:
+
+- **无静态模型列表**: 遵循项目架构，不提供静态模型列表
+- **用户自定义输入**: 用户可以输入任意腾讯混元模型名
+- **智能提示**: 配置时提示用户查看腾讯云控制台获取可用模型
+- **模型能力检测**: 基于模型名自动检测能力 (vision, code)
+- **默认模型**: hunyuan-pro (专业版，可修改)
+
+**技术实现细节**:
+
+- **提供者类**: 创建`TencentProvider`类，继承自`AIProvider`
+- **API格式**: 使用Tencent Cloud API格式，非OpenAI兼容
+- **认证方式**: Tencent Cloud API密钥，需要特定头部：
+  - `X-TC-Action`: "ChatCompletions"
+  - `X-TC-Version`: "2023-09-01"
+  - `X-TC-Region`: 默认"ap-guangzhou"
+  - `X-TC-Timestamp`: Unix时间戳
+  - `Authorization`: Bearer token格式
+- **模型能力检测**: 基于模型名自动检测能力 (vision, code)
+- **流式支持**: 完整支持流式生成
+- **错误处理**: 完整的API错误处理和用户友好提示
+
+#### 2. 文档更新
+
+**文件**: `agentname.md`, `README.md`, `whatisthis.md`
+**内容**:
+
+- **版本更新**: 所有文件版本号更新到1.5.6
+- **功能列表**: 更新provider总数到12个
+- **文档完善**: 更新agentname.md添加Tencent Hunyuan详细说明
+- **README更新**: 更新版本号和功能列表
+
+#### 3. 已完成的任务
+
+1. ✅ 创建TencentProvider类 (`src/providers/tencent.js`)
+2. ✅ 更新配置向导 (`src/cli/commands/model.js`)
+3. ✅ 更新启动系统 (`src/cli/commands/start.js`)
+4. ✅ 更新文档 (`agentname.md`, `README.md`, `whatisthis.md`)
+5. ✅ 更新版本号到1.5.6
+
+#### 4. 项目现状
+
+**当前状态 (v1.5.6)**:
+
+- **总provider数量**: 12个
+- **新增provider**: Tencent Hunyuan (腾讯混元)
+- **配置向导**: 支持Tencent Cloud API密钥和区域配置
+- **模型支持**: 支持所有腾讯混元模型
+- **文档**: 完整更新
+
+**技术架构**:
+
+- 支持DeepSeek、OpenAI、Azure OpenAI、n1n.ai、4SAPI、Qwen (DashScope)、Anthropic、Google Gemini、Ollama、Zhipu AI、Tencent Hunyuan、Custom Provider十二个provider
+- 配置系统支持故障回退机制
+- 用户界面友好，支持默认值
+- 代码质量经过多次清理和优化
+
+**当前状态**:
+
+- Tencent Hunyuan配置：用户输入模型名，提示查看cloud.tencent.com/product/hunyuan
+- 使用Tencent Cloud API格式，需要特定头部和认证
+- 默认区域：ap-guangzhou (广州)
+- 支持流式和非流式生成
+- 完整的文件系统集成
+
 6. **查看当前配置**: `naturecode config`
 
 ### 向后兼容性
+
 - 现有配置继续工作
 - 新配置更灵活，支持任意模型名
 - 错误信息更简洁，便于问题诊断
 
 ## 安全提醒
+
 GitHub Token安全注意事项:
+
 - 永远不要在代码、日志或文档中存储Token
 - 使用环境变量或安全存储管理Token
 - 定期轮换Token
 - 撤销地址: https://github.com/settings/tokens
+
 ## 🔄 如何更新 NatureCode
 
 ### 自动更新（推荐）

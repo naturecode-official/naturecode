@@ -6,6 +6,7 @@ import { GeminiProvider } from "../../providers/gemini.js";
 import { OllamaProvider } from "../../providers/ollama.js";
 import { ZhipuAIProvider } from "../../providers/zhipuai.js";
 import { DashScopeProvider } from "../../providers/dashscope.js";
+import { TencentProvider } from "../../providers/tencent.js";
 
 export async function runModelConfiguration() {
   console.log("NatureCode AI Configuration Wizard\n");
@@ -72,6 +73,11 @@ export async function runModelConfiguration() {
           description: "Chinese AI models including GLM-4 series",
         },
         {
+          name: "Tencent Hunyuan (腾讯混元) - Tencent Cloud AI models",
+          value: "tencent",
+          description: "Tencent Cloud Hunyuan AI models via Tencent Cloud API",
+        },
+        {
           name: "Custom Provider - Connect to any AI API",
           value: "custom",
           description: "Connect to any AI API with custom configuration",
@@ -97,6 +103,8 @@ export async function runModelConfiguration() {
           return "Enter your Google Gemini API key (leave empty to skip):";
         } else if (answers.provider === "zhipuai") {
           return "Enter your Zhipu AI API key (leave empty to skip):";
+        } else if (answers.provider === "tencent") {
+          return "Enter your Tencent Cloud API key (leave empty to skip):";
         } else if (answers.provider === "custom") {
           return "Enter your Custom Provider API key (leave empty to skip):";
         }
@@ -124,7 +132,8 @@ export async function runModelConfiguration() {
         answers.provider === "n1n" ||
         answers.provider === "anthropic" ||
         answers.provider === "gemini" ||
-        answers.provider === "zhipuai",
+        answers.provider === "zhipuai" ||
+        answers.provider === "tencent",
     },
     {
       type: "input",
@@ -191,6 +200,7 @@ export async function runModelConfiguration() {
           gemini: "Google Gemini",
           ollama: "Ollama",
           zhipuai: "Zhipu AI (智谱AI)",
+          tencent: "Tencent Hunyuan (腾讯混元)",
           custom: "Custom Provider",
         };
         const providerName =
@@ -211,6 +221,7 @@ export async function runModelConfiguration() {
           gemini: "gemini-2.5-flash",
           ollama: "llama3.2:latest",
           zhipuai: "glm-4-flash",
+          tencent: "hunyuan-pro",
           custom: "custom-model",
         };
         return currentConfig.model || smartDefaults[answers.provider] || "";
@@ -232,6 +243,7 @@ export async function runModelConfiguration() {
         answers.provider === "gemini" ||
         answers.provider === "ollama" ||
         answers.provider === "zhipuai" ||
+        answers.provider === "tencent" ||
         answers.provider === "custom",
     },
     {
@@ -486,6 +498,55 @@ export async function runModelConfiguration() {
           }
 
           return choices;
+        } else if (answers.provider === "tencent") {
+          // Tencent Hunyuan model capabilities
+          const capabilities = TencentProvider.getStaticModelCapabilities(
+            answers.model,
+          );
+
+          const choices = [];
+
+          if (capabilities.includes("text")) {
+            choices.push({
+              name: "Text Generation - Standard text completion",
+              value: "text",
+              short: "Text",
+            });
+          }
+
+          if (capabilities.includes("chat")) {
+            choices.push({
+              name: "Chat - Interactive conversation (recommended for Tencent Hunyuan)",
+              value: "chat",
+              short: "Chat",
+            });
+          }
+
+          if (capabilities.includes("vision")) {
+            choices.push({
+              name: "Vision - Image analysis and understanding",
+              value: "vision",
+              short: "Vision",
+            });
+          }
+
+          if (capabilities.includes("code")) {
+            choices.push({
+              name: "Code - Code generation and analysis",
+              value: "code",
+              short: "Code",
+            });
+          }
+
+          if (choices.length === 0) {
+            choices.push({
+              name: "Chat - Default for Tencent Hunyuan models",
+              value: "chat",
+              short: "Chat",
+            });
+          }
+
+          return choices;
         } else if (answers.provider === "custom") {
           // 自定义提供者支持所有模型类型
           return [
@@ -537,6 +598,8 @@ export async function runModelConfiguration() {
           return currentConfig.modelType || "chat";
         } else if (answers.provider === "zhipuai") {
           return currentConfig.modelType || "chat";
+        } else if (answers.provider === "tencent") {
+          return currentConfig.modelType || "chat";
         } else if (answers.provider === "custom") {
           return currentConfig.modelType || "text";
         }
@@ -553,6 +616,7 @@ export async function runModelConfiguration() {
         answers.provider === "gemini" ||
         answers.provider === "ollama" ||
         answers.provider === "zhipuai" ||
+        answers.provider === "tencent" ||
         answers.provider === "custom",
     },
     {

@@ -35,7 +35,7 @@ const program = new Command();
 program
   .name("naturecode")
   .description("Cross-platform AI assistant for terminal (Professional Mode)")
-  .version("1.5.5", "-v, --version", "output the version number");
+  .version("1.5.6", "-v, --version", "output the version number");
 
 program
   .command("model")

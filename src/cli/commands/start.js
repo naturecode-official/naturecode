@@ -11,6 +11,7 @@ import { OllamaProvider } from "../../providers/ollama.js";
 import { AnthropicProvider } from "../../providers/anthropic.js";
 import { GeminiProvider } from "../../providers/gemini.js";
 import { ZhipuAIProvider } from "../../providers/zhipuai.js";
+import { TencentProvider } from "../../providers/tencent.js";
 import { CustomProvider } from "../../providers/custom.js";
 import {
   formatResponse,
@@ -78,6 +79,8 @@ function createProvider(config) {
       return new GeminiProvider(config);
     case "zhipuai":
       return new ZhipuAIProvider(config);
+    case "tencent":
+      return new TencentProvider(config);
     case "custom":
       return new CustomProvider(config);
     default:
