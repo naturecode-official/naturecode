@@ -38,7 +38,31 @@ make test         # Run tests
 make lint         # Lint code
 make clean        # Clean build files
 make package      # Create release package
+make dmg          # Create macOS DMG (macOS only)
+make release      # Complete release process
 make all          # Clean, install, build, test, lint, package
+make dev          # Start development mode
+```
+
+### Testing Commands
+
+```bash
+# Run specific test file
+npm test -- --testPathPattern="config"          # Run config.test.js
+npm test -- --testPathPattern="filesystem"      # Run filesystem.test.js
+npm test -- --testPathPattern="git"             # Run git.test.js
+
+# Run tests with specific name pattern
+npm test -- --testNamePattern="should validate API key"
+
+# Run tests with coverage
+npm test -- --coverage
+
+# Run tests in watch mode
+npm test -- --watch
+
+# Run tests with verbose output
+npm test -- --verbose
 ```
 
 ## Code Style Guidelines
@@ -59,6 +83,25 @@ make all          # Clean, install, build, test, lint, package
 - `indent`: error (2 spaces)
 - `comma-dangle`: error (always-multiline)
 
+### Import Order Pattern
+
+```javascript
+// 1. Built-in Node.js modules
+import fs from "fs";
+import path from "path";
+import os from "os";
+
+// 2. External dependencies
+import { Command } from "commander";
+import axios from "axios";
+import chalk from "chalk";
+
+// 3. Internal modules
+import { ConfigManager } from "../config/manager.js";
+import { secureStore } from "../config/secure-store.js";
+import { exitWithError } from "../utils/error-handler.js";
+```
+
 ### Error Handling Pattern
 
 ```javascript
@@ -71,6 +114,8 @@ async function callAI(provider, prompt) {
       throw new Error(
         "Invalid API key. Please reconfigure with naturecode model",
       );
+    } else if (error.response?.status === 429) {
+      throw new Error("Rate limit exceeded. Please try again later.");
     } else {
       throw new Error(`AI service error: ${error.message}`);
     }
@@ -121,7 +166,7 @@ async function callAI(provider, prompt) {
 
 Use `file_path:line_number` pattern for code references.
 
-Example: `src/services/process.ts:712`
+Example: `src/config/manager.js:45`
 
 ## GitHub Push Requirements
 
@@ -142,15 +187,3 @@ Example: `src/services/process.ts:712`
 3. Run `./push-with-key-md.sh`
 4. Verify: `curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash --dry-run`
 5. Delete `key.md`
-
-## Project Structure
-
-```
-src/
-├── cli/              # CLI interface and command handlers
-├── config/           # Configuration management
-├── providers/        # AI providers (DeepSeek, OpenAI, Ollama)
-├── plugins/          # Plugin system
-├── utils/           # Utilities (filesystem, git, formatter)
-└── tests/           # Test files
-```

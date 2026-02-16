@@ -14,7 +14,16 @@ const DEFAULT_CONFIG = {
   temperature: 0.7,
   maxTokens: 2000,
   stream: true,
-  fallbackModel: undefined,
+  // fallbackModel 由 autoConfigureDefaults 设置
+};
+
+// 智能默认模型选择
+const SMART_DEFAULT_MODELS = {
+  openai: "gpt-4o-mini", // 免费、快速、可靠的默认选择
+  deepseek: "deepseek-chat", // 免费、中文优化
+  ollama: "llama3.2", // 本地运行
+  anthropic: "claude-3-haiku", // 快速、便宜
+  gemini: "gemini-1.5-flash", // 免费、快速
 };
 
 const VALID_PROVIDERS = ["deepseek", "openai", "ollama", "anthropic", "gemini"];
@@ -197,13 +206,26 @@ class ConfigManager {
         }
       }
 
-      return this._validateConfig(config);
+      const validatedConfig = this._validateConfig(config);
+
+      // 自动应用智能默认配置
+      const autoConfigured = this.autoConfigureDefaults(validatedConfig);
+
+      // 确保 fallbackModel 被设置
+      if (!autoConfigured.fallbackModel) {
+        autoConfigured.fallbackModel = this.getSmartDefaultModel(
+          autoConfigured.provider,
+        );
+      }
+
+      return autoConfigured;
     } catch (error) {
       console.error(
         "Warning: Failed to load config, using defaults:",
         error.message,
       );
-      return { ...DEFAULT_CONFIG };
+      const defaultConfig = { ...DEFAULT_CONFIG };
+      return this.autoConfigureDefaults(defaultConfig);
     }
   }
 
@@ -244,8 +266,50 @@ class ConfigManager {
     }
   }
 
+  // 获取智能默认模型（用户无需选择）
+  getSmartDefaultModel(provider) {
+    return SMART_DEFAULT_MODELS[provider] || DEFAULT_CONFIG.model;
+  }
+
+  // 检查是否需要配置（没有API密钥或模型）
+  needsConfiguration() {
+    const config = this.load();
+    return (
+      !config.apiKey ||
+      config.apiKey === "" ||
+      config.apiKey === "[ENCRYPTED_STORAGE]"
+    );
+  }
+
+  // 自动配置默认设置
+  autoConfigureDefaults(config) {
+    const validatedConfig = { ...config };
+
+    // 如果模型未设置或无效，设置智能默认模型
+    if (!validatedConfig.model || validatedConfig.model === "") {
+      validatedConfig.model = this.getSmartDefaultModel(
+        validatedConfig.provider,
+      );
+    }
+
+    // 设置回退模型（如果未设置）
+    if (
+      validatedConfig.fallbackModel === undefined ||
+      validatedConfig.fallbackModel === null
+    ) {
+      validatedConfig.fallbackModel = this.getSmartDefaultModel(
+        validatedConfig.provider,
+      );
+    }
+
+    return validatedConfig;
+  }
+
   _validateConfig(config) {
     const validated = { ...DEFAULT_CONFIG, ...config };
+
+    // 确保 fallbackModel 在 autoConfigureDefaults 中处理
+    // 这里不设置默认值，让 autoConfigureDefaults 处理
 
     // API key can be empty if it will be loaded from secure storage
     if (validated.apiKey === undefined || validated.apiKey === null) {

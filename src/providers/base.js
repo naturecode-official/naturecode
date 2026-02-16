@@ -314,8 +314,13 @@ You are empowered to directly interact with the file system. Use these tools to 
         case 400:
           throw new Error(this._getDetailed400Error(errorMessage, data));
         case 401:
+          const providerName = this.config?.provider || "AI";
+          const modelName = this.config?.model || "default model";
+
           throw new Error(
-            'Invalid API key. Please reconfigure with "naturecode model"',
+            `Invalid ${providerName} API key for model "${modelName}".\n` +
+              'Please check your API key and reconfigure with "naturecode model".\n' +
+              "Tip: Make sure your API key is valid and has access to the selected model.",
           );
         case 429:
           throw new Error("Rate limit exceeded. Please try again later");
