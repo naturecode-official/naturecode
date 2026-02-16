@@ -1,6 +1,7 @@
 import inquirer from "inquirer";
 import { configManager } from "../../config/manager.js";
 import { secureStore } from "../../config/secure-store.js";
+import { ZhipuAIProvider } from "../../providers/zhipuai.js";
 
 export async function runModelConfiguration() {
   console.log("NatureCode AI Configuration Wizard\n");
@@ -39,6 +40,11 @@ export async function runModelConfiguration() {
           description: "Local AI models (free, runs on your machine)",
         },
         {
+          name: "Zhipu AI (智谱AI) - Chinese AI models (GLM series)",
+          value: "zhipuai",
+          description: "Chinese AI models including GLM-4 series",
+        },
+        {
           name: "Custom Provider - Connect to any AI API",
           value: "custom",
           description: "Connect to any AI API with custom configuration",
@@ -58,6 +64,8 @@ export async function runModelConfiguration() {
           return "Enter your Anthropic API key (leave empty to skip):";
         } else if (answers.provider === "gemini") {
           return "Enter your Google Gemini API key (leave empty to skip):";
+        } else if (answers.provider === "zhipuai") {
+          return "Enter your Zhipu AI API key (leave empty to skip):";
         } else if (answers.provider === "custom") {
           return "Enter your Custom Provider API key (leave empty to skip):";
         }
@@ -69,7 +77,8 @@ export async function runModelConfiguration() {
           answers.provider === "deepseek" ||
           answers.provider === "openai" ||
           answers.provider === "anthropic" ||
-          answers.provider === "gemini"
+          answers.provider === "gemini" ||
+          answers.provider === "zhipuai"
         ) {
           return currentConfig.apiKey || undefined;
         }
@@ -79,7 +88,8 @@ export async function runModelConfiguration() {
         answers.provider === "deepseek" ||
         answers.provider === "openai" ||
         answers.provider === "anthropic" ||
-        answers.provider === "gemini",
+        answers.provider === "gemini" ||
+        answers.provider === "zhipuai",
     },
     {
       type: "input",
@@ -91,6 +101,7 @@ export async function runModelConfiguration() {
           anthropic: "Anthropic (Claude)",
           gemini: "Google Gemini",
           ollama: "Ollama",
+          zhipuai: "Zhipu AI (智谱AI)",
           custom: "Custom Provider",
         };
         const providerName =
@@ -106,6 +117,7 @@ export async function runModelConfiguration() {
           anthropic: "claude-3-5-haiku-20241022",
           gemini: "gemini-2.5-flash",
           ollama: "llama3.2:latest",
+          zhipuai: "glm-4-flash",
           custom: "custom-model",
         };
         return currentConfig.model || smartDefaults[answers.provider] || "";
@@ -122,6 +134,7 @@ export async function runModelConfiguration() {
         answers.provider === "anthropic" ||
         answers.provider === "gemini" ||
         answers.provider === "ollama" ||
+        answers.provider === "zhipuai" ||
         answers.provider === "custom",
     },
     {
@@ -317,6 +330,55 @@ export async function runModelConfiguration() {
           }
 
           return choices;
+        } else if (answers.provider === "zhipuai") {
+          // 智谱AI模型能力
+          const capabilities = ZhipuAIProvider.getStaticModelCapabilities(
+            answers.model,
+          );
+
+          const choices = [];
+
+          if (capabilities.includes("text")) {
+            choices.push({
+              name: "Text Generation - Standard text completion",
+              value: "text",
+              short: "Text",
+            });
+          }
+
+          if (capabilities.includes("chat")) {
+            choices.push({
+              name: "Chat - Interactive conversation (recommended for Zhipu AI)",
+              value: "chat",
+              short: "Chat",
+            });
+          }
+
+          if (capabilities.includes("vision")) {
+            choices.push({
+              name: "Vision - Image analysis and understanding",
+              value: "vision",
+              short: "Vision",
+            });
+          }
+
+          if (capabilities.includes("roleplay")) {
+            choices.push({
+              name: "Roleplay - Character interaction and role playing",
+              value: "roleplay",
+              short: "Roleplay",
+            });
+          }
+
+          if (choices.length === 0) {
+            choices.push({
+              name: "Chat - Default for Zhipu AI models",
+              value: "chat",
+              short: "Chat",
+            });
+          }
+
+          return choices;
         } else if (answers.provider === "custom") {
           // 自定义提供者支持所有模型类型
           return [
@@ -360,6 +422,8 @@ export async function runModelConfiguration() {
           return currentConfig.modelType || "chat";
         } else if (answers.provider === "ollama") {
           return currentConfig.modelType || "chat";
+        } else if (answers.provider === "zhipuai") {
+          return currentConfig.modelType || "chat";
         } else if (answers.provider === "custom") {
           return currentConfig.modelType || "text";
         }
@@ -371,6 +435,7 @@ export async function runModelConfiguration() {
         answers.provider === "anthropic" ||
         answers.provider === "gemini" ||
         answers.provider === "ollama" ||
+        answers.provider === "zhipuai" ||
         answers.provider === "custom",
     },
     {

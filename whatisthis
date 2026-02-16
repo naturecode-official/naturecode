@@ -240,7 +240,7 @@
 - GitHub: 所有更改已同步
 
 **技术架构**:
-- 支持DeepSeek、OpenAI、Anthropic、Gemini、Ollama五个provider
+- 支持DeepSeek、OpenAI、Anthropic、Google Gemini、Ollama、Zhipu AI、Custom Provider七个provider
 - 配置系统支持故障回退机制
 - 用户界面友好，支持默认值
 - 代码质量经过多次清理和优化
@@ -251,6 +251,7 @@
 - Anthropic配置：用户输入模型名，提示查看console.anthropic.com
 - Google Gemini配置：用户输入模型名，提示查看ai.google.dev
 - Ollama配置：用户输入模型名，提示运行'ollama list'
+- Zhipu AI配置：用户输入模型名，提示查看open.bigmodel.cn
 - 自定义提供者配置：支持任何AI API，需要提供base URL和API密钥
 
 ### 使用指南
