@@ -1,5 +1,11 @@
 # NatureCode - Cross-platform Terminal AI Assistant
 
+## 📚 Documentation Navigation
+
+- **[📖 Complete Documentation](whatisthis)** - Full project documentation, changelog, and current status
+- **[🔧 Development Guide](AGENTS.md)** - Development guidelines, commands, and coding standards
+- **[🚀 Quick Start](#quick-install)** - Installation and basic usage (below)
+
 ## Features
 
 - **Multi-model AI Support**: DeepSeek, OpenAI, Azure OpenAI, n1n.ai, Anthropic, Google Gemini, Ollama, Zhipu AI, Custom Provider with flexible model input
