@@ -1,7 +1,8 @@
 import axios from "axios";
 import { AIProvider } from "./base.js";
 
-const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
+const DEFAULT_OPENAI_BASE_URL = "https://api.openai.com/v1";
+const CHAT_COMPLETIONS_ENDPOINT = "/chat/completions";
 
 export class OpenAIProvider extends AIProvider {
   constructor(config) {
@@ -21,6 +22,20 @@ export class OpenAIProvider extends AIProvider {
     if (!config.apiKey.startsWith("sk-")) {
       console.warn("⚠️  Warning: Your API key doesn't start with 'sk-'");
       console.warn("   Valid OpenAI keys start with 'sk-' or 'sk-proj-'");
+    }
+
+    // 验证 base_url（如果提供）
+    if (config.base_url && typeof config.base_url === "string") {
+      try {
+        const url = new URL(config.base_url);
+        if (!url.protocol.startsWith("http")) {
+          throw new Error("base_url must use http or https protocol");
+        }
+      } catch (error) {
+        throw new Error(
+          `Invalid base_url: ${config.base_url}. Must be a valid URL.`,
+        );
+      }
     }
 
     if (!config.model || !this.getAvailableModels().includes(config.model)) {
@@ -52,6 +67,37 @@ export class OpenAIProvider extends AIProvider {
 
   getAvailableModels() {
     return OpenAIProvider.getStaticAvailableModels();
+  }
+
+  // 获取 API URL，支持自定义 base_url
+  _getApiUrl() {
+    const baseUrl = this.config.base_url || DEFAULT_OPENAI_BASE_URL;
+    let apiBaseUrl = baseUrl.trim();
+
+    // 移除末尾的斜杠
+    if (apiBaseUrl.endsWith("/")) {
+      apiBaseUrl = apiBaseUrl.slice(0, -1);
+    }
+
+    // 检查是否是标准 OpenAI API 格式
+    const isStandardOpenAI = apiBaseUrl.includes("api.openai.com");
+
+    if (isStandardOpenAI) {
+      // 标准 OpenAI API：确保有 /v1
+      if (!apiBaseUrl.endsWith("/v1")) {
+        apiBaseUrl += "/v1";
+      }
+      return `${apiBaseUrl}${CHAT_COMPLETIONS_ENDPOINT}`;
+    } else {
+      // 自定义/兼容 API：直接使用提供的 base_url
+      // 假设用户提供的已经是完整的端点或知道他们的 API 结构
+      // 检查是否已经包含 chat/completions
+      if (apiBaseUrl.includes("chat/completions")) {
+        return apiBaseUrl;
+      }
+      // 否则添加 /chat/completions
+      return `${apiBaseUrl}${CHAT_COMPLETIONS_ENDPOINT}`;
+    }
   }
 
   static getStaticAvailableModels() {
@@ -770,7 +816,8 @@ export class OpenAIProvider extends AIProvider {
       requestBody.max_tokens = mergedOptions.max_tokens;
     }
 
-    const response = await axios.post(OPENAI_API_URL, requestBody, {
+    const apiUrl = this._getApiUrl();
+    const response = await axios.post(apiUrl, requestBody, {
       headers: {
         Authorization: `Bearer ${this.config.apiKey}`,
         "Content-Type": "application/json",
@@ -996,7 +1043,8 @@ Please help with this request. If it involves file operations, provide the neces
       requestBody.max_tokens = mergedOptions.max_tokens;
     }
 
-    const response = await axios.post(OPENAI_API_URL, requestBody, {
+    const apiUrl = this._getApiUrl();
+    const response = await axios.post(apiUrl, requestBody, {
       headers: {
         Authorization: `Bearer ${this.config.apiKey}`,
         "Content-Type": "application/json",
