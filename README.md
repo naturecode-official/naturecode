@@ -2,15 +2,15 @@
 
 ## Features
 
-- 🤖 **Multi-model AI Support**: DeepSeek, OpenAI, Ollama with comprehensive model coverage
+- 🤖 **Multi-model AI Support**: DeepSeek, OpenAI, Anthropic, Gemini, Ollama with flexible model input
 - 🚀 **One-line Installation**: Simple curl-based installation system
 - 📦 **Cross-platform**: Native support for macOS, Linux, and Windows
 - 🔧 **Professional Mode**: Advanced diagnostics and developer tools
 - 🛡️ **Secure Configuration**: Encrypted storage for API keys and settings
 - 🔌 **Plugin System**: Extensible architecture for custom functionality
 - 👥 **Team Collaboration**: Shared projects, member management, and role-based access
-- 🌐 **Custom API Endpoints**: Configure custom base_url for all AI providers
-- 📚 **Comprehensive Model Support**: 12+ DeepSeek models, 8 Google Gemma models, open-source models migrated to Ollama
+- 🎯 **Flexible Model Input**: Input any model name manually instead of selecting from pre-defined lists
+- 📚 **Provider Guidance**: Smart prompts guide users to check official websites for available models
 
 ## Quick Install
 
@@ -64,8 +64,11 @@ naturecode --version
 ### Advanced Usage
 
 ```bash
-# Configure custom API endpoints
-naturecode model --provider openai --base-url "https://your-custom-endpoint.com"
+# Configure AI provider and model (flexible model name input)
+naturecode model
+
+# Configure specific provider with custom settings
+naturecode model --provider openai
 
 # Manage team collaboration
 naturecode team
@@ -98,7 +101,15 @@ See [WINDOWS_INSTALL.md](WINDOWS_INSTALL.md) for detailed Windows installation i
 - [README_INSTALL.md](README_INSTALL.md) - Detailed installation instructions
 - [whatisthis.md](whatisthis.md) - Comprehensive project documentation and guidelines
 
-### Key Features in v1.4.9
+### Key Features in v1.5.0
+
+- **Flexible Model Configuration**: Input any model name manually instead of selecting from pre-defined lists
+- **Simplified Validation**: Removed model list validation from all providers (OpenAI, DeepSeek, Anthropic, Gemini, Ollama)
+- **Smart User Guidance**: Provider-specific prompts guide users to check official websites for available models
+- **Enhanced User Experience**: More intuitive configuration wizard with text input fields
+- **Backward Compatibility**: Maintains all existing functionality while providing more flexibility
+
+### Previous Version Highlights (v1.4.9)
 
 - **Custom API Endpoint Configuration**: Set custom `base_url` for all AI providers
 - **Open-source Model Migration**: GPT-OSS models moved from OpenAI to Ollama provider
@@ -134,7 +145,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ## Support
 
 - **GitHub Issues**: https://github.com/naturecode-official/naturecode/issues
-- **Current Version**: 1.4.9
+- **Current Version**: 1.5.0
 - **Installation Verification**:
   ```bash
   curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash --dry-run
