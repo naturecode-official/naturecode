@@ -389,11 +389,11 @@ show_post_install() {
     echo ""
     echo "  3. Get help:"
     if [ "$COLORS_SUPPORTED" = "true" ]; then
-        echo "     ${CYAN}naturecode help${NC}              # Direct AI chat"
-        echo "     ${CYAN}naturecode help \"your question\"${NC}  # Get specific help"
+        echo "     ${CYAN}naturecode help${NC}              # Show help information"
+        echo "     ${CYAN}naturecode start${NC}             # Start AI session (requires AI configuration)"
     else
-        echo "     naturecode help              # Direct AI chat"
-        echo "     naturecode help \"your question\"  # Get specific help"
+        echo "     naturecode help              # Show help information"
+        echo "     naturecode start             # Start AI session (requires AI configuration)"
     fi
     echo ""
     echo "  4. Check available commands:"
@@ -556,11 +556,11 @@ EOF
         # Run Ollama installation
         install_ollama_and_model || {
             if [ "$COLORS_SUPPORTED" = "true" ]; then
-                printf "%b" "${YELLOW}[NOTE]${NC} AI assistant will be installed when you first run:\n"
-                printf "%b" "        ${CYAN}naturecode help \"your question\"${NC}\n"
+                printf "%b" "${YELLOW}[NOTE]${NC} Configure AI model first:\n"
+                printf "%b" "        ${CYAN}naturecode model${NC}\n"
             else
-                echo "[NOTE] AI assistant will be installed when you first run:"
-                echo "        naturecode help \"your question\""
+                echo "[NOTE] Configure AI model first:"
+                echo "        naturecode model"
             fi
         }
     }

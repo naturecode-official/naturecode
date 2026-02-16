@@ -1,5 +1,6 @@
 import inquirer from "inquirer";
 import { configManager } from "../../config/manager.js";
+import { secureStore } from "../../config/secure-store.js";
 import { DeepSeekProvider } from "../../providers/deepseek.js";
 import { OpenAIProvider } from "../../providers/openai.js";
 import { OllamaProvider } from "../../providers/ollama.js";
