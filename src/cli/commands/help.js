@@ -16,8 +16,13 @@ export function createHelpCommand() {
 export class HelpCommand {
   constructor() {
     this.command = new Command("help")
-      .description("Get help for NatureCode commands")
-      .argument("[question]", "Your question about NatureCode")
+      .description(
+        "Get help for NatureCode - use 'naturecode start' for AI assistance",
+      )
+      .argument(
+        "[question]",
+        "Get AI help for specific questions (requires AI configuration)",
+      )
       .option("-s, --simple", "Use simple help without AI")
       .option("-d, --docs", "Show full documentation")
       .action(this.handleCommand.bind(this));
