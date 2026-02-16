@@ -26,13 +26,23 @@ function getAvailableModels() {
     const providerKeys = allKeys[provider];
     for (const keyId in providerKeys) {
       const keyInfo = providerKeys[keyId];
-      models.push({
-        provider: provider,
-        keyId: keyId,
-        name: keyInfo.metadata?.name || `${provider}-${keyId}`,
-        model: keyInfo.metadata?.model || "default",
-        description: keyInfo.metadata?.modelType || "No description",
-      });
+
+      // 跳过重复的配置（相同的名称和模型）
+      const isDuplicate = models.some(
+        (m) =>
+          m.name === (keyInfo.metadata?.name || `${provider}-${keyId}`) &&
+          m.model === (keyInfo.metadata?.model || "default"),
+      );
+
+      if (!isDuplicate) {
+        models.push({
+          provider: provider,
+          keyId: keyId,
+          name: keyInfo.metadata?.name || `${provider}-${keyId}`,
+          model: keyInfo.metadata?.model || "default",
+          description: keyInfo.metadata?.modelType || "No description",
+        });
+      }
     }
   }
 

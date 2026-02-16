@@ -21,14 +21,10 @@ const VALID_PROVIDERS = ["deepseek", "openai", "ollama", "anthropic", "gemini"];
 const DEEPSEEK_MODELS = ["deepseek-chat", "deepseek-reasoner"];
 const OPENAI_MODELS = [
   // GPT-5系列 (最新)
-  "gpt-5.2",
-  "gpt-5.2-pro",
-  "gpt-5",
-  "gpt-5-mini",
-  "gpt-5-nano",
-  "gpt-5.1",
-  "gpt-5.1-codex",
-  "gpt-5.1-codex-extended",
+  "gpt-5-preview",
+  "gpt-5-mini-preview",
+  "gpt-5.2-preview",
+  "gpt-5.2-pro-preview",
 
   // GPT-4.1系列
   "gpt-4.1",

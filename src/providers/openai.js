@@ -59,11 +59,10 @@ export class OpenAIProvider extends AIProvider {
       // ✅ 实际测试可用的 OpenAI 模型
 
       // GPT-5 系列 (使用 max_completion_tokens)
-      "gpt-5",
-      "gpt-5-mini",
-      "gpt-5-nano",
-      "gpt-5.1",
-      "gpt-5.2",
+      "gpt-5-preview",
+      "gpt-5-mini-preview",
+      "gpt-5.2-preview",
+      "gpt-5.2-pro-preview",
 
       // GPT-4.1 系列
       "gpt-4.1",
@@ -122,14 +121,10 @@ export class OpenAIProvider extends AIProvider {
   getModelCategory(model) {
     const categories = {
       // GPT-5系列 (最新)
-      "gpt-5.2": "GPT-5.2 (最新旗舰模型)",
-      "gpt-5.2-pro": "GPT-5.2 Pro (专业增强版)",
-      "gpt-5": "GPT-5 (标准旗舰模型)",
-      "gpt-5-mini": "GPT-5 Mini (轻量版)",
-      "gpt-5-nano": "GPT-5 Nano (超轻量版)",
-      "gpt-5.1": "GPT-5.1 (上一代旗舰)",
-      "gpt-5.1-codex": "GPT-5.1 Codex (代码优化版)",
-      "gpt-5.1-codex-extended": "GPT-5.1 Codex Extended (扩展代码版)",
+      "gpt-5-preview": "GPT-5 Preview (预览版)",
+      "gpt-5-mini-preview": "GPT-5 Mini Preview (轻量预览版)",
+      "gpt-5.2-preview": "GPT-5.2 Preview (最新预览版)",
+      "gpt-5.2-pro-preview": "GPT-5.2 Pro Preview (专业预览版)",
 
       // GPT-4.1系列
       "gpt-4.1": "GPT-4.1 (增强版)",
@@ -186,22 +181,14 @@ export class OpenAIProvider extends AIProvider {
   static getStaticModelDescription(model) {
     const descriptions = {
       // GPT-5系列 (最新)
-      "gpt-5.2":
-        "GPT-5.2 flagship model, 512K context, advanced multimodal reasoning",
-      "gpt-5.2-pro":
-        "GPT-5.2 Pro enhanced version, 1M context, enterprise-grade performance",
-      "gpt-5":
-        "GPT-5 standard model, 256K context, advanced reasoning capabilities",
-      "gpt-5-mini":
-        "GPT-5 Mini lightweight version, 128K context, cost-effective",
-      "gpt-5-nano":
-        "GPT-5 Nano ultra-lightweight, 64K context, fastest inference",
-      "gpt-5.1":
-        "GPT-5.1 previous generation, 192K context, stable performance",
-      "gpt-5.1-codex":
-        "GPT-5.1 Codex specialized for programming, 256K context",
-      "gpt-5.1-codex-extended":
-        "GPT-5.1 Codex Extended with enhanced code generation, 512K context",
+      "gpt-5-preview":
+        "GPT-5 Preview model, 256K context, advanced reasoning capabilities",
+      "gpt-5-mini-preview":
+        "GPT-5 Mini Preview lightweight version, 128K context, cost-effective",
+      "gpt-5.2-preview":
+        "GPT-5.2 Preview flagship model, 512K context, advanced multimodal reasoning",
+      "gpt-5.2-pro-preview":
+        "GPT-5.2 Pro Preview enhanced version, 1M context, enterprise-grade performance",
 
       // GPT-4.1系列
       "gpt-4.1": "GPT-4.1 enhanced version, 128K context, improved accuracy",
