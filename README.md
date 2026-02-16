@@ -6,7 +6,7 @@
 
 ## Features
 
-- **Multi-model AI Support**: DeepSeek, OpenAI, Azure OpenAI, n1n.ai, 4SAPI, Anthropic, Google Gemini, Ollama, Zhipu AI, Custom Provider with flexible model input
+- **Multi-model AI Support**: DeepSeek, OpenAI, Azure OpenAI, n1n.ai, 4SAPI, Qwen (DashScope), Anthropic, Google Gemini, Ollama, Zhipu AI, Custom Provider with flexible model input
 - **One-line Installation**: Simple curl-based installation system
 - **Cross-platform**: Native support for macOS, Linux, and Windows
 - **Professional Mode**: Advanced diagnostics and developer tools

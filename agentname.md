@@ -52,7 +52,17 @@ NatureCode支持以下AI供应商，每个供应商都有特定的配置要求�
 - **特性**: OpenAI兼容API，支持完整模型套件
 - **官方网站**: https://4sapi.com
 
-## 6. Anthropic (Claude)
+## 6. Qwen (DashScope)
+
+- **供应商ID**: `dashscope`
+- **API端点**: `https://dashscope.aliyuncs.com/`
+- **认证方式**: Bearer Token
+- **默认模型**: `qwen-turbo`
+- **模型类型**: 文本、聊天、视觉（部分模型）、音频（部分模型）、代码（部分模型）
+- **特性**: 阿里云通义千问模型，OpenAI兼容API
+- **官方网站**: https://dashscope.aliyuncs.com
+
+## 8. Anthropic (Claude)
 
 - **供应商ID**: `anthropic`
 - **API端点**: `https://api.anthropic.com`
@@ -140,7 +150,7 @@ naturecode delmodel all
 ### 版本信息
 
 - **当前版本**: 1.5.3
-- **供应商数量**: 10个
+- **供应商数量**: 11个
 - **平台支持**: macOS, Linux, Windows
 - **安装方式**: 一键curl安装
 
