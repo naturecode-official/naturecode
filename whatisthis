@@ -13,14 +13,12 @@
 - **模型能力**: 支持文本、聊天、视觉、音频、代码等多种模型类型
 - **智能默认值**: 默认模型为`qwen-turbo` (极速版)
 
-**Qwen模型列表** (19个模型):
-- **Qwen Max系列**: qwen-max, qwen-max-longcontext (最强能力)
-- **Qwen增强版**: qwen-plus (平衡性能与成本)
-- **Qwen极速版**: qwen-turbo (响应最快，默认)
-- **Qwen2.5系列**: 72b, 32b, 14b, 7b, 3b, 1.5b (不同参数规模)
-- **Qwen2.5代码系列**: coder-32b, coder-14b, coder-7b (代码生成)
-- **Qwen2视觉系列**: vl-72b, vl-7b (视觉语言模型)
-- **Qwen音频系列**: audio-7b, qwen2.5-audio-7b (音频理解)
+**Qwen模型支持**:
+- **无静态模型列表**: 遵循项目架构，不提供静态模型列表
+- **用户自定义输入**: 用户可以输入任意Qwen模型名
+- **智能提示**: 配置时提示用户查看DashScope控制台获取可用模型
+- **模型能力检测**: 基于模型名自动检测能力 (vision, audio, code)
+- **默认模型**: qwen-turbo (极速版，可修改)
 
 **技术实现细节**:
 - **提供者类**: 创建`DashScopeProvider`类，继承自`AIProvider`

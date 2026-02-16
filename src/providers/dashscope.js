@@ -14,9 +14,13 @@ export class DashScopeProvider extends AIProvider {
       throw new Error("DashScope API key is required");
     }
 
+    // 只检查模型名是否存在，不验证是否在预定义列表中
     if (!config.model || typeof config.model !== "string") {
       throw new Error("DashScope model name is required");
     }
+
+    console.log(`ℹ️  Using model: ${config.model}`);
+    console.log("ℹ️  Check dashscope.console.aliyun.com for available models");
 
     // DashScope使用固定的base URL
     if (
@@ -27,6 +31,8 @@ export class DashScopeProvider extends AIProvider {
         "DashScope uses fixed base URL: https://dashscope.aliyuncs.com/. Custom base URL will be ignored.",
       );
     }
+
+    return true;
   }
 
   _getApiUrl (_config) {
@@ -178,48 +184,14 @@ export class DashScopeProvider extends AIProvider {
   }
 
   static getStaticAvailableModels () {
-    // DashScope支持的模型（通义千问系列）
-    return [
-      "qwen-max",
-      "qwen-max-longcontext",
-      "qwen-plus",
-      "qwen-turbo",
-      "qwen2.5-72b-instruct",
-      "qwen2.5-32b-instruct",
-      "qwen2.5-14b-instruct",
-      "qwen2.5-7b-instruct",
-      "qwen2.5-3b-instruct",
-      "qwen2.5-1.5b-instruct",
-      "qwen2.5-coder-32b-instruct",
-      "qwen2.5-coder-14b-instruct",
-      "qwen2.5-coder-7b-instruct",
-      "qwen2-vl-72b-instruct",
-      "qwen2-vl-7b-instruct",
-      "qwen2-audio-7b-instruct",
-      "qwen2.5-audio-7b-instruct",
-    ];
+    // 不再返回静态模型列表，用户可输入任意模型名
+    // 提示用户查看DashScope官方文档获取可用模型
+    return [];
   }
 
   static getStaticModelDescriptions () {
-    return {
-      "qwen-max": "通义千问最大模型，最强能力",
-      "qwen-max-longcontext": "通义千问最大模型，支持长上下文",
-      "qwen-plus": "通义千问增强版，平衡性能与成本",
-      "qwen-turbo": "通义千问极速版，响应最快",
-      "qwen2.5-72b-instruct": "Qwen2.5 720亿参数指令调优模型",
-      "qwen2.5-32b-instruct": "Qwen2.5 320亿参数指令调优模型",
-      "qwen2.5-14b-instruct": "Qwen2.5 140亿参数指令调优模型",
-      "qwen2.5-7b-instruct": "Qwen2.5 70亿参数指令调优模型",
-      "qwen2.5-3b-instruct": "Qwen2.5 30亿参数指令调优模型",
-      "qwen2.5-1.5b-instruct": "Qwen2.5 15亿参数指令调优模型",
-      "qwen2.5-coder-32b-instruct": "Qwen2.5 320亿参数代码生成模型",
-      "qwen2.5-coder-14b-instruct": "Qwen2.5 140亿参数代码生成模型",
-      "qwen2.5-coder-7b-instruct": "Qwen2.5 70亿参数代码生成模型",
-      "qwen2-vl-72b-instruct": "Qwen2 720亿参数视觉语言模型",
-      "qwen2-vl-7b-instruct": "Qwen2 70亿参数视觉语言模型",
-      "qwen2-audio-7b-instruct": "Qwen2 70亿参数音频理解模型",
-      "qwen2.5-audio-7b-instruct": "Qwen2.5 70亿参数音频理解模型",
-    };
+    // 不再返回静态模型描述
+    return {};
   }
 
   static getStaticModelCapabilities (model) {
