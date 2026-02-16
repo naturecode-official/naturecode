@@ -57,21 +57,8 @@ export class OpenAIProvider extends AIProvider {
 
   // 获取 API URL
   _getApiUrl() {
-    // 支持自定义 base_url，默认为标准的 OpenAI API
-    const baseUrl = this.config.base_url || DEFAULT_OPENAI_BASE_URL;
-    let apiBaseUrl = baseUrl.trim();
-
-    // 移除末尾的斜杠
-    if (apiBaseUrl.endsWith("/")) {
-      apiBaseUrl = apiBaseUrl.slice(0, -1);
-    }
-
-    // 确保有 /v1（对于 OpenAI 兼容的 API）
-    if (!apiBaseUrl.endsWith("/v1")) {
-      apiBaseUrl += "/v1";
-    }
-
-    return `${apiBaseUrl}${CHAT_COMPLETIONS_ENDPOINT}`;
+    // 只使用 OpenAI 官方 API
+    return `${DEFAULT_OPENAI_BASE_URL}${CHAT_COMPLETIONS_ENDPOINT}`;
   }
 
   static getStaticAvailableModels() {

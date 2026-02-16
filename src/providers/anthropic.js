@@ -208,21 +208,8 @@ export class AnthropicProvider extends AIProvider {
 
   // 获取 API URL
   _getApiUrl() {
-    // 支持自定义 base_url，默认为标准的 Anthropic API
-    const baseUrl = this.config.base_url || DEFAULT_ANTHROPIC_BASE_URL;
-    let apiBaseUrl = baseUrl.trim();
-
-    // 移除末尾的斜杠
-    if (apiBaseUrl.endsWith("/")) {
-      apiBaseUrl = apiBaseUrl.slice(0, -1);
-    }
-
-    // 确保有 /v1
-    if (!apiBaseUrl.endsWith("/v1")) {
-      apiBaseUrl += "/v1";
-    }
-
-    return `${apiBaseUrl}${MESSAGES_ENDPOINT}`;
+    // 只使用 Anthropic 官方 API
+    return `${DEFAULT_ANTHROPIC_BASE_URL}${MESSAGES_ENDPOINT}`;
   }
 
   // Enhanced generate method that handles file system operations

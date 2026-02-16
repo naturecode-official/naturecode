@@ -107,21 +107,8 @@ export class GeminiProvider extends AIProvider {
 
   // 获取 API URL
   _getApiUrl() {
-    // 支持自定义 base_url，默认为标准的 Gemini API
-    const baseUrl = this.config.base_url || DEFAULT_GEMINI_BASE_URL;
-    let apiBaseUrl = baseUrl.trim();
-
-    // 移除末尾的斜杠
-    if (apiBaseUrl.endsWith("/")) {
-      apiBaseUrl = apiBaseUrl.slice(0, -1);
-    }
-
-    // 确保有 /v1beta
-    if (!apiBaseUrl.endsWith("/v1beta")) {
-      apiBaseUrl += "/v1beta";
-    }
-
-    return `${apiBaseUrl}${MODELS_ENDPOINT}`;
+    // 只使用 Gemini 官方 API
+    return `${DEFAULT_GEMINI_BASE_URL}${MODELS_ENDPOINT}`;
   }
 
   // Enhanced generate method that handles file system operations
