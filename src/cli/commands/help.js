@@ -34,8 +34,13 @@ export class HelpCommand {
         return;
       }
 
-      if (options.simple || question) {
+      if (options.simple) {
         await this.showSimpleHelp();
+        return;
+      }
+
+      if (question) {
+        await this.getAIHelp(question);
         return;
       }
 
@@ -47,6 +52,82 @@ export class HelpCommand {
     }
   }
 
+  async getAIHelp(question) {
+    try {
+      console.log(`\nGetting AI assistance for: "${question}"\n`);
+
+      // Load configuration to create AI provider
+      const { configManager } = await import("../../config/manager.js");
+      const config = configManager.load();
+
+      if (!config.apiKey || !config.provider) {
+        console.log("No AI configuration found. Please configure first:");
+        console.log("  naturecode model");
+        console.log("\nShowing basic help instead:");
+        await this.showSimpleHelp();
+        return;
+      }
+
+      // Create AI provider based on config
+      const { DeepSeekProvider } = await import("../../providers/deepseek.js");
+      const { OpenAIProvider } = await import("../../providers/openai.js");
+      const { OllamaProvider } = await import("../../providers/ollama.js");
+      const { AnthropicProvider } =
+        await import("../../providers/anthropic.js");
+      const { GeminiProvider } = await import("../../providers/gemini.js");
+
+      let provider;
+      switch (config.provider) {
+        case "deepseek":
+          provider = new DeepSeekProvider(config);
+          break;
+        case "openai":
+          provider = new OpenAIProvider(config);
+          break;
+        case "ollama":
+          provider = new OllamaProvider(config);
+          break;
+        case "anthropic":
+          provider = new AnthropicProvider(config);
+          break;
+        case "gemini":
+          provider = new GeminiProvider(config);
+          break;
+        default:
+          throw new Error(`Unsupported provider: ${config.provider}`);
+      }
+
+      // Prepare prompt for AI
+      const prompt = `You are NatureCode AI assistant. A user is asking for help with: "${question}"
+
+Please provide helpful, specific guidance about NatureCode features and usage.
+Focus on practical steps and examples.
+
+NatureCode is a cross-platform terminal AI assistant with these features:
+- Interactive AI sessions (naturecode start)
+- Model configuration (naturecode model)
+- File system operations
+- Git integration
+- Code analysis and review
+- Project management
+- Plugin system
+- Session management
+- Team collaboration
+
+Provide clear, concise help. If the question is about a specific feature, explain how to use it.`;
+
+      console.log("Thinking...\n");
+
+      // Get AI response
+      const response = await provider.generate(prompt);
+      console.log(response);
+    } catch (error) {
+      console.error(`Failed to get AI help: ${error.message}`);
+      console.log("\nShowing basic help instead:");
+      await this.showSimpleHelp();
+    }
+  }
+
   async showSimpleHelp() {
     const helpText = `
 NatureCode - Cross-platform Terminal AI Assistant
@@ -54,7 +135,7 @@ NatureCode - Cross-platform Terminal AI Assistant
 Available Commands:
   start              Start interactive AI session
   model              Configure AI model and API
-  help [question]    Get help for NatureCode
+  help [question]    Get AI help for specific questions
 
 File System:
   read <file>        Read file content

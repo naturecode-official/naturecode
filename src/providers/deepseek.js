@@ -5,7 +5,7 @@ import { formatFileList } from "../utils/filesystem.js";
 const DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
 
 export class DeepSeekProvider extends AIProvider {
-  constructor (config) {
+  constructor(config) {
     super(config);
     // Only validate if model is provided
     if (config.model) {
@@ -16,7 +16,7 @@ export class DeepSeekProvider extends AIProvider {
     this.initializeFileSystem();
   }
 
-  validateConfig (config) {
+  validateConfig(config) {
     if (!config.apiKey || typeof config.apiKey !== "string") {
       throw new Error("DeepSeek API key is required");
     }
@@ -30,15 +30,15 @@ export class DeepSeekProvider extends AIProvider {
     return true;
   }
 
-  getAvailableModels () {
+  getAvailableModels() {
     return DeepSeekProvider.getStaticAvailableModels();
   }
 
-  static getStaticAvailableModels () {
+  static getStaticAvailableModels() {
     return ["deepseek-chat", "deepseek-reasoner"];
   }
 
-  getModelDescription (model) {
+  getModelDescription(model) {
     const descriptions = {
       "deepseek-chat":
         "General purpose chat model (recommended for most tasks)",
@@ -50,7 +50,7 @@ export class DeepSeekProvider extends AIProvider {
   }
 
   // Enhanced generate method that handles file system operations
-  async generate (prompt, options = {}) {
+  async generate(prompt, options = {}) {
     // Check if this is a file system operation
     const fileOp = this._extractFileOperation(prompt);
 
@@ -63,52 +63,52 @@ export class DeepSeekProvider extends AIProvider {
   }
 
   // Handle file system operations
-  async _handleFileSystemOperation (fileOp, originalPrompt) {
+  async _handleFileSystemOperation(fileOp, originalPrompt) {
     try {
       switch (fileOp.operation) {
-      case "list": {
-        const files = await this.listFiles();
-        return `Current directory: ${this.getCurrentDirectory().relative}\n\n${formatFileList(files)}\n\nYou can ask me to read, edit, or create files in this directory.`;
-      }
-
-      case "read": {
-        if (fileOp.potentialPaths.length > 0) {
-          const filePath = fileOp.potentialPaths[0];
-          try {
-            const content = await this.readFile(filePath);
-            return `Content of "${filePath}":\n\`\`\`\n${content}\n\`\`\``;
-          } catch (error) {
-            return `Error: Unable to read "${filePath}": ${error.message}`;
-          }
-        } else {
-          return 'Please specify which file you want to read. For example: "read package.json"';
+        case "list": {
+          const files = await this.listFiles();
+          return `Current directory: ${this.getCurrentDirectory().relative}\n\n${formatFileList(files)}\n\nYou can ask me to read, edit, or create files in this directory.`;
         }
-      }
 
-      case "write":
-      case "create": {
-        // For write/create operations, we need the AI to generate content
-        // This will be handled by the normal AI generation with file context
-        return await this._generateWithFileContext(originalPrompt, {});
-      }
-
-      case "delete": {
-        if (fileOp.potentialPaths.length > 0) {
-          const filePath = fileOp.potentialPaths[0];
-          try {
-            const result = await this.deleteFile(filePath);
-            return `Deleted "${filePath}"${result.backupPath ? ` (backup saved to ${result.backupPath})` : ""}`;
-          } catch (error) {
-            return `Error: Unable to delete "${filePath}": ${error.message}`;
+        case "read": {
+          if (fileOp.potentialPaths.length > 0) {
+            const filePath = fileOp.potentialPaths[0];
+            try {
+              const content = await this.readFile(filePath);
+              return `Content of "${filePath}":\n\`\`\`\n${content}\n\`\`\``;
+            } catch (error) {
+              return `Error: Unable to read "${filePath}": ${error.message}`;
+            }
+          } else {
+            return 'Please specify which file you want to read. For example: "read package.json"';
           }
-        } else {
-          return 'Please specify which file you want to delete. For example: "delete temp.txt"';
         }
-      }
 
-      default:
-        // For unknown or complex file operations, use AI with context
-        return await this._generateWithFileContext(originalPrompt, {});
+        case "write":
+        case "create": {
+          // For write/create operations, we need the AI to generate content
+          // This will be handled by the normal AI generation with file context
+          return await this._generateWithFileContext(originalPrompt, {});
+        }
+
+        case "delete": {
+          if (fileOp.potentialPaths.length > 0) {
+            const filePath = fileOp.potentialPaths[0];
+            try {
+              const result = await this.deleteFile(filePath);
+              return `Deleted "${filePath}"${result.backupPath ? ` (backup saved to ${result.backupPath})` : ""}`;
+            } catch (error) {
+              return `Error: Unable to delete "${filePath}": ${error.message}`;
+            }
+          } else {
+            return 'Please specify which file you want to delete. For example: "delete temp.txt"';
+          }
+        }
+
+        default:
+          // For unknown or complex file operations, use AI with context
+          return await this._generateWithFileContext(originalPrompt, {});
       }
     } catch (error) {
       return `Error: File operation failed: ${error.message}`;
@@ -116,7 +116,7 @@ export class DeepSeekProvider extends AIProvider {
   }
 
   // Generate AI response with file system context
-  async _generateWithFileContext (prompt, options = {}) {
+  async _generateWithFileContext(prompt, options = {}) {
     try {
       // Get current file context to provide to AI
       const fileContext = this.getFileContext();
@@ -168,49 +168,101 @@ export class DeepSeekProvider extends AIProvider {
   }
 
   // Create system prompt with file context
-  _createSystemPrompt (fileContext, currentDir) {
-    return `You are an AI assistant with access to the local file system. You are currently in directory: ${currentDir.relative}
-    
-Current file context:
+  _createSystemPrompt(fileContext, currentDir) {
+    return `You are NatureCode AI assistant with full access to the local file system. You are currently in directory: ${currentDir.relative}
+
+## FILE SYSTEM TOOLS AVAILABLE:
+
+You have direct access to these file operations - USE THEM PROACTIVELY:
+
+### 1. FILE READING:
+- Read any file: "read package.json", "show me index.js", "what's in config.js"
+- You will get the complete file content
+- Use this to understand code, configs, logs, etc.
+
+### 2. FILE WRITING/CREATING:
+- Create new files: "create app.js", "make config.json"
+- Edit existing files: "edit index.html", "update package.json"
+- When asked to create/edit, PROVIDE COMPLETE FILE CONTENT in code blocks
+- Example response format:
+  \`\`\`javascript
+  // Complete file content here
+  console.log("Hello World");
+  \`\`\`
+
+### 3. FILE LISTING:
+- List directory contents: "list files", "what's in this folder", "show directory"
+- See file names, sizes, types
+- Use to understand project structure
+
+### 4. FILE DELETION:
+- Delete files: "delete temp.txt", "remove old.log"
+- Confirm before deleting important files
+
+### 5. DIRECTORY NAVIGATION:
+- Change directory: "cd src", "go to utils", "navigate to documents"
+- Work within project structure
+
+### 6. FILE SEARCH:
+- Find files: "find .js files", "search for config", "locate test files"
+
+## HOW TO HELP USERS:
+
+### BE PROACTIVE:
+- If user asks about code, READ the relevant files first
+- If user wants to create something, PROVIDE the complete code
+- If user has an error, CHECK the related files
+- Don't wait for user to ask - just do it
+
+### EXAMPLES OF GOOD RESPONSES:
+User: "帮我修复这个错误"
+You: [Reads relevant files first, then provides fix with complete code]
+
+User: "创建一个React组件"
+You: [Provides complete component code in code block]
+
+User: "我的项目结构是什么"
+You: [Lists files, then analyzes structure]
+
+User: "更新配置文件"
+You: [Reads current config, then provides updated complete version]
+
+## CURRENT CONTEXT:
 - Working directory: ${currentDir.relative}
 - Recent files: ${fileContext.recentFiles
-    .slice(0, 5)
-    .map((f) => f.name)
-    .join(", ")}
+      .slice(0, 8)
+      .map((f) => f.name)
+      .join(", ")}
 - Recent operations: ${fileContext.fileOperations
-    .slice(-3)
-    .map((op) => op.type)
-    .join(", ")}
+      .slice(-5)
+      .map((op) => `${op.type}${op.path ? ` (${op.path})` : ""}`)
+      .join(", ")}
 
-You can perform these file operations:
-1. List files in current directory
-2. Read file contents
-3. Create/edit files
-4. Delete files
-5. Change directory
-6. Search for files
+## IMPORTANT RULES:
+1. ALWAYS provide COMPLETE file content when creating/editing
+2. Use code blocks with appropriate language tags
+3. Stay within current directory for security
+4. Be proactive - use file tools without being asked
+5. If unsure, read files first to understand context
 
-When user asks about files, provide helpful responses. If they ask to edit/create a file, provide the complete file content in your response.
-Always stay within the current directory and its subdirectories for security.
-
-IMPORTANT: If you're asked to create or edit a file, provide the COMPLETE file content in your response.`;
+You are empowered to directly interact with the file system. Use these tools to provide the best possible help!`;
   }
 
   // Create enhanced user prompt
-  _createEnhancedPrompt (userPrompt, fileContext, currentDir) {
+  _createEnhancedPrompt(userPrompt, fileContext, currentDir) {
     return `User: ${userPrompt}
 
 Current location: ${currentDir.relative}
 Recent files: ${fileContext.recentFiles
-    .slice(0, 3)
-    .map((f) => f.name)
-    .join(", ")}
+      .slice(0, 3)
+      .map((f) => f.name)
+      .join(", ")}
 
 Please help with this request. If it involves file operations, provide the necessary information or perform the operation.`;
   }
 
   // Process AI response to execute any file operations
-  async _processAIResponse (aiResponse, originalPrompt) {
+  async _processAIResponse(aiResponse, originalPrompt) {
     // Check if AI response contains file content to write
     // This is a simple heuristic - in production you'd want more sophisticated parsing
     const codeBlockRegex = /```(?:\w+)?\n([\s\S]*?)\n```/g;
@@ -245,7 +297,7 @@ Please help with this request. If it involves file operations, provide the neces
   }
 
   // Override streamGenerate to also handle file context
-  async *streamGenerate (prompt, options = {}) {
+  async *streamGenerate(prompt, options = {}) {
     // Check if this is a simple file operation
     const fileOp = this._extractFileOperation(prompt);
 
@@ -265,7 +317,7 @@ Please help with this request. If it involves file operations, provide the neces
     yield* await this._streamGenerateWithContext(prompt, options);
   }
 
-  async *_streamGenerateWithContext (prompt, options = {}) {
+  async *_streamGenerateWithContext(prompt, options = {}) {
     try {
       const fileContext = this.getFileContext();
       const currentDir = this.getCurrentDirectory();
