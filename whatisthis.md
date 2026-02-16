@@ -1480,6 +1480,28 @@ naturecode start
 # - 具体建议的解决方案
 ```
 
+### 7. 自定义 API 端点 (base_url)
+
+```bash
+# NatureCode 现在支持自定义 OpenAI 兼容 API 端点
+# 配置时可以通过环境变量或直接编辑配置文件设置 base_url
+
+# 方法1: 通过环境变量
+export NATURECODE_OPENAI_BASE_URL="https://api.openai.com/v1"
+naturecode model
+
+# 方法2: 编辑配置文件
+# 编辑 ~/.naturecode/config.json，添加:
+#   "base_url": "https://api.openai.com/v1"
+
+# 支持的 API 端点类型:
+# - 标准 OpenAI: https://api.openai.com/v1
+# - Azure OpenAI: https://your-resource.openai.azure.com/openai/deployments/your-deployment
+# - OpenRouter: https://openrouter.ai/api/v1
+# - 本地 API: http://localhost:8080/v1
+# - 其他兼容 API: https://your-api.com/v1
+```
+
 # 或使用本地安装
 
 ./local-install.sh
@@ -1498,6 +1520,7 @@ naturecode start
 | sk-proj API 兼容 | ❌ 不支持   | ✅ 完全支持 |
 | GPT-5 模型支持   | ❌ 不支持   | ✅ 完全支持 |
 | 400 错误诊断     | ❌ 有限     | ✅ 详细分析 |
+| 自定义 API 端点  | ❌ 不支持   | ✅ 完全支持 |
 | 版本一致性       | ❌ 1.4.7.3  | ✅ 1.4.8    |
 
 ## 🐛 已知问题与解决方案
@@ -1575,7 +1598,7 @@ brew upgrade curl
 **安装命令**: `curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash`  
 **GitHub 仓库**: https://github.com/naturecode-official/naturecode  
 **主要功能**: 跨平台终端 AI 助手，支持 DeepSeek、OpenAI、Ollama  
-**核心改进**: 模型自定义命名、AI 系统提示增强、帮助系统修复、网络问题解决方案、sk-proj API 兼容、GPT-5 模型支持、详细错误诊断
+**核心改进**: 模型自定义命名、AI 系统提示增强、帮助系统修复、网络问题解决方案、sk-proj API 兼容、GPT-5 模型支持、详细错误诊断、自定义 API 端点支持
 
 ## 🎉 v1.4.8 版本亮点
 
@@ -1596,6 +1619,13 @@ brew upgrade curl
 - 增强的 400 错误分析
 - 用户友好的错误消息
 - 具体的解决方案建议
+
+### 🌐 **自定义 API 端点支持**
+
+- 支持自定义 `base_url` 配置
+- 兼容各种 OpenAI 兼容 API
+- 支持 Azure OpenAI、OpenRouter、本地 API 等
+- 智能 URL 构建逻辑
 
 ### 🛠️ **代码质量改进**
 
