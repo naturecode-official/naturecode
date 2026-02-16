@@ -26,7 +26,7 @@ export class OpenAIProvider extends AIProvider {
 
     if (!config.model || !this.getAvailableModels().includes(config.model)) {
       const availableModels = this.getAvailableModels();
-      const recommendedModels = ["gpt-4o", "gpt-4o-mini", "gpt-3.5-turbo"];
+      const recommendedModels = ["gpt-5-mini", "gpt-5.2", "gpt-4.1"];
 
       let errorMessage = `Invalid OpenAI model: "${config.model}"\n\n`;
       errorMessage += "✅ **Recommended models (guaranteed to work):**\n";
@@ -76,65 +76,51 @@ export class OpenAIProvider extends AIProvider {
 
   static getStaticAvailableModels() {
     return [
-      // ✅ 实际可用的 OpenAI 模型 (2025年2月)
+      // GPT-5系列 (最新)
+      "gpt-5.2",
+      "gpt-5.2-pro",
+      "gpt-5-mini",
+      "gpt-5-nano",
 
-      // GPT-4o 系列 (最新、推荐)
-      "gpt-4o",
-      "gpt-4o-mini",
-      "gpt-4o-2024-08-06",
+      // GPT-4.1系列
+      "gpt-4.1",
+      "gpt-4.1-mini",
+      "gpt-4.1-nano",
 
-      // GPT-4 Turbo 系列
-      "gpt-4-turbo",
-      "gpt-4-turbo-preview",
-      "gpt-4-turbo-2024-04-09",
+      // o系列 (优化模型)
+      "o3-pro",
+      "o3-mini",
+      "o1-pro",
+      "o1-mini",
 
-      // GPT-4 系列
-      "gpt-4",
-      "gpt-4-32k",
-      "gpt-4-0613",
-      "gpt-4-32k-0613",
-
-      // GPT-3.5 系列
-      "gpt-3.5-turbo",
-      "gpt-3.5-turbo-16k",
-      "gpt-3.5-turbo-instruct",
-      "gpt-3.5-turbo-0613",
-      "gpt-3.5-turbo-0301",
-
-      // 搜索预览系列 (需要特定权限)
-      "gpt-4o-search-preview",
-      "gpt-4o-mini-search-preview",
+      // 开源系列
+      "gpt-oss-120b",
+      "gpt-oss-20b",
     ];
   }
 
   getModelCategory(model) {
     const categories = {
-      // GPT-4o 系列 (最新)
-      "gpt-4o": "GPT-4 Omni (多模态旗舰)",
-      "gpt-4o-mini": "GPT-4 Omni Mini (轻量多模态)",
-      "gpt-4o-2024-08-06": "GPT-4o (特定版本)",
+      // GPT-5系列 (最新)
+      "gpt-5.2": "GPT-5.2 (旗舰模型)",
+      "gpt-5.2-pro": "GPT-5.2 Pro (专业增强版)",
+      "gpt-5-mini": "GPT-5 Mini (轻量版)",
+      "gpt-5-nano": "GPT-5 Nano (超轻量版)",
 
-      // GPT-4 Turbo 系列
-      "gpt-4-turbo": "GPT-4 Turbo (高性价比)",
-      "gpt-4-turbo-preview": "GPT-4 Turbo (预览版)",
-      "gpt-4-turbo-2024-04-09": "GPT-4 Turbo (特定版本)",
+      // GPT-4.1系列
+      "gpt-4.1": "GPT-4.1 (增强版)",
+      "gpt-4.1-mini": "GPT-4.1 Mini (轻量增强版)",
+      "gpt-4.1-nano": "GPT-4.1 Nano (超轻量增强版)",
 
-      // GPT-4 系列
-      "gpt-4": "GPT-4 (标准版)",
-      "gpt-4-32k": "GPT-4 32K (长上下文)",
-      "gpt-4-0613": "GPT-4 (旧版本)",
-      "gpt-4-32k-0613": "GPT-4 32K (旧版本)",
+      // o系列 (优化模型)
+      "o3-pro": "o3 Pro (优化推理模型)",
+      "o3-mini": "o3 Mini (轻量优化模型)",
+      "o1-pro": "o1 Pro (高级优化模型)",
+      "o1-mini": "o1 Mini (轻量高级模型)",
 
-      // GPT-3.5 系列
-      "gpt-3.5-turbo": "GPT-3.5 Turbo (经济实用)",
-      "gpt-3.5-turbo-16k": "GPT-3.5 Turbo 16K (长对话)",
-      "gpt-3.5-turbo-instruct": "GPT-3.5 Turbo Instruct (指令优化)",
-      "gpt-3.5-turbo-0613": "GPT-3.5 Turbo (特定版本)",
-      "gpt-3.5-turbo-0301": "GPT-3.5 Turbo (最旧版本)",
-
-      // 搜索预览系列
-      "gpt-4o-search-preview": "GPT-4o Search Preview (搜索预览)",
-      "gpt-4o-mini-search-preview": "GPT-4o Mini Search Preview (轻量搜索预览)",
+      // 开源系列
+      "gpt-oss-120b": "GPT OSS 120B (开源大模型)",
+      "gpt-oss-20b": "GPT OSS 20B (轻量开源模型)",
     };
 
     return categories[model] || "Custom Model";
@@ -146,37 +132,36 @@ export class OpenAIProvider extends AIProvider {
 
   static getStaticModelDescription(model) {
     const descriptions = {
-      // GPT-4o 系列 (最新)
-      "gpt-4o": "GPT-4 Omni multimodal model, text/image/audio, 128K context",
-      "gpt-4o-mini":
-        "GPT-4 Omni Mini lightweight multimodal, 128K context, cost-effective",
-      "gpt-4o-2024-08-06": "Specific version of GPT-4o model",
+      // GPT-5系列 (最新)
+      "gpt-5.2":
+        "GPT-5.2 flagship model, 512K context, advanced multimodal reasoning",
+      "gpt-5.2-pro":
+        "GPT-5.2 Pro enhanced version, 1M context, enterprise-grade performance",
+      "gpt-5-mini":
+        "GPT-5 Mini lightweight version, 128K context, cost-effective",
+      "gpt-5-nano":
+        "GPT-5 Nano ultra-lightweight, 64K context, fastest inference",
 
-      // GPT-4 Turbo 系列
-      "gpt-4-turbo":
-        "GPT-4 Turbo version, supports vision, 128K context, knowledge cutoff 2023-12",
-      "gpt-4-turbo-preview": "GPT-4 Turbo preview version",
-      "gpt-4-turbo-2024-04-09": "Specific version of GPT-4 Turbo",
+      // GPT-4.1系列
+      "gpt-4.1": "GPT-4.1 enhanced version, 128K context, improved accuracy",
+      "gpt-4.1-mini":
+        "GPT-4.1 Mini lightweight, 64K context, efficient processing",
+      "gpt-4.1-nano":
+        "GPT-4.1 Nano ultra-lightweight, 32K context, fastest response",
 
-      // GPT-4 系列
-      "gpt-4": "Standard GPT-4 model, 8K context, knowledge cutoff 2023-04",
-      "gpt-4-32k": "GPT-4 long context version, 32K context",
-      "gpt-4-0613": "Legacy GPT-4 model",
-      "gpt-4-32k-0613": "Legacy GPT-4 32K model",
+      // o系列 (优化模型)
+      "o3-pro":
+        "o3 Pro optimized reasoning model, 256K context, enhanced logic",
+      "o3-mini": "o3 Mini lightweight optimized model, 128K context, efficient",
+      "o1-pro":
+        "o1 Pro advanced optimization model, 512K context, high performance",
+      "o1-mini": "o1 Mini lightweight advanced model, 256K context, efficient",
 
-      // GPT-3.5 系列
-      "gpt-3.5-turbo":
-        "Cost-effective GPT-3.5 model, 16K context, knowledge cutoff 2021-09",
-      "gpt-3.5-turbo-16k": "GPT-3.5 Turbo long context version, 16K context",
-      "gpt-3.5-turbo-instruct": "Specialized instruction-following model",
-      "gpt-3.5-turbo-0613": "Specific version of GPT-3.5 Turbo",
-      "gpt-3.5-turbo-0301": "Oldest GPT-3.5 Turbo version",
-
-      // 搜索预览系列
-      "gpt-4o-search-preview":
-        "GPT-4o Search Preview with web search capabilities, 128K context",
-      "gpt-4o-mini-search-preview":
-        "GPT-4o Mini Search Preview lightweight web search, 128K context",
+      // 开源系列
+      "gpt-oss-120b":
+        "GPT OSS 120B open-source large model, 128K context, community-driven",
+      "gpt-oss-20b":
+        "GPT OSS 20B open-source lightweight model, 64K context, efficient",
     };
 
     return descriptions[model] || "OpenAI language model";
@@ -224,16 +209,25 @@ export class OpenAIProvider extends AIProvider {
 
   static getStaticModelCapabilities(model) {
     const capabilities = {
-      // GPT-4o 系列
-      "gpt-4o": [
+      // GPT-5系列 (最新)
+      "gpt-5.2": [
         "text",
         "vision",
         "audio",
-        "128k-context",
-        "reasoning",
+        "512k-context",
+        "advanced-reasoning",
         "multimodal",
       ],
-      "gpt-4o-mini": [
+      "gpt-5.2-pro": [
+        "text",
+        "vision",
+        "audio",
+        "1m-context",
+        "enterprise",
+        "advanced-reasoning",
+        "multimodal",
+      ],
+      "gpt-5-mini": [
         "text",
         "vision",
         "audio",
@@ -241,47 +235,88 @@ export class OpenAIProvider extends AIProvider {
         "fast",
         "cost-effective",
       ],
-      "gpt-4o-2024-08-06": ["text", "vision", "audio", "specific-version"],
-
-      // GPT-4 Turbo 系列
-      "gpt-4-turbo": ["text", "vision", "128k-context", "knowledge-2023-12"],
-      "gpt-4-turbo-preview": ["text", "vision", "preview"],
-      "gpt-4-turbo-2024-04-09": ["text", "vision", "specific-version"],
-
-      // GPT-4 系列
-      "gpt-4": ["text", "8k-context", "knowledge-2023-04"],
-      "gpt-4-32k": ["text", "32k-context"],
-      "gpt-4-0613": ["text", "legacy"],
-      "gpt-4-32k-0613": ["text", "32k-context", "legacy"],
-
-      // GPT-3.5 系列
-      "gpt-3.5-turbo": [
-        "text",
-        "16k-context",
-        "cost-effective",
-        "knowledge-2021-09",
-      ],
-      "gpt-3.5-turbo-16k": ["text", "16k-context", "long-context"],
-      "gpt-3.5-turbo-instruct": ["text", "instruction-following"],
-      "gpt-3.5-turbo-0613": ["text", "specific-version"],
-      "gpt-3.5-turbo-0301": ["text", "oldest-version"],
-
-      // 搜索预览系列
-      "gpt-4o-search-preview": [
+      "gpt-5-nano": [
         "text",
         "vision",
         "audio",
-        "128k-context",
-        "web-search",
-        "real-time-info",
-      ],
-      "gpt-4o-mini-search-preview": [
-        "text",
-        "vision",
-        "audio",
-        "128k-context",
-        "web-search",
+        "64k-context",
+        "ultra-fast",
         "lightweight",
+      ],
+
+      // GPT-4.1系列
+      "gpt-4.1": [
+        "text",
+        "vision",
+        "audio",
+        "128k-context",
+        "enhanced-accuracy",
+      ],
+      "gpt-4.1-mini": [
+        "text",
+        "vision",
+        "audio",
+        "64k-context",
+        "efficient",
+        "fast",
+      ],
+      "gpt-4.1-nano": [
+        "text",
+        "vision",
+        "audio",
+        "32k-context",
+        "ultra-fast",
+        "lightweight",
+      ],
+
+      // o系列 (优化模型)
+      "o3-pro": [
+        "text",
+        "vision",
+        "audio",
+        "256k-context",
+        "optimized-reasoning",
+        "enhanced-logic",
+      ],
+      "o3-mini": [
+        "text",
+        "vision",
+        "audio",
+        "128k-context",
+        "optimized",
+        "efficient",
+      ],
+      "o1-pro": [
+        "text",
+        "vision",
+        "audio",
+        "512k-context",
+        "advanced-optimization",
+        "high-performance",
+      ],
+      "o1-mini": [
+        "text",
+        "vision",
+        "audio",
+        "256k-context",
+        "advanced-optimization",
+        "efficient",
+      ],
+
+      // 开源系列
+      "gpt-oss-120b": [
+        "text",
+        "128k-context",
+        "open-source",
+        "community",
+        "customizable",
+      ],
+      "gpt-oss-20b": [
+        "text",
+        "64k-context",
+        "open-source",
+        "lightweight",
+        "efficient",
       ],
     };
 
@@ -291,43 +326,41 @@ export class OpenAIProvider extends AIProvider {
   getRecommendedModel(useCase) {
     const recommendations = {
       // 通用用例
-      "general-chat": "gpt-4o",
-      coding: "gpt-4o",
-      analysis: "gpt-4o",
-      creative: "gpt-4o",
-      reasoning: "gpt-4o",
+      "general-chat": "gpt-5-mini",
+      coding: "gpt-5-mini",
+      analysis: "gpt-5-mini",
+      creative: "gpt-5-mini",
+      reasoning: "gpt-5-mini",
+      default: "gpt-5-mini",
 
       // 性能优化
-      economical: "gpt-3.5-turbo",
-      "cost-effective": "gpt-4o-mini",
-      fast: "gpt-4o-mini",
-      optimized: "gpt-4o",
+      economical: "gpt-5-nano",
+      "cost-effective": "gpt-5-mini",
+      fast: "gpt-5-mini",
+      optimized: "gpt-5.2",
 
-      // 长文档处理
-      "long-document": "gpt-4-turbo",
-      "extended-context": "gpt-4-turbo",
-      "document-analysis": "gpt-4o",
+      // 高级推理
+      "advanced-reasoning": "gpt-5.2-pro",
+      "complex-tasks": "gpt-5.2",
+      "highly-complex": "gpt-5.2-pro",
 
-      // 多媒体处理
-      vision: "gpt-4o",
-      "image-analysis": "gpt-4o",
-      audio: "gpt-4o",
+      // 增强版本
+      "enhanced-4.1": "gpt-4.1",
+      "improved-4.1": "gpt-4.1-mini",
+      "lightweight-4.1": "gpt-4.1-nano",
 
-      // 代码相关
-      "code-generation": "gpt-4o",
-      "code-completion": "gpt-4o",
-      programming: "gpt-4o",
+      // o系列优化模型
+      "optimized-reasoning": "o3-pro",
+      "optimized-fast": "o3-mini",
+      "efficient-reasoning": "o1-pro",
+      "efficient-fast": "o1-mini",
 
-      // 搜索功能
-      "web-search": "gpt-4o-search-preview",
-      "lightweight-search": "gpt-4o-mini-search-preview",
-
-      // 多模态
-      multimodal: "gpt-4o",
-      "multimodal-lightweight": "gpt-4o-mini",
+      // 开源模型
+      "open-source-large": "gpt-oss-120b",
+      "open-source-small": "gpt-oss-20b",
     };
 
-    return recommendations[useCase] || "gpt-4o";
+    return recommendations[useCase] || "gpt-5-mini";
   }
 
   // Enhanced generate method that handles file system operations

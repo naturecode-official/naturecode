@@ -37,80 +37,57 @@ export class AnthropicProvider extends AIProvider {
   static getStaticAvailableModels() {
     return [
       // Claude 4.6 系列
-      "claude-opus-4.6",
-
-      // Claude 4.5 系列
-      "claude-opus-4.5",
-      "claude-sonnet-4.5",
-      "claude-haiku-4.5",
+      "claude-opus-4-6",
 
       // Claude 4.1 系列
-      "claude-opus-4.1",
+      "claude-opus-4-1-20250805",
+      "claude-opus-4-0",
 
-      // Claude 4 系列
-      "claude-opus-4",
-      "claude-sonnet-4",
+      // Claude 4.5 系列
+      "claude-sonnet-4-5-20250929",
+      "claude-sonnet-4-0",
+
+      // Claude 4.5 系列 - Haiku
+      "claude-haiku-4-5-20251001",
 
       // Claude 3.7 系列
-      "claude-3.7-sonnet",
+      "claude-3-7-sonnet-20250219",
 
       // Claude 3.5 系列
-      "claude-3.5-haiku",
-
-      // Claude 3 系列
-      "claude-3-haiku",
-
-      // 现有模型 (保持向后兼容)
       "claude-3-5-sonnet-20241022",
       "claude-3-5-haiku-20241022",
-      "claude-3-opus-20240229",
-      "claude-3-sonnet-20240229",
-      "claude-3-haiku-20240307",
     ];
   }
 
   static getStaticModelDescriptions() {
     return {
       // Claude 4.6 系列
-      "claude-opus-4.6":
+      "claude-opus-4-6":
         "Claude Opus 4.6 - Latest flagship model with advanced reasoning",
 
-      // Claude 4.5 系列
-      "claude-opus-4.5":
-        "Claude Opus 4.5 - Enhanced flagship model for complex tasks",
-      "claude-sonnet-4.5":
-        "Claude Sonnet 4.5 - Balanced performance for most use cases",
-      "claude-haiku-4.5":
-        "Claude Haiku 4.5 - Fast and efficient lightweight model",
-
       // Claude 4.1 系列
-      "claude-opus-4.1": "Claude Opus 4.1 - Previous generation flagship model",
+      "claude-opus-4-1-20250805":
+        "Claude Opus 4.1 (2025-08-05) - Previous generation flagship model",
+      "claude-opus-4-0": "Claude Opus 4.0 - Standard flagship model",
 
-      // Claude 4 系列
-      "claude-opus-4": "Claude Opus 4 - Standard flagship model",
-      "claude-sonnet-4": "Claude Sonnet 4 - Standard balanced model",
+      // Claude 4.5 系列
+      "claude-sonnet-4-5-20250929":
+        "Claude Sonnet 4.5 (2025-09-29) - Balanced performance for most use cases",
+      "claude-sonnet-4-0": "Claude Sonnet 4.0 - Standard balanced model",
+
+      // Claude 4.5 系列 - Haiku
+      "claude-haiku-4-5-20251001":
+        "Claude Haiku 4.5 (2025-10-01) - Fast and efficient lightweight model",
 
       // Claude 3.7 系列
-      "claude-3.7-sonnet": "Claude 3.7 Sonnet - Enhanced 3.5 series model",
+      "claude-3-7-sonnet-20250219":
+        "Claude 3.7 Sonnet (2025-02-19) - Enhanced 3.5 series model",
 
       // Claude 3.5 系列
-      "claude-3.5-haiku":
-        "Claude 3.5 Haiku - Fast and efficient 3.5 series model",
-
-      // Claude 3 系列
-      "claude-3-haiku": "Claude 3 Haiku - Original fast lightweight model",
-
-      // 现有模型 (保持向后兼容)
       "claude-3-5-sonnet-20241022":
-        "Claude 3.5 Sonnet - Most capable model for complex tasks",
+        "Claude 3.5 Sonnet (2024-10-22) - Most capable model for complex tasks",
       "claude-3-5-haiku-20241022":
-        "Claude 3.5 Haiku - Fast and efficient for simple tasks",
-      "claude-3-opus-20240229":
-        "Claude 3 Opus - Most powerful model for highly complex tasks",
-      "claude-3-sonnet-20240229":
-        "Claude 3 Sonnet - Balanced model for most use cases",
-      "claude-3-haiku-20240307":
-        "Claude 3 Haiku - Fastest model for simple queries",
+        "Claude 3.5 Haiku (2024-10-22) - Fast and efficient for simple tasks",
     };
   }
 
@@ -122,7 +99,7 @@ export class AnthropicProvider extends AIProvider {
   static getStaticModelCapabilities(model) {
     const capabilities = {
       // Claude 4.6 系列
-      "claude-opus-4.6": [
+      "claude-opus-4-6": [
         "text",
         "chat",
         "advanced-reasoning",
@@ -130,50 +107,48 @@ export class AnthropicProvider extends AIProvider {
         "flagship",
       ],
 
-      // Claude 4.5 系列
-      "claude-opus-4.5": [
+      // Claude 4.1 系列
+      "claude-opus-4-1-20250805": [
         "text",
         "chat",
         "advanced-reasoning",
-        "enhanced",
-        "flagship",
+        "previous-generation",
       ],
-      "claude-sonnet-4.5": [
+      "claude-opus-4-0": [
+        "text",
+        "chat",
+        "advanced-reasoning",
+        "standard-flagship",
+      ],
+
+      // Claude 4.5 系列
+      "claude-sonnet-4-5-20250929": [
         "text",
         "chat",
         "balanced",
         "general-purpose",
         "recommended",
       ],
-      "claude-haiku-4.5": ["text", "chat", "fast", "lightweight", "efficient"],
+      "claude-sonnet-4-0": ["text", "chat", "balanced", "standard"],
 
-      // Claude 4.1 系列
-      "claude-opus-4.1": [
+      // Claude 4.5 系列 - Haiku
+      "claude-haiku-4-5-20251001": [
         "text",
         "chat",
-        "advanced-reasoning",
-        "previous-generation",
+        "fast",
+        "lightweight",
+        "efficient",
       ],
-
-      // Claude 4 系列
-      "claude-opus-4": [
-        "text",
-        "chat",
-        "advanced-reasoning",
-        "standard-flagship",
-      ],
-      "claude-sonnet-4": ["text", "chat", "balanced", "standard"],
 
       // Claude 3.7 系列
-      "claude-3.7-sonnet": ["text", "chat", "enhanced-3.5", "improved"],
+      "claude-3-7-sonnet-20250219": [
+        "text",
+        "chat",
+        "enhanced-3.5",
+        "improved",
+      ],
 
       // Claude 3.5 系列
-      "claude-3.5-haiku": ["text", "chat", "fast", "efficient", "3.5-series"],
-
-      // Claude 3 系列
-      "claude-3-haiku": ["text", "chat", "fast", "lightweight", "original"],
-
-      // 现有模型 (保持向后兼容)
       "claude-3-5-sonnet-20241022": [
         "text",
         "chat",
@@ -187,14 +162,6 @@ export class AnthropicProvider extends AIProvider {
         "simple-tasks",
         "efficient",
       ],
-      "claude-3-opus-20240229": ["text", "chat", "powerful", "complex-tasks"],
-      "claude-3-sonnet-20240229": [
-        "text",
-        "chat",
-        "balanced",
-        "general-purpose",
-      ],
-      "claude-3-haiku-20240307": ["text", "chat", "fastest", "simple-queries"],
     };
 
     return capabilities[model] || ["text", "chat"];
@@ -202,43 +169,40 @@ export class AnthropicProvider extends AIProvider {
 
   getRecommendedModel(useCase) {
     const recommendations = {
-      // 通用用例 - 使用 claude-sonnet-4.5 作为默认回退
-      "general-chat": "claude-sonnet-4.5",
-      coding: "claude-sonnet-4.5",
-      analysis: "claude-sonnet-4.5",
-      creative: "claude-sonnet-4.5",
-      reasoning: "claude-sonnet-4.5",
-      default: "claude-sonnet-4.5",
+      // 通用用例 - 使用 claude-haiku-4-5-20251001 作为默认回退 (根据配置管理器)
+      "general-chat": "claude-haiku-4-5-20251001",
+      coding: "claude-haiku-4-5-20251001",
+      analysis: "claude-haiku-4-5-20251001",
+      creative: "claude-haiku-4-5-20251001",
+      reasoning: "claude-haiku-4-5-20251001",
+      default: "claude-haiku-4-5-20251001",
 
       // 高级推理
-      "advanced-reasoning": "claude-opus-4.6",
-      "complex-tasks": "claude-opus-4.5",
-      "highly-complex": "claude-opus-4.6",
+      "advanced-reasoning": "claude-opus-4-6",
+      "complex-tasks": "claude-opus-4-1-20250805",
+      "highly-complex": "claude-opus-4-6",
 
       // 平衡性能
-      "balanced-performance": "claude-sonnet-4.5",
-      "general-purpose": "claude-sonnet-4.5",
-      "most-use-cases": "claude-sonnet-4.5",
+      "balanced-performance": "claude-sonnet-4-5-20250929",
+      "general-purpose": "claude-sonnet-4-5-20250929",
+      "most-use-cases": "claude-sonnet-4-5-20250929",
 
       // 快速响应
-      fast: "claude-haiku-4.5",
-      "lightweight-tasks": "claude-haiku-4.5",
-      "simple-queries": "claude-haiku-4.5",
-      efficient: "claude-haiku-4.5",
+      fast: "claude-haiku-4-5-20251001",
+      "lightweight-tasks": "claude-haiku-4-5-20251001",
+      "simple-queries": "claude-haiku-4-5-20251001",
+      efficient: "claude-haiku-4-5-20251001",
 
       // 增强版本
-      "enhanced-3.5": "claude-3.7-sonnet",
-      "improved-3.5": "claude-3.7-sonnet",
+      "enhanced-3.5": "claude-3-7-sonnet-20250219",
+      "improved-3.5": "claude-3-7-sonnet-20250219",
 
       // 现有模型兼容
       "legacy-complex": "claude-3-5-sonnet-20241022",
       "legacy-fast": "claude-3-5-haiku-20241022",
-      "legacy-powerful": "claude-3-opus-20240229",
-      "legacy-balanced": "claude-3-sonnet-20240229",
-      "legacy-fastest": "claude-3-haiku-20240307",
     };
 
-    return recommendations[useCase] || "claude-sonnet-4.5";
+    return recommendations[useCase] || "claude-haiku-4-5-20251001";
   }
 
   // Enhanced generate method that handles file system operations
@@ -335,7 +299,7 @@ export class AnthropicProvider extends AIProvider {
       const response = await axios.post(
         ANTHROPIC_API_URL,
         {
-          model: this.config.model || "claude-3-5-sonnet-20241022",
+          model: this.config.model || "claude-haiku-4-5-20251001",
           max_tokens: mergedOptions.max_tokens,
           temperature: mergedOptions.temperature,
           system: systemPrompt,
@@ -391,7 +355,7 @@ export class AnthropicProvider extends AIProvider {
       const response = await axios.post(
         ANTHROPIC_API_URL,
         {
-          model: this.config.model || "claude-3-5-sonnet-20241022",
+          model: this.config.model || "claude-haiku-4-5-20251001",
           max_tokens: mergedOptions.max_tokens,
           temperature: mergedOptions.temperature,
           system: systemPrompt,

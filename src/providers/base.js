@@ -416,7 +416,7 @@ You are empowered to directly interact with the file system. Use these tools to 
     detailedMessage += "💡 **Quick Fixes**:\n";
     detailedMessage += "   • Run: naturecode model (reconfigure)\n";
     detailedMessage += "   • Choose DeepSeek (free, no API key issues)\n";
-    detailedMessage += "   • Use model: gpt-3.5-turbo (most compatible)\n";
+    detailedMessage += "   • Use model: gpt-5-mini (most compatible)\n";
     detailedMessage += "   • Check: platform.openai.com for account status\n\n";
 
     detailedMessage += "📋 **Your Current Config**:\n";

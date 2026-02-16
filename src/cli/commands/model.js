@@ -158,11 +158,11 @@ export async function runModelConfiguration() {
         if (answers.provider === "deepseek") {
           return currentConfig.model || "deepseek-chat";
         } else if (answers.provider === "openai") {
-          return currentConfig.model || "gpt-4o";
+          return currentConfig.model || "gpt-5-mini";
         } else if (answers.provider === "anthropic") {
-          return currentConfig.model || "claude-sonnet-4.5";
+          return currentConfig.model || "claude-haiku-4-5-20251001";
         } else if (answers.provider === "gemini") {
-          return currentConfig.model || "gemini-3-pro";
+          return currentConfig.model || "gemini-2.5-flash";
         } else if (answers.provider === "ollama") {
           return currentConfig.model || "llama3.2:latest";
         }
@@ -508,11 +508,11 @@ export async function runModelConfiguration() {
     // Add fallback model for providers if selected model fails
     fallbackModel:
       answers.provider === "openai"
-        ? "gpt-4o"
+        ? "gpt-5-mini"
         : answers.provider === "anthropic"
-          ? "claude-3-5-haiku-20241022"
+          ? "claude-haiku-4-5-20251001"
           : answers.provider === "gemini"
-            ? "gemini-3-pro"
+            ? "gemini-2.5-flash"
             : undefined,
   };
 

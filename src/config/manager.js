@@ -19,39 +19,36 @@ const DEFAULT_CONFIG = {
 
 // 智能默认模型选择
 const SMART_DEFAULT_MODELS = {
-  openai: "gpt-4o-mini", // 免费、快速、可靠的默认选择
+  openai: "gpt-5-mini", // 最新、快速、可靠的默认选择
   deepseek: "deepseek-chat", // 免费、中文优化
   ollama: "llama3.2", // 本地运行
-  anthropic: "claude-3-haiku", // 快速、便宜
-  gemini: "gemini-1.5-flash", // 免费、快速
+  anthropic: "claude-haiku-4-5-20251001", // 快速、便宜
+  gemini: "gemini-2.5-flash", // 快速、高效
 };
 
 const VALID_PROVIDERS = ["deepseek", "openai", "ollama", "anthropic", "gemini"];
 const DEEPSEEK_MODELS = ["deepseek-chat", "deepseek-reasoner"];
 const OPENAI_MODELS = [
-  // GPT-4o系列 (当前最新)
-  "gpt-4o",
-  "gpt-4o-mini",
-  "gpt-4o-2024-08-06",
+  // GPT-5系列 (最新)
+  "gpt-5.2",
+  "gpt-5.2-pro",
+  "gpt-5-mini",
+  "gpt-5-nano",
 
-  // GPT-4系列
-  "gpt-4-turbo",
-  "gpt-4-turbo-2024-04-09",
-  "gpt-4",
-  "gpt-4-32k",
-  "gpt-4-0613",
-  "gpt-4-32k-0613",
+  // GPT-4.1系列
+  "gpt-4.1",
+  "gpt-4.1-mini",
+  "gpt-4.1-nano",
 
-  // GPT-3.5系列
-  "gpt-3.5-turbo",
-  "gpt-3.5-turbo-16k",
-  "gpt-3.5-turbo-instruct",
-  "gpt-3.5-turbo-0613",
-  "gpt-3.5-turbo-0301",
+  // o系列 (优化模型)
+  "o3-pro",
+  "o3-mini",
+  "o1-pro",
+  "o1-mini",
 
-  // 搜索预览系列 (需要特定权限)
-  "gpt-4o-search-preview",
-  "gpt-4o-mini-search-preview",
+  // 开源系列
+  "gpt-oss-120b",
+  "gpt-oss-20b",
 ];
 
 const OLLAMA_MODELS = [
@@ -76,67 +73,26 @@ const OLLAMA_MODELS = [
 ];
 
 const ANTHROPIC_MODELS = [
-  // Claude 4.6 系列
-  "claude-opus-4.6",
-
-  // Claude 4.5 系列
-  "claude-opus-4.5",
-  "claude-sonnet-4.5",
-  "claude-haiku-4.5",
-
-  // Claude 4.1 系列
-  "claude-opus-4.1",
-
-  // Claude 4 系列
-  "claude-opus-4",
-  "claude-sonnet-4",
-
-  // Claude 3.7 系列
-  "claude-3.7-sonnet",
-
-  // Claude 3.5 系列
-  "claude-3.5-haiku",
-
-  // Claude 3 系列
-  "claude-3-haiku",
-
-  // 现有模型 (保持向后兼容)
+  // Claude 最新系列
+  "claude-opus-4-6",
+  "claude-opus-4-1-20250805",
+  "claude-opus-4-0",
+  "claude-sonnet-4-5-20250929",
+  "claude-sonnet-4-0",
+  "claude-haiku-4-5-20251001",
+  "claude-3-7-sonnet-20250219",
   "claude-3-5-sonnet-20241022",
   "claude-3-5-haiku-20241022",
-  "claude-3-opus-20240229",
-  "claude-3-sonnet-20240229",
-  "claude-3-haiku-20240307",
 ];
 
 const GEMINI_MODELS = [
-  // Gemini 3 Series (Latest)
-  "gemini-3-pro",
-  "gemini-3-deep-think",
-  "gemini-3-flash",
-
-  // Gemini 2.5 Series
+  // Gemini 最新系列
+  "gemini-3-pro-preview",
+  "gemini-3-flash-preview",
   "gemini-2.5-pro",
   "gemini-2.5-flash",
   "gemini-2.5-flash-lite",
-  "gemini-2.5-computer-use",
-
-  // Gemini 2.0 Series
-  "gemini-2.0-flash",
-  "gemini-2.0-pro",
-  "gemini-2.0-flash-thinking",
-
-  // Open Source Gemma Series
-  "gemma-3n",
-  "gemma-3",
-  "gemini-2",
-  "codegemma",
-  "shieldgemma-2",
-
-  // Legacy models (keep for backward compatibility)
-  "gemini-2.0-flash-exp",
-  "gemini-1.5-flash",
-  "gemini-1.5-pro",
-  "gemini-1.0-pro",
+  "gemini-2.5-flash-image",
 ];
 
 class ConfigManager {

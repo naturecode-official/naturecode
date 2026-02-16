@@ -37,46 +37,25 @@ export class GeminiProvider extends AIProvider {
 
   static getStaticAvailableModels() {
     return [
-      // Gemini 3 Series (Latest)
-      "gemini-3-pro",
-      "gemini-3-deep-think",
-      "gemini-3-flash",
+      // Gemini 3 Series (Preview)
+      "gemini-3-pro-preview",
+      "gemini-3-flash-preview",
 
       // Gemini 2.5 Series
       "gemini-2.5-pro",
       "gemini-2.5-flash",
       "gemini-2.5-flash-lite",
-      "gemini-2.5-computer-use",
-
-      // Gemini 2.0 Series
-      "gemini-2.0-flash",
-      "gemini-2.0-pro",
-      "gemini-2.0-flash-thinking",
-
-      // Open Source Gemma Series
-      "gemma-3n",
-      "gemma-3",
-      "gemini-2",
-      "codegemma",
-      "shieldgemma-2",
-
-      // Legacy models (keep for backward compatibility)
-      "gemini-2.0-flash-exp",
-      "gemini-1.5-flash",
-      "gemini-1.5-pro",
-      "gemini-1.0-pro",
+      "gemini-2.5-flash-image",
     ];
   }
 
   static getStaticModelDescriptions() {
     return {
-      // Gemini 3 Series (Latest)
-      "gemini-3-pro":
-        "Gemini 3 Pro - Most advanced model for complex reasoning and analysis (Recommended)",
-      "gemini-3-deep-think":
-        "Gemini 3 Deep Think - Specialized for deep analytical thinking and problem solving",
-      "gemini-3-flash":
-        "Gemini 3 Flash - Fast and efficient latest generation model",
+      // Gemini 3 Series (Preview)
+      "gemini-3-pro-preview":
+        "Gemini 3 Pro Preview - Latest preview model for complex reasoning and analysis",
+      "gemini-3-flash-preview":
+        "Gemini 3 Flash Preview - Fast and efficient preview model",
 
       // Gemini 2.5 Series
       "gemini-2.5-pro":
@@ -84,47 +63,8 @@ export class GeminiProvider extends AIProvider {
       "gemini-2.5-flash": "Gemini 2.5 Flash - Balanced speed and capability",
       "gemini-2.5-flash-lite":
         "Gemini 2.5 Flash Lite - Lightweight version for simple tasks",
-      "gemini-2.5-computer-use":
-        "Gemini 2.5 Computer Use - Specialized for computer interaction and automation",
-
-      // Gemini 2.0 Series
-      "gemini-2.0-flash":
-        "Gemini 2.0 Flash - Fast and efficient model for most tasks",
-      "gemini-2.0-pro":
-        "Gemini 2.0 Pro - Professional grade model with strong capabilities",
-      "gemini-2.0-flash-thinking":
-        "Gemini 2.0 Flash Thinking - Enhanced reasoning capabilities",
-
-      // Open Source Gemma Series
-      "gemma-3n":
-        "Gemma 3n - Latest open-source model with enhanced capabilities",
-      "gemma-3": "Gemma 3 - Open-source model for general purpose tasks",
-      "gemini-2": "Gemini 2 - Open-source version of Gemini 2",
-      codegemma: "CodeGemma - Specialized for code generation and analysis",
-      "shieldgemma-2":
-        "ShieldGemma 2 - Security-focused model with enhanced safety features",
-
-      // Legacy models
-      "gemini-2.0-flash-exp":
-        "Gemini 2.0 Flash Experimental - Experimental model with enhanced capabilities",
-      "gemini-1.5-flash": "Gemini 1.5 Flash - Balanced performance and speed",
-      "gemini-1.5-pro": "Gemini 1.5 Pro - Capable model for complex reasoning",
-      "gemini-1.0-pro":
-        "Gemini 1.0 Pro - Original pro model with strong capabilities",
-    };
-  }
-
-  static getStaticModelDescriptions() {
-    return {
-      "gemini-2.0-flash-exp":
-        "Gemini 2.0 Flash Experimental - Latest experimental model with enhanced capabilities",
-      "gemini-2.0-flash":
-        "Gemini 2.0 Flash - Fast and efficient model for most tasks",
-      "gemini-1.5-flash": "Gemini 1.5 Flash - Balanced performance and speed",
-      "gemini-1.5-pro":
-        "Gemini 1.5 Pro - Most capable model for complex reasoning",
-      "gemini-1.0-pro":
-        "Gemini 1.0 Pro - Original pro model with strong capabilities",
+      "gemini-2.5-flash-image":
+        "Gemini 2.5 Flash Image - Specialized for image-related tasks",
     };
   }
 
@@ -134,44 +74,26 @@ export class GeminiProvider extends AIProvider {
 
     // Models with vision capabilities
     const visionModels = [
-      // Gemini 3 Series
-      "gemini-3-pro",
-      "gemini-3-deep-think",
-      "gemini-3-flash",
+      // Gemini 3 Series (Preview)
+      "gemini-3-pro-preview",
+      "gemini-3-flash-preview",
 
       // Gemini 2.5 Series
       "gemini-2.5-pro",
       "gemini-2.5-flash",
       "gemini-2.5-flash-lite",
-      "gemini-2.5-computer-use",
-
-      // Gemini 2.0 Series
-      "gemini-2.0-flash",
-      "gemini-2.0-pro",
-      "gemini-2.0-flash-thinking",
-
-      // Legacy models
-      "gemini-1.5-flash",
-      "gemini-1.5-pro",
-      "gemini-2.0-flash-exp",
+      "gemini-2.5-flash-image",
     ];
 
-    // Models with code capabilities
-    const codeModels = ["codegemma", "gemini-2.5-computer-use"];
-
-    // Models with security/safety capabilities
-    const securityModels = ["shieldgemma-2"];
+    // Models with image capabilities
+    const imageModels = ["gemini-2.5-flash-image"];
 
     if (visionModels.includes(model)) {
       capabilities.push("vision");
     }
 
-    if (codeModels.includes(model)) {
-      capabilities.push("code");
-    }
-
-    if (securityModels.includes(model)) {
-      capabilities.push("security");
+    if (imageModels.includes(model)) {
+      capabilities.push("image");
     }
 
     return capabilities;
@@ -273,7 +195,7 @@ export class GeminiProvider extends AIProvider {
       "For file operations, be precise and follow the user's instructions carefully.";
 
     try {
-      const modelName = this.config.model || "gemini-3-pro";
+      const modelName = this.config.model || "gemini-2.5-flash";
       const apiUrl = `${GEMINI_API_URL}/${modelName}:generateContent?key=${this.config.apiKey}`;
 
       const response = await axios.post(
@@ -364,7 +286,7 @@ export class GeminiProvider extends AIProvider {
       "For file operations, be precise and follow the user's instructions carefully.";
 
     try {
-      const modelName = this.config.model || "gemini-3-pro";
+      const modelName = this.config.model || "gemini-2.5-flash";
       const apiUrl = `${GEMINI_API_URL}/${modelName}:streamGenerateContent?key=${this.config.apiKey}`;
 
       const response = await axios.post(

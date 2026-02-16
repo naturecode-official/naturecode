@@ -1,7 +1,7 @@
 import chalk from "chalk";
 
 export class ErrorHandler {
-  static formatError (error, context = "") {
+  static formatError(error, context = "") {
     const errorMessage = error.message || String(error);
     const errorType = errorMessage.toLowerCase();
 
@@ -102,7 +102,7 @@ export class ErrorHandler {
     };
   }
 
-  static handleError (error, context = "") {
+  static handleError(error, context = "") {
     const formatted = this.formatError(error, context);
 
     console.error("\n" + formatted.userMessage);
@@ -124,12 +124,12 @@ export class ErrorHandler {
     return formatted.exitCode;
   }
 
-  static exitWithError (error, context = "") {
+  static exitWithError(error, context = "") {
     const exitCode = this.handleError(error, context);
     process.exit(exitCode);
   }
 
-  static async withErrorHandling (operation, task, context = "") {
+  static async withErrorHandling(operation, task, context = "") {
     try {
       return await task();
     } catch (error) {
@@ -139,7 +139,7 @@ export class ErrorHandler {
   }
 
   // File system specific error handling
-  static formatFileSystemError (error, operation, filePath) {
+  static formatFileSystemError(error, operation, filePath) {
     const baseError = this.formatError(error, `${operation} "${filePath}"`);
 
     // Add file-specific suggestions
@@ -155,7 +155,7 @@ export class ErrorHandler {
   }
 
   // AI provider specific error handling
-  static formatAIError (error, provider) {
+  static formatAIError(error, provider) {
     const baseError = this.formatError(error, `${provider} API Error`);
 
     // Add provider-specific suggestions
@@ -167,7 +167,7 @@ export class ErrorHandler {
     } else if (provider === "openai") {
       if (error.message.includes("model")) {
         baseError.suggestion =
-          "Please check if the model name is correct. Common models: gpt-3.5-turbo, gpt-4";
+          "Please check if the model name is correct. Common models: gpt-5-mini, gpt-5.2, gpt-4.1";
       }
     }
 
@@ -176,14 +176,14 @@ export class ErrorHandler {
 }
 
 // Convenience functions
-export function handleError (error, context = "") {
+export function handleError(error, context = "") {
   return ErrorHandler.handleError(error, context);
 }
 
-export function exitWithError (error, context = "") {
+export function exitWithError(error, context = "") {
   ErrorHandler.exitWithError(error, context);
 }
 
-export async function withErrorHandling (operation, task, context = "") {
+export async function withErrorHandling(operation, task, context = "") {
   return ErrorHandler.withErrorHandling(operation, task, context);
 }
