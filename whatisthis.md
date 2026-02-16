@@ -1711,3 +1711,60 @@ gemini:
 2. 更新所有提供商支持自定义 API 端点
 3. 修复模型兼容性问题
 4. 改进错误处理和诊断信息
+
+## 🔄 **模型结构调整 (v1.4.9)**
+
+### **开源模型迁移**
+
+为了更合理的模型分类，NatureCode 进行了以下模型结构调整：
+
+#### **从 OpenAI 迁移到 Ollama 的模型**:
+
+- `gpt-oss-120b` → 迁移到 Ollama 提供商
+- `gpt-oss-20b` → 迁移到 Ollama 提供商
+
+**理由**: 这些是开源模型，更适合在本地运行的 Ollama 环境中使用。
+
+#### **新增 Google Gemma 系列模型到 Ollama**:
+
+- `gemma-2b`, `gemma-2b-it`
+- `gemma-7b`, `gemma-7b-it`
+- `gemma-2-9b`, `gemma-2-9b-it`
+- `gemma-2-27b`, `gemma-2-27b-it`
+
+**理由**: Gemma 是 Google 的开源模型系列，适合在 Ollama 中本地运行。
+
+### **更新后的模型分类**
+
+#### **OpenAI 提供商 (云端 API)**:
+
+- GPT-5 系列: `gpt-5.2`, `gpt-5.2-pro`, `gpt-5-mini`, `gpt-5-nano`
+- GPT-4.1 系列: `gpt-4.1`, `gpt-4.1-mini`, `gpt-4.1-nano`
+- o 系列优化模型: `o3-pro`, `o3-mini`, `o1-pro`, `o1-mini`
+
+#### **Ollama 提供商 (本地运行)**:
+
+- Meta 系列: `llama3.2`, `llama3.1`
+- Mistral 系列: `mistral`, `mixtral`
+- 代码生成系列: `codellama`, `deepseek-coder`, `deepseek-chat`
+- 其他模型: `phi`, `qwen`
+- **新增**: GPT 开源系列 (`gpt-oss-120b`, `gpt-oss-20b`)
+- **新增**: Google Gemma 系列 (8个模型)
+
+#### **其他云端提供商**:
+
+- **DeepSeek**: `deepseek-chat`, `deepseek-reasoner`
+- **Anthropic**: Claude 系列 (9个模型)
+- **Gemini**: Gemini 系列 (6个模型)
+
+### **迁移影响**
+
+1. **现有用户**: 如果之前配置了 `gpt-oss-120b` 或 `gpt-oss-20b`，需要重新配置模型
+2. **新用户**: 可以直接在 Ollama 中选择这些开源模型
+3. **向后兼容**: 配置管理器会自动处理模型验证
+
+### **使用建议**
+
+1. **云端服务**: 使用 OpenAI、DeepSeek、Anthropic、Gemini 提供商
+2. **本地运行**: 使用 Ollama 提供商运行开源模型
+3. **性能考虑**: 大模型需要更多计算资源，请根据硬件选择合适模型

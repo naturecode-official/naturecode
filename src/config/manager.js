@@ -45,31 +45,48 @@ const OPENAI_MODELS = [
   "o3-mini",
   "o1-pro",
   "o1-mini",
-
-  // 开源系列
-  "gpt-oss-120b",
-  "gpt-oss-20b",
 ];
 
 const OLLAMA_MODELS = [
+  // Meta 系列
   "llama3.2",
   "llama3.2:latest",
   "llama3.1",
   "llama3.1:latest",
+
+  // Mistral 系列
   "mistral",
   "mistral:latest",
   "mixtral",
   "mixtral:latest",
+
+  // 代码生成系列
   "codellama",
   "codellama:latest",
   "deepseek-coder",
   "deepseek-coder:latest",
   "deepseek-chat",
   "deepseek-chat:latest",
+
+  // 其他模型
   "phi",
   "phi:latest",
   "qwen",
   "qwen:latest",
+
+  // GPT 开源系列 (从 OpenAI 迁移)
+  "gpt-oss-120b",
+  "gpt-oss-20b",
+
+  // Google Gemma 系列
+  "gemma-2b",
+  "gemma-2b-it",
+  "gemma-7b",
+  "gemma-7b-it",
+  "gemma-2-9b",
+  "gemma-2-9b-it",
+  "gemma-2-27b",
+  "gemma-2-27b-it",
 ];
 
 const ANTHROPIC_MODELS = [

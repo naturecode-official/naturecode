@@ -92,10 +92,6 @@ export class OpenAIProvider extends AIProvider {
       "o3-mini",
       "o1-pro",
       "o1-mini",
-
-      // 开源系列
-      "gpt-oss-120b",
-      "gpt-oss-20b",
     ];
   }
 
@@ -117,10 +113,6 @@ export class OpenAIProvider extends AIProvider {
       "o3-mini": "o3 Mini (轻量优化模型)",
       "o1-pro": "o1 Pro (高级优化模型)",
       "o1-mini": "o1 Mini (轻量高级模型)",
-
-      // 开源系列
-      "gpt-oss-120b": "GPT OSS 120B (开源大模型)",
-      "gpt-oss-20b": "GPT OSS 20B (轻量开源模型)",
     };
 
     return categories[model] || "Custom Model";
@@ -156,12 +148,6 @@ export class OpenAIProvider extends AIProvider {
       "o1-pro":
         "o1 Pro advanced optimization model, 512K context, high performance",
       "o1-mini": "o1 Mini lightweight advanced model, 256K context, efficient",
-
-      // 开源系列
-      "gpt-oss-120b":
-        "GPT OSS 120B open-source large model, 128K context, community-driven",
-      "gpt-oss-20b":
-        "GPT OSS 20B open-source lightweight model, 64K context, efficient",
     };
 
     return descriptions[model] || "OpenAI language model";
@@ -302,22 +288,6 @@ export class OpenAIProvider extends AIProvider {
         "advanced-optimization",
         "efficient",
       ],
-
-      // 开源系列
-      "gpt-oss-120b": [
-        "text",
-        "128k-context",
-        "open-source",
-        "community",
-        "customizable",
-      ],
-      "gpt-oss-20b": [
-        "text",
-        "64k-context",
-        "open-source",
-        "lightweight",
-        "efficient",
-      ],
     };
 
     return capabilities[model] || ["text"];
@@ -354,10 +324,6 @@ export class OpenAIProvider extends AIProvider {
       "optimized-fast": "o3-mini",
       "efficient-reasoning": "o1-pro",
       "efficient-fast": "o1-mini",
-
-      // 开源模型
-      "open-source-large": "gpt-oss-120b",
-      "open-source-small": "gpt-oss-20b",
     };
 
     return recommendations[useCase] || "gpt-5-mini";

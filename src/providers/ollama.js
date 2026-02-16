@@ -31,47 +31,90 @@ export class OllamaProvider extends AIProvider {
 
   static getStaticAvailableModels() {
     return [
+      // Meta 系列
       "llama3.2",
       "llama3.2:latest",
       "llama3.1",
       "llama3.1:latest",
+
+      // Mistral 系列
       "mistral",
       "mistral:latest",
       "mixtral",
       "mixtral:latest",
+
+      // 代码生成系列
       "codellama",
       "codellama:latest",
       "deepseek-coder",
       "deepseek-coder:latest",
       "deepseek-chat",
       "deepseek-chat:latest",
+
+      // 其他模型
       "phi",
       "phi:latest",
       "qwen",
       "qwen:latest",
+
+      // GPT 开源系列 (从 OpenAI 迁移)
+      "gpt-oss-120b",
+      "gpt-oss-20b",
+
+      // Google Gemma 系列
+      "gemma-2b",
+      "gemma-2b-it",
+      "gemma-7b",
+      "gemma-7b-it",
+      "gemma-2-9b",
+      "gemma-2-9b-it",
+      "gemma-2-27b",
+      "gemma-2-27b-it",
     ];
   }
 
   static getStaticModelDescriptions() {
     return {
+      // Meta 系列
       "llama3.2": "Meta Llama 3.2 - General purpose model",
       "llama3.2:latest": "Meta Llama 3.2 (latest)",
       "llama3.1": "Meta Llama 3.1 - General purpose model",
       "llama3.1:latest": "Meta Llama 3.1 (latest)",
+
+      // Mistral 系列
       mistral: "Mistral 7B - Efficient French model",
       "mistral:latest": "Mistral 7B (latest)",
       mixtral: "Mixtral 8x7B - Mixture of experts",
       "mixtral:latest": "Mixtral 8x7B (latest)",
+
+      // 代码生成系列
       codellama: "Code Llama - Specialized for code generation",
       "codellama:latest": "Code Llama (latest)",
       "deepseek-coder": "DeepSeek Coder - Code generation model",
       "deepseek-coder:latest": "DeepSeek Coder (latest)",
       "deepseek-chat": "DeepSeek Chat - General chat model",
       "deepseek-chat:latest": "DeepSeek Chat (latest)",
+
+      // 其他模型
       phi: "Microsoft Phi - Small but capable model",
       "phi:latest": "Microsoft Phi (latest)",
       qwen: "Qwen - Alibaba's general model",
       "qwen:latest": "Qwen (latest)",
+
+      // GPT 开源系列 (从 OpenAI 迁移)
+      "gpt-oss-120b": "GPT OSS 120B - Open-source large model, 128K context",
+      "gpt-oss-20b": "GPT OSS 20B - Open-source lightweight model, 64K context",
+
+      // Google Gemma 系列
+      "gemma-2b": "Google Gemma 2B - Small but capable model",
+      "gemma-2b-it": "Google Gemma 2B Instruct - Instruction-tuned version",
+      "gemma-7b": "Google Gemma 7B - Balanced performance model",
+      "gemma-7b-it": "Google Gemma 7B Instruct - Instruction-tuned version",
+      "gemma-2-9b": "Google Gemma 2 9B - Enhanced 9B parameter model",
+      "gemma-2-9b-it": "Google Gemma 2 9B Instruct - Instruction-tuned version",
+      "gemma-2-27b": "Google Gemma 2 27B - Large 27B parameter model",
+      "gemma-2-27b-it":
+        "Google Gemma 2 27B Instruct - Instruction-tuned version",
     };
   }
 
@@ -84,16 +127,50 @@ export class OllamaProvider extends AIProvider {
     // Determine capabilities based on model name
     const capabilities = ["text", "chat"];
 
+    // 代码生成能力
     if (
       model.includes("coder") ||
       model.includes("code") ||
-      model.includes("phi")
+      model.includes("phi") ||
+      model.includes("gemma") // Gemma 模型通常有代码能力
     ) {
       capabilities.push("code");
     }
 
+    // 视觉能力
     if (model.includes("vision") || model.includes("llava")) {
       capabilities.push("vision");
+    }
+
+    // 开源模型特定能力
+    if (model.includes("gpt-oss")) {
+      capabilities.push("open-source");
+      capabilities.push("customizable");
+      if (model.includes("120b")) {
+        capabilities.push("large-model");
+        capabilities.push("128k-context");
+      } else if (model.includes("20b")) {
+        capabilities.push("lightweight");
+        capabilities.push("64k-context");
+      }
+    }
+
+    // Gemma 模型特定能力
+    if (model.includes("gemma")) {
+      capabilities.push("google");
+      capabilities.push("open-source");
+      if (model.includes("it")) {
+        capabilities.push("instruction-tuned");
+      }
+      if (model.includes("2b")) {
+        capabilities.push("small-model");
+      } else if (model.includes("7b")) {
+        capabilities.push("medium-model");
+      } else if (model.includes("9b")) {
+        capabilities.push("large-model");
+      } else if (model.includes("27b")) {
+        capabilities.push("xlarge-model");
+      }
     }
 
     return capabilities;
