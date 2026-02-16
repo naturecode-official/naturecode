@@ -686,19 +686,7 @@ export async function runModelConfiguration() {
       answers.stream !== undefined
         ? answers.stream
         : currentConfig.stream !== false,
-    // Add fallback model for providers if selected model fails
-    fallbackModel:
-      answers.provider === "openai"
-        ? "gpt-5-mini"
-        : answers.provider === "azure-openai"
-          ? "gpt-35-turbo"
-          : answers.provider === "4sapi"
-            ? "gpt-4o-mini"
-            : answers.provider === "anthropic"
-              ? "claude-haiku-4-5-20251001"
-              : answers.provider === "gemini"
-                ? "gemini-2.5-flash"
-                : undefined,
+
     // Azure OpenAI specific fields
     azureResourceName: answers.azureResourceName || undefined,
     azureApiVersion: answers.azureApiVersion || undefined,

@@ -1,5 +1,7 @@
 # NatureCode - Cross-platform Terminal AI Assistant
 
+**Version: 1.5.3**
+
 ## → [agentname.md](agentname.md)
 
 ## Features

@@ -1,5 +1,22 @@
 # NatureCode 更新记录 - 2026年2月16日
 
+## 版本 1.5.3 更新
+
+### 1. 移除默认回退模型配置
+**文件**: `src/cli/commands/model.js`
+**内容**:
+- **简化配置**: 移除配置向导中的默认回退模型设置
+- **自动处理**: 回退模型现在由系统自动处理，无需用户配置
+- **减少复杂度**: 简化配置流程，减少用户决策点
+
+### 2. 添加4SAPI提供者支持
+**文件**: `src/providers/4sapi.js`, `src/cli/commands/model.js`, `src/cli/commands/start.js`
+**内容**:
+- **4SAPI集成**: 添加4SAPI作为新的AI提供者选项
+- **固定base URL**: `https://4sapi.com/v1` (OpenAI兼容API)
+- **模型支持**: 支持所有OpenAI兼容模型 (GPT-4o, GPT-4, GPT-3.5, DALL-E, TTS, Whisper等)
+- **配置向导**: 在提供者选择中添加4SAPI选项
+
 ## 版本 1.5.2 更新
 
 ### 1. 添加Azure OpenAI提供者支持
@@ -260,15 +277,16 @@
 8. Azure OpenAI Microsoft Azure托管模型支持添加
 9. 4SAPI OpenAI兼容API支持添加
 10. 自定义提供者支持添加
-11. 版本升级到1.5.2
-12. 所有更改已推送到GitHub
-13. 模型列表现在干净、合理、实用
+11. 移除默认回退模型配置
+12. 版本升级到1.5.3
+13. 所有更改已推送到GitHub
+14. 模型列表现在干净、合理、实用
 
-🎯 **当前状态**:
+🎯 **当前状态 (v1.5.3)**:
 - OpenAI模型列表: 18个纯文本模型
 - Anthropic模型列表: 5个Claude模型
 - Gemini模型列表: 5个Google模型
-- 配置向导: 支持默认值和故障回退
+- 配置向导: 支持默认值，简化配置流程
 - help命令: 简化版，只显示基本帮助
 - GitHub: 所有更改已同步
 
