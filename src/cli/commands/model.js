@@ -454,6 +454,22 @@ export async function runModelConfiguration() {
       when: (answers) => answers.advancedSettings,
     },
     {
+      type: "input",
+      name: "keyName",
+      message:
+        "Give this configuration a name (e.g., 'Work GPT', 'Personal Claude', 'Code Assistant'):",
+      default: (answers) => `${answers.provider}-${answers.model || "default"}`,
+      validate: (input) => {
+        if (!input || input.trim().length === 0) {
+          return "Configuration name cannot be empty";
+        }
+        if (input.trim().length > 50) {
+          return "Configuration name must be less than 50 characters";
+        }
+        return true;
+      },
+    },
+    {
       type: "confirm",
       name: "confirm",
       message: "Save this configuration?",
@@ -500,11 +516,22 @@ export async function runModelConfiguration() {
   };
 
   try {
+    // Save to config manager
     configManager.save(config);
+
+    // Also save to secure store with metadata
+    const keyId = `${config.provider}-${Date.now()}`;
+    secureStore.saveApiKey(config.provider, keyId, config.apiKey, {
+      name: answers.keyName,
+      model: config.model,
+      modelType: config.modelType,
+    });
+
     console.log("\nConfiguration saved successfully!");
     console.log(`Config file: ${configManager.getConfigPath()}`);
 
     console.log("\nSummary:");
+    console.log(`  Name: ${answers.keyName}`);
     console.log(`  Provider: ${config.provider}`);
     console.log(`  Model: ${config.model} (${config.modelType})`);
     console.log(`  Temperature: ${config.temperature}`);

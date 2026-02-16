@@ -182,9 +182,19 @@ class ConfigManager {
 
       // If config has apiKeyId, load API key from encrypted storage
       if (config.apiKeyId && config.provider) {
-        const apiKey = secureStore.getApiKey(config.provider, config.apiKeyId);
-        if (apiKey) {
-          config.apiKey = apiKey;
+        const apiKeyInfo = secureStore.getApiKey(
+          config.provider,
+          config.apiKeyId,
+        );
+        if (apiKeyInfo && apiKeyInfo.key) {
+          config.apiKey = apiKeyInfo.key;
+          // Also update metadata if available
+          if (apiKeyInfo.metadata) {
+            config.apiKeyName = apiKeyInfo.metadata.name || config.apiKeyName;
+            config.model = apiKeyInfo.metadata.model || config.model;
+            config.modelType =
+              apiKeyInfo.metadata.modelType || config.modelType;
+          }
         } else {
           console.warn("Warning: API key not found in encrypted storage");
           config.apiKey = "";

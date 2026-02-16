@@ -298,7 +298,7 @@ export async function startInteractiveSession(options = {}) {
       availableModels.forEach((model, index) => {
         const displayName = model.name || `${model.provider} - ${model.model}`;
         console.log(`  ${index + 1}. ${displayName}`);
-        if (model.description) {
+        if (model.description && model.description !== "No description") {
           console.log(`     ${model.description}`);
         }
       });

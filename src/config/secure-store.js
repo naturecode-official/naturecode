@@ -96,7 +96,7 @@ class SecureStore {
     fs.chmodSync(ENCRYPTED_FILE, 0o600);
   }
 
-  saveApiKey(provider, keyId, apiKey) {
+  saveApiKey(provider, keyId, apiKey, metadata = {}) {
     const data = this._loadEncryptedData();
     if (!data.keys) data.keys = [];
 
@@ -105,11 +105,17 @@ class SecureStore {
       (k) => !(k.provider === provider && k.keyId === keyId),
     );
 
-    // Add new key
+    // Add new key with metadata
     data.keys.push({
       provider,
       keyId,
       apiKey,
+      metadata: {
+        name: metadata.name || `${provider}-${keyId}`,
+        model: metadata.model || "default",
+        modelType: metadata.modelType || "text",
+        ...metadata,
+      },
       createdAt: new Date().toISOString(),
       lastUsed: null,
     });
@@ -128,7 +134,10 @@ class SecureStore {
       // Update last used timestamp
       key.lastUsed = new Date().toISOString();
       this._saveEncryptedData(data);
-      return key.apiKey;
+      return {
+        key: key.apiKey,
+        metadata: key.metadata || {},
+      };
     }
 
     return null;
@@ -136,12 +145,21 @@ class SecureStore {
 
   listApiKeys() {
     const data = this._loadEncryptedData();
-    return data.keys.map((key) => ({
-      provider: key.provider,
-      keyId: key.keyId,
-      createdAt: key.createdAt,
-      lastUsed: key.lastUsed,
-    }));
+    const result = {};
+
+    data.keys.forEach((key) => {
+      if (!result[key.provider]) {
+        result[key.provider] = {};
+      }
+      result[key.provider][key.keyId] = {
+        key: key.apiKey,
+        metadata: key.metadata || {},
+        createdAt: key.createdAt,
+        lastUsed: key.lastUsed,
+      };
+    });
+
+    return result;
   }
 
   deleteApiKey(provider, keyId) {
