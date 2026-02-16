@@ -17,10 +17,34 @@ export class OpenAIProvider extends AIProvider {
       throw new Error("OpenAI API key is required");
     }
 
+    // 检查 API 密钥格式
+    if (!config.apiKey.startsWith("sk-")) {
+      console.warn("⚠️  Warning: Your API key doesn't start with 'sk-'");
+      console.warn("   This may be a project key (sk-proj-) or invalid key");
+    }
+
     if (!config.model || !this.getAvailableModels().includes(config.model)) {
-      throw new Error(
-        `OpenAI model must be one of: ${this.getAvailableModels().join(", ")}`,
-      );
+      const availableModels = this.getAvailableModels();
+      const recommendedModels = ["gpt-4o", "gpt-4o-mini", "gpt-3.5-turbo"];
+
+      let errorMessage = `Invalid OpenAI model: "${config.model}"\n\n`;
+      errorMessage += "✅ **Recommended models (guaranteed to work):**\n";
+      recommendedModels.forEach((model) => {
+        errorMessage += `   • ${model}\n`;
+      });
+
+      errorMessage += "\n📋 **All available models:**\n";
+      availableModels.slice(0, 10).forEach((model) => {
+        errorMessage += `   • ${model}\n`;
+      });
+
+      if (availableModels.length > 10) {
+        errorMessage += `   • ... and ${availableModels.length - 10} more\n`;
+      }
+
+      errorMessage += "\n💡 **Tip**: Run 'naturecode model' to reconfigure";
+
+      throw new Error(errorMessage);
     }
 
     return true;
@@ -32,59 +56,54 @@ export class OpenAIProvider extends AIProvider {
 
   static getStaticAvailableModels() {
     return [
-      // GPT-5系列 (最新)
-      "gpt-5.2",
-      "gpt-5.2-pro",
-      "gpt-5",
-      "gpt-5-mini",
-      "gpt-5-nano",
-      "gpt-5.1",
-      "gpt-5.1-codex",
-      "gpt-5.1-codex-extended",
+      // ✅ 实际可用的 OpenAI 模型 (2024-2025)
 
-      // GPT-4.1系列
-      "gpt-4.1",
-      "gpt-4.1-mini",
-      "gpt-4.1-nano",
-
-      // GPT-4o系列
+      // GPT-4o 系列 (最新、推荐)
       "gpt-4o",
       "gpt-4o-mini",
+      "gpt-4o-2024-08-06",
+      "gpt-4o-mini-2024-07-18",
 
-      // o系列 (优化模型)
-      "o3",
-      "o4-mini",
-      "o4-mini-high",
-      "o3-deep-research",
-      "o4-mini-deep-research",
+      // GPT-4 Turbo 系列
+      "gpt-4-turbo",
+      "gpt-4-turbo-preview",
+      "gpt-4-turbo-2024-04-09",
+      "gpt-4-0125-preview",
+      "gpt-4-1106-preview",
 
-      // 搜索预览系列
+      // GPT-4 基础系列
+      "gpt-4",
+      "gpt-4-0613",
+      "gpt-4-32k",
+      "gpt-4-32k-0613",
+
+      // GPT-3.5 Turbo 系列 (最兼容、最便宜)
+      "gpt-3.5-turbo",
+      "gpt-3.5-turbo-0125",
+      "gpt-3.5-turbo-1106",
+      "gpt-3.5-turbo-0613",
+      "gpt-3.5-turbo-16k",
+      "gpt-3.5-turbo-16k-0613",
+      "gpt-3.5-turbo-instruct",
+
+      // 视觉模型
+      "gpt-4o-vision-preview",
+      "gpt-4-vision-preview",
+
+      // ⚠️ 需要特殊权限的模型 (可能不可用)
       "gpt-4o-search-preview",
       "gpt-4o-mini-search-preview",
+      "gpt-4-search-preview",
 
-      // 计算机使用预览
-      "computer-use-preview",
+      // 文本嵌入模型
+      "text-embedding-3-small",
+      "text-embedding-3-large",
+      "text-embedding-ada-002",
 
-      // 开源系列
-      "gpt-oss-120b",
-      "gpt-oss-20b",
-
-      // 现有模型 (保持向后兼容)
-      "gpt-4-turbo",
-      "gpt-4",
-      "gpt-4-32k",
-      "gpt-3.5-turbo",
-      "gpt-3.5-turbo-16k",
-      "gpt-3.5-turbo-instruct",
-      "gpt-5-turbo",
-      "gpt-4-enterprise",
-      "gpt-4o-enterprise",
-      "gpt-4o-2024-08-06",
-      "gpt-4-turbo-2024-04-09",
-      "gpt-4-0613",
-      "gpt-4-32k-0613",
-      "gpt-3.5-turbo-0613",
-      "gpt-3.5-turbo-0301",
+      // 微调模型
+      "ft:gpt-3.5-turbo-0613",
+      "ft:davinci-002",
+      "ft:babbage-002",
     ];
   }
 

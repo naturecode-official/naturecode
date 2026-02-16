@@ -308,8 +308,11 @@ You are empowered to directly interact with the file system. Use these tools to 
     if (error.response) {
       const status = error.response.status;
       const data = error.response.data;
+      const errorMessage = data?.error?.message || error.message;
 
       switch (status) {
+        case 400:
+          throw new Error(this._getDetailed400Error(errorMessage, data));
         case 401:
           throw new Error(
             'Invalid API key. Please reconfigure with "naturecode model"',
@@ -321,15 +324,92 @@ You are empowered to directly interact with the file system. Use these tools to 
         case 503:
           throw new Error("AI service temporarily unavailable");
         default:
-          throw new Error(
-            `AI service error: ${data?.error?.message || error.message}`,
-          );
+          throw new Error(`AI service error: ${errorMessage}`);
       }
     } else if (error.request) {
       throw new Error("Network error: Cannot connect to AI service");
     } else {
       throw new Error(`Request error: ${error.message}`);
     }
+  }
+
+  _getDetailed400Error(errorMessage, data) {
+    const config = this.config || {};
+    const apiKey = config.apiKey || "";
+
+    let detailedMessage = `Bad Request (400): ${errorMessage}\n\n`;
+    detailedMessage += "🔍 **Common causes and solutions:**\n\n";
+
+    // 检查 API 密钥格式
+    if (apiKey.startsWith("sk-proj-")) {
+      detailedMessage += "1. **Project API Key Issue**:\n";
+      detailedMessage +=
+        "   - Your key starts with 'sk-proj-' (OpenAI project key)\n";
+      detailedMessage +=
+        "   - Project keys may have restrictions on model access\n";
+      detailedMessage += "   - Check project settings at platform.openai.com\n";
+      detailedMessage += "   - Try a personal API key (starts with 'sk-')\n\n";
+    } else if (!apiKey.startsWith("sk-")) {
+      detailedMessage += "1. **Invalid API Key Format**:\n";
+      detailedMessage += "   - Your key doesn't start with 'sk-'\n";
+      detailedMessage += "   - Get a valid key from platform.openai.com\n\n";
+    }
+
+    // 检查模型名称
+    const model = config.model || "";
+    const invalidModels = ["gpt-5", "gpt-4.1", "gpt-5.1", "gpt-5.2"];
+    const isInvalidModel = invalidModels.some((invalid) =>
+      model.includes(invalid),
+    );
+
+    if (isInvalidModel) {
+      detailedMessage += "2. **Invalid Model Name**:\n";
+      detailedMessage += `   - You're trying to use: "${model}"\n`;
+      detailedMessage +=
+        "   - This model may not exist or require special access\n";
+      detailedMessage += "   - Try these valid models instead:\n";
+      detailedMessage += "     • gpt-4o (recommended)\n";
+      detailedMessage += "     • gpt-4o-mini (faster, cheaper)\n";
+      detailedMessage += "     • gpt-3.5-turbo (most compatible)\n\n";
+    }
+
+    // 检查错误类型
+    if (
+      errorMessage.includes("model") &&
+      errorMessage.includes("does not exist")
+    ) {
+      detailedMessage += "3. **Model Does Not Exist**:\n";
+      detailedMessage += "   - The model name is incorrect or unavailable\n";
+      detailedMessage +=
+        "   - Check available models at platform.openai.com\n\n";
+    }
+
+    if (errorMessage.includes("insufficient_quota")) {
+      detailedMessage += "4. **Insufficient Quota**:\n";
+      detailedMessage += "   - Your account has no remaining credits\n";
+      detailedMessage += "   - Add payment method at platform.openai.com\n";
+      detailedMessage += "   - Or try DeepSeek (free): naturecode model\n\n";
+    }
+
+    if (errorMessage.includes("invalid_api_key")) {
+      detailedMessage += "5. **Invalid API Key**:\n";
+      detailedMessage += "   - Your API key is incorrect or revoked\n";
+      detailedMessage += "   - Get a new key from platform.openai.com\n\n";
+    }
+
+    // 通用建议
+    detailedMessage += "💡 **Quick Fixes**:\n";
+    detailedMessage += "   • Run: naturecode model (reconfigure)\n";
+    detailedMessage += "   • Choose DeepSeek (free, no API key issues)\n";
+    detailedMessage += "   • Use model: gpt-3.5-turbo (most compatible)\n";
+    detailedMessage += "   • Check: platform.openai.com for account status\n\n";
+
+    detailedMessage += "📋 **Your Current Config**:\n";
+    detailedMessage += `   • Provider: ${config.provider || "unknown"}\n`;
+    detailedMessage += `   • Model: ${model || "unknown"}\n`;
+    detailedMessage += `   • Key Format: ${apiKey.substring(0, 15)}...\n`;
+
+    return detailedMessage;
   }
 
   // Helper method to extract file operations from user input
