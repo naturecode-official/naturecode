@@ -1,447 +1,447 @@
-# NatureCode 项目详解 - AI 助手指南
+# NatureCode Project Documentation - AI Assistant Guide
 
-## 🚨 AI 助手核心守则（必须严格遵守）
+## 🚨 Core Rules for AI Assistants (Must Strictly Follow)
 
-### 1. 禁止使用 Emoji（项目内部）
+### 1. No Emoji in Project Internals
 
-- **代码文件禁止**: .js, .sh, .json 等文件中禁止任何 Emoji
-- **注释禁止**: 代码注释中禁止 Emoji
-- **文档限制**: Markdown 中可使用简单符号（），避免表情符号
-- **用户界面**: CLI 输出可适当使用符号增强可读性
+- **Code Files Prohibited**: No emoji in .js, .sh, .json, etc. files
+- **Comments Prohibited**: No emoji in code comments
+- **Documentation Limited**: Simple symbols () allowed in Markdown, avoid emoji
+- **User Interface**: CLI output may use symbols for readability
 
-### 2. 语言使用规范
+### 2. Language Usage Standards
 
-- **默认语言**: 系统默认使用英文界面和文档
-- **AI翻译**: AI助手负责处理多语言翻译（用户可用中文提问，AI用英文响应并翻译）
-- **代码编写**: 变量、函数、注释使用英文
-- **错误消息**: 用户界面用英文，技术日志用英文
-- **文档**: 技术文档英文，用户指南英文为主
+- **Default Language**: System defaults to English interface and documentation
+- **AI Translation**: AI assistant handles multilingual translation (users can ask in Chinese, AI responds in English with translation)
+- **Code Writing**: Variables, functions, comments use English
+- **Error Messages**: User interface in English, technical logs in English
+- **Documentation**: Technical documentation in English, user guides primarily in English
 
-### 3. 代码提交后自动推送至 GitHub
+### 3. Automatic Push to GitHub After Code Changes
 
-#### 核心原则
+#### Core Principles
 
-- **必须推送**: 完成代码修改后立即推送至 GitHub
-- **保持同步**: 确保 GitHub 仓库始终是最新版本
-- **验证成功**: 推送后必须验证安装命令工作正常
+- **Mandatory Push**: Immediately push to GitHub after completing code modifications
+- **Keep Synchronized**: Ensure GitHub repository is always the latest version
+- **Verify Success**: Must verify installation command works after push
 
-### 4. 🌍 GitHub 提交语言规范
+### 4. 🌍 GitHub Commit Language Standards
 
-#### 提交信息规则
+#### Commit Message Rules
 
-- **提交信息**: 必须使用英文（简短描述 + 详细说明）
-- **代码注释**: 保持英文
-- **文件命名**: 使用英文或标准缩写
-- **README**: 主要文档使用英文，可添加中文翻译
+- **Commit Messages**: Must use English (short description + detailed explanation)
+- **Code Comments**: Maintain English
+- **File Naming**: Use English or standard abbreviations
+- **README**: Primary documentation in English, Chinese translation may be added
 
-#### 提交格式示例
+#### Commit Format Examples
 
 ```bash
-#  正确 - 英文提交
+#  Correct - English commit
 git commit -m "feat: add new AI provider interface"
 
-#  正确 - 详细英文说明
+#  Correct - Detailed English explanation
 git commit -m "fix: resolve color display issue in non-interactive terminals
 
 - Detect terminal type with [ -t 0 ]
 - Auto-select simple mode for curl | bash
 - Add clear non-interactive mode message"
 
-#  错误 - 中文提交
+#  Incorrect - Chinese commit
 git commit -m "修复: 解决非交互终端颜色显示问题"
 ```
 
-#### 原因说明
+#### Reasons
 
-1. **国际化**: GitHub是全球平台，英文更通用
-2. **搜索友好**: 英文关键词便于全球开发者搜索
-3. **工具兼容**: 许多Git工具和CI/CD系统对英文支持更好
-4. **团队协作**: 便于国际团队理解和维护
+1. **Internationalization**: GitHub is a global platform, English is more universal
+2. **Search Friendly**: English keywords facilitate global developer searches
+3. **Tool Compatibility**: Many Git tools and CI/CD systems have better English support
+4. **Team Collaboration**: Easier for international teams to understand and maintain
 
-#### 完整上传流程
+#### Complete Upload Process
 
-##### 步骤 1: 准备 GitHub Token
+##### Step 1: Prepare GitHub Token
 
 ```bash
-# 1. 访问 Token 页面
+# 1. Access Token page
 open https://github.com/settings/tokens
 
-# 2. 生成新 Token (classic)
-# 3. 设置权限:  repo (Full control)
-# 4. 设置有效期: 90天或无期限
-# 5. 生成并复制 Token
+# 2. Generate new Token (classic)
+# 3. Set permissions: repo (Full control)
+# 4. Set expiration: 90 days or no expiration
+# 5. Generate and copy Token
 
-# 6. 保存 Token 到文件（可选）
+# 6. Save Token to file (optional)
 echo "YOUR_TOKEN" > key.md
-# 注意: 完成后删除敏感文件
+# Note: Delete sensitive files after completion
 ```
 
-##### 步骤 2: 选择推送方法
+##### Step 2: Choose Push Method
 
 ```bash
-# 方法 A: 使用 key.md 文件推送（推荐）
+# Method A: Push using key.md file (Recommended)
 ./push-with-key-md.sh
-# 特点: 自动读取 key.md，交互式确认
+# Features: Automatically reads key.md, interactive confirmation
 
-# 方法 B: 交互式推送
+# Method B: Interactive push
 ./push-with-interactive-token.sh
-# 特点: 隐藏输入 Token，详细提示
+# Features: Hidden Token input, detailed prompts
 
-# 方法 C: 简单推送
+# Method C: Simple push
 ./push-simple.sh
-# 特点: 快速简单，适合小更改
+# Features: Quick and simple, suitable for small changes
 
-# 方法 D: 完整功能推送
+# Method D: Full-featured push
 ./push-to-github-final.sh
-# 特点: 完整功能，支持多种认证方式
+# Features: Complete functionality, supports multiple authentication methods
 ```
 
-##### 步骤 3: 执行推送
+##### Step 3: Execute Push
 
 ```bash
-# 1. 检查当前状态
+# 1. Check current status
 git status
 git log --oneline -3
 
-# 2. 运行推送脚本
+# 2. Run push script
 ./push-with-key-md.sh
 
-# 3. 确认推送（输入 y）
+# 3. Confirm push (enter y)
 ```
 
-##### 步骤 4: 验证上传成功
+##### Step 4: Verify Upload Success
 
 ```bash
-# 1. 验证远程仓库
+# 1. Verify remote repository
 git remote show origin
 
-# 2. 测试安装命令
+# 2. Test installation command
 curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash --dry-run
 
-# 3. 检查仓库可访问性
+# 3. Check repository accessibility
 open https://github.com/naturecode-official/naturecode
 
-# 4. 验证版本号
+# 4. Verify version number
 curl -s https://raw.githubusercontent.com/naturecode-official/naturecode/main/package.json | grep '"version"'
 ```
 
-#### 推送脚本说明
+#### Push Script Descriptions
 
 ##### `push-with-key-md.sh`
 
-- **用途**: 从 `key.md` 文件读取 Token 推送
-- **流程**: 读取 Token → 显示状态 → 确认 → 推送 → 验证
-- **安全**: 推送后建议删除 `key.md` 文件
+- **Purpose**: Read Token from `key.md` file for push
+- **Process**: Read Token → Show status → Confirm → Push → Verify
+- **Security**: Recommended to delete `key.md` file after push
 
 ##### `push-with-interactive-token.sh`
 
-- **用途**: 交互式输入 Token（隐藏输入）
-- **流程**: 提示输入 → 验证 → 推送 → 显示安装命令
-- **安全**: Token 不保存，每次需要输入
+- **Purpose**: Interactive Token input (hidden input)
+- **Process**: Prompt input → Verify → Push → Show installation command
+- **Security**: Token not saved, needs input each time
 
 ##### `push-simple.sh`
 
-- **用途**: 快速简单推送
-- **流程**: 添加文件 → 提交 → Token 输入 → 推送
-- **适合**: 小更改，快速部署
+- **Purpose**: Quick and simple push
+- **Process**: Add files → Commit → Token input → Push
+- **Suitable for**: Small changes, quick deployment
 
 ##### `push-to-github-final.sh`
 
-- **用途**: 完整功能推送
-- **流程**: 状态检查 → 认证选择 → 推送 → 验证 → 显示命令
-- **功能**: 支持 Token/SSH/现有凭据多种方式
+- **Purpose**: Full-featured push
+- **Process**: Status check → Authentication selection → Push → Verify → Show command
+- **Features**: Supports multiple methods: Token/SSH/existing credentials
 
-#### 故障排除
+#### Troubleshooting
 
-##### 常见错误
+##### Common Errors
 
-1. **403 Forbidden**: Token 权限不足或过期
+1. **403 Forbidden**: Token insufficient permissions or expired
 
    ```bash
-   # 重新生成 Token
+   # Regenerate Token
    open https://github.com/settings/tokens
    ```
 
-2. **Repository not found**: 仓库不存在或 URL 错误
+2. **Repository not found**: Repository doesn't exist or URL is incorrect
 
    ```bash
-   # 检查远程仓库配置
+   # Check remote repository configuration
    git remote -v
-   # 正确 URL: https://github.com/naturecode-official/naturecode.git
+   # Correct URL: https://github.com/naturecode-official/naturecode.git
    ```
 
-3. **Authentication failed**: Token 格式错误或无效
+3. **Authentication failed**: Token format error or invalid
 
    ```bash
-   # 检查 Token 格式（应以 ghp_ 开头）
+   # Check Token format (should start with ghp_)
    head -c 3 key.md
    ```
 
-4. **Network error**: 网络连接问题
+4. **Network error**: Network connection issue
    ```bash
-   # 测试 GitHub 连接
+   # Test GitHub connection
    curl -I https://github.com
    ```
 
-##### 紧急恢复
+##### Emergency Recovery
 
 ```bash
-# 如果推送失败，尝试:
-# 1. 重新生成 Token
-# 2. 使用不同的推送脚本
-# 3. 检查网络连接
-# 4. 验证仓库权限
+# If push fails, try:
+# 1. Regenerate Token
+# 2. Use different push script
+# 3. Check network connection
+# 4. Verify repository permissions
 
-# 手动推送命令
+# Manual push command
 git push https://naturecode-official:TOKEN@github.com/naturecode-official/naturecode.git main
 ```
 
-#### 安全注意事项
+#### Security Considerations
 
-1. **Token 安全**: 不要提交 Token 到代码仓库
-2. **文件安全**: 使用后删除 `key.md` 等敏感文件
-3. **权限最小化**: Token 只需要 `repo` 权限
-4. **定期更新**: Token 设置合理有效期
-5. **访问日志**: 监控 GitHub 访问记录
-6. **手动Token安全**: 使用 `push-with-manual-token.sh` 时，Token只在内存中使用，不会保存到文件
+1. **Token Security**: Do not commit Token to code repository
+2. **File Security**: Delete sensitive files like `key.md` after use
+3. **Minimal Permissions**: Token only needs `repo` permission
+4. **Regular Updates**: Set reasonable expiration for Token
+5. **Access Logs**: Monitor GitHub access records
+6. **Manual Token Security**: When using `push-with-manual-token.sh`, Token is only used in memory and not saved to file
 
-#### 手动Token推送安全
+#### Manual Token Push Security
 
-- Token通过命令行输入，不会保存到磁盘
-- 脚本使用后立即清除Token
-- 建议在GitHub设置Token有效期
-- 推送后可在GitHub撤销Token
+- Token entered via command line, not saved to disk
+- Script clears Token immediately after use
+- Recommended to set Token expiration in GitHub
+- Token can be revoked in GitHub after push
 
-#### 成功标志
+#### Success Indicators
 
-- 推送命令执行成功
-- 安装命令可正常访问
-- GitHub 仓库显示最新代码
-- 版本号正确显示（当前: 1.4.6）
-- 所有功能测试通过
+- Push command executes successfully
+- Installation command is accessible
+- GitHub repository shows latest code
+- Version number displays correctly (current: 1.4.9)
+- All functionality tests pass
 
-#### 自动化建议
+#### Automation Suggestions
 
 ```bash
-# 可以创建自动化脚本
+# Can create automation script
 #!/bin/bash
 # auto-push.sh
 git add .
 git commit -m "$1"
 ./push-with-key-md.sh
 
-# 使用: ./auto-push.sh "提交描述"
+# Usage: ./auto-push.sh "commit description"
 ```
 
-**记住**: 每次代码修改后必须推送，保持 GitHub 仓库同步！
+**Remember**: Must push after every code modification to keep GitHub repository synchronized!
 
-## 项目概述
+## Project Overview
 
-**NatureCode** 是一个跨平台终端 AI 助手，支持 DeepSeek、OpenAI 和 Ollama 模型。当前版本：**v1.4.8**
+**NatureCode** is a cross-platform terminal AI assistant supporting DeepSeek, OpenAI, and Ollama models. Current version: **v1.4.9**
 
-### 🚨 必要守则（AI 助手必须遵守）
+### 🚨 Essential Rules (AI Assistants Must Follow)
 
-1. **禁止使用 Emoji（项目内部）**
-   - 代码、注释、文档中禁止使用任何 Emoji
-   - 用户界面可以使用适当的符号（如 、、）
-   - 保持代码专业性和可读性
+1. **No Emoji Usage (Project Internals)**
+   - No emoji allowed in code, comments, or documentation
+   - User interface may use appropriate symbols (such as , , )
+   - Maintain code professionalism and readability
 
-2. **语言使用规范**
-   - **与用户对话**: 使用中文（简体/繁体）
-   - **项目内部**: 代码、注释、文档使用英文
-   - **错误消息**: 用户友好的中文提示，技术细节用英文
+2. **Language Usage Standards**
+   - **User Conversations**: Use Chinese (Simplified/Traditional)
+   - **Project Internals**: Code, comments, documentation use English
+   - **Error Messages**: User-friendly Chinese prompts, technical details in English
 
-3. **代码提交后自动推送至 GitHub**
-   - 完成代码修改后必须推送至 GitHub
-   - 推送方法（四选一）:
+3. **Automatic Push to GitHub After Code Changes**
+   - Must push to GitHub after completing code modifications
+   - Push methods (choose one):
 
      ```bash
-     # 方法 A: 交互式推送（推荐）
+     # Method A: Interactive push (Recommended)
      ./push-with-interactive-token.sh
 
-     # 方法 B: 手动Token推送（网络问题时使用）
+     # Method B: Manual Token push (use when network issues)
      ./push-with-manual-token.sh
 
-     # 方法 C: 简单推送
+     # Method C: Simple push
      ./push-simple.sh
 
-     # 方法 D: 完整推送
+     # Method D: Complete push
      ./push-to-github-final.sh
      ```
 
-   - 推送前确保:
-     - 所有文件已添加 `git add .`
-     - 有意义的提交信息
-     - GitHub Token 已准备好
+   - Before pushing ensure:
+     - All files added with `git add .`
+     - Meaningful commit messages
+     - GitHub Token is ready
 
-   - **手动Token推送方法**（当网络或SSL有问题时）:
-     1. 生成GitHub Token: https://github.com/settings/tokens
-     2. 选择 `repo` 权限
-     3. 运行 `./push-with-manual-token.sh`
-     4. 粘贴Token
-     5. 脚本会自动使用Token构造HTTPS URL进行推送
+   - **Manual Token Push Method** (when network or SSL issues):
+     1. Generate GitHub Token: https://github.com/settings/tokens
+     2. Select `repo` permission
+     3. Run `./push-with-manual-token.sh`
+     4. Paste Token
+     5. Script will automatically construct HTTPS URL using Token for push
 
-### 核心特性
+### Core Features
 
-- **一键安装系统** - 支持 curl 单行安装
-- **多模型支持** - DeepSeek、OpenAI、Ollama
-- **智能安装** - 简单/专业模式选择
-- **模块化架构** - 插件系统、团队协作
-- **跨平台** - macOS、Linux、Windows
+- **One-click Installation System** - Supports curl single-line installation
+- **Multi-model Support** - DeepSeek, OpenAI, Ollama
+- **Smart Installation** - Simple/Professional mode selection
+- **Modular Architecture** - Plugin system, team collaboration
+- **Cross-platform** - macOS, Linux, Windows
 
-## 📁 文件结构详解
+## 📁 File Structure Details
 
-### 1. **核心配置文件**
+### 1. **Core Configuration Files**
 
-#### `package.json` (v1.4.5.4)
+#### `package.json` (v1.4.9)
 
 ```json
 {
   "name": "naturecode",
-  "version": "1.4.5.4",
+  "version": "1.4.9",
   "type": "module",
   "main": "src/cli/index.js",
   "bin": { "naturecode": "src/cli/index.js" }
 }
 ```
 
-**作用**: 定义项目元数据、依赖、脚本命令
-**设计**: ES 模块系统，支持全局安装
+**Purpose**: Defines project metadata, dependencies, script commands
+**Design**: ES module system, supports global installation
 
 #### `AGENTS.md`
 
-**作用**: AI 助手开发指南
-**内容**:
+**Purpose**: AI assistant development guide
+**Content**:
 
-- 语言要求（中文对话/英文代码）
-- 开发命令（npm run dev, npm test）
-- 代码风格规范
-- 安全注意事项
+- Language requirements (Chinese conversations/English code)
+- Development commands (npm run dev, npm test)
+- Code style standards
+- Security considerations
 
 #### `.eslintrc.json`
 
-**作用**: JavaScript 代码规范配置
-**规则**:
+**Purpose**: JavaScript code standards configuration
+**Rules**:
 
-- 双引号字符串
-- 2空格缩进
-- 分号结尾
-- 最大行长度 100
+- Double quote strings
+- 2-space indentation
+- Semicolon endings
+- Maximum line length 100
 
-### 2. **安装系统文件**
+### 2. **Installation System Files**
 
-#### 安装脚本层次结构
+#### Installation Script Hierarchy
 
 ```
-install.sh (入口) → install-smart.sh (智能选择) → 具体安装器
+install.sh (entry) → install-smart.sh (smart selection) → specific installer
 ```
 
-#### `install.sh` (33行)
+#### `install.sh` (33 lines)
 
 ```bash
 #!/bin/bash
-# 主入口脚本
+# Main entry script
 curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-smart.sh | bash
 ```
 
-**作用**: 单行安装入口
-**设计**: 最小化，重定向到智能安装器
+**Purpose**: Single-line installation entry
+**Design**: Minimal, redirects to smart installer
 
-#### `install-smart.sh` (434行)
+#### `install-smart.sh` (434 lines)
 
-**作用**: 智能安装器，询问用户安装模式
-**特性**:
+**Purpose**: Smart installer, asks user for installation mode
+**Features**:
 
-- 终端颜色支持检测（tput/ANSI 回退）
-- 简单模式（快速安静）
-- 专业模式（详细诊断）
-- 系统信息收集
-- 错误处理完善
+- Terminal color support detection (tput/ANSI fallback)
+- Simple mode (fast and quiet)
+- Professional mode (detailed diagnostics)
+- System information collection
+- Comprehensive error handling
 
-#### `install-simple.sh` (直接安装)
+#### `install-simple.sh` (direct installation)
 
-**作用**: 无交互快速安装
-**流程**: 下载 → 安装依赖 → 全局安装
+**Purpose**: Non-interactive fast installation
+**Process**: Download → Install dependencies → Global installation
 
 #### `install-universal.sh`
 
-**作用**: 跨平台通用安装器
-**特性**: 支持 macOS、Linux、Windows
+**Purpose**: Cross-platform universal installer
+**Features**: Supports macOS, Linux, Windows
 
 #### `install-now.sh`
 
-**作用**: 本地安装测试脚本
-**用途**: 开发环境快速测试
+**Purpose**: Local installation test script
+**Use**: Quick testing in development environment
 
-### 3. **GitHub 部署文件**
+### 3. **GitHub Deployment Files**
 
-#### `push-to-github-final.sh` (完整推送)
+#### `push-to-github-final.sh` (complete push)
 
-**作用**: 完整的 GitHub 推送助手
-**功能**:
+**Purpose**: Complete GitHub push assistant
+**Functions**:
 
-1. Git 状态检查
-2. 多种认证方式（Token/SSH/现有凭据）
-3. 提交和推送
-4. 验证推送结果
-5. 显示安装命令
+1. Git status check
+2. Multiple authentication methods (Token/SSH/existing credentials)
+3. Commit and push
+4. Verify push results
+5. Display installation command
 
-#### `push-simple.sh` (简单推送)
+#### `push-simple.sh` (simple push)
 
-**作用**: 快速 Token 推送
-**流程**: 添加文件 → 提交 → Token 认证推送
+**Purpose**: Fast Token push
+**Process**: Add files → Commit → Token authentication push
 
 #### `push-with-token.sh`
 
-**作用**: Token 专用推送器
-**特性**: 交互式 Token 输入，详细错误处理
+**Purpose**: Token-specific pusher
+**Features**: Interactive Token input, detailed error handling
 
 #### `GENERATE_TOKEN_GUIDE.md`
 
-**作用**: GitHub Token 生成详细指南
-**内容**: 权限设置、有效期、使用步骤
+**Purpose**: Detailed GitHub Token generation guide
+**Content**: Permission settings, expiration, usage steps
 
-### 4. **文档文件**
+### 4. **Documentation Files**
 
 #### `README_INSTALL.md`
 
-**作用**: 安装快速指南
-**内容**: 各种安装方式、故障排除
+**Purpose**: Quick installation guide
+**Content**: Various installation methods, troubleshooting
 
 #### `CURL_INSTALL.md`
 
-**作用**: curl 安装详细说明
-**内容**: 命令示例、工作原理、安全说明
+**Purpose**: Detailed curl installation instructions
+**Content**: Command examples, working principles, security notes
 
 #### `INSTALLATION_ARCHITECTURE.md`
 
-**作用**: 安装系统架构设计
-**内容**: 脚本层次、错误处理、用户流程
+**Purpose**: Installation system architecture design
+**Content**: Script hierarchy, error handling, user flow
 
 #### `QUICK_PUSH_GUIDE.md`
 
-**作用**: GitHub 推送快速参考
-**内容**: 脚本选择、Token 生成、验证步骤
+**Purpose**: GitHub push quick reference
+**Content**: Script selection, Token generation, verification steps
 
-### 5. **源代码结构**
+### 5. **Source Code Structure**
 
 #### `src/cli/index.js`
 
-**作用**: CLI 主入口
-**功能**:
+**Purpose**: CLI main entry
+**Functions**:
 
-- commander.js 参数解析
-- 命令路由（model, start, git, code, project）
-- 错误处理
-- 版本显示
+- commander.js parameter parsing
+- Command routing (model, start, git, code, project)
+- Error handling
+- Version display
 
 #### `src/cli/commands/help.js`
 
-**作用**: 改进的帮助命令
-**特性**:
+**Purpose**: Enhanced help command
+**Features**:
 
-- 彩色输出
-- 命令分类
+- Colored output
+- Command categorization
 - 详细示例
 
 #### `src/utils/ascii-art.js`
@@ -1567,44 +1567,46 @@ brew upgrade curl
 **当前版本**: NatureCode v1.4.8 已部署到 GitHub
 **项目状态**: 完整功能，一键安装系统就绪，所有改进已完成  
 **安装命令**: `curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash`  
-**GitHub 仓库**: https://github.com/naturecode-official/naturecode  
-**主要功能**: 跨平台终端 AI 助手，支持 DeepSeek、OpenAI、Ollama（专注于标准 API，简单易用）  
-**核心改进**: 模型自定义命名、AI 系统提示增强、帮助系统修复、网络问题解决方案、sk-proj API 兼容、GPT-5 模型支持、详细错误诊断
+**GitHub Repository**: https://github.com/naturecode-official/naturecode  
+**Main Features**: Cross-platform terminal AI assistant supporting DeepSeek, OpenAI, and Ollama models  
+**Core Improvements**: Model customization, enhanced AI system prompts, help system fixes, network issue solutions, sk-proj API compatibility, GPT-5 model support, detailed error diagnostics
 
-## 🎉 v1.4.8 版本亮点
+## 🎉 v1.4.9 Version Highlights
 
-> **设计理念更新**: 为了提供更简单、更稳定的用户体验，v1.4.8 移除了 Azure OpenAI、OpenRouter、自定义 API 等过于复杂的功能。NatureCode 现在专注于标准 OpenAI API，提供更简洁、更易维护的代码库。
+### 🌐 **Internationalization and English-First Documentation**
 
-### 🔑 **sk-proj API 密钥完全兼容**
+- **English-first documentation** for global accessibility
+- **Improved language policy**: Chinese for user conversations, English for code and technical documentation
+- **Enhanced error messages**: User-friendly Chinese prompts with English technical details
+- **GitHub commits**: English-only for global collaboration
 
-- 支持 OpenAI 项目密钥 (`sk-proj-` 格式)
-- 移除无效格式警告
-- 改进的密钥验证逻辑
+### 🔧 **Custom API Endpoint Configuration**
 
-### 🤖 **GPT-5 模型完全支持**
+- **Universal base_url support** for all AI providers (OpenAI, DeepSeek, Anthropic, Gemini)
+- **Flexible endpoint configuration** for custom API providers and self-hosted services
+- **Backward compatibility** with existing configuration files
+- **Enhanced validation** for custom endpoints
 
-- 自动参数选择 (max_tokens vs max_completion_tokens)
-- 支持 GPT-5 系列模型
-- 搜索预览模型支持
+### 🔄 **Model Restructuring and Migration**
 
-### 🩺 **详细的错误诊断**
+- **Open-source model migration**: GPT-OSS models (gpt-oss-120b, gpt-oss-20b) moved from OpenAI to Ollama provider
+- **Google Gemma series**: 8 new models added to Ollama provider (gemma-2b, gemma-7b, gemma-2-9b, gemma-2-27b with instruction-tuned variants)
+- **Comprehensive DeepSeek support**: 6 model series with 12 variants for offline and online usage
+- **Enhanced model descriptions**: Detailed information about each model's capabilities and use cases
 
-- 增强的 400 错误分析
-- 用户友好的错误消息
-- 具体的解决方案建议
+### 🤖 **Enhanced AI Provider Support**
 
-### 🛠️ **代码质量改进**
+- **DeepSeek offline models**: Full support for DeepSeek's comprehensive model lineup
+- **Ollama expansion**: Added support for latest open-source models
+- **Provider-specific optimizations**: Custom configurations for each AI provider
+- **Error handling improvements**: Better error messages and recovery mechanisms
 
-- 修复 openai.js 重复代码问题
-- 改进的错误处理流程
-- 性能优化
+### 🛡️ **Security and Configuration Improvements**
 
-### 🎯 **简化设计原则**
-
-- **移除复杂功能**: 删除了 Azure OpenAI、OpenRouter、自定义 API 等过于复杂的功能
-- **专注核心**: 专注于标准 OpenAI API，提供更稳定、更简单的用户体验
-- **易于维护**: 减少代码复杂度，提高可维护性
-- **明确边界**: 明确 NatureCode 的定位 - 简单、易用的终端 AI 助手
+- **Secure storage**: Encrypted API key storage with enhanced security
+- **Configuration validation**: Improved validation for all provider settings
+- **Error recovery**: Better handling of network and authentication issues
+- **User experience**: Simplified configuration process with clear guidance
 
 ## 🔧 **自定义 API 端点配置 (v1.4.9)**
 

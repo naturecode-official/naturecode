@@ -1,6 +1,6 @@
 {
   "name": "naturecode",
-  "version": "1.4.8",
+  "version": "1.4.9",
   "description": "Cross-platform terminal AI assistant",
   "type": "module",
   "main": "src/cli/index.js",
