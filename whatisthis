@@ -251,7 +251,7 @@
 - Anthropic配置：用户输入模型名，提示查看console.anthropic.com
 - Google Gemini配置：用户输入模型名，提示查看ai.google.dev
 - Ollama配置：用户输入模型名，提示运行'ollama list'
-- 自定义AI配置：支持任何AI API，需要提供base URL和API密钥
+- 自定义提供者配置：支持任何AI API，需要提供base URL和API密钥
 
 ### 使用指南
 1. **配置模型**: `naturecode model`

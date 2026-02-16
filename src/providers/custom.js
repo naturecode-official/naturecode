@@ -4,33 +4,31 @@ export class CustomProvider extends AIProvider {
   constructor() {
     super();
     this.name = "custom";
-    this.displayName = "Custom AI";
+    this.displayName = "Custom Provider";
     this.supportsStreaming = true;
   }
 
   validateConfig(config) {
     // 验证自定义提供者配置
     if (!config.apiKey || typeof config.apiKey !== "string") {
-      throw new Error("Custom AI API key is required");
+      throw new Error("Custom Provider API key is required");
     }
 
     if (!config.model || typeof config.model !== "string") {
-      throw new Error("Custom AI model name is required");
+      throw new Error("Custom Provider model name is required");
     }
 
     if (!config.baseUrl || typeof config.baseUrl !== "string") {
-      throw new Error("Custom AI base URL is required");
+      throw new Error("Custom Provider base URL is required");
     }
 
     try {
       new URL(config.baseUrl);
     } catch (error) {
-      throw new Error("Invalid base URL format for custom AI provider");
+      throw new Error("Invalid base URL format for custom provider");
     }
 
-    console.log(
-      `ℹ️  Using custom AI provider with base URL: ${config.baseUrl}`,
-    );
+    console.log(`ℹ️  Using custom provider with base URL: ${config.baseUrl}`);
     console.log(`ℹ️  Model: ${config.model}`);
 
     return true;
@@ -53,14 +51,14 @@ export class CustomProvider extends AIProvider {
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(
-          `Custom AI API error (${response.status}): ${errorText}`,
+          `Custom Provider API error (${response.status}): ${errorText}`,
         );
       }
 
       const data = await response.json();
       return this._extractResponse(data, config);
     } catch (error) {
-      throw new Error(`Custom AI service error: ${error.message}`);
+      throw new Error(`Custom Provider service error: ${error.message}`);
     }
   }
 
@@ -84,13 +82,13 @@ export class CustomProvider extends AIProvider {
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(
-          `Custom AI API error (${response.status}): ${errorText}`,
+          `Custom Provider API error (${response.status}): ${errorText}`,
         );
       }
 
       return this._handleStreamResponse(response, config);
     } catch (error) {
-      throw new Error(`Custom AI service error: ${error.message}`);
+      throw new Error(`Custom Provider service error: ${error.message}`);
     }
   }
 

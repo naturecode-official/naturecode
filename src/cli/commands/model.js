@@ -39,7 +39,7 @@ export async function runModelConfiguration() {
           description: "Local AI models (free, runs on your machine)",
         },
         {
-          name: "Custom AI - Connect to any AI API (custom provider)",
+          name: "Custom Provider - Connect to any AI API",
           value: "custom",
           description: "Connect to any AI API with custom configuration",
         },
@@ -59,7 +59,7 @@ export async function runModelConfiguration() {
         } else if (answers.provider === "gemini") {
           return "Enter your Google Gemini API key (leave empty to skip):";
         } else if (answers.provider === "custom") {
-          return "Enter your Custom AI API key (leave empty to skip):";
+          return "Enter your Custom Provider API key (leave empty to skip):";
         }
         return "Ollama does not require an API key (press Enter to continue):";
       },
@@ -91,7 +91,7 @@ export async function runModelConfiguration() {
           anthropic: "Anthropic (Claude)",
           gemini: "Google Gemini",
           ollama: "Ollama",
-          custom: "Custom AI",
+          custom: "Custom Provider",
         };
         const providerName =
           providerNames[answers.provider] || answers.provider;
@@ -456,11 +456,11 @@ export async function runModelConfiguration() {
       type: "input",
       name: "customBaseUrl",
       message:
-        "Enter Custom API Base URL (e.g., https://api.custom-ai.com/v1):",
+        "Enter Custom API Base URL (e.g., https://api.custom-provider.com/v1):",
       default: (answers) => currentConfig.baseUrl || "",
       validate: (input) => {
         if (!input || input.trim() === "") {
-          return "Base URL is required for custom AI provider";
+          return "Base URL is required for custom provider";
         }
         try {
           new URL(input.trim());
