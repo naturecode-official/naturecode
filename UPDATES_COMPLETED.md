@@ -86,10 +86,9 @@ curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main
 
 # 使用（英文默认）
 naturecode -v                    # 查看版本
-naturecode help "hello"          # 英文帮助
-naturecode help "who are you"    # AI介绍（英文）
-naturecode help "你是谁"         # AI介绍（AI翻译）
-naturecode start                 # 交互会话
+naturecode help                  # 显示帮助信息
+naturecode start                 # 启动AI交互会话
+naturecode model                 # 配置AI模型
 ```
 
 ## 🔄 GitHub推送状态
@@ -117,14 +116,14 @@ git push origin main
 # 检查版本
 naturecode -v
 
-# 测试英文帮助
-naturecode help "hello"
+# 测试帮助系统
+naturecode help
 
-# 测试中文问题（英文响应）
-naturecode help "你是谁"
+# 测试AI交互
+naturecode start
 
-# 测试配置帮助
-naturecode help "how to configure"
+# 测试模型配置
+naturecode model
 ```
 
 ### GitHub验证（推送后）

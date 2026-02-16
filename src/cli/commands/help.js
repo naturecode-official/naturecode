@@ -135,7 +135,7 @@ NatureCode - Cross-platform Terminal AI Assistant
 Available Commands:
   start              Start interactive AI session
   model              Configure AI model and API
-  help [question]    Get AI help for specific questions
+  help               Show help information
 
 File System:
   read <file>        Read file content

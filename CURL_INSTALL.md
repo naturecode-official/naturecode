@@ -177,8 +177,8 @@ naturecode help
 
 3. Get help:
    ```bash
-   naturecode help                    # Direct AI chat
-   naturecode help "your question"    # Specific help
+   naturecode help                    # Show help information
+   naturecode start                   # Start AI interactive session
    ```
 
 ### Available Commands
