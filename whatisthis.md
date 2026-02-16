@@ -237,7 +237,7 @@ git commit -m "$1"
 
 ## 项目概述
 
-**NatureCode** 是一个跨平台终端 AI 助手，支持 DeepSeek、OpenAI 和 Ollama 模型。当前版本：**v1.1.4.8**
+**NatureCode** 是一个跨平台终端 AI 助手，支持 DeepSeek、OpenAI 和 Ollama 模型。当前版本：**v1.4.8**
 
 ### 🚨 必要守则（AI 助手必须遵守）
 
@@ -1294,6 +1294,33 @@ npm run typecheck
 - **统一版本号**: 更新所有文件到版本 1.4.8
 - **版本验证**: 确保所有组件显示一致的版本号
 
+##### 6. **sk-proj API 密钥完全兼容**
+
+- **OpenAI 项目密钥支持**: 完全支持 `sk-proj-` 格式的 API 密钥
+- **移除错误警告**: 不再将 sk-proj- 密钥标记为无效格式
+- **验证逻辑更新**: 更新 API 密钥验证以接受项目密钥
+- **错误消息改进**: 提供更准确的错误信息
+
+##### 7. **GPT-5 模型完全支持**
+
+- **参数自动选择**: GPT-5 系列使用 `max_completion_tokens`，其他模型使用 `max_tokens`
+- **模型列表更新**: 添加 GPT-5 系列模型支持
+- **向后兼容**: 现有配置无需修改即可工作
+- **搜索预览模型**: 支持 `gpt-4o-mini-search-preview` 和 `gpt-4o-search-preview`
+
+##### 8. **详细的 400 错误诊断**
+
+- **增强错误处理**: 提供具体的错误诊断信息
+- **用户友好消息**: 将技术错误转换为用户可理解的建议
+- **API 密钥验证**: 改进的密钥格式和权限检查
+- **网络问题诊断**: 更好的连接问题识别
+
+##### 9. **代码质量改进**
+
+- **修复重复代码**: 解决 openai.js 中的语法错误
+- **性能优化**: 改进错误处理流程
+- **代码清理**: 移除重复和不必要的代码
+
 #### 技术细节：
 
 ##### 修改的文件：
@@ -1304,18 +1331,22 @@ npm run typecheck
 4. **src/config/manager.js** - 修复 API 密钥加载逻辑
 5. **src/cli/commands/help.js** - 修复帮助系统
 6. **src/providers/deepseek.js** - 增强系统提示
-7. **src/providers/openai.js** - 增强系统提示
-8. **src/providers/base.js** - 添加默认系统提示
-9. **package.json** - 更新版本号
-10. **src/cli/index.js** - 更新版本显示
+7. **src/providers/openai.js** - 增强系统提示，添加 GPT-5 支持，修复重复代码
+8. **src/providers/base.js** - 添加默认系统提示，增强错误诊断
+9. **package.json** - 更新版本号到 1.4.8
+10. **src/cli/index.js** - 更新版本显示，添加专业模式品牌
 11. **src/utils/ascii-art.js** - 更新版本显示
 12. **src/utils/feedback.js** - 更新版本显示
 13. **install-smart.sh** - 更新版本显示
-14. **FINAL_INSTALL_COMMANDS.md** - 修复文档
-15. **CURL_INSTALL.md** - 修复文档
-16. **UPDATES_COMPLETED.md** - 修复文档
-17. **新增 local-install.sh** - 本地安装脚本
-18. **新增 robust-install.sh** - 稳定安装脚本
+14. **install-curl.sh** - 更新版本显示
+15. **install-local-test.sh** - 更新版本显示
+16. **package-lock.json** - 更新版本号
+17. **whatisthis.md** - 更新文档
+18. **FINAL_INSTALL_COMMANDS.md** - 修复文档
+19. **CURL_INSTALL.md** - 修复文档
+20. **UPDATES_COMPLETED.md** - 修复文档
+21. **新增 local-install.sh** - 本地安装脚本
+22. **新增 robust-install.sh** - 稳定安装脚本
 
 ##### 提交记录：
 
@@ -1323,7 +1354,9 @@ npm run typecheck
 2. **38d9508** - feat: enhance AI system prompt with detailed file tool instructions
 3. **5cf8ba1** - fix: remove help "question" references from documentation
 4. **9876d4f** - fix: update CLI help output and remove incorrect references
-5. **9912623** - chore: update version to 1.4.8
+5. **ac8ea74** - feat: add detailed 400 error diagnostics and user-friendly error handling
+6. **2e69495** - feat: add full sk-proj API key compatibility and GPT-5 support
+7. **6c65ed1** - feat: update version to 1.4.8 with sk-proj API compatibility and GPT-5 support
 
 ## 🔄 如何更新 NatureCode
 
@@ -1408,6 +1441,51 @@ curl -kfsSL https://raw.githubusercontent.com/naturecode-official/naturecode/mai
 ./local-install.sh
 ```
 
+### 4. sk-proj API 密钥使用
+
+```bash
+# 现在支持 OpenAI 项目密钥
+naturecode model
+# 输入: sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# 系统会正确识别并保存项目密钥
+
+# 验证配置
+naturecode config
+# 应该显示正确的 API 密钥类型
+```
+
+### 5. GPT-5 模型使用
+
+```bash
+# 配置 GPT-5 模型
+naturecode model
+# 选择 OpenAI 提供商
+# 输入模型名称: gpt-5-mini-preview 或 gpt-5-preview
+# 系统会自动使用正确的参数 (max_completion_tokens)
+
+# 启动会话
+naturecode start
+# AI 会使用 GPT-5 模型进行响应
+```
+
+### 6. 详细的错误诊断
+
+```bash
+# 当遇到 400 错误时，系统会提供详细诊断
+naturecode start
+# 如果 API 密钥有问题，会显示:
+# - 密钥格式是否正确
+# - 是否有足够的权限
+# - 网络连接状态
+# - 具体建议的解决方案
+```
+
+# 或使用本地安装
+
+./local-install.sh
+
+````
+
 ## 📊 版本对比
 
 | 特性             | v1.4.7.3    | v1.4.8      |
@@ -1438,7 +1516,7 @@ curl -kfsSL https://raw.githubusercontent.com/naturecode-official/naturecode/mai
 
 # 方法3: 更新 curl
 brew upgrade curl
-```
+````
 
 ### 2. 帮助命令误解
 
@@ -1497,4 +1575,30 @@ brew upgrade curl
 **安装命令**: `curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install.sh | bash`  
 **GitHub 仓库**: https://github.com/naturecode-official/naturecode  
 **主要功能**: 跨平台终端 AI 助手，支持 DeepSeek、OpenAI、Ollama  
-**核心改进**: 模型自定义命名、AI 系统提示增强、帮助系统修复、网络问题解决方案
+**核心改进**: 模型自定义命名、AI 系统提示增强、帮助系统修复、网络问题解决方案、sk-proj API 兼容、GPT-5 模型支持、详细错误诊断
+
+## 🎉 v1.4.8 版本亮点
+
+### 🔑 **sk-proj API 密钥完全兼容**
+
+- 支持 OpenAI 项目密钥 (`sk-proj-` 格式)
+- 移除无效格式警告
+- 改进的密钥验证逻辑
+
+### 🤖 **GPT-5 模型完全支持**
+
+- 自动参数选择 (max_tokens vs max_completion_tokens)
+- 支持 GPT-5 系列模型
+- 搜索预览模型支持
+
+### 🩺 **详细的错误诊断**
+
+- 增强的 400 错误分析
+- 用户友好的错误消息
+- 具体的解决方案建议
+
+### 🛠️ **代码质量改进**
+
+- 修复 openai.js 重复代码问题
+- 改进的错误处理流程
+- 性能优化
