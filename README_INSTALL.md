@@ -93,6 +93,8 @@ naturecode --help
 
 # Main Commands:
 naturecode model     # Configure AI model and API
+naturecode delmodel  # Delete model configuration
+naturecode config    # Show current configuration
 naturecode start     # Start interactive AI session
 naturecode help      # Get AI assistance
 naturecode git       # Git operations

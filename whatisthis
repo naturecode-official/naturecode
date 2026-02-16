@@ -286,6 +286,8 @@
 2. **查看可用模型**: 访问各AI服务商官网
 3. **开始使用**: `naturecode start`
 4. **获取帮助**: `naturecode --help`
+5. **删除模型配置**: `naturecode delmodel <name>` 或 `naturecode delmodel all`
+6. **查看当前配置**: `naturecode config`
 
 ### 🔄 向后兼容性
 - 现有配置继续工作

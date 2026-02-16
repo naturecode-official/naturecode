@@ -54,6 +54,13 @@ naturecode model
 # Start interactive AI session
 naturecode start
 
+# Delete model configuration
+naturecode delmodel <name>        # Delete specific model
+naturecode delmodel all          # Delete all models
+
+# Show current configuration
+naturecode config
+
 # Get comprehensive help
 naturecode --help
 
