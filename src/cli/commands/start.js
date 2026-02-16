@@ -6,6 +6,7 @@ import { OpenAIProvider } from "../../providers/openai.js";
 import { OllamaProvider } from "../../providers/ollama.js";
 import { AnthropicProvider } from "../../providers/anthropic.js";
 import { GeminiProvider } from "../../providers/gemini.js";
+import { CustomProvider } from "../../providers/custom.js";
 import {
   formatResponse,
   showWelcome,
@@ -62,6 +63,8 @@ function createProvider(config) {
       return new AnthropicProvider(config);
     case "gemini":
       return new GeminiProvider(config);
+    case "custom":
+      return new CustomProvider(config);
     default:
       throw new Error(`Unsupported provider: ${config.provider}`);
   }

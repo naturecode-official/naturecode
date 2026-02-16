@@ -2,7 +2,7 @@
 
 ## Features
 
-- 🤖 **Multi-model AI Support**: DeepSeek, OpenAI, Anthropic, Gemini, Ollama with flexible model input
+- 🤖 **Multi-model AI Support**: DeepSeek, OpenAI, Anthropic, Google Gemini, Ollama, Custom AI with flexible model input
 - 🚀 **One-line Installation**: Simple curl-based installation system
 - 📦 **Cross-platform**: Native support for macOS, Linux, and Windows
 - 🔧 **Professional Mode**: Advanced diagnostics and developer tools
@@ -111,7 +111,8 @@ See [WINDOWS_INSTALL.md](WINDOWS_INSTALL.md) for detailed Windows installation i
 ### Key Features in v1.5.0
 
 - **Flexible Model Configuration**: Input any model name manually instead of selecting from pre-defined lists
-- **Simplified Validation**: Removed model list validation from all providers (OpenAI, DeepSeek, Anthropic, Gemini, Ollama)
+- **Custom AI Provider**: Connect to any AI API with custom base URL, API key, and configuration
+- **Simplified Validation**: Removed model list validation from all providers (OpenAI, DeepSeek, Anthropic, Google Gemini, Ollama, Custom)
 - **Smart User Guidance**: Provider-specific prompts guide users to check official websites for available models
 - **Enhanced User Experience**: More intuitive configuration wizard with text input fields
 - **Backward Compatibility**: Maintains all existing functionality while providing more flexibility

@@ -38,6 +38,11 @@ export async function runModelConfiguration() {
           value: "ollama",
           description: "Local AI models (free, runs on your machine)",
         },
+        {
+          name: "Custom AI - Connect to any AI API (custom provider)",
+          value: "custom",
+          description: "Connect to any AI API with custom configuration",
+        },
       ],
       default: currentConfig.provider || "deepseek",
     },
@@ -53,6 +58,8 @@ export async function runModelConfiguration() {
           return "Enter your Anthropic API key (leave empty to skip):";
         } else if (answers.provider === "gemini") {
           return "Enter your Google Gemini API key (leave empty to skip):";
+        } else if (answers.provider === "custom") {
+          return "Enter your Custom AI API key (leave empty to skip):";
         }
         return "Ollama does not require an API key (press Enter to continue):";
       },
@@ -84,6 +91,7 @@ export async function runModelConfiguration() {
           anthropic: "Anthropic (Claude)",
           gemini: "Google Gemini",
           ollama: "Ollama",
+          custom: "Custom AI",
         };
         const providerName =
           providerNames[answers.provider] || answers.provider;
@@ -98,6 +106,7 @@ export async function runModelConfiguration() {
           anthropic: "claude-3-5-haiku-20241022",
           gemini: "gemini-2.5-flash",
           ollama: "llama3.2:latest",
+          custom: "custom-model",
         };
         return currentConfig.model || smartDefaults[answers.provider] || "";
       },
@@ -112,7 +121,8 @@ export async function runModelConfiguration() {
         answers.provider === "openai" ||
         answers.provider === "anthropic" ||
         answers.provider === "gemini" ||
-        answers.provider === "ollama",
+        answers.provider === "ollama" ||
+        answers.provider === "custom",
     },
     {
       type: "list",
@@ -307,6 +317,35 @@ export async function runModelConfiguration() {
           }
 
           return choices;
+        } else if (answers.provider === "custom") {
+          // 自定义提供者支持所有模型类型
+          return [
+            {
+              name: "Text - Standard text generation",
+              value: "text",
+              short: "Text",
+            },
+            {
+              name: "Chat - Interactive conversation",
+              value: "chat",
+              short: "Chat",
+            },
+            {
+              name: "Code - Code generation and analysis",
+              value: "code",
+              short: "Code",
+            },
+            {
+              name: "Vision - Image analysis and understanding",
+              value: "vision",
+              short: "Vision",
+            },
+            {
+              name: "Reasoner - Advanced reasoning and problem solving",
+              value: "reasoner",
+              short: "Reasoner",
+            },
+          ];
         }
         return [];
       },
@@ -321,6 +360,8 @@ export async function runModelConfiguration() {
           return currentConfig.modelType || "chat";
         } else if (answers.provider === "ollama") {
           return currentConfig.modelType || "chat";
+        } else if (answers.provider === "custom") {
+          return currentConfig.modelType || "text";
         }
         return "text";
       },
@@ -329,7 +370,8 @@ export async function runModelConfiguration() {
         answers.provider === "openai" ||
         answers.provider === "anthropic" ||
         answers.provider === "gemini" ||
-        answers.provider === "ollama",
+        answers.provider === "ollama" ||
+        answers.provider === "custom",
     },
     {
       type: "confirm",
@@ -409,6 +451,40 @@ export async function runModelConfiguration() {
         return true;
       },
     },
+    // 自定义提供者特定配置
+    {
+      type: "input",
+      name: "customBaseUrl",
+      message:
+        "Enter Custom API Base URL (e.g., https://api.custom-ai.com/v1):",
+      default: (answers) => currentConfig.baseUrl || "",
+      validate: (input) => {
+        if (!input || input.trim() === "") {
+          return "Base URL is required for custom AI provider";
+        }
+        try {
+          new URL(input.trim());
+          return true;
+        } catch (error) {
+          return "Please enter a valid URL (e.g., https://api.example.com/v1)";
+        }
+      },
+      when: (answers) => answers.provider === "custom",
+    },
+    {
+      type: "input",
+      name: "customApiVersion",
+      message: "Enter API Version (press Enter for default '2024-01-01'):",
+      default: (answers) => currentConfig.apiVersion || "2024-01-01",
+      when: (answers) => answers.provider === "custom",
+    },
+    {
+      type: "input",
+      name: "customOrganization",
+      message: "Enter Organization ID (optional, press Enter to skip):",
+      default: (answers) => currentConfig.organization || "",
+      when: (answers) => answers.provider === "custom",
+    },
     {
       type: "confirm",
       name: "confirm",
@@ -453,6 +529,10 @@ export async function runModelConfiguration() {
           : answers.provider === "gemini"
             ? "gemini-2.5-flash"
             : undefined,
+    // Custom provider specific fields
+    baseUrl: answers.customBaseUrl || undefined,
+    apiVersion: answers.customApiVersion || undefined,
+    organization: answers.customOrganization || undefined,
   };
 
   try {
