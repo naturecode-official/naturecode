@@ -34,9 +34,9 @@ export class GeminiProvider extends AIProvider {
     return true;
   }
 
-    if (config.model && !this.getAvailableModels().includes(config.model)) {
+    if (!config.model || config.model.trim() === "") {
       throw new Error(
-        `Gemini model must be one of: ${this.getAvailableModels().join(", ")}`,
+        "Gemini model name is required. Please check https://ai.google.dev for available models.",
       );
     }
 

@@ -1,11 +1,6 @@
 import inquirer from "inquirer";
 import { configManager } from "../../config/manager.js";
 import { secureStore } from "../../config/secure-store.js";
-import { DeepSeekProvider } from "../../providers/deepseek.js";
-import { OpenAIProvider } from "../../providers/openai.js";
-import { OllamaProvider } from "../../providers/ollama.js";
-import { AnthropicProvider } from "../../providers/anthropic.js";
-import { GeminiProvider } from "../../providers/gemini.js";
 
 export async function runModelConfiguration() {
   console.log("NatureCode AI Configuration Wizard\n");

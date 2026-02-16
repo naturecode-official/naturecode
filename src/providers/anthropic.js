@@ -33,9 +33,9 @@ export class AnthropicProvider extends AIProvider {
     return true;
   }
 
-    if (config.model && !this.getAvailableModels().includes(config.model)) {
+    if (!config.model || config.model.trim() === "") {
       throw new Error(
-        `Anthropic model must be one of: ${this.getAvailableModels().join(", ")}`,
+        "Anthropic model name is required. Please check https://console.anthropic.com for available models.",
       );
     }
 

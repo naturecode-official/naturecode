@@ -26,9 +26,6 @@ export class OllamaProvider extends AIProvider {
     return true;
   }
 
-    return true;
-  }
-
   getAvailableModels() {
     return OllamaProvider.getStaticAvailableModels();
   }
