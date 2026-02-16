@@ -1,12 +1,12 @@
 # NatureCode v1.4.5.4 - Installation Guide
 
-##  Quick Install (One Command)
+## Quick Install (One Command)
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-simple.sh | bash
 ```
 
-##  What's Included
+## What's Included
 
 NatureCode is a cross-platform terminal AI assistant with:
 
@@ -58,7 +58,7 @@ npm install -g .
 npm install -g naturecode
 ```
 
-##  Prerequisites
+## Prerequisites
 
 - **Node.js** v16 or higher
 - **npm** (comes with Node.js)
@@ -80,10 +80,10 @@ After installation:
    naturecode start
    ```
 
-3. **Get AI help**:
+3. **Get help**:
    ```bash
-   naturecode help                    # Direct AI chat
-   naturecode help "your question"    # Specific help
+   naturecode help                    # Show help information
+   naturecode start                   # Start AI session
    ```
 
 ## 📚 Available Commands
@@ -195,7 +195,7 @@ naturecode help
 # Should start AI chat
 ```
 
-##  Documentation
+## Documentation
 
 - **Full Documentation**: See `docs.md`
 - **Configuration Guide**: See `CONFIG_GUIDE.md`
@@ -213,7 +213,7 @@ naturecode help
 
 MIT License - see LICENSE file
 
-##  Links
+## Links
 
 - **GitHub**: https://github.com/naturecode-official/naturecode
 - **Issues**: https://github.com/naturecode-official/naturecode/issues
@@ -225,4 +225,4 @@ MIT License - see LICENSE file
 curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-simple.sh | bash
 ```
 
-After installation, run `naturecode help` to start your AI-powered coding journey! 
+After installation, run `naturecode help` to start your AI-powered coding journey!

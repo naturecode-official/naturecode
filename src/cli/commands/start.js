@@ -426,22 +426,8 @@ export async function startInteractiveSession(options = {}) {
     }
 
     if (input.toLowerCase().startsWith("help")) {
-      // Extract question from help command
-      const questionMatch = input.match(/^help\s+(.+)$/i);
-      const question = questionMatch ? questionMatch[1].trim() : null;
-
-      if (question) {
-        // Use the new help command for AI assistance
-        const { createHelpCommand } = await import("./help.js");
-        const helpCommand = createHelpCommand();
-
-        // Simulate running the help command with question
-        console.log("\nGetting AI assistance for your question...\n");
-        await helpCommand.handleCommand(question, {});
-      } else {
-        // Show enhanced help for simple help command
-        showEnhancedHelp();
-      }
+      // Show enhanced help
+      showEnhancedHelp();
       updatePrompt();
       return;
     }

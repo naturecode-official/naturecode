@@ -1131,7 +1131,7 @@ npm run typecheck
 
 1. **安装消息修复**：
    - 修复安装成功消息中的错误指引
-   - 将 "naturecode help 'your question'" 改为 "naturecode start (for AI assistance)"
+   - 删除 "naturecode help 'your question'" 引用，使用 "naturecode start" 进行 AI 协助
    - 准确反映实际可用功能
 
 #### 技术细节：
@@ -1192,8 +1192,7 @@ npm run typecheck
 
 **问题 2**: 安装成功消息不准确
 
-- **错误消息**: `You can now use: naturecode help "your question"`
-- **问题**: `naturecode help "question"` 的 AI 功能在当前版本不存在
+- **问题**: `naturecode help "question"` 功能已被彻底删除
 - **修复**: 改为 `You can now use: naturecode start (for AI assistance)`
 - **版本**: 发布 1.4.7.2 修复此问题
 
@@ -1280,7 +1279,7 @@ npm run typecheck
 ##### 3. **帮助系统修复**
 
 - **修复 CLI 帮助输出**: 更新帮助命令描述，准确反映可用功能
-- **移除错误引用**: 删除文档中不准确的 `help "question"` 引用
+- **彻底删除**: 完全移除 `help "question"` 功能和相关引用
 - **更新文档**: 所有文档现在一致地指导用户使用 `naturecode start` 获取 AI 帮助
 - **清理旧文件**: 移除旧的 `help-original.js` 文件
 
@@ -1322,7 +1321,7 @@ npm run typecheck
 
 1. **24d65d4** - feat: improve model configuration with custom naming
 2. **38d9508** - feat: enhance AI system prompt with detailed file tool instructions
-3. **5cf8ba1** - fix: remove incorrect help "question" references from documentation
+3. **5cf8ba1** - fix: remove help "question" references from documentation
 4. **9876d4f** - fix: update CLI help output and remove incorrect references
 5. **9912623** - chore: update version to 1.4.7.3
 
@@ -1440,12 +1439,12 @@ brew upgrade curl
 
 ### 2. 帮助命令误解
 
-**症状**: 用户以为 `help "question"` 功能不存在
+**症状**: `help "question"` 功能已被彻底删除
 **澄清**:
 
-- ✅ `naturecode help "question"` 功能存在但需要 AI 配置
-- ✅ `naturecode start` 是推荐的 AI 交互方式
-- ✅ 所有文档已更新反映实际情况
+- ✅ `naturecode help "question"` 功能已完全移除
+- ✅ `naturecode start` 是唯一的 AI 交互方式
+- ✅ 所有文档和代码已更新
 
 ### 3. 模型配置问题
 

@@ -730,17 +730,8 @@ async function startInteractiveMode() {
         const { HelpCommand } = await import("./commands/help.js");
         const helpInstance = new HelpCommand();
 
-        // 提取问题参数
-        const questionMatch = command.match(/^help\s+(.+)$/i);
-        const question = questionMatch ? questionMatch[1].trim() : null;
-
-        if (question) {
-          // 使用文档帮助模式
-          await helpInstance.showDocsBasedHelp(question);
-        } else {
-          // 显示完整的简单帮助
-          await helpInstance.showSimpleHelp();
-        }
+        // 显示完整的简单帮助
+        await helpInstance.showSimpleHelp();
       } catch (error) {
         console.error("Error showing help:", error.message);
         console.log("\n" + getCommandPrompt());
