@@ -440,18 +440,10 @@ show_post_install() {
         echo "     ${CYAN}naturecode code${NC}              # Code analysis and quality tools"
         echo "     ${CYAN}naturecode project${NC}           # Project management tools"
         echo "     ${CYAN}naturecode plugin${NC}            # Plugin management"
-        echo "     ${CYAN}naturecode session${NC}           # Session management"
-        echo "     ${CYAN}naturecode review${NC}            # Code review tools"
-        echo "     ${CYAN}naturecode team${NC}              # Team collaboration"
-        echo "     ${CYAN}naturecode performance${NC}       # Performance monitoring"
     else
         echo "     naturecode code              # Code analysis and quality tools"
         echo "     naturecode project           # Project management tools"
         echo "     naturecode plugin            # Plugin management"
-        echo "     naturecode session           # Session management"
-        echo "     naturecode review            # Code review tools"
-        echo "     naturecode team              # Team collaboration"
-        echo "     naturecode performance       # Performance monitoring"
     fi
     echo ""
     

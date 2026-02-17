@@ -88,23 +88,12 @@ AI Providers:
   - OpenAI: GPT models, requires API key
   - Ollama: Local models, no API key needed
 
-Session Management:
-  session list       List saved sessions
-  session load <id>  Load saved session
-  session save       Save current session
-  session delete <id> Delete saved session
-
 Plugin System:
   plugin list        List available plugins
   plugin install <id> Install plugin
   plugin remove <id> Remove plugin
   plugin enable <id> Enable plugin
   plugin disable <id> Disable plugin
-
-Team Collaboration:
-  team share         Share session with team
-  team review        Request code review
-  team sync          Sync with team repository
 
 Options:
   --version          Show version
