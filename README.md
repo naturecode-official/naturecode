@@ -518,6 +518,38 @@ naturecode help
 # Should start AI chat
 ```
 
+## Android Support
+
+NatureCode now has Android compatibility with a dedicated terminal application.
+
+### Android App Features
+
+- **Full terminal interface** with Linux-like command operations
+- **NatureCode AI integration** - all AI features available
+- **File system access** - read, write, and manage files
+- **Network connectivity** - for AI model access
+- **Basic Linux commands** - ls, cd, pwd, clear, etc.
+
+### Getting the Android App
+
+1. **Pre-built APK**: Download from [GitHub Releases](https://github.com/naturecode-official/naturecode/releases)
+2. **Build from source**: See `android-app/` directory and `build-android.sh` script
+
+### Installation Requirements
+
+- Android 8.0+ (API 26+)
+- 100MB+ free storage
+- Network connection for AI features
+
+### Quick Start on Android
+
+1. Install the APK file
+2. Open "NatureCode Terminal" app
+3. Type `naturecode start` to begin AI session
+4. Type `help` for available commands
+
+For detailed Android installation instructions, see [Android Installation Guide](dist/android/README-ANDROID.md).
+
 ## Windows Installation Guide
 
 NatureCode fully supports Windows 10/11 with:
