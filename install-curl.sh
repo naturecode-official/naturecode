@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # NatureCode Curl Installation Script
-# Version: 1.5.5
+# Version: 1.5.6
 # One-line install: curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-curl.sh | bash
 
 set -e
@@ -64,7 +64,7 @@ get_latest_version() {
     
     if [ -z "$version" ]; then
         # 如果无法获取，使用默认版本
-        echo "1.5.5"
+        echo "1.5.6"
     else
         echo "$version"
     fi
