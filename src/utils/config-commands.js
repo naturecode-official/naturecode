@@ -4,7 +4,7 @@ import { ConfigManager } from "./config-manager.js";
 import { exitWithError } from "./error-handler.js";
 
 export class ConfigCommandHandler {
-  constructor () {
+  constructor() {
     this.manager = new ConfigManager();
     this.commands = [
       {
@@ -55,14 +55,14 @@ export class ConfigCommandHandler {
     ];
   }
 
-  getAvailableCommands () {
+  getAvailableCommands() {
     return this.commands.map((cmd) => ({
       command: cmd.command,
       description: cmd.description,
     }));
   }
 
-  async handleCommand (command, args = {}) {
+  async handleCommand(command, args = {}) {
     const cmd = this.commands.find((c) => c.command === command);
 
     if (!cmd) {
@@ -76,7 +76,7 @@ export class ConfigCommandHandler {
     }
   }
 
-  async handleShow (args) {
+  async handleShow(args) {
     const { scope = "merged", format = "pretty" } = args;
 
     const config = await this.manager.loadConfig();
@@ -92,7 +92,7 @@ export class ConfigCommandHandler {
     return config;
   }
 
-  printConfig (config, prefix = "") {
+  printConfig(config, prefix = "") {
     Object.entries(config).forEach(([key, value]) => {
       if (value && typeof value === "object" && !Array.isArray(value)) {
         console.log(`${prefix}${key}:`);
@@ -110,7 +110,7 @@ export class ConfigCommandHandler {
     });
   }
 
-  async handleGet (args) {
+  async handleGet(args) {
     const { key } = args;
 
     if (!key) {
@@ -131,7 +131,7 @@ export class ConfigCommandHandler {
     return { key, value };
   }
 
-  async handleSet (args) {
+  async handleSet(args) {
     const { key, value, scope = "project" } = args;
 
     if (!key) {
@@ -169,7 +169,7 @@ export class ConfigCommandHandler {
     return result;
   }
 
-  async handleReset (args) {
+  async handleReset(args) {
     const { scope = "project", confirm = false } = args;
 
     if (!confirm) {
@@ -187,7 +187,7 @@ export class ConfigCommandHandler {
     return result;
   }
 
-  async handlePermission (args) {
+  async handlePermission(args) {
     const { level, scope = "project" } = args;
 
     if (!level) {
@@ -214,53 +214,53 @@ export class ConfigCommandHandler {
     return result;
   }
 
-  async handleAlias (args) {
+  async handleAlias(args) {
     const { action = "list", name, command, scope = "project" } = args;
 
     switch (action) {
-    case "list":
-      const aliases = await this.manager.getCommandAliases();
-      console.log("Command Aliases:");
-      if (Object.keys(aliases).length === 0) {
-        console.log("  (no aliases defined)");
-      } else {
-        Object.entries(aliases).forEach(([alias, cmd]) => {
-          console.log(`  ${alias} -> ${cmd}`);
-        });
-      }
-      return aliases;
+      case "list":
+        const aliases = await this.manager.getCommandAliases();
+        console.log("Command Aliases:");
+        if (Object.keys(aliases).length === 0) {
+          console.log("  (no aliases defined)");
+        } else {
+          Object.entries(aliases).forEach(([alias, cmd]) => {
+            console.log(`  ${alias} -> ${cmd}`);
+          });
+        }
+        return aliases;
 
-    case "add":
-      if (!name || !command) {
-        throw new Error("Name and command parameters are required");
-      }
-      const addResult = await this.manager.addCommandAlias(
-        name,
-        command,
-        scope,
-      );
-      console.log("Alias added:");
-      console.log(`  ${name} -> ${command}`);
-      return addResult;
+      case "add":
+        if (!name || !command) {
+          throw new Error("Name and command parameters are required");
+        }
+        const addResult = await this.manager.addCommandAlias(
+          name,
+          command,
+          scope,
+        );
+        console.log("Alias added:");
+        console.log(`  ${name} -> ${command}`);
+        return addResult;
 
-    case "remove":
-      if (!name) {
-        throw new Error("Name parameter is required");
-      }
-      const removeResult = await this.manager.removeCommandAlias(name, scope);
-      if (removeResult.success === false) {
-        console.log(removeResult.message);
-      } else {
-        console.log(`Alias removed: ${name}`);
-      }
-      return removeResult;
+      case "remove":
+        if (!name) {
+          throw new Error("Name parameter is required");
+        }
+        const removeResult = await this.manager.removeCommandAlias(name, scope);
+        if (removeResult.success === false) {
+          console.log(removeResult.message);
+        } else {
+          console.log(`Alias removed: ${name}`);
+        }
+        return removeResult;
 
-    default:
-      throw new Error(`Unknown alias action: ${action}`);
+      default:
+        throw new Error(`Unknown alias action: ${action}`);
     }
   }
 
-  async handleWhitelist (args) {
+  async handleWhitelist(args) {
     const {
       action = "show",
       type = "extensions",
@@ -272,64 +272,64 @@ export class ConfigCommandHandler {
     const rules = config.fileAccess?.rules || {};
 
     switch (action) {
-    case "show":
-      if (type === "extensions") {
-        console.log("Allowed Extensions:");
-        const exts = rules.allowedExtensions || [];
-        if (exts.length === 0) {
-          console.log("  (all extensions allowed)");
-        } else {
-          exts.forEach((ext) => console.log(`  ${ext}`));
+      case "show":
+        if (type === "extensions") {
+          console.log("Allowed Extensions:");
+          const exts = rules.allowedExtensions || [];
+          if (exts.length === 0) {
+            console.log("  (all extensions allowed)");
+          } else {
+            exts.forEach((ext) => console.log(`  ${ext}`));
+          }
+        } else if (type === "directories") {
+          console.log("Allowed Directories:");
+          const dirs = rules.allowedDirectories || [];
+          if (dirs.length === 0) {
+            console.log("  (all directories allowed)");
+          } else {
+            dirs.forEach((dir) => console.log(`  ${dir}`));
+          }
         }
-      } else if (type === "directories") {
-        console.log("Allowed Directories:");
-        const dirs = rules.allowedDirectories || [];
-        if (dirs.length === 0) {
-          console.log("  (all directories allowed)");
-        } else {
-          dirs.forEach((dir) => console.log(`  ${dir}`));
-        }
-      }
-      return rules;
+        return rules;
 
-    case "add":
-      if (!item) {
-        throw new Error("Item parameter is required");
-      }
-      const key =
+      case "add":
+        if (!item) {
+          throw new Error("Item parameter is required");
+        }
+        const key =
           type === "extensions"
             ? "fileAccess.rules.allowedExtensions"
             : "fileAccess.rules.allowedDirectories";
-      const currentList = (await this.manager.getConfigValue(key)) || [];
-      if (!currentList.includes(item)) {
-        currentList.push(item);
-        await this.manager.setConfigValue(key, currentList, scope);
-        console.log(`Added to whitelist: ${item}`);
-      } else {
-        console.log(`Already in whitelist: ${item}`);
-      }
-      return { added: item };
+        const currentList = (await this.manager.getConfigValue(key)) || [];
+        if (!currentList.includes(item)) {
+          currentList.push(item);
+          await this.manager.setConfigValue(key, currentList, scope);
+          console.log(`Added to whitelist: ${item}`);
+        } else {
+          console.log(`Already in whitelist: ${item}`);
+        }
+        return { added: item };
 
-    case "remove":
-      if (!item) {
-        throw new Error("Item parameter is required");
-      }
-      const removeKey =
+      case "remove":
+        if (!item) {
+          throw new Error("Item parameter is required");
+        }
+        const removeKey =
           type === "extensions"
             ? "fileAccess.rules.allowedExtensions"
             : "fileAccess.rules.allowedDirectories";
-      const removeList = (await this.manager.getConfigValue(removeKey)) || [];
-      const filtered = removeList.filter((i) => i !== item);
-      await this.manager.setConfigValue(removeKey, filtered, scope);
-      console.log(`Removed from whitelist: ${item}`);
-      return { removed: item };
+        const removeList = (await this.manager.getConfigValue(removeKey)) || [];
+        const filtered = removeList.filter((i) => i !== item);
+        await this.manager.setConfigValue(removeKey, filtered, scope);
+        console.log(`Removed from whitelist: ${item}`);
+        return { removed: item };
 
-    default:
-      throw new Error(`Unknown whitelist action: ${action}`);
+      default:
+        throw new Error(`Unknown whitelist action: ${action}`);
     }
   }
 
-  async handleBlacklist (args) {
+  async handleBlacklist(args) {
     const {
       action = "show",
       type = "extensions",
@@ -341,64 +341,64 @@ export class ConfigCommandHandler {
     const rules = config.fileAccess?.rules || {};
 
     switch (action) {
-    case "show":
-      if (type === "extensions") {
-        console.log("Denied Extensions:");
-        const exts = rules.deniedExtensions || [];
-        if (exts.length === 0) {
-          console.log("  (no extensions denied)");
-        } else {
-          exts.forEach((ext) => console.log(`  ${ext}`));
+      case "show":
+        if (type === "extensions") {
+          console.log("Denied Extensions:");
+          const exts = rules.deniedExtensions || [];
+          if (exts.length === 0) {
+            console.log("  (no extensions denied)");
+          } else {
+            exts.forEach((ext) => console.log(`  ${ext}`));
+          }
+        } else if (type === "directories") {
+          console.log("Denied Directories:");
+          const dirs = rules.deniedDirectories || [];
+          if (dirs.length === 0) {
+            console.log("  (no directories denied)");
+          } else {
+            dirs.forEach((dir) => console.log(`  ${dir}`));
+          }
         }
-      } else if (type === "directories") {
-        console.log("Denied Directories:");
-        const dirs = rules.deniedDirectories || [];
-        if (dirs.length === 0) {
-          console.log("  (no directories denied)");
-        } else {
-          dirs.forEach((dir) => console.log(`  ${dir}`));
-        }
-      }
-      return rules;
+        return rules;
 
-    case "add":
-      if (!item) {
-        throw new Error("Item parameter is required");
-      }
-      const key =
+      case "add":
+        if (!item) {
+          throw new Error("Item parameter is required");
+        }
+        const key =
           type === "extensions"
             ? "fileAccess.rules.deniedExtensions"
             : "fileAccess.rules.deniedDirectories";
-      const currentList = (await this.manager.getConfigValue(key)) || [];
-      if (!currentList.includes(item)) {
-        currentList.push(item);
-        await this.manager.setConfigValue(key, currentList, scope);
-        console.log(`Added to blacklist: ${item}`);
-      } else {
-        console.log(`Already in blacklist: ${item}`);
-      }
-      return { added: item };
+        const currentList = (await this.manager.getConfigValue(key)) || [];
+        if (!currentList.includes(item)) {
+          currentList.push(item);
+          await this.manager.setConfigValue(key, currentList, scope);
+          console.log(`Added to blacklist: ${item}`);
+        } else {
+          console.log(`Already in blacklist: ${item}`);
+        }
+        return { added: item };
 
-    case "remove":
-      if (!item) {
-        throw new Error("Item parameter is required");
-      }
-      const removeKey =
+      case "remove":
+        if (!item) {
+          throw new Error("Item parameter is required");
+        }
+        const removeKey =
           type === "extensions"
             ? "fileAccess.rules.deniedExtensions"
             : "fileAccess.rules.deniedDirectories";
-      const removeList = (await this.manager.getConfigValue(removeKey)) || [];
-      const filtered = removeList.filter((i) => i !== item);
-      await this.manager.setConfigValue(removeKey, filtered, scope);
-      console.log(`Removed from blacklist: ${item}`);
-      return { removed: item };
+        const removeList = (await this.manager.getConfigValue(removeKey)) || [];
+        const filtered = removeList.filter((i) => i !== item);
+        await this.manager.setConfigValue(removeKey, filtered, scope);
+        console.log(`Removed from blacklist: ${item}`);
+        return { removed: item };
 
-    default:
-      throw new Error(`Unknown blacklist action: ${action}`);
+      default:
+        throw new Error(`Unknown blacklist action: ${action}`);
     }
   }
 
-  async handleCheck (args) {
+  async handleCheck(args) {
     const { file, operation } = args;
 
     if (file) {

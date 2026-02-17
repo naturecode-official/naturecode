@@ -5,7 +5,7 @@ import path from "path";
 import os from "os";
 
 export class ConfigManager {
-  constructor (projectDir = process.cwd()) {
+  constructor(projectDir = process.cwd()) {
     this.projectDir = projectDir;
     this.globalConfigPath = path.join(
       os.homedir(),
@@ -16,7 +16,7 @@ export class ConfigManager {
     this.defaultConfig = this.getDefaultConfig();
   }
 
-  getDefaultConfig () {
+  getDefaultConfig() {
     return {
       version: "1.0.0",
       fileAccess: {
@@ -104,7 +104,7 @@ export class ConfigManager {
     };
   }
 
-  async loadConfig () {
+  async loadConfig() {
     try {
       // Start with default config (deep copy to avoid mutations)
       let config = JSON.parse(JSON.stringify(this.defaultConfig));
@@ -127,7 +127,7 @@ export class ConfigManager {
     }
   }
 
-  async saveConfig (config, scope = "project") {
+  async saveConfig(config, scope = "project") {
     try {
       const configPath =
         scope === "global" ? this.globalConfigPath : this.projectConfigPath;
@@ -152,7 +152,7 @@ export class ConfigManager {
     }
   }
 
-  async readConfigFile (filePath) {
+  async readConfigFile(filePath) {
     try {
       const content = await fs.readFile(filePath, "utf-8");
       return JSON.parse(content);
@@ -161,7 +161,7 @@ export class ConfigManager {
     }
   }
 
-  mergeConfigs (base, override) {
+  mergeConfigs(base, override) {
     const merged = { ...base };
 
     Object.keys(override).forEach((key) => {
@@ -179,7 +179,7 @@ export class ConfigManager {
     return merged;
   }
 
-  validateConfig (config) {
+  validateConfig(config) {
     // Validate version
     if (!config.version) {
       throw new Error("Config must have a version field");
@@ -218,7 +218,7 @@ export class ConfigManager {
     return true;
   }
 
-  async updateConfig (updates, scope = "project") {
+  async updateConfig(updates, scope = "project") {
     try {
       const currentConfig = await this.loadConfig();
       const updatedConfig = this.mergeConfigs(currentConfig, updates);
@@ -228,7 +228,7 @@ export class ConfigManager {
     }
   }
 
-  async resetConfig (scope = "project") {
+  async resetConfig(scope = "project") {
     try {
       const defaultConfig = this.getDefaultConfig();
       return await this.saveConfig(defaultConfig, scope);
@@ -237,7 +237,7 @@ export class ConfigManager {
     }
   }
 
-  async getConfigValue (key, config = null) {
+  async getConfigValue(key, config = null) {
     try {
       if (!config) {
         config = await this.loadConfig();
@@ -260,7 +260,7 @@ export class ConfigManager {
     }
   }
 
-  async setConfigValue (key, value, scope = "project") {
+  async setConfigValue(key, value, scope = "project") {
     try {
       const config = await this.loadConfig();
       const keys = key.split(".");
@@ -284,7 +284,7 @@ export class ConfigManager {
     }
   }
 
-  async addCommandAlias (alias, command, scope = "project") {
+  async addCommandAlias(alias, command, scope = "project") {
     try {
       const config = await this.loadConfig();
 
@@ -304,7 +304,7 @@ export class ConfigManager {
     }
   }
 
-  async removeCommandAlias (alias, scope = "project") {
+  async removeCommandAlias(alias, scope = "project") {
     try {
       const config = await this.loadConfig();
 
@@ -327,7 +327,7 @@ export class ConfigManager {
     }
   }
 
-  async getCommandAliases () {
+  async getCommandAliases() {
     try {
       const config = await this.loadConfig();
       return config.commands?.aliases || {};
@@ -336,7 +336,7 @@ export class ConfigManager {
     }
   }
 
-  async resolveAlias (command) {
+  async resolveAlias(command) {
     try {
       const aliases = await this.getCommandAliases();
       return aliases[command] || command;
@@ -345,7 +345,7 @@ export class ConfigManager {
     }
   }
 
-  async isFileAllowed (filePath) {
+  async isFileAllowed(filePath) {
     try {
       const config = await this.loadConfig();
       const rules = config.fileAccess?.rules;
@@ -407,7 +407,7 @@ export class ConfigManager {
     }
   }
 
-  async isOperationAllowed (operation) {
+  async isOperationAllowed(operation) {
     try {
       const config = await this.loadConfig();
       const permissions = config.permissions;
@@ -441,7 +441,7 @@ export class ConfigManager {
     }
   }
 
-  async requiresConfirmation (operation) {
+  async requiresConfirmation(operation) {
     try {
       const config = await this.loadConfig();
       const confirmations = config.permissions?.requireConfirmation;
@@ -456,7 +456,7 @@ export class ConfigManager {
     }
   }
 
-  async setPermissionLevel (level, scope = "project") {
+  async setPermissionLevel(level, scope = "project") {
     try {
       const validLevels = ["readonly", "restricted", "full"];
 
@@ -474,29 +474,29 @@ export class ConfigManager {
 
       // Apply level-specific defaults
       switch (level) {
-      case "readonly":
-        config.permissions.allowRead = true;
-        config.permissions.allowWrite = false;
-        config.permissions.allowDelete = false;
-        config.permissions.allowExecute = false;
-        break;
-      case "restricted":
-        config.permissions.allowRead = true;
-        config.permissions.allowWrite = true;
-        config.permissions.allowDelete = false;
-        config.permissions.allowExecute = false;
-        config.permissions.requireConfirmation = {
-          delete: true,
-          overwrite: true,
-          largeFiles: true,
-        };
-        break;
-      case "full":
-        config.permissions.allowRead = true;
-        config.permissions.allowWrite = true;
-        config.permissions.allowDelete = true;
-        config.permissions.allowExecute = false;
-        break;
+        case "readonly":
+          config.permissions.allowRead = true;
+          config.permissions.allowWrite = false;
+          config.permissions.allowDelete = false;
+          config.permissions.allowExecute = false;
+          break;
+        case "restricted":
+          config.permissions.allowRead = true;
+          config.permissions.allowWrite = true;
+          config.permissions.allowDelete = false;
+          config.permissions.allowExecute = false;
+          config.permissions.requireConfirmation = {
+            delete: true,
+            overwrite: true,
+            largeFiles: true,
+          };
+          break;
+        case "full":
+          config.permissions.allowRead = true;
+          config.permissions.allowWrite = true;
+          config.permissions.allowDelete = true;
+          config.permissions.allowExecute = false;
+          break;
       }
 
       return await this.saveConfig(config, scope);
@@ -505,7 +505,7 @@ export class ConfigManager {
     }
   }
 
-  async fileExists (filePath) {
+  async fileExists(filePath) {
     try {
       await fs.access(filePath);
       return true;

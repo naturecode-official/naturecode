@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 
-export async function collectFeedback (feedback, feedbackFile) {
+export async function collectFeedback(feedback, feedbackFile) {
   try {
     // Validate feedback data
     if (!feedback || typeof feedback !== "object") {
@@ -55,7 +55,7 @@ export async function collectFeedback (feedback, feedbackFile) {
   }
 }
 
-export async function showFeedback (feedbackFile, filters = {}) {
+export async function showFeedback(feedbackFile, filters = {}) {
   try {
     let feedbackData = { feedback: [] };
 
@@ -101,7 +101,7 @@ export async function showFeedback (feedbackFile, filters = {}) {
   }
 }
 
-export async function clearFeedback (feedbackFile) {
+export async function clearFeedback(feedbackFile) {
   try {
     let feedbackData = { feedback: [] };
     let originalCount = 0;
@@ -126,7 +126,7 @@ export async function clearFeedback (feedbackFile) {
   }
 }
 
-export async function getFeedbackStats (feedbackFile) {
+export async function getFeedbackStats(feedbackFile) {
   try {
     let feedbackData = { feedback: [] };
 

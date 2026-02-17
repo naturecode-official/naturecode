@@ -21,9 +21,9 @@ import {
 } from "../../utils/formatter.js";
 import { formatFileList } from "../../utils/filesystem.js";
 import { handleError } from "../../utils/error-handler.js";
-import { SessionTracker, feedbackCollector } from "../../utils/feedback.js";
+import { feedbackCollector } from "../../utils/feedback.js";
 import { commandRecognizer } from "../../utils/command-recognizer.js";
-import { SessionManager } from "../../sessions/manager/index.js";
+import { createPerformanceMonitor } from "./performance.js";
 
 // Get available models from secure storage
 function getAvailableModels() {
@@ -115,6 +115,13 @@ function showEnhancedHelp() {
     '  • Search: "find .js files", "search for config", "locate test files"',
   );
   console.log('  • Current dir: "pwd", "where am i", "current directory"');
+  console.log("\nSystem Commands:");
+  console.log(
+    '  • Performance: "performance", "perf" - Show detailed performance info',
+  );
+  console.log('  • Configuration: "config" - Show current AI configuration');
+  console.log('  • Clear screen: "clear" - Clear the terminal');
+  console.log('  • Exit: "exit", "quit" - End the session');
   console.log(
     "\nTips: Use natural language - the AI understands commands like:",
   );
@@ -199,7 +206,7 @@ async function handleSpecialFileCommand(input, provider) {
 }
 
 // Handle quick file commands (simple syntax)
-async function handleQuickFileCommands(input, provider, sessionTracker) {
+async function handleQuickFileCommands(input, provider) {
   const lowerInput = input.toLowerCase().trim();
 
   // Current directory
@@ -215,10 +222,6 @@ async function handleQuickFileCommands(input, provider, sessionTracker) {
       const result = await provider.changeDirectory(newDir);
       return `Changed to: ${result.to}\nRelative: ${result.relative}`;
     } catch (error) {
-      // Track error
-      if (sessionTracker) {
-        sessionTracker.incrementErrors();
-      }
       handleError(error, "AI Response");
       console.log();
     }
@@ -263,48 +266,7 @@ function getPromptWithDirectory(provider) {
 export async function startInteractiveSession(options = {}) {
   console.clear();
 
-  // Initialize session tracker
-  const sessionTracker = new SessionTracker();
-
-  // Initialize session manager if session ID is provided
-  let sessionManager = null;
-  let sessionContext = null;
-
-  if (options.session) {
-    try {
-      sessionManager = new SessionManager();
-      sessionContext = await sessionManager.loadSession(options.session);
-      console.log(`Session loaded: ${sessionContext.session.name}`);
-
-      // Update current directory to session's project path
-      if (sessionContext.session.projectPath) {
-        process.chdir(sessionContext.session.projectPath);
-      }
-    } catch (error) {
-      console.warn(
-        `Failed to load session ${options.session}: ${error.message}`,
-      );
-      console.log("Starting new session...");
-    }
-  }
-
   let config = configManager.load();
-
-  // Use session configuration if available
-  if (sessionContext && sessionContext.session.configuration) {
-    const sessionConfig = sessionContext.session.configuration;
-    config = {
-      ...config,
-      provider: sessionConfig.provider,
-      model: sessionConfig.model,
-      temperature: sessionConfig.temperature,
-      maxTokens: sessionConfig.maxTokens,
-      stream: sessionConfig.stream !== false,
-    };
-    console.log(
-      `Using session configuration: ${sessionConfig.provider} - ${sessionConfig.model}`,
-    );
-  }
 
   if (!config.apiKey || !configManager.exists()) {
     console.log(
@@ -414,6 +376,24 @@ export async function startInteractiveSession(options = {}) {
 
   const provider = createProvider(config);
 
+  // Initialize and start performance monitoring
+  let performanceMonitor = null;
+  try {
+    performanceMonitor = await createPerformanceMonitor();
+    await performanceMonitor.startMonitoring();
+
+    // Show performance info in top-left corner
+    const performanceInfo = performanceMonitor.formatStatsForDisplay();
+    console.log(`\x1b[1;37;44m${" ".repeat(80)}\x1b[0m`);
+    console.log(
+      `\x1b[1;37;44m Performance: ${performanceInfo.padEnd(66)} \x1b[0m`,
+    );
+    console.log(`\x1b[1;37;44m${" ".repeat(80)}\x1b[0m\n`);
+  } catch (error) {
+    // Silently fail - performance monitoring is optional
+    console.log("\x1b[1;37;44m Performance monitoring unavailable \x1b[0m\n");
+  }
+
   showWelcome(config);
   console.log(
     '\nType "help" for available commands, including file operations.',
@@ -433,14 +413,7 @@ export async function startInteractiveSession(options = {}) {
 
   updatePrompt();
 
-  // Use session conversation history if available
-  let sessionHistory = [];
-  if (sessionContext && sessionContext.session.conversation.messages) {
-    sessionHistory = [...sessionContext.session.conversation.messages];
-    console.log(
-      `Loaded ${sessionHistory.length} previous messages from session`,
-    );
-  }
+  let conversationHistory = [];
 
   rl.on("line", async (line) => {
     const input = line.trim();
@@ -449,9 +422,6 @@ export async function startInteractiveSession(options = {}) {
       updatePrompt();
       return;
     }
-
-    // Track user message
-    sessionTracker.incrementMessageCount();
 
     if (input.toLowerCase() === "exit" || input.toLowerCase() === "quit") {
       console.log("\nGoodbye!");
@@ -468,7 +438,18 @@ export async function startInteractiveSession(options = {}) {
 
     if (input.toLowerCase() === "clear") {
       console.clear();
-      sessionHistory.length = 0;
+      conversationHistory.length = 0;
+
+      // Re-display performance info after clear
+      if (performanceMonitor) {
+        const performanceInfo = performanceMonitor.formatStatsForDisplay();
+        console.log(`\x1b[1;37;44m${" ".repeat(80)}\x1b[0m`);
+        console.log(
+          `\x1b[1;37;44m Performance: ${performanceInfo.padEnd(66)} \x1b[0m`,
+        );
+        console.log(`\x1b[1;37;44m${" ".repeat(80)}\x1b[0m\n`);
+      }
+
       updatePrompt();
       return;
     }
@@ -480,50 +461,48 @@ export async function startInteractiveSession(options = {}) {
       return;
     }
 
-    try {
-      // Save user message to session if available
-      if (sessionContext) {
-        await sessionContext.session.addMessage("user", input);
+    if (
+      input.toLowerCase() === "performance" ||
+      input.toLowerCase() === "perf"
+    ) {
+      if (performanceMonitor) {
+        console.log("\n" + performanceMonitor.getDetailedInfo());
+
+        // Show optimization suggestions
+        const suggestions =
+          await performanceMonitor.getOptimizationSuggestions();
+        if (suggestions.length > 0) {
+          console.log("\nOptimization Suggestions:");
+          suggestions.forEach((suggestion, index) => {
+            console.log(`  ${index + 1}. ${suggestion.title}`);
+            console.log(`     Impact: ${suggestion.impact}`);
+            console.log(`     Difficulty: ${suggestion.difficulty}`);
+          });
+        }
+      } else {
+        console.log("\nPerformance monitoring is not available.");
       }
-      sessionHistory.push({ role: "user", content: input });
+      updatePrompt();
+      return;
+    }
+
+    try {
+      conversationHistory.push({ role: "user", content: input });
 
       // Check for special file commands first
       const specialResult = await handleSpecialFileCommand(input, provider);
       if (specialResult) {
         console.log("\n" + specialResult);
-        // Save assistant response to session
-        if (sessionContext) {
-          await sessionContext.session.addMessage("assistant", specialResult);
-        }
-        sessionHistory.push({ role: "assistant", content: specialResult });
-        // Track file operation
-        sessionTracker.incrementFileOperations();
-        // Track file operation in session
-        if (sessionContext && recognition && recognition.action === "read") {
-          const filePath = commandRecognizer.extractFilePath(recognition);
-          if (filePath) {
-            await sessionContext.trackFileRead(filePath);
-          }
-        }
+        conversationHistory.push({ role: "assistant", content: specialResult });
         updatePrompt();
         return;
       }
 
       // Check for quick file commands
-      const quickResult = await handleQuickFileCommands(
-        input,
-        provider,
-        sessionTracker,
-      );
+      const quickResult = await handleQuickFileCommands(input, provider);
       if (quickResult) {
         console.log("\n" + quickResult);
-        // Save assistant response to session
-        if (sessionContext) {
-          await sessionContext.session.addMessage("assistant", quickResult);
-        }
-        sessionHistory.push({ role: "assistant", content: quickResult });
-        // Track file operation
-        sessionTracker.incrementFileOperations();
+        conversationHistory.push({ role: "assistant", content: quickResult });
         updatePrompt();
         return;
       }
@@ -551,19 +530,11 @@ export async function startInteractiveSession(options = {}) {
         }
 
         process.stdout.write("\n\n");
-        // Save assistant response to session
-        if (sessionContext) {
-          await sessionContext.session.addMessage("assistant", fullResponse);
-        }
-        sessionHistory.push({ role: "assistant", content: fullResponse });
+        conversationHistory.push({ role: "assistant", content: fullResponse });
       } else {
         const response = await provider.generate(input, options);
         formatResponse(response);
-        // Save assistant response to session
-        if (sessionContext) {
-          await sessionContext.session.addMessage("assistant", response);
-        }
-        sessionHistory.push({ role: "assistant", content: response });
+        conversationHistory.push({ role: "assistant", content: response });
       }
 
       const endTime = Date.now();
@@ -586,34 +557,17 @@ export async function startInteractiveSession(options = {}) {
 
     updatePrompt();
   }).on("close", async () => {
-    // Save session if available
-    if (sessionContext && sessionManager) {
+    // Stop performance monitoring
+    if (performanceMonitor) {
       try {
-        await sessionContext.save();
-        console.log(`\nSession saved: ${sessionContext.session.name}`);
-        console.log(
-          `  Messages: ${sessionContext.session.conversation.messages.length}`,
-        );
-        console.log(
-          `  File operations: ${sessionContext.session.context.fileOperations.length}`,
-        );
+        await performanceMonitor.stopMonitoring();
       } catch (error) {
-        console.warn(`Failed to save session: ${error.message}`);
+        // Ignore errors when stopping
       }
     }
 
-    // Save session feedback
-    const sessionData = await sessionTracker.saveSessionFeedback();
-
-    console.log("\nSession Summary:");
-    console.log(
-      `  Duration: ${Math.round(sessionData.duration / 1000)} seconds`,
-    );
-    console.log(`  Messages: ${sessionData.messages}`);
-    console.log(`  File operations: ${sessionData.fileOperations}`);
-    console.log(`  Errors: ${sessionData.errors}`);
-    console.log(`  Success rate: ${sessionData.successRate}`);
-    console.log("  Session ended.");
+    console.log("\nSession ended.");
+    console.log(`  Messages exchanged: ${conversationHistory.length}`);
 
     // Show file operations if any
     try {

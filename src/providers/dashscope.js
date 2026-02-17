@@ -1,14 +1,14 @@
 import { AIProvider } from "./base.js";
 
 export class DashScopeProvider extends AIProvider {
-  constructor () {
+  constructor() {
     super();
     this.name = "dashscope";
     this.displayName = "Qwen (DashScope)";
     this.supportsStreaming = true;
   }
 
-  validateConfig (config) {
+  validateConfig(config) {
     // 验证DashScope配置
     if (!config.apiKey || typeof config.apiKey !== "string") {
       throw new Error("DashScope API key is required");
@@ -35,12 +35,12 @@ export class DashScopeProvider extends AIProvider {
     return true;
   }
 
-  _getApiUrl (_config) {
+  _getApiUrl(_config) {
     // DashScope使用固定的base URL
     return "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions";
   }
 
-  _getHeaders (config) {
+  _getHeaders(config) {
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${config.apiKey}`,
@@ -49,7 +49,7 @@ export class DashScopeProvider extends AIProvider {
     return headers;
   }
 
-  _getRequestBody (prompt, options, config) {
+  _getRequestBody(prompt, options, config) {
     const body = {
       messages: [
         {
@@ -89,7 +89,7 @@ export class DashScopeProvider extends AIProvider {
     return body;
   }
 
-  async generate (prompt, options = {}) {
+  async generate(prompt, options = {}) {
     const config = this.config;
     this.validateConfig(config);
 
@@ -125,7 +125,7 @@ export class DashScopeProvider extends AIProvider {
     }
   }
 
-  async *streamGenerate (prompt, options = {}) {
+  async *streamGenerate(prompt, options = {}) {
     const config = this.config;
     this.validateConfig(config);
 
@@ -183,18 +183,18 @@ export class DashScopeProvider extends AIProvider {
     }
   }
 
-  static getStaticAvailableModels () {
+  static getStaticAvailableModels() {
     // 不再返回静态模型列表，用户可输入任意模型名
     // 提示用户查看DashScope官方文档获取可用模型
     return [];
   }
 
-  static getStaticModelDescriptions () {
+  static getStaticModelDescriptions() {
     // 不再返回静态模型描述
     return {};
   }
 
-  static getStaticModelCapabilities (model) {
+  static getStaticModelCapabilities(model) {
     // 基于模型类型返回能力
     const capabilities = ["text", "chat"];
 

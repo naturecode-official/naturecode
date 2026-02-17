@@ -18,7 +18,7 @@ export const PermissionLevel = {
 };
 
 export class PluginManifest {
-  constructor (data) {
+  constructor(data) {
     this.name = data.name;
     this.version = data.version;
     this.description = data.description || "";
@@ -41,7 +41,7 @@ export class PluginManifest {
     this.validate();
   }
 
-  validate () {
+  validate() {
     const required = ["name", "version", "description", "author"];
     for (const field of required) {
       if (!this[field]) {
@@ -81,7 +81,7 @@ export class PluginManifest {
     }
   }
 
-  compareVersions (v1, v2) {
+  compareVersions(v1, v2) {
     const parts1 = v1.split(".").map(Number);
     const parts2 = v2.split(".").map(Number);
 
@@ -93,7 +93,7 @@ export class PluginManifest {
     return 0;
   }
 
-  toJSON () {
+  toJSON() {
     return {
       name: this.name,
       version: this.version,
@@ -110,7 +110,7 @@ export class PluginManifest {
 }
 
 export class PluginContext {
-  constructor (pluginManager, pluginId) {
+  constructor(pluginManager, pluginId) {
     this.pluginManager = pluginManager;
     this.pluginId = pluginId;
     this.logger = pluginManager.getLogger();
@@ -119,7 +119,7 @@ export class PluginContext {
   }
 
   // File system access (with permissions)
-  async readFile (path, encoding = "utf-8") {
+  async readFile(path, encoding = "utf-8") {
     return await this.pluginManager.fileSystem.readFile(
       this.pluginId,
       path,
@@ -127,7 +127,7 @@ export class PluginContext {
     );
   }
 
-  async writeFile (path, content, encoding = "utf-8") {
+  async writeFile(path, content, encoding = "utf-8") {
     return await this.pluginManager.fileSystem.writeFile(
       this.pluginId,
       path,
@@ -136,7 +136,7 @@ export class PluginContext {
     );
   }
 
-  async listFiles (path = ".", options = {}) {
+  async listFiles(path = ".", options = {}) {
     return await this.pluginManager.fileSystem.listFiles(
       this.pluginId,
       path,
@@ -145,48 +145,48 @@ export class PluginContext {
   }
 
   // Configuration access
-  getConfig (key, defaultValue = null) {
+  getConfig(key, defaultValue = null) {
     return this.config.get(`plugins.${this.pluginId}.${key}`, defaultValue);
   }
 
-  setConfig (key, value) {
+  setConfig(key, value) {
     return this.config.set(`plugins.${this.pluginId}.${key}`, value);
   }
 
   // AI provider access
-  async generate (prompt, options = {}) {
+  async generate(prompt, options = {}) {
     return await this.pluginManager.ai.generate(this.pluginId, prompt, options);
   }
 
-  async chat (messages, options = {}) {
+  async chat(messages, options = {}) {
     return await this.pluginManager.ai.chat(this.pluginId, messages, options);
   }
 
   // Logging
-  info (message, data = {}) {
+  info(message, data = {}) {
     this.logger.info(`[${this.pluginId}] ${message}`, data);
   }
 
-  warn (message, data = {}) {
+  warn(message, data = {}) {
     this.logger.warn(`[${this.pluginId}] ${message}`, data);
   }
 
-  error (message, data = {}) {
+  error(message, data = {}) {
     this.logger.error(`[${this.pluginId}] ${message}`, data);
   }
 
   // Event system
-  on (event, handler) {
+  on(event, handler) {
     return this.events.on(`plugin:${this.pluginId}:${event}`, handler);
   }
 
-  emit (event, data) {
+  emit(event, data) {
     return this.events.emit(`plugin:${this.pluginId}:${event}`, data);
   }
 }
 
 export class PluginCommand {
-  constructor (name, description, handler, options = {}) {
+  constructor(name, description, handler, options = {}) {
     this.name = name;
     this.description = description;
     this.handler = handler;
@@ -196,7 +196,7 @@ export class PluginCommand {
     this.subcommands = options.subcommands || {};
   }
 
-  async execute (context, args = {}, subcommand = null) {
+  async execute(context, args = {}, subcommand = null) {
     // Check permissions
     for (const permission of this.permissions) {
       if (!context.pluginManager.hasPermission(context.pluginId, permission)) {

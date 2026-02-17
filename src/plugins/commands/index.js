@@ -3,13 +3,13 @@
 import { PluginManager } from "../manager/index.js";
 
 export class PluginCommandRegistry {
-  constructor (pluginManager) {
+  constructor(pluginManager) {
     this.pluginManager = pluginManager;
     this.cliCommands = new Map(); // CLI command name -> plugin command info
   }
 
   // Register plugin commands with CLI
-  registerWithCLI (program) {
+  registerWithCLI(program) {
     const commands = this.pluginManager.listCommands();
 
     for (const cmd of commands) {
@@ -20,7 +20,7 @@ export class PluginCommandRegistry {
     this.registerPluginManagementCommands(program);
   }
 
-  registerCommand (program, pluginCommand) {
+  registerCommand(program, pluginCommand) {
     const { name, description, plugin, pluginName } = pluginCommand;
 
     // Get command definition from plugin
@@ -75,7 +75,7 @@ export class PluginCommandRegistry {
     return cliCommand;
   }
 
-  registerPluginManagementCommands (program) {
+  registerPluginManagementCommands(program) {
     // Plugin list command
     program
       .command("plugin list")
@@ -208,17 +208,17 @@ export class PluginCommandRegistry {
   }
 
   // Execute plugin command directly
-  async executePluginCommand (commandName, args = {}) {
+  async executePluginCommand(commandName, args = {}) {
     return await this.pluginManager.executeCommand(commandName, args);
   }
 
   // Get all registered commands
-  getCommands () {
+  getCommands() {
     return Array.from(this.cliCommands.keys());
   }
 
   // Check if command exists
-  hasCommand (commandName) {
+  hasCommand(commandName) {
     return this.cliCommands.has(commandName);
   }
 }

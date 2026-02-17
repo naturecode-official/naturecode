@@ -1,14 +1,14 @@
 import { AIProvider } from "./base.js";
 
 export class TencentProvider extends AIProvider {
-  constructor () {
+  constructor() {
     super();
     this.name = "tencent";
     this.displayName = "Tencent Hunyuan";
     this.supportsStreaming = true;
   }
 
-  validateConfig (config) {
+  validateConfig(config) {
     // 验证腾讯混元配置
     if (!config.apiKey || typeof config.apiKey !== "string") {
       throw new Error("Tencent Hunyuan API key is required");
@@ -37,12 +37,12 @@ export class TencentProvider extends AIProvider {
     return true;
   }
 
-  _getApiUrl (_config) {
+  _getApiUrl(_config) {
     // 腾讯混元使用固定的base URL
     return "https://hunyuan.tencentcloudapi.com";
   }
 
-  _getHeaders (config) {
+  _getHeaders(config) {
     // 腾讯混元使用特殊的认证头
     const headers = {
       "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export class TencentProvider extends AIProvider {
     return headers;
   }
 
-  _getRequestBody (prompt, options, config) {
+  _getRequestBody(prompt, options, config) {
     // 腾讯混元API请求体格式
     const body = {
       Model: config.model,
@@ -92,7 +92,7 @@ export class TencentProvider extends AIProvider {
     return body;
   }
 
-  async generate (prompt, options = {}) {
+  async generate(prompt, options = {}) {
     const config = this.config;
     this.validateConfig(config);
 
@@ -128,7 +128,7 @@ export class TencentProvider extends AIProvider {
     }
   }
 
-  async *streamGenerate (prompt, options = {}) {
+  async *streamGenerate(prompt, options = {}) {
     const config = this.config;
     this.validateConfig(config);
 
@@ -186,18 +186,18 @@ export class TencentProvider extends AIProvider {
     }
   }
 
-  static getStaticAvailableModels () {
+  static getStaticAvailableModels() {
     // 不再返回静态模型列表，用户可输入任意模型名
     // 提示用户查看腾讯混元官方文档获取可用模型
     return [];
   }
 
-  static getStaticModelDescriptions () {
+  static getStaticModelDescriptions() {
     // 不再返回静态模型描述
     return {};
   }
 
-  static getStaticModelCapabilities (model) {
+  static getStaticModelCapabilities(model) {
     // 基于模型类型返回能力
     const capabilities = ["text", "chat"];
 

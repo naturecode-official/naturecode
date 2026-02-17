@@ -1,4 +1,6 @@
 import { FileSystem } from "../utils/filesystem.js";
+import { performCodeReview } from "../cli/commands/review.js";
+import { createTeamCollaboration } from "../cli/commands/team.js";
 
 export class AIProvider {
   constructor(config) {
@@ -195,6 +197,81 @@ export class AIProvider {
     };
   }
 
+  // Code review functionality for AI internal use
+  async reviewCode(options = {}) {
+    try {
+      const reviewOptions = {
+        command: options.command || "file",
+        file: options.file,
+        dir: options.dir || this.fileContext.currentDirectory,
+        useAI: options.useAI !== false,
+        severity: options.severity,
+        category: options.category,
+        format: options.format || "text",
+        exclude: options.exclude,
+        include: options.include,
+        limit: options.limit || 50,
+        config: options.config,
+      };
+
+      const result = await performCodeReview(reviewOptions);
+
+      // Format the result for AI consumption
+      if (reviewOptions.format === "json") {
+        return result;
+      } else if (result && result.message) {
+        return result.message;
+      } else if (typeof result === "string") {
+        return result;
+      } else {
+        return JSON.stringify(result, null, 2);
+      }
+    } catch (error) {
+      throw new Error(`Code review failed: ${error.message}`);
+    }
+  }
+
+  // Team collaboration functionality for AI internal use
+  async manageTeam(options = {}) {
+    try {
+      const collaboration = await createTeamCollaboration();
+      const action = options.action || "createProject";
+
+      switch (action) {
+        case "createProject":
+          return await collaboration.createProject(options);
+        case "listProjects":
+          return await collaboration.listProjects(options);
+        case "getProjectInfo":
+          return await collaboration.getProjectInfo(options);
+        case "createTask":
+          return await collaboration.createTask(options);
+        case "updateTask":
+          return await collaboration.updateTask(options);
+        case "listTasks":
+          return await collaboration.listTasks(options);
+        case "createTeam":
+          return await collaboration.createTeam(options);
+        case "inviteToTeam":
+          return await collaboration.inviteToTeam(options);
+        case "getProjectAnalytics":
+          return await collaboration.getProjectAnalytics(options);
+        case "getMemberAnalytics":
+          return await collaboration.getMemberAnalytics(options);
+        case "getTeamAnalytics":
+          return await collaboration.getTeamAnalytics(options);
+        case "search":
+          return await collaboration.search(options);
+        case "getDashboard":
+          return await collaboration.getDashboard(options);
+        default:
+          throw new Error(`Unknown team action: ${action}`);
+      }
+    } catch (error) {
+      throw new Error(`Team management failed: ${error.message}`);
+    }
+  }
+
   // AI generation methods (to be implemented by subclasses)
   async generate(prompt, options = {}) {
     throw new Error("Method not implemented");
@@ -251,6 +328,27 @@ You have direct access to these file operations - USE THEM PROACTIVELY:
 
 ### 6. FILE SEARCH:
 - Find files: "find .js files", "search for config", "locate test files"
+
+### 7. CODE REVIEW (AI INTERNAL USE ONLY):
+- Review code quality: "review this file", "analyze code quality"
+- Check for issues: security, performance, readability, best practices
+- Available review types:
+  * Single file: review specific file
+  * Directory: review all files in directory
+  * Project: comprehensive project review
+- Review categories: security, performance, readability, maintainability, best-practice, complexity
+- Severity levels: critical, high, medium, low, info
+
+### 8. TEAM COLLABORATION (AI INTERNAL USE ONLY):
+- Team project management: create projects, manage tasks, track progress
+- Available team actions:
+  * Project management: createProject, listProjects, getProjectInfo
+  * Task management: createTask, updateTask, listTasks
+  * Team management: createTeam, inviteToTeam
+  * Analytics: getProjectAnalytics, getMemberAnalytics, getTeamAnalytics
+  * Search: search across teams, projects, members
+  * Dashboard: get member dashboard
+- Use for: team coordination, project tracking, task assignment
 
 ## HOW TO HELP USERS:
 

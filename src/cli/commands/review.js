@@ -1,129 +1,61 @@
-#!/usr/bin/env node
+// Code review functionality for AI internal use
+// This module provides code review capabilities for AI providers
 
 import { reviewCommandHandler } from "../../utils/review-commands.js";
-import { exitWithError } from "../../utils/error-handler.js";
 
-export async function runReviewCommand(options) {
+/**
+ * Perform code review for AI internal use
+ * @param {Object} options - Review options
+ * @param {string} options.command - Review command (file, dir, project)
+ * @param {string} [options.file] - File to review
+ * @param {string} [options.dir] - Directory to review
+ * @param {boolean} [options.useAI=true] - Enable AI-powered review
+ * @param {string} [options.severity] - Filter by severity
+ * @param {string} [options.category] - Filter by category
+ * @param {string} [options.format="text"] - Output format
+ * @param {string[]} [options.exclude] - Patterns to exclude
+ * @param {string[]} [options.include] - Patterns to include
+ * @param {number} [options.limit=50] - Limit number of issues
+ * @returns {Promise<Object>} Review results
+ */
+export async function performCodeReview(options) {
+  const args = {
+    file: options.file,
+    dir: options.dir || process.cwd(),
+    useAI: options.useAI !== false,
+    severity: options.severity,
+    category: options.category,
+    format: options.format || "text",
+    exclude: options.exclude || [],
+    include: options.include || [],
+    limit: options.limit || 50,
+    config: options.config,
+  };
+
+  const command = options.command || "file";
+
   try {
-    const command = options.command;
-    const args = {
-      file: options.file,
-      dir: options.dir || process.cwd(),
-      session: options.session,
-      useAI: options.ai !== false,
-      severity: options.severity,
-      category: options.category,
-      format: options.format || "text",
-      output: options.output,
-      exclude: options.exclude ? options.exclude.split(",") : [],
-      include: options.include ? options.include.split(",") : [],
-      limit: options.limit || 50,
-      config: options.config,
-    };
-
-    if (!command) {
-      console.log("Available code review commands:");
-      const commands = reviewCommandHandler.getAvailableCommands();
-      commands.forEach((cmd) => {
-        console.log(`  ${cmd.command.padEnd(15)} - ${cmd.description}`);
-      });
-      console.log("\nUsage: naturecode review <command> [options]");
-      console.log("\nExamples:");
-      console.log("  naturecode review file src/utils/code-review/reviewer.js");
-      console.log("  naturecode review dir src/ --session current");
-      console.log("  naturecode review project --ai --format json");
-      console.log("  naturecode review history --session session-123");
-      console.log("  naturecode review compare session-123 session-456");
-      console.log("  naturecode review rules --category security");
-      console.log("  naturecode review export review-123 --format json");
-      return;
-    }
-
     const result = await reviewCommandHandler.handleCommand(command, args);
-
-    if (result && typeof result === "object") {
-      if (options.format === "json") {
-        console.log(JSON.stringify(result, null, 2));
-      } else if (result.message) {
-        console.log(result.message);
-      }
-    } else if (result) {
-      console.log(result);
-    }
+    return result;
   } catch (error) {
-    exitWithError(error, "review");
+    throw new Error(`Code review failed: ${error.message}`);
   }
 }
 
-// Command definition for CLI
-export const reviewCommand = {
-  name: "review",
-  description: "Code review and quality analysis",
-  options: [
-    {
-      flags: "-c, --command <command>",
-      description: "Review command to execute",
-    },
-    {
-      flags: "-f, --file <file>",
-      description: "File to review",
-    },
-    {
-      flags: "-d, --dir <directory>",
-      description: "Directory to review",
-    },
-    {
-      flags: "-s, --session <sessionId>",
-      description: "Use specific session (default: current session)",
-    },
-    {
-      flags: "--ai",
-      description: "Enable AI-powered review",
-    },
-    {
-      flags: "--no-ai",
-      description: "Disable AI-powered review",
-    },
-    {
-      flags: "--severity <severity>",
-      description: "Filter by severity (critical, high, medium, low, info)",
-    },
-    {
-      flags: "--category <category>",
-      description: "Filter by category",
-    },
-    {
-      flags: "--format <format>",
-      description: "Output format (text, json, markdown)",
-    },
-    {
-      flags: "-o, --output <file>",
-      description: "Output file",
-    },
-    {
-      flags: "--exclude <patterns>",
-      description: "Comma-separated patterns to exclude",
-    },
-    {
-      flags: "--include <patterns>",
-      description: "Comma-separated patterns to include",
-    },
-    {
-      flags: "--limit <number>",
-      description: "Limit number of issues shown",
-    },
-    {
-      flags: "--config <configFile>",
-      description: "Custom configuration file",
-    },
-  ],
-  examples: [
-    "naturecode review file src/index.js",
-    "naturecode review dir src/ --ai --format json",
-    "naturecode review project --session current",
-    "naturecode review history",
-    "naturecode review rules --enabled",
-    "naturecode review export latest --output review.json",
-  ],
-  handler: runReviewCommand,
-};
+/**
+ * Get available review commands for AI reference
+ * @returns {Array} List of available review commands
+ */
+export function getReviewCommands() {
+  return reviewCommandHandler.getAvailableCommands();
+}
+
+/**
+ * Get review rules by category for AI reference
+ * @param {string} [category] - Filter by category
+ * @returns {Array} List of review rules
+ */
+export function getReviewRules(category) {
+  // This would need to be implemented based on the actual review rules system
+  return [];
+}

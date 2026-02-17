@@ -185,101 +185,183 @@ After installation:
    naturecode start                   # Start AI session
    ```
 
-### Available Commands
+## Code Analysis & Project Management
 
-#### Code Analysis Commands
+NatureCode provides two powerful tools for developers: **Code Analysis** (`naturecode code`) and **Project Management** (`naturecode project`). These tools work together to help you understand, improve, and maintain your codebase.
 
-NatureCode provides comprehensive code analysis tools. When you run `naturecode code` without arguments, it automatically performs a comprehensive analysis:
+### 🛠️ Code Analysis (`naturecode code`)
+
+**Comprehensive code quality assessment** - automatically analyzes your codebase to identify issues, measure quality, and provide actionable insights.
+
+**When to use it:**
+
+- Before committing code
+- When joining a new project
+- During code reviews
+- For technical debt assessment
+- When optimizing performance
+
+**Key features:**
+
+- **Automatic analysis** - Run `naturecode code` for instant insights
+- **Code metrics** - Lines, functions, complexity, duplication
+- **Issue detection** - Bugs, security vulnerabilities, performance issues
+- **Dependency analysis** - Security, updates, conflicts
+- **Refactoring suggestions** - Actionable improvement recommendations
+
+### 📊 Project Management (`naturecode project`)
+
+**Complete project health assessment** - analyzes project structure, dependencies, configuration, and overall health.
+
+**When to use it:**
+
+- Starting a new project
+- Assessing project health
+- Planning refactoring
+- Managing dependencies
+- Onboarding new team members
+
+**Key features:**
+
+- **Project health score** - Overall project quality assessment
+- **Structure analysis** - Directory organization and file patterns
+- **Dependency management** - Updates, conflicts, security
+- **Template system** - Quick project creation from templates
+- **Setup automation** - Automated project configuration
+
+### 🚀 Quick Start Examples
 
 ```bash
-# Automatic comprehensive analysis (new feature)
+# Get instant code insights
 naturecode code
 
-# Output includes:
-# - Code metrics (files, lines, functions, classes)
-# - Dependency analysis
-# - Quick issues scan
-# - Recommendations for next steps
-```
+# Check project health
+naturecode project
 
-**Detailed code analysis commands:**
+# Analyze specific directory
+naturecode code analyze src/
 
-```bash
-# Full code analysis
-naturecode code analyze
+# Check for security issues
+naturecode code deps-security
 
-# Analyze specific file
-naturecode code analyze-file --file src/utils/git.js
-
-# Calculate code complexity metrics
-naturecode code complexity --file src/cli/index.js
-
-# List code issues and suggestions
-naturecode code issues --severity high
-
-# Show code metrics summary
-naturecode code metrics
+# Create new project from template
+naturecode project create --template nodejs --name my-app
 
 # Get refactoring suggestions
 naturecode code refactor
-
-# Analyze project dependencies
-naturecode code deps
-
-# Show dependency tree
-naturecode code deps-tree
-
-# Check for security vulnerabilities
-naturecode code deps-security
-
-# Find unused dependencies
-naturecode code deps-unused
 ```
 
-#### Project Management Commands
+## 📋 Detailed Command Reference
 
-NatureCode provides comprehensive project management tools. When you run `naturecode project` without arguments, it automatically performs a comprehensive analysis:
+### Code Analysis Commands (`naturecode code`)
+
+NatureCode's code analysis tool provides comprehensive insights into your codebase. When run without arguments, it performs automatic analysis of the current directory.
+
+**Basic Usage:**
 
 ```bash
-# Automatic comprehensive analysis (new feature)
+# Automatic comprehensive analysis (default behavior)
+naturecode code
+
+# Analyze specific directory or file
+naturecode code analyze <path>
+naturecode code analyze src/
+naturecode code analyze package.json
+
+# Get specific analysis types
+naturecode code metrics          # Code metrics (lines, complexity, etc.)
+naturecode code issues           # Code issues and problems
+naturecode code issues --severity high  # Critical issues only
+naturecode code deps             # Dependency analysis
+naturecode code deps-security    # Security audit for dependencies
+naturecode code refactor         # Refactoring suggestions
+naturecode code quality          # Code quality assessment
+```
+
+**Advanced Options:**
+
+```bash
+# Export analysis results
+naturecode code analyze --output report.json
+naturecode code analyze --format json
+
+# Filter analysis
+naturecode code analyze --exclude "**/node_modules/**"
+naturecode code analyze --include "**/*.js,**/*.ts"
+
+# Compare with previous analysis
+naturecode code analyze --compare previous.json
+```
+
+### Project Management Commands (`naturecode project`)
+
+The project management tool helps you understand, create, and maintain projects with comprehensive health assessments.
+
+**Basic Usage:**
+
+```bash
+# Automatic project health assessment (default behavior)
 naturecode project
 
-# Output includes:
-# - Project health assessment
-# - Project structure overview
-# - Dependency status check
-# - Recommendations for next steps
+# Analyze specific project
+naturecode project analyze <path>
+naturecode project analyze .
+
+# Create new projects
+naturecode project create --template <template> --name <project-name>
+naturecode project create --template nodejs --name my-app
+naturecode project create --template python --name data-project
+
+# Project setup and configuration
+naturecode project setup          # Interactive project setup
+naturecode project init           # Initialize project structure
+naturecode project config         # Configure project settings
 ```
 
-**Detailed project management commands:**
+**Project Templates:**
 
 ```bash
-# Analyze project structure
-naturecode project analyze
-
-# Show project structure tree
-naturecode project structure --max-depth 3
-
-# Check project health score
-naturecode project health
-
-# Create project from template
-naturecode project create --template nodejs --name my-project
-
-# Automate project setup
-naturecode project setup
-
-# List available project templates
+# List available templates
 naturecode project templates
 
-# Check for dependency upgrades
-naturecode project upgrades
+# Create from specific template
+naturecode project create --template nodejs      # Node.js project
+naturecode project create --template python      # Python project
+naturecode project create --template react       # React application
+naturecode project create --template vue         # Vue.js application
+naturecode project create --template static      # Static website
+naturecode project create --template api         # API server
+```
 
-# Check for dependency conflicts
-naturecode project conflicts
+**Advanced Project Analysis:**
 
-# Get package manager recommendations
-naturecode project package-manager
+```bash
+# Get detailed project report
+naturecode project analyze --detailed
+naturecode project analyze --output report.html
+
+# Dependency management
+naturecode project deps           # Analyze project dependencies
+naturecode project deps-update    # Check for dependency updates
+naturecode project deps-audit     # Security audit for dependencies
+
+# Project health metrics
+naturecode project health         # Overall health score
+naturecode project structure      # Directory structure analysis
+naturecode project documentation  # Documentation assessment
+```
+
+**Project Comparison and Migration:**
+
+```bash
+# Compare projects
+naturecode project compare <path1> <path2>
+
+# Migration assistance
+naturecode project migrate --from <old-version> --to <new-version>
+
+# Best practices check
+naturecode project best-practices
 ```
 
 ```bash
@@ -295,9 +377,6 @@ naturecode git       # Git operations
 naturecode code      # Code analysis and review
 naturecode project   # Project management
 naturecode plugin    # Plugin management
-naturecode session   # Session management
-naturecode review    # Code review
-naturecode team      # Team collaboration
 
 # Examples:
 naturecode git status

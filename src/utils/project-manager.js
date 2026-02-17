@@ -6,12 +6,12 @@ import { execSync } from "child_process";
 import { DependencyAnalyzer } from "./dependency-analyzer.js";
 
 export class ProjectManager {
-  constructor (baseDir = process.cwd()) {
+  constructor(baseDir = process.cwd()) {
     this.baseDir = baseDir;
     this.dependencyAnalyzer = new DependencyAnalyzer(baseDir);
   }
 
-  async analyzeProjectStructure (options = {}) {
+  async analyzeProjectStructure(options = {}) {
     try {
       const structure = {
         path: this.baseDir,
@@ -35,7 +35,7 @@ export class ProjectManager {
     }
   }
 
-  async detectProjectType () {
+  async detectProjectType() {
     const files = await fs.readdir(this.baseDir);
 
     // Check for common project files
@@ -85,7 +85,7 @@ export class ProjectManager {
     return "unknown";
   }
 
-  async scanDirectory (currentPath, structure, options, depth = 0) {
+  async scanDirectory(currentPath, structure, options, depth = 0) {
     if (depth > (options.maxDepth || 5)) {
       return;
     }
@@ -152,7 +152,7 @@ export class ProjectManager {
     }
   }
 
-  isImportantDotFile (filename) {
+  isImportantDotFile(filename) {
     const importantFiles = [
       ".gitignore",
       ".env",
@@ -176,7 +176,7 @@ export class ProjectManager {
     return importantFiles.includes(filename) || filename.startsWith(".env.");
   }
 
-  async analyzeStructure (structure) {
+  async analyzeStructure(structure) {
     const analysis = {
       fileTypes: {},
       largestFiles: [],
@@ -221,7 +221,7 @@ export class ProjectManager {
     return analysis;
   }
 
-  async generateRecommendations (structure, analysis) {
+  async generateRecommendations(structure, analysis) {
     const recommendations = [];
 
     // Check for large files
@@ -277,7 +277,7 @@ export class ProjectManager {
     return recommendations;
   }
 
-  formatFileSize (bytes) {
+  formatFileSize(bytes) {
     if (bytes === 0) return "0 Bytes";
     const k = 1024;
     const sizes = ["Bytes", "KB", "MB", "GB"];
@@ -285,7 +285,7 @@ export class ProjectManager {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   }
 
-  async createProjectTemplate (templateType, options = {}) {
+  async createProjectTemplate(templateType, options = {}) {
     const templates = {
       nodejs: this.createNodeJsTemplate.bind(this),
       react: this.createReactTemplate.bind(this),
@@ -310,7 +310,7 @@ export class ProjectManager {
     }
   }
 
-  async createNodeJsTemplate (options = {}) {
+  async createNodeJsTemplate(options = {}) {
     const files = {
       "package.json": JSON.stringify(
         {
@@ -376,7 +376,7 @@ PORT=3000
     await this.createFiles(files);
   }
 
-  async createReactTemplate (options = {}) {
+  async createReactTemplate(options = {}) {
     const files = {
       "package.json": JSON.stringify(
         {
@@ -477,7 +477,7 @@ root.render(
     await this.createFiles(files);
   }
 
-  async createPythonTemplate (options = {}) {
+  async createPythonTemplate(options = {}) {
     const files = {
       "requirements.txt": `# Python dependencies
 flask>=2.0.0
@@ -522,7 +522,7 @@ env/
     await this.createFiles(files);
   }
 
-  async createExpressTemplate (options = {}) {
+  async createExpressTemplate(options = {}) {
     const files = {
       "package.json": JSON.stringify(
         {
@@ -599,7 +599,7 @@ npm run dev
     await this.createFiles(files);
   }
 
-  async createFiles (files) {
+  async createFiles(files) {
     for (const [filePath, content] of Object.entries(files)) {
       const fullPath = path.join(this.baseDir, filePath);
       const dir = path.dirname(fullPath);
@@ -613,10 +613,10 @@ npm run dev
     }
   }
 
-  async listCreatedFiles (dir) {
+  async listCreatedFiles(dir) {
     const files = [];
 
-    async function scan (currentPath) {
+    async function scan(currentPath) {
       const entries = await fs.readdir(currentPath, { withFileTypes: true });
 
       for (const entry of entries) {
@@ -635,7 +635,7 @@ npm run dev
     return files;
   }
 
-  async setupProjectAutomation (options = {}) {
+  async setupProjectAutomation(options = {}) {
     const setupTasks = [];
 
     try {
@@ -697,7 +697,7 @@ npm run dev
     }
   }
 
-  async getProjectHealth () {
+  async getProjectHealth() {
     const analysis = await this.analyzeProjectStructure();
     const health = {
       score: 100,
@@ -796,7 +796,7 @@ npm run dev
     return health;
   }
 
-  async getDependencyUpgrades () {
+  async getDependencyUpgrades() {
     try {
       const packageManager =
         await this.dependencyAnalyzer.detectNodePackageManager();
@@ -877,7 +877,7 @@ npm run dev
     }
   }
 
-  getUpgradeType (current, latest) {
+  getUpgradeType(current, latest) {
     if (!current || !latest) return "unknown";
 
     const currentParts = current.split(".").map((n) => parseInt(n, 10));
@@ -890,7 +890,7 @@ npm run dev
     return "unknown";
   }
 
-  generateUpgradeRecommendations (upgrades) {
+  generateUpgradeRecommendations(upgrades) {
     const recommendations = [];
 
     // Group by upgrade type
@@ -934,7 +934,7 @@ npm run dev
     return recommendations;
   }
 
-  async checkDependencyConflicts () {
+  async checkDependencyConflicts() {
     try {
       const conflicts = {
         found: [],
@@ -1035,7 +1035,7 @@ npm run dev
     }
   }
 
-  generateConflictResolutions (conflicts) {
+  generateConflictResolutions(conflicts) {
     const resolutions = [];
 
     conflicts.forEach((conflict) => {
@@ -1064,7 +1064,7 @@ npm run dev
     return resolutions;
   }
 
-  async recommendPackageManager () {
+  async recommendPackageManager() {
     try {
       const recommendation = {
         current: await this.dependencyAnalyzer.detectNodePackageManager(),
@@ -1181,7 +1181,7 @@ npm run dev
     }
   }
 
-  async fileExists (filePath) {
+  async fileExists(filePath) {
     try {
       await fs.access(filePath);
       return true;

@@ -7,14 +7,12 @@ import { runGitCommand } from "./commands/git.js";
 import { runCodeCommand } from "./commands/code.js";
 import { runProjectCommand } from "./commands/project.js";
 import { runPluginCommand } from "./commands/plugin.js";
-import { runSessionCommand } from "./commands/session.js";
-import { runReviewCommand, reviewCommand } from "./commands/review.js";
-import { createTeamCommand } from "./commands/team.js";
+
 import { createCollaborationCommand } from "./commands/collaboration.js";
 import { createPermissionsCommand } from "./commands/permissions.js";
 import { createTeamReviewCommand } from "./commands/team-review.js";
 import { setupIntegrationCommands } from "./commands/integration.js";
-import { setupPerformanceCommands } from "./commands/performance.js";
+
 import { createHelpCommand } from "./commands/help.js";
 import { configManager } from "../config/manager.js";
 import { secureStore } from "../config/secure-store.js";
@@ -54,9 +52,7 @@ program
   .option("-m, --model <model>", "Specify model to use")
   .option("-t, --temperature <temp>", "Set temperature (0.0-2.0)", parseFloat)
   .option("--stream", "Enable streaming responses", true)
-  .option("-s, --session <session-id>", "Load existing session")
-  .option("--new-session", "Create new session")
-  .option("--session-name <name>", "Name for new session")
+
   .action(async (options) => {
     try {
       await startInteractiveSession(options);
@@ -161,77 +157,6 @@ program
       });
     } catch (error) {
       exitWithError(error, "Plugin Management");
-    }
-  });
-
-program
-  .command("session")
-  .description("Session management and context tracking")
-  .argument("[command]", "Session command to execute")
-  .argument("[args...]", "Additional arguments")
-  .option("-i, --session-id <id>", "Session ID for specific operations")
-  .option("-n, --name <name>", "Session name for creation")
-  .option("-p, --project <path>", "Project path for session")
-  .option("-t, --template <id>", "Template ID for session creation")
-  .option("--tags <tags>", "Comma-separated tags for session")
-  .option("--status <status>", "Filter sessions by status")
-  .option("--search <query>", "Search sessions by content")
-  .option("--limit <number>", "Limit number of results")
-  .option("--sort-by <field>", "Sort field (name, lastAccessed, createdAt)")
-  .option("--sort-order <order>", "Sort order (asc, desc)")
-  .option("--format <format>", "Export format (json, markdown, text)")
-  .option("--output <path>", "Output path for export")
-  .option("--days <days>", "Days threshold for cleanup")
-  .option("--force", "Force operation without confirmation")
-  .option("--verbose", "Show detailed information")
-  .option("-j, --json", "Output results in JSON format")
-  .action(async (command, args, options) => {
-    try {
-      await runSessionCommand({
-        command,
-        ...options,
-        // Parse additional arguments based on command
-        ...parseSessionArgs(command, args),
-      });
-    } catch (error) {
-      exitWithError(error, "Session Management");
-    }
-  });
-
-program
-  .command("review")
-  .description("Code review and quality analysis")
-  .argument("[command]", "Review command to execute")
-  .argument("[args...]", "Additional arguments")
-  .option("-f, --file <file>", "File to review")
-  .option("-d, --dir <directory>", "Directory to review")
-  .option(
-    "-s, --session <sessionId>",
-    "Use specific session (default: current session)",
-  )
-  .option("--ai", "Enable AI-powered review")
-  .option("--no-ai", "Disable AI-powered review")
-  .option(
-    "--severity <severity>",
-    "Filter by severity (critical, high, medium, low, info)",
-  )
-  .option("--category <category>", "Filter by category")
-  .option("--format <format>", "Output format (text, json, markdown)")
-  .option("-o, --output <file>", "Output file")
-  .option("--exclude <patterns>", "Comma-separated patterns to exclude")
-  .option("--include <patterns>", "Comma-separated patterns to include")
-  .option("--limit <number>", "Limit number of issues shown")
-  .option("--config <configFile>", "Custom configuration file")
-  .action(async (command, args, options) => {
-    try {
-      await runReviewCommand({
-        command,
-        ...options,
-        // Parse additional arguments based on command
-        ...parseReviewArgs(command, args),
-      });
-    } catch (error) {
-      exitWithError(error, "Code Review");
     }
   });
 
@@ -443,133 +368,6 @@ function performNamedDeletion(
   }
 }
 
-// Helper function to parse session command arguments
-function parseSessionArgs(command, args) {
-  const parsed = {};
-
-  if (!args || args.length === 0) {
-    return parsed;
-  }
-
-  switch (command) {
-    case "info":
-    case "switch":
-    case "archive":
-    case "restore":
-    case "delete":
-      parsed.sessionId = args[0];
-      break;
-
-    case "rename":
-      if (args.length >= 2) {
-        parsed.sessionId = args[0];
-        parsed.newName = args[1];
-      }
-      break;
-
-    case "tag":
-      if (args.length >= 2) {
-        parsed.sessionId = args[0];
-        parsed.tags = args[1];
-      }
-      break;
-
-    case "export":
-      parsed.sessionId = args[0];
-      if (args.length >= 2) {
-        parsed.format = args[1];
-      }
-      if (args.length >= 3) {
-        parsed.output = args[2];
-      }
-      break;
-
-    case "import":
-      parsed.filePath = args[0];
-      if (args.length >= 2) {
-        parsed.name = args[1];
-      }
-      break;
-
-    case "search":
-      parsed.query = args.join(" ");
-      break;
-
-    case "template":
-      if (args.length >= 1) {
-        parsed.subcommand = args[0];
-      }
-      if (args.length >= 2) {
-        parsed.sessionId = args[1];
-      }
-      if (args.length >= 3) {
-        parsed.templateId = args[2];
-      }
-      break;
-
-    default:
-      // For create command or others
-      if (args.length >= 1) {
-        parsed.name = args[0];
-      }
-  }
-
-  return parsed;
-}
-
-// Helper function to parse review command arguments
-function parseReviewArgs(command, args) {
-  const parsed = {};
-
-  if (!args || args.length === 0) {
-    return parsed;
-  }
-
-  switch (command) {
-    case "file":
-      if (args.length >= 1) {
-        parsed.file = args[0];
-      }
-      break;
-
-    case "dir":
-      if (args.length >= 1) {
-        parsed.dir = args[0];
-      }
-      break;
-
-    case "compare":
-      if (args.length >= 2) {
-        parsed.session = args[0];
-        parsed.session2 = args[1];
-      }
-      break;
-
-    case "export":
-      if (args.length >= 1) {
-        parsed.reviewId = args[0];
-      }
-      break;
-
-    case "import":
-      if (args.length >= 1) {
-        parsed.file = args[0];
-      }
-      break;
-
-    default:
-      // For commands that might take additional arguments
-      if (args.length >= 1) {
-        // First arg could be session ID or other parameter
-        if (command === "history" || command === "stats") {
-          parsed.session = args[0];
-        }
-      }
-  }
-
-  return parsed;
-}
-
 // Function to delete all models and configurations
 function deleteAllModels(force = false) {
   const CONFIG_DIR = path.join(os.homedir(), ".naturecode");
@@ -674,9 +472,6 @@ program
     }
   });
 
-// Add team collaboration command
-program.addCommand(createTeamCommand());
-
 // Add real-time collaboration command
 program.addCommand(createCollaborationCommand());
 
@@ -688,9 +483,6 @@ program.addCommand(createTeamReviewCommand());
 
 // Add third-party tool integration command
 program.addCommand(setupIntegrationCommands(program));
-
-// Add performance monitoring and optimization command
-program.addCommand(setupPerformanceCommands(program));
 
 // Add help command with AI-powered documentation support
 program.addCommand(createHelpCommand());

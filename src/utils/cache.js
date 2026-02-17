@@ -3,7 +3,7 @@ import path from "path";
 import crypto from "crypto";
 
 export class FileCache {
-  constructor (options = {}) {
+  constructor(options = {}) {
     this.cache = new Map();
     this.maxSize = options.maxSize || 100 * 1024 * 1024; // 100MB default
     this.maxEntries = options.maxEntries || 100;
@@ -14,7 +14,7 @@ export class FileCache {
   }
 
   // Generate cache key from file path and options
-  _generateKey (filePath, options = {}) {
+  _generateKey(filePath, options = {}) {
     const keyData = {
       path: path.resolve(filePath),
       options: JSON.stringify(options),
@@ -26,7 +26,7 @@ export class FileCache {
   }
 
   // Check if cache entry is valid (not expired)
-  _isValid (entry) {
+  _isValid(entry) {
     if (!entry) return false;
     if (entry.expiresAt && Date.now() > entry.expiresAt) {
       this._remove(entry.key);
@@ -36,7 +36,7 @@ export class FileCache {
   }
 
   // Remove entry from cache
-  _remove (key) {
+  _remove(key) {
     const entry = this.cache.get(key);
     if (entry) {
       this.currentSize -= entry.size;
@@ -45,7 +45,7 @@ export class FileCache {
   }
 
   // Clean expired entries
-  _cleanup () {
+  _cleanup() {
     const now = Date.now();
     for (const [key, entry] of this.cache.entries()) {
       if (entry.expiresAt && now > entry.expiresAt) {
@@ -55,7 +55,7 @@ export class FileCache {
   }
 
   // Ensure cache doesn't exceed limits
-  _enforceLimits () {
+  _enforceLimits() {
     // Remove expired entries first
     this._cleanup();
 
@@ -85,7 +85,7 @@ export class FileCache {
   }
 
   // Get file from cache
-  get (filePath, options = {}) {
+  get(filePath, options = {}) {
     const key = this._generateKey(filePath, options);
     const entry = this.cache.get(key);
 
@@ -106,7 +106,7 @@ export class FileCache {
   }
 
   // Set file in cache
-  set (filePath, data, options = {}) {
+  set(filePath, data, options = {}) {
     const key = this._generateKey(filePath, options);
     const size = Buffer.byteLength(JSON.stringify(data));
 
@@ -139,13 +139,13 @@ export class FileCache {
   }
 
   // Invalidate cache for a file
-  invalidate (filePath, options = {}) {
+  invalidate(filePath, options = {}) {
     const key = this._generateKey(filePath, options);
     this._remove(key);
   }
 
   // Invalidate all cache entries for a directory
-  invalidateDirectory (dirPath) {
+  invalidateDirectory(dirPath) {
     const resolvedDir = path.resolve(dirPath);
 
     for (const [key, entry] of this.cache.entries()) {
@@ -164,7 +164,7 @@ export class FileCache {
   }
 
   // Clear entire cache
-  clear () {
+  clear() {
     this.cache.clear();
     this.currentSize = 0;
     this.hits = 0;
@@ -172,7 +172,7 @@ export class FileCache {
   }
 
   // Get cache statistics
-  getStats () {
+  getStats() {
     return {
       size: this.currentSize,
       entries: this.cache.size,
@@ -190,7 +190,7 @@ export class FileCache {
 
 // File system specific cache with intelligent invalidation
 export class FileSystemCache extends FileCache {
-  constructor (options = {}) {
+  constructor(options = {}) {
     super({
       maxSize: options.maxSize || 50 * 1024 * 1024, // 50MB for file system
       maxEntries: options.maxEntries || 50,
@@ -202,7 +202,7 @@ export class FileSystemCache extends FileCache {
   }
 
   // Enhanced cache key with file stats
-  async _generateEnhancedKey (filePath, options = {}) {
+  async _generateEnhancedKey(filePath, options = {}) {
     try {
       const stats = await fs.stat(filePath);
       const keyData = {
@@ -222,7 +222,7 @@ export class FileSystemCache extends FileCache {
   }
 
   // Get with file stat validation
-  async get (filePath, options = {}) {
+  async get(filePath, options = {}) {
     try {
       const stats = await fs.stat(filePath);
       const key = await this._generateEnhancedKey(filePath, {
@@ -255,7 +255,7 @@ export class FileSystemCache extends FileCache {
   }
 
   // Set with file metadata
-  async set (filePath, data, options = {}) {
+  async set(filePath, data, options = {}) {
     try {
       const stats = await fs.stat(filePath);
       const key = await this._generateEnhancedKey(filePath, {
@@ -303,7 +303,7 @@ export class FileSystemCache extends FileCache {
 export const fileSystemCache = new FileSystemCache();
 
 // Utility function for caching file reads
-export async function cachedFileRead (
+export async function cachedFileRead(
   filePath,
   encoding = "utf-8",
   forceRefresh = false,
@@ -324,7 +324,7 @@ export async function cachedFileRead (
 }
 
 // Utility function for caching directory listings
-export async function cachedDirectoryList (dirPath, options = {}) {
+export async function cachedDirectoryList(dirPath, options = {}) {
   const cached = await fileSystemCache.get(dirPath, options);
   if (cached) {
     return cached.files;

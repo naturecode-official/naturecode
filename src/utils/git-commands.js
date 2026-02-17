@@ -4,7 +4,7 @@ import { gitManager } from "./git.js";
 import { exitWithError } from "./error-handler.js";
 
 class GitCommandHandler {
-  constructor () {
+  constructor() {
     this.commands = {
       status: this.handleStatus.bind(this),
       diff: this.handleDiff.bind(this),
@@ -22,7 +22,7 @@ class GitCommandHandler {
     };
   }
 
-  async handleCommand (command, args = {}) {
+  async handleCommand(command, args = {}) {
     try {
       if (!this.commands[command]) {
         throw new Error(`Unknown git command: ${command}`);
@@ -35,7 +35,7 @@ class GitCommandHandler {
     }
   }
 
-  async handleStatus (args) {
+  async handleStatus(args) {
     try {
       const dir = args.dir || process.cwd();
 
@@ -69,7 +69,7 @@ class GitCommandHandler {
     }
   }
 
-  async handleDiff (args) {
+  async handleDiff(args) {
     try {
       const dir = args.dir || process.cwd();
       const staged = args.staged || false;
@@ -84,7 +84,7 @@ class GitCommandHandler {
       const diff = gitManager.getDiff(dir, staged);
       const summary = diff
         ? diff.split("\n").filter((l) => l.startsWith("+") || l.startsWith("-"))
-          .length
+            .length
         : 0;
 
       return {
@@ -100,7 +100,7 @@ class GitCommandHandler {
     }
   }
 
-  async handleLog (args) {
+  async handleLog(args) {
     try {
       const dir = args.dir || process.cwd();
       const limit = args.limit || 10;
@@ -127,7 +127,7 @@ class GitCommandHandler {
     }
   }
 
-  async handleCommit (args) {
+  async handleCommit(args) {
     try {
       const dir = args.dir || process.cwd();
       const message = args.message;
@@ -167,7 +167,7 @@ class GitCommandHandler {
     }
   }
 
-  async handlePush (args) {
+  async handlePush(args) {
     try {
       const dir = args.dir || process.cwd();
       const branch = args.branch;
@@ -195,7 +195,7 @@ class GitCommandHandler {
     }
   }
 
-  async handlePull (args) {
+  async handlePull(args) {
     try {
       const dir = args.dir || process.cwd();
       const branch = args.branch;
@@ -223,7 +223,7 @@ class GitCommandHandler {
     }
   }
 
-  async handleBranch (args) {
+  async handleBranch(args) {
     try {
       const dir = args.dir || process.cwd();
       const action = args.action || "list";
@@ -262,7 +262,7 @@ class GitCommandHandler {
     }
   }
 
-  async handleCheckout (args) {
+  async handleCheckout(args) {
     try {
       const dir = args.dir || process.cwd();
       const branch = args.branch;
@@ -294,7 +294,7 @@ class GitCommandHandler {
     }
   }
 
-  async handleMerge (args) {
+  async handleMerge(args) {
     try {
       const dir = args.dir || process.cwd();
       const branch = args.branch;
@@ -326,7 +326,7 @@ class GitCommandHandler {
     }
   }
 
-  async handleAdd (args) {
+  async handleAdd(args) {
     try {
       const dir = args.dir || process.cwd();
       const files = args.files;
@@ -358,7 +358,7 @@ class GitCommandHandler {
     }
   }
 
-  async handleRemote (args) {
+  async handleRemote(args) {
     try {
       const dir = args.dir || process.cwd();
 
@@ -382,7 +382,7 @@ class GitCommandHandler {
     }
   }
 
-  async handleAnalyze (args) {
+  async handleAnalyze(args) {
     try {
       const dir = args.dir || process.cwd();
 
@@ -410,7 +410,7 @@ class GitCommandHandler {
     }
   }
 
-  async handleSuggest (args) {
+  async handleSuggest(args) {
     try {
       const dir = args.dir || process.cwd();
 
@@ -474,14 +474,14 @@ class GitCommandHandler {
     }
   }
 
-  getAvailableCommands () {
+  getAvailableCommands() {
     return Object.keys(this.commands).map((cmd) => ({
       command: cmd,
       description: this.getCommandDescription(cmd),
     }));
   }
 
-  getCommandDescription (command) {
+  getCommandDescription(command) {
     const descriptions = {
       status: "Show repository status and changes",
       diff: "Show changes between commits, commit and working tree, etc",

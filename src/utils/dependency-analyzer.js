@@ -5,11 +5,11 @@ import path from "path";
 import { execSync } from "child_process";
 
 export class DependencyAnalyzer {
-  constructor (baseDir = process.cwd()) {
+  constructor(baseDir = process.cwd()) {
     this.baseDir = baseDir;
   }
 
-  async analyzeDependencies (options = {}) {
+  async analyzeDependencies(options = {}) {
     try {
       const packageJsonPath = path.join(this.baseDir, "package.json");
       const requirementsPath = path.join(this.baseDir, "requirements.txt");
@@ -124,7 +124,7 @@ export class DependencyAnalyzer {
     }
   }
 
-  async detectNodePackageManager () {
+  async detectNodePackageManager() {
     try {
       if (await this.fileExists(path.join(this.baseDir, "yarn.lock"))) {
         return "yarn";
@@ -143,7 +143,7 @@ export class DependencyAnalyzer {
     }
   }
 
-  async analyzeDependencyHealth (dependencies, projectType) {
+  async analyzeDependencyHealth(dependencies, projectType) {
     const analysis = {
       outdatedCount: 0,
       securityIssues: 0,
@@ -197,7 +197,7 @@ export class DependencyAnalyzer {
     return analysis;
   }
 
-  async getDependencyTree () {
+  async getDependencyTree() {
     try {
       const packageJsonPath = path.join(this.baseDir, "package.json");
 
@@ -223,7 +223,7 @@ export class DependencyAnalyzer {
     }
   }
 
-  formatDependencyTree (tree) {
+  formatDependencyTree(tree) {
     const formatted = {
       name: tree.name || "unknown",
       version: tree.version || "unknown",
@@ -248,7 +248,7 @@ export class DependencyAnalyzer {
     return formatted;
   }
 
-  async checkForSecurityIssues () {
+  async checkForSecurityIssues() {
     try {
       // Try to use npm audit if available
       try {
@@ -276,7 +276,7 @@ export class DependencyAnalyzer {
     }
   }
 
-  formatSecurityReport (audit) {
+  formatSecurityReport(audit) {
     const report = {
       available: true,
       metadata: audit.metadata || {},
@@ -313,7 +313,7 @@ export class DependencyAnalyzer {
     return report;
   }
 
-  async getDependencyStats () {
+  async getDependencyStats() {
     const analysis = await this.analyzeDependencies();
     const stats = {
       projectType: analysis.projectType,
@@ -343,7 +343,7 @@ export class DependencyAnalyzer {
     return stats;
   }
 
-  async fileExists (filePath) {
+  async fileExists(filePath) {
     try {
       await fs.access(filePath);
       return true;
@@ -352,7 +352,7 @@ export class DependencyAnalyzer {
     }
   }
 
-  async getUnusedDependencies () {
+  async getUnusedDependencies() {
     try {
       // Try to use depcheck if available
       try {

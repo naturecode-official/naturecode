@@ -1,14 +1,14 @@
 import { OpenAIProvider } from "./openai.js";
 
 export class FourSAPIProvider extends OpenAIProvider {
-  constructor () {
+  constructor() {
     super();
     this.name = "4sapi";
     this.displayName = "4SAPI";
     this.supportsStreaming = true;
   }
 
-  validateConfig (config) {
+  validateConfig(config) {
     // 验证4SAPI配置
     if (!config.apiKey || typeof config.apiKey !== "string") {
       throw new Error("4SAPI API key is required");
@@ -26,12 +26,12 @@ export class FourSAPIProvider extends OpenAIProvider {
     }
   }
 
-  _getApiUrl (_config) {
+  _getApiUrl(_config) {
     // 4SAPI使用固定的base URL
     return "https://4sapi.com/v1/chat/completions";
   }
 
-  _getHeaders (config) {
+  _getHeaders(config) {
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${config.apiKey}`,
@@ -45,7 +45,7 @@ export class FourSAPIProvider extends OpenAIProvider {
     return headers;
   }
 
-  _getRequestBody (prompt, options, config) {
+  _getRequestBody(prompt, options, config) {
     const body = {
       messages: [
         {
@@ -85,7 +85,7 @@ export class FourSAPIProvider extends OpenAIProvider {
     return body;
   }
 
-  static getStaticAvailableModels () {
+  static getStaticAvailableModels() {
     // 4SAPI支持的模型（基于OpenAI兼容模型）
     return [
       "gpt-4o",
@@ -107,7 +107,7 @@ export class FourSAPIProvider extends OpenAIProvider {
     ];
   }
 
-  static getStaticModelDescriptions () {
+  static getStaticModelDescriptions() {
     return {
       "gpt-4o": "最新多模态模型，支持文本和图像",
       "gpt-4o-mini": "轻量版GPT-4o，性价比高",
@@ -128,7 +128,7 @@ export class FourSAPIProvider extends OpenAIProvider {
     };
   }
 
-  static getStaticModelCapabilities (model) {
+  static getStaticModelCapabilities(model) {
     // 基于模型类型返回能力
     const capabilities = ["text", "chat"];
 

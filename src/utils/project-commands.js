@@ -5,7 +5,7 @@ import { exitWithError } from "./error-handler.js";
 import path from "path";
 
 export class ProjectCommandHandler {
-  constructor () {
+  constructor() {
     this.manager = new ProjectManager();
     this.commands = [
       {
@@ -56,14 +56,14 @@ export class ProjectCommandHandler {
     ];
   }
 
-  getAvailableCommands () {
+  getAvailableCommands() {
     return this.commands.map((cmd) => ({
       command: cmd.command,
       description: cmd.description,
     }));
   }
 
-  async handleCommand (command, args = {}) {
+  async handleCommand(command, args = {}) {
     const cmd = this.commands.find((c) => c.command === command);
 
     if (!cmd) {
@@ -77,7 +77,7 @@ export class ProjectCommandHandler {
     }
   }
 
-  async handleAnalyze (args) {
+  async handleAnalyze(args) {
     const {
       dir = process.cwd(),
       maxDepth = 5,
@@ -129,7 +129,7 @@ export class ProjectCommandHandler {
     return structure;
   }
 
-  async handleStructure (args) {
+  async handleStructure(args) {
     const {
       dir = process.cwd(),
       maxDepth = 3,
@@ -151,7 +151,7 @@ export class ProjectCommandHandler {
     return structure;
   }
 
-  buildTree (structure) {
+  buildTree(structure) {
     const root = {
       name: path.basename(structure.path),
       type: "directory",
@@ -183,7 +183,7 @@ export class ProjectCommandHandler {
     });
 
     // Build tree recursively
-    function addToTree (parent, currentDepth, currentPath) {
+    function addToTree(parent, currentDepth, currentPath) {
       const items = itemsByDepth[currentDepth] || [];
 
       items.forEach((item) => {
@@ -215,7 +215,7 @@ export class ProjectCommandHandler {
     return root;
   }
 
-  printTree (node, prefix = "", isLast = true) {
+  printTree(node, prefix = "", isLast = true) {
     const connector = isLast ? "└── " : "├── ";
     const extension = node.type === "file" ? path.extname(node.name) : "";
     const name = node.type === "directory" ? `${node.name}/` : node.name;
@@ -238,7 +238,7 @@ export class ProjectCommandHandler {
     }
   }
 
-  async handleHealth (args) {
+  async handleHealth(args) {
     const { dir = process.cwd() } = args;
 
     console.log(`Checking project health for ${dir}...`);
@@ -292,7 +292,7 @@ export class ProjectCommandHandler {
     return health;
   }
 
-  async handleCreate (args) {
+  async handleCreate(args) {
     const { template, name, description, author, dir = process.cwd() } = args;
 
     if (!template) {
@@ -331,7 +331,7 @@ export class ProjectCommandHandler {
     return result;
   }
 
-  async handleSetup (args) {
+  async handleSetup(args) {
     const {
       dir = process.cwd(),
       initGit = true,
@@ -369,7 +369,7 @@ export class ProjectCommandHandler {
     return result;
   }
 
-  async handleTemplates (args) {
+  async handleTemplates(args) {
     const templates = [
       {
         name: "nodejs",
@@ -422,7 +422,7 @@ export class ProjectCommandHandler {
     return { templates };
   }
 
-  async handleUpgrades (args) {
+  async handleUpgrades(args) {
     const { dir = process.cwd() } = args;
 
     console.log(`Checking for dependency upgrades in ${dir}...`);
@@ -470,7 +470,7 @@ export class ProjectCommandHandler {
     return upgrades;
   }
 
-  async handleConflicts (args) {
+  async handleConflicts(args) {
     const { dir = process.cwd() } = args;
 
     console.log(`Checking for dependency conflicts in ${dir}...`);
@@ -518,7 +518,7 @@ export class ProjectCommandHandler {
     return conflicts;
   }
 
-  async handlePackageManager (args) {
+  async handlePackageManager(args) {
     const { dir = process.cwd() } = args;
 
     console.log(`Analyzing package manager options for ${dir}...`);

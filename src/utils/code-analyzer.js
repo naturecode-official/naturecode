@@ -5,11 +5,11 @@ import path from "path";
 import { execSync } from "child_process";
 
 export class CodeAnalyzer {
-  constructor (baseDir = process.cwd()) {
+  constructor(baseDir = process.cwd()) {
     this.baseDir = baseDir;
   }
 
-  async analyzeFile (filePath) {
+  async analyzeFile(filePath) {
     try {
       const stats = await fs.stat(filePath);
       const content = await fs.readFile(filePath, "utf-8");
@@ -27,32 +27,32 @@ export class CodeAnalyzer {
 
       // Run language-specific analysis
       switch (ext) {
-      case ".js":
-      case ".jsx":
-      case ".ts":
-      case ".tsx":
-        analysis.issues = await this.analyzeJavaScript(content, filePath);
-        analysis.metrics = this.calculateJavaScriptMetrics(content);
-        break;
-      case ".py":
-        analysis.issues = await this.analyzePython(content, filePath);
-        analysis.metrics = this.calculatePythonMetrics(content);
-        break;
-      case ".java":
-        analysis.issues = await this.analyzeJava(content, filePath);
-        analysis.metrics = this.calculateJavaMetrics(content);
-        break;
-      case ".go":
-        analysis.issues = await this.analyzeGo(content, filePath);
-        analysis.metrics = this.calculateGoMetrics(content);
-        break;
-      case ".rs":
-        analysis.issues = await this.analyzeRust(content, filePath);
-        analysis.metrics = this.calculateRustMetrics(content);
-        break;
-      default:
-        analysis.issues = await this.analyzeGeneric(content, filePath);
-        analysis.metrics = this.calculateGenericMetrics(content);
+        case ".js":
+        case ".jsx":
+        case ".ts":
+        case ".tsx":
+          analysis.issues = await this.analyzeJavaScript(content, filePath);
+          analysis.metrics = this.calculateJavaScriptMetrics(content);
+          break;
+        case ".py":
+          analysis.issues = await this.analyzePython(content, filePath);
+          analysis.metrics = this.calculatePythonMetrics(content);
+          break;
+        case ".java":
+          analysis.issues = await this.analyzeJava(content, filePath);
+          analysis.metrics = this.calculateJavaMetrics(content);
+          break;
+        case ".go":
+          analysis.issues = await this.analyzeGo(content, filePath);
+          analysis.metrics = this.calculateGoMetrics(content);
+          break;
+        case ".rs":
+          analysis.issues = await this.analyzeRust(content, filePath);
+          analysis.metrics = this.calculateRustMetrics(content);
+          break;
+        default:
+          analysis.issues = await this.analyzeGeneric(content, filePath);
+          analysis.metrics = this.calculateGenericMetrics(content);
       }
 
       return analysis;
@@ -61,7 +61,7 @@ export class CodeAnalyzer {
     }
   }
 
-  async analyzeDirectory (dirPath = this.baseDir, options = {}) {
+  async analyzeDirectory(dirPath = this.baseDir, options = {}) {
     try {
       const files = await this.scanDirectory(dirPath, options);
       const analyses = [];
@@ -89,7 +89,7 @@ export class CodeAnalyzer {
     }
   }
 
-  async scanDirectory (dirPath, options = {}) {
+  async scanDirectory(dirPath, options = {}) {
     const files = [];
     const extensions = options.extensions || [
       ".js",
@@ -110,7 +110,7 @@ export class CodeAnalyzer {
       ".swift",
     ];
 
-    async function scan (currentPath) {
+    async function scan(currentPath) {
       try {
         const entries = await fs.readdir(currentPath, { withFileTypes: true });
 
@@ -138,7 +138,7 @@ export class CodeAnalyzer {
     return files;
   }
 
-  getLanguage (ext) {
+  getLanguage(ext) {
     const languageMap = {
       ".js": "JavaScript",
       ".jsx": "JavaScript (React)",
@@ -169,7 +169,7 @@ export class CodeAnalyzer {
     return languageMap[ext] || "Unknown";
   }
 
-  async analyzeJavaScript (content, filePath) {
+  async analyzeJavaScript(content, filePath) {
     const issues = [];
 
     // Check for common issues
@@ -259,7 +259,7 @@ export class CodeAnalyzer {
     return issues;
   }
 
-  calculateJavaScriptMetrics (content) {
+  calculateJavaScriptMetrics(content) {
     const lines = content.split("\n");
     const codeLines = lines.filter(
       (line) => line.trim() && !line.trim().startsWith("//"),
@@ -279,7 +279,7 @@ export class CodeAnalyzer {
     };
   }
 
-  async analyzePython (content, filePath) {
+  async analyzePython(content, filePath) {
     const issues = [];
     const lines = content.split("\n");
 
@@ -312,7 +312,7 @@ export class CodeAnalyzer {
     return issues;
   }
 
-  calculatePythonMetrics (content) {
+  calculatePythonMetrics(content) {
     const lines = content.split("\n");
     const codeLines = lines.filter(
       (line) => line.trim() && !line.trim().startsWith("#"),
@@ -330,7 +330,7 @@ export class CodeAnalyzer {
     };
   }
 
-  async analyzeJava (content, filePath) {
+  async analyzeJava(content, filePath) {
     const issues = [];
     const lines = content.split("\n");
 
@@ -355,7 +355,7 @@ export class CodeAnalyzer {
     return issues;
   }
 
-  calculateJavaMetrics (content) {
+  calculateJavaMetrics(content) {
     const lines = content.split("\n");
     const codeLines = lines.filter(
       (line) => line.trim() && !line.trim().startsWith("//"),
@@ -375,7 +375,7 @@ export class CodeAnalyzer {
     };
   }
 
-  async analyzeGo (content, filePath) {
+  async analyzeGo(content, filePath) {
     const issues = [];
     const lines = content.split("\n");
 
@@ -397,7 +397,7 @@ export class CodeAnalyzer {
     return issues;
   }
 
-  calculateGoMetrics (content) {
+  calculateGoMetrics(content) {
     const lines = content.split("\n");
     const codeLines = lines.filter(
       (line) => line.trim() && !line.trim().startsWith("//"),
@@ -417,7 +417,7 @@ export class CodeAnalyzer {
     };
   }
 
-  async analyzeRust (content, filePath) {
+  async analyzeRust(content, filePath) {
     const issues = [];
     const lines = content.split("\n");
 
@@ -439,7 +439,7 @@ export class CodeAnalyzer {
     return issues;
   }
 
-  calculateRustMetrics (content) {
+  calculateRustMetrics(content) {
     const lines = content.split("\n");
     const codeLines = lines.filter(
       (line) => line.trim() && !line.trim().startsWith("//"),
@@ -459,7 +459,7 @@ export class CodeAnalyzer {
     };
   }
 
-  async analyzeGeneric (content, filePath) {
+  async analyzeGeneric(content, filePath) {
     const issues = [];
     const lines = content.split("\n");
 
@@ -496,7 +496,7 @@ export class CodeAnalyzer {
     return issues;
   }
 
-  calculateGenericMetrics (content) {
+  calculateGenericMetrics(content) {
     const lines = content.split("\n");
     return {
       totalLines: lines.length,
@@ -506,7 +506,7 @@ export class CodeAnalyzer {
     };
   }
 
-  generateSummary (analyses) {
+  generateSummary(analyses) {
     const summary = {
       totalFiles: analyses.length,
       totalLines: 0,
@@ -536,12 +536,12 @@ export class CodeAnalyzer {
     return summary;
   }
 
-  getLineNumber (content, position) {
+  getLineNumber(content, position) {
     const lines = content.substring(0, position).split("\n");
     return lines.length;
   }
 
-  async getComplexityMetrics (filePath) {
+  async getComplexityMetrics(filePath) {
     try {
       const content = await fs.readFile(filePath, "utf-8");
       const lines = content.split("\n");

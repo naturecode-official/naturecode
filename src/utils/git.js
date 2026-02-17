@@ -5,11 +5,11 @@ import fs from "fs";
 import path from "path";
 
 class GitManager {
-  constructor () {
+  constructor() {
     this.gitPath = this.findGitPath();
   }
 
-  findGitPath () {
+  findGitPath() {
     try {
       const gitPath = execSync("which git || where git", {
         encoding: "utf8",
@@ -20,7 +20,7 @@ class GitManager {
     }
   }
 
-  isGitRepository (dir = process.cwd()) {
+  isGitRepository(dir = process.cwd()) {
     try {
       const gitDir = path.join(dir, ".git");
       return fs.existsSync(gitDir);
@@ -29,7 +29,7 @@ class GitManager {
     }
   }
 
-  getRepositoryRoot (dir = process.cwd()) {
+  getRepositoryRoot(dir = process.cwd()) {
     try {
       const output = execSync("git rev-parse --show-toplevel", {
         cwd: dir,
@@ -41,7 +41,7 @@ class GitManager {
     }
   }
 
-  getCurrentBranch (dir = process.cwd()) {
+  getCurrentBranch(dir = process.cwd()) {
     try {
       const output = execSync("git branch --show-current", {
         cwd: dir,
@@ -53,7 +53,7 @@ class GitManager {
     }
   }
 
-  getStatus (dir = process.cwd()) {
+  getStatus(dir = process.cwd()) {
     try {
       const output = execSync("git status --porcelain", {
         cwd: dir,
@@ -91,7 +91,7 @@ class GitManager {
     }
   }
 
-  getDiff (dir = process.cwd(), staged = false) {
+  getDiff(dir = process.cwd(), staged = false) {
     try {
       const command = staged ? "git diff --staged" : "git diff";
       const output = execSync(command, {
@@ -104,7 +104,7 @@ class GitManager {
     }
   }
 
-  getLog (dir = process.cwd(), limit = 10) {
+  getLog(dir = process.cwd(), limit = 10) {
     try {
       const output = execSync(`git log --oneline -n ${limit}`, {
         cwd: dir,
@@ -116,7 +116,7 @@ class GitManager {
     }
   }
 
-  getRemoteInfo (dir = process.cwd()) {
+  getRemoteInfo(dir = process.cwd()) {
     try {
       const output = execSync("git remote -v", {
         cwd: dir,
@@ -144,7 +144,7 @@ class GitManager {
     }
   }
 
-  stageFiles (files, dir = process.cwd()) {
+  stageFiles(files, dir = process.cwd()) {
     try {
       const fileList = Array.isArray(files) ? files.join(" ") : files;
       execSync(`git add ${fileList}`, {
@@ -157,7 +157,7 @@ class GitManager {
     }
   }
 
-  commit (message, dir = process.cwd()) {
+  commit(message, dir = process.cwd()) {
     try {
       const escapedMessage = message.replace(/"/g, '\\"');
       execSync(`git commit -m "${escapedMessage}"`, {
@@ -170,7 +170,7 @@ class GitManager {
     }
   }
 
-  push (branch = null, remote = "origin", dir = process.cwd()) {
+  push(branch = null, remote = "origin", dir = process.cwd()) {
     try {
       const branchName = branch || this.getCurrentBranch(dir);
       execSync(`git push ${remote} ${branchName}`, {
@@ -183,7 +183,7 @@ class GitManager {
     }
   }
 
-  pull (remote = "origin", branch = null, dir = process.cwd()) {
+  pull(remote = "origin", branch = null, dir = process.cwd()) {
     try {
       const branchName = branch || this.getCurrentBranch(dir);
       execSync(`git pull ${remote} ${branchName}`, {
@@ -196,7 +196,7 @@ class GitManager {
     }
   }
 
-  createBranch (name, dir = process.cwd()) {
+  createBranch(name, dir = process.cwd()) {
     try {
       execSync(`git checkout -b ${name}`, {
         cwd: dir,
@@ -208,7 +208,7 @@ class GitManager {
     }
   }
 
-  switchBranch (name, dir = process.cwd()) {
+  switchBranch(name, dir = process.cwd()) {
     try {
       execSync(`git checkout ${name}`, {
         cwd: dir,
@@ -220,7 +220,7 @@ class GitManager {
     }
   }
 
-  mergeBranch (name, dir = process.cwd()) {
+  mergeBranch(name, dir = process.cwd()) {
     try {
       execSync(`git merge ${name}`, {
         cwd: dir,
@@ -232,7 +232,7 @@ class GitManager {
     }
   }
 
-  getBranches (dir = process.cwd()) {
+  getBranches(dir = process.cwd()) {
     try {
       const output = execSync("git branch -a", {
         cwd: dir,
@@ -267,7 +267,7 @@ class GitManager {
     }
   }
 
-  analyzeChanges (dir = process.cwd()) {
+  analyzeChanges(dir = process.cwd()) {
     try {
       const status = this.getStatus(dir);
 
@@ -312,7 +312,7 @@ class GitManager {
     }
   }
 
-  generateCommitMessage (changes, dir = process.cwd()) {
+  generateCommitMessage(changes, dir = process.cwd()) {
     try {
       const status = this.getStatus(dir);
       const stagedFiles = status.staged.map((s) => s.file);
@@ -352,7 +352,7 @@ class GitManager {
     }
   }
 
-  validate () {
+  validate() {
     try {
       if (!this.gitPath) {
         throw new Error("Git not found");

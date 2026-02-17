@@ -4,11 +4,11 @@ import fs from "fs/promises";
 import path from "path";
 
 export class RefactorSuggestions {
-  constructor (baseDir = process.cwd()) {
+  constructor(baseDir = process.cwd()) {
     this.baseDir = baseDir;
   }
 
-  async analyzeForRefactoring (filePath) {
+  async analyzeForRefactoring(filePath) {
     try {
       const content = await fs.readFile(filePath, "utf-8");
       const ext = path.extname(filePath).toLowerCase();
@@ -40,7 +40,7 @@ export class RefactorSuggestions {
     }
   }
 
-  async analyzeJavaScriptForRefactoring (content, filePath) {
+  async analyzeJavaScriptForRefactoring(content, filePath) {
     const suggestions = [];
     const lines = content.split("\n");
 
@@ -142,7 +142,7 @@ export class RefactorSuggestions {
     return suggestions;
   }
 
-  async analyzePythonForRefactoring (content, filePath) {
+  async analyzePythonForRefactoring(content, filePath) {
     const suggestions = [];
     const lines = content.split("\n");
 
@@ -203,7 +203,7 @@ export class RefactorSuggestions {
     return suggestions;
   }
 
-  async analyzeJavaForRefactoring (content, filePath) {
+  async analyzeJavaForRefactoring(content, filePath) {
     const suggestions = [];
     const lines = content.split("\n");
 
@@ -250,7 +250,7 @@ export class RefactorSuggestions {
     return suggestions;
   }
 
-  async getRefactoringSuggestions (directory = this.baseDir, options = {}) {
+  async getRefactoringSuggestions(directory = this.baseDir, options = {}) {
     try {
       const files = await this.scanDirectory(directory, options);
       const allSuggestions = [];
@@ -292,7 +292,7 @@ export class RefactorSuggestions {
     }
   }
 
-  async scanDirectory (dirPath, options = {}) {
+  async scanDirectory(dirPath, options = {}) {
     const files = [];
     const extensions = options.extensions || [
       ".js",
@@ -303,7 +303,7 @@ export class RefactorSuggestions {
       ".java",
     ];
 
-    async function scan (currentPath) {
+    async function scan(currentPath) {
       try {
         const entries = await fs.readdir(currentPath, { withFileTypes: true });
 
@@ -331,7 +331,7 @@ export class RefactorSuggestions {
     return files;
   }
 
-  generateSummary (files) {
+  generateSummary(files) {
     const summary = {
       totalFiles: files.length,
       totalSuggestions: files.reduce(
@@ -354,7 +354,7 @@ export class RefactorSuggestions {
     return summary;
   }
 
-  getRefactoringPriority (issues) {
+  getRefactoringPriority(issues) {
     const highPriority = issues.filter(
       (issue) => issue.priority === "high",
     ).length;

@@ -8,7 +8,7 @@ import {
 } from "./cache.js";
 
 export class FileSystem {
-  constructor (baseDir = process.cwd(), options = {}) {
+  constructor(baseDir = process.cwd(), options = {}) {
     this.baseDir = path.resolve(baseDir);
     this.allowedDirs = [this.baseDir];
     this.operationLog = [];
@@ -18,7 +18,7 @@ export class FileSystem {
   }
 
   // Validate path is within allowed directory
-  validatePath (targetPath) {
+  validatePath(targetPath) {
     if (!targetPath || typeof targetPath !== "string") {
       throw new Error("Invalid path: path must be a string");
     }
@@ -76,7 +76,7 @@ export class FileSystem {
   }
 
   // Log file operation for audit
-  logOperation (operation, filePath, success = true, details = {}) {
+  logOperation(operation, filePath, success = true, details = {}) {
     const logEntry = {
       timestamp: new Date().toISOString(),
       operation,
@@ -98,7 +98,7 @@ export class FileSystem {
   }
 
   // List directory contents
-  async listFiles (dirPath = ".", options = {}) {
+  async listFiles(dirPath = ".", options = {}) {
     const resolvedPath = this.validatePath(dirPath);
 
     try {
@@ -128,7 +128,7 @@ export class FileSystem {
   }
 
   // Direct directory reading (without cache)
-  async _readDirectoryDirect (resolvedPath, options = {}) {
+  async _readDirectoryDirect(resolvedPath, options = {}) {
     const items = await fs.readdir(resolvedPath, { withFileTypes: true });
 
     const fileList = items.map((item) => {
@@ -176,7 +176,7 @@ export class FileSystem {
   }
 
   // Read file content
-  async readFile (filePath, encoding = "utf-8", options = {}) {
+  async readFile(filePath, encoding = "utf-8", options = {}) {
     const resolvedPath = this.validatePath(filePath);
     const forceRefresh = options.forceRefresh || false;
 
@@ -219,7 +219,7 @@ export class FileSystem {
   }
 
   // Write file content with automatic backup
-  async writeFile (filePath, content, options = {}) {
+  async writeFile(filePath, content, options = {}) {
     const resolvedPath = this.validatePath(filePath);
     const backupPath =
       options.backup !== false ? `${resolvedPath}.backup-${Date.now()}` : null;
@@ -266,12 +266,12 @@ export class FileSystem {
   }
 
   // Create new file
-  async createFile (filePath, content = "") {
+  async createFile(filePath, content = "") {
     return this.writeFile(filePath, content, { backup: false });
   }
 
   // Delete file
-  async deleteFile (filePath, options = {}) {
+  async deleteFile(filePath, options = {}) {
     const resolvedPath = this.validatePath(filePath);
     const backupPath =
       options.backup !== false ? `${resolvedPath}.deleted-${Date.now()}` : null;
@@ -310,7 +310,7 @@ export class FileSystem {
   }
 
   // Get file information
-  async getFileInfo (filePath) {
+  async getFileInfo(filePath) {
     const resolvedPath = this.validatePath(filePath);
 
     try {
@@ -340,7 +340,7 @@ export class FileSystem {
   }
 
   // Get current directory information
-  getCurrentDirectory () {
+  getCurrentDirectory() {
     return {
       path: this.baseDir,
       relative: path.relative(process.cwd(), this.baseDir),
@@ -351,7 +351,7 @@ export class FileSystem {
   }
 
   // Change current directory (within allowed boundaries)
-  async changeDirectory (newDir) {
+  async changeDirectory(newDir) {
     const resolvedPath = path.resolve(this.baseDir, newDir);
 
     // Validate the new directory is within allowed boundaries
@@ -395,18 +395,18 @@ export class FileSystem {
   }
 
   // Get operation log
-  getOperationLog (limit = 100) {
+  getOperationLog(limit = 100) {
     return this.operationLog.slice(-limit);
   }
 
   // Clear operation log
-  clearOperationLog () {
+  clearOperationLog() {
     this.operationLog = [];
     return { success: true, cleared: true };
   }
 
   // Get cache statistics
-  getCacheStats () {
+  getCacheStats() {
     if (!this.enableCache) {
       return { enabled: false };
     }
@@ -417,7 +417,7 @@ export class FileSystem {
   }
 
   // Clear cache
-  clearCache () {
+  clearCache() {
     if (this.enableCache) {
       this.cache.clear();
       return { success: true, cleared: true };
@@ -426,7 +426,7 @@ export class FileSystem {
   }
 
   // Search for files
-  async searchFiles (pattern, searchDir = ".", options = {}) {
+  async searchFiles(pattern, searchDir = ".", options = {}) {
     const resolvedDir = this.validatePath(searchDir);
 
     try {
@@ -454,7 +454,7 @@ export class FileSystem {
         );
       }
 
-      async function searchRecursive (currentDir) {
+      async function searchRecursive(currentDir) {
         const items = await fs.readdir(currentDir, { withFileTypes: true });
 
         for (const item of items) {
@@ -503,7 +503,7 @@ export class FileSystem {
 }
 
 // Utility functions
-export function formatFileSize (bytes) {
+export function formatFileSize(bytes) {
   if (bytes === 0) return "0 B";
 
   const k = 1024;
@@ -513,7 +513,7 @@ export function formatFileSize (bytes) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
 }
 
-export function formatFileList (files) {
+export function formatFileList(files) {
   if (!files || files.length === 0) {
     return "No files found.";
   }

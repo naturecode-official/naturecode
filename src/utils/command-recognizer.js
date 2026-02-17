@@ -1,7 +1,7 @@
 // Enhanced command recognition for natural language input
 
 export class CommandRecognizer {
-  constructor () {
+  constructor() {
     // Command patterns with synonyms and natural language variations
     this.commandPatterns = {
       listFiles: {
@@ -86,7 +86,7 @@ export class CommandRecognizer {
   }
 
   // Recognize command from natural language input
-  recognize (input) {
+  recognize(input) {
     const lowerInput = input.toLowerCase().trim();
 
     // Check for exact keyword matches first (fast path)
@@ -160,7 +160,7 @@ export class CommandRecognizer {
   }
 
   // Calculate confidence score for a match
-  _calculateConfidence (match, input) {
+  _calculateConfidence(match, input) {
     let confidence = 0.5; // Base confidence
 
     // Longer matches are more confident
@@ -190,7 +190,7 @@ export class CommandRecognizer {
   }
 
   // Check if input contains file references
-  _containsFileReference (input) {
+  _containsFileReference(input) {
     const filePatterns = [
       /\.(js|ts|py|java|cpp|c|html|css|json|txt|md|yml|yaml|xml)$/i,
       /file.*["']?[\w\.\-]+["']?/i,
@@ -201,7 +201,7 @@ export class CommandRecognizer {
   }
 
   // Extract file path from command
-  extractFilePath (commandResult) {
+  extractFilePath(commandResult) {
     if (!commandResult.extractedPath) {
       return null;
     }
@@ -225,7 +225,7 @@ export class CommandRecognizer {
   }
 
   // Suggest corrections for misrecognized commands
-  suggestCorrection (input, availableFiles = []) {
+  suggestCorrection(input, availableFiles = []) {
     const lowerInput = input.toLowerCase();
     const suggestions = [];
 
@@ -267,7 +267,7 @@ export class CommandRecognizer {
   }
 
   // Calculate string similarity (simple Levenshtein-like)
-  _similarity (a, b) {
+  _similarity(a, b) {
     if (a === b) return 1;
     if (a.length === 0 || b.length === 0) return 0;
 
@@ -277,7 +277,7 @@ export class CommandRecognizer {
   }
 
   // Levenshtein distance
-  _levenshtein (a, b) {
+  _levenshtein(a, b) {
     const matrix = [];
 
     for (let i = 0; i <= b.length; i++) {
@@ -306,7 +306,7 @@ export class CommandRecognizer {
   }
 
   // Format recognition result for display
-  formatResult (result) {
+  formatResult(result) {
     if (result.type === "unknown") {
       return {
         message: "No specific command recognized. Using AI assistant.",

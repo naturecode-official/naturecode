@@ -7,7 +7,7 @@ const DEFAULT_GEMINI_BASE_URL =
 const MODELS_ENDPOINT = "/models";
 
 export class GeminiProvider extends AIProvider {
-  constructor (config) {
+  constructor(config) {
     super(config);
     // Only validate if model is provided
     if (config.model) {
@@ -18,7 +18,7 @@ export class GeminiProvider extends AIProvider {
     this.initializeFileSystem();
   }
 
-  validateConfig (config) {
+  validateConfig(config) {
     if (!config.apiKey || typeof config.apiKey !== "string") {
       throw new Error("Google Gemini API key is required");
     }
@@ -34,11 +34,11 @@ export class GeminiProvider extends AIProvider {
     return true;
   }
 
-  getAvailableModels () {
+  getAvailableModels() {
     return GeminiProvider.getStaticAvailableModels();
   }
 
-  static getStaticAvailableModels () {
+  static getStaticAvailableModels() {
     return [
       // Gemini 3 Series (Preview)
       "gemini-3-pro-preview",
@@ -52,7 +52,7 @@ export class GeminiProvider extends AIProvider {
     ];
   }
 
-  static getStaticModelDescriptions () {
+  static getStaticModelDescriptions() {
     return {
       // Gemini 3 Series (Preview)
       "gemini-3-pro-preview":
@@ -71,7 +71,7 @@ export class GeminiProvider extends AIProvider {
     };
   }
 
-  static getStaticModelCapabilities (model) {
+  static getStaticModelCapabilities(model) {
     // All Gemini models support text and chat
     const capabilities = ["text", "chat"];
 
@@ -102,19 +102,19 @@ export class GeminiProvider extends AIProvider {
     return capabilities;
   }
 
-  getModelDescription (model) {
+  getModelDescription(model) {
     const descriptions = GeminiProvider.getStaticModelDescriptions();
     return descriptions[model] || "Unknown model";
   }
 
   // 获取 API URL
-  _getApiUrl () {
+  _getApiUrl() {
     // 只使用 Gemini 官方 API
     return `${DEFAULT_GEMINI_BASE_URL}${MODELS_ENDPOINT}`;
   }
 
   // Enhanced generate method that handles file system operations
-  async generate (prompt, options = {}) {
+  async generate(prompt, options = {}) {
     // Check if this is a file system operation
     const fileOp = this._extractFileOperation(prompt);
 
@@ -127,51 +127,51 @@ export class GeminiProvider extends AIProvider {
   }
 
   // Handle file system operations
-  async _handleFileSystemOperation (fileOp, originalPrompt) {
+  async _handleFileSystemOperation(fileOp, originalPrompt) {
     try {
       switch (fileOp.operation) {
-      case "list": {
-        const files = await this.listFiles();
-        return `Current directory: ${this.getCurrentDirectory().relative}\n\n${formatFileList(files)}\n\nYou can ask me to read, edit, or create files in this directory.`;
-      }
-
-      case "read": {
-        if (fileOp.potentialPaths.length > 0) {
-          const filePath = fileOp.potentialPaths[0];
-          try {
-            const content = await this.readFile(filePath);
-            return `Content of "${filePath}":\n\`\`\`\n${content}\n\`\`\``;
-          } catch (error) {
-            return `Error: Unable to read "${filePath}": ${error.message}`;
-          }
-        } else {
-          return 'Please specify which file you want to read. For example: "read package.json"';
+        case "list": {
+          const files = await this.listFiles();
+          return `Current directory: ${this.getCurrentDirectory().relative}\n\n${formatFileList(files)}\n\nYou can ask me to read, edit, or create files in this directory.`;
         }
-      }
 
-      case "write":
-      case "create": {
-        // For write/create operations, we need the AI to generate content
-        // This will be handled by the normal AI generation with file context
-        return await this._generateWithFileContext(originalPrompt, {});
-      }
-
-      case "delete": {
-        if (fileOp.potentialPaths.length > 0) {
-          const filePath = fileOp.potentialPaths[0];
-          try {
-            const result = await this.deleteFile(filePath);
-            return `Deleted "${filePath}"${result.backupPath ? ` (backup saved to ${result.backupPath})` : ""}`;
-          } catch (error) {
-            return `Error: Unable to delete "${filePath}": ${error.message}`;
+        case "read": {
+          if (fileOp.potentialPaths.length > 0) {
+            const filePath = fileOp.potentialPaths[0];
+            try {
+              const content = await this.readFile(filePath);
+              return `Content of "${filePath}":\n\`\`\`\n${content}\n\`\`\``;
+            } catch (error) {
+              return `Error: Unable to read "${filePath}": ${error.message}`;
+            }
+          } else {
+            return 'Please specify which file you want to read. For example: "read package.json"';
           }
-        } else {
-          return 'Please specify which file you want to delete. For example: "delete temp.txt"';
         }
-      }
 
-      default:
-        return await this._generateWithFileContext(originalPrompt, {});
+        case "write":
+        case "create": {
+          // For write/create operations, we need the AI to generate content
+          // This will be handled by the normal AI generation with file context
+          return await this._generateWithFileContext(originalPrompt, {});
+        }
+
+        case "delete": {
+          if (fileOp.potentialPaths.length > 0) {
+            const filePath = fileOp.potentialPaths[0];
+            try {
+              const result = await this.deleteFile(filePath);
+              return `Deleted "${filePath}"${result.backupPath ? ` (backup saved to ${result.backupPath})` : ""}`;
+            } catch (error) {
+              return `Error: Unable to delete "${filePath}": ${error.message}`;
+            }
+          } else {
+            return 'Please specify which file you want to delete. For example: "delete temp.txt"';
+          }
+        }
+
+        default:
+          return await this._generateWithFileContext(originalPrompt, {});
       }
     } catch (error) {
       return `Error handling file operation: ${error.message}`;
@@ -179,7 +179,7 @@ export class GeminiProvider extends AIProvider {
   }
 
   // Generate with file context
-  async _generateWithFileContext (prompt, options = {}) {
+  async _generateWithFileContext(prompt, options = {}) {
     const mergedOptions = this._mergeOptions(options);
     const fileContext = this.getFileContext();
 
@@ -270,7 +270,7 @@ export class GeminiProvider extends AIProvider {
   }
 
   // Stream generation with file context
-  async _streamGenerateWithContext (prompt, options = {}) {
+  async _streamGenerateWithContext(prompt, options = {}) {
     const mergedOptions = this._mergeOptions(options);
     const fileContext = this.getFileContext();
 
@@ -351,7 +351,7 @@ export class GeminiProvider extends AIProvider {
   }
 
   // Stream generation
-  async streamGenerate (prompt, options = {}) {
+  async streamGenerate(prompt, options = {}) {
     // Check if this is a file system operation
     const fileOp = this._extractFileOperation(prompt);
 
@@ -361,7 +361,7 @@ export class GeminiProvider extends AIProvider {
       // Return a simple stream that emits the result
       const { Readable } = await import("stream");
       const stream = new Readable({
-        read () {
+        read() {
           this.push(result);
           this.push(null);
         },
@@ -374,37 +374,37 @@ export class GeminiProvider extends AIProvider {
   }
 
   // Custom error handling for Gemini API
-  _handleError (error) {
+  _handleError(error) {
     if (error.response) {
       const status = error.response.status;
       const data = error.response.data;
 
       switch (status) {
-      case 400:
-        if (data.error?.message?.includes("API key")) {
+        case 400:
+          if (data.error?.message?.includes("API key")) {
+            throw new Error(
+              'Invalid API key. Please reconfigure with "naturecode model"',
+            );
+          }
+          throw new Error(
+            `Gemini API error: ${data.error?.message || "Bad request"}`,
+          );
+        case 401:
           throw new Error(
             'Invalid API key. Please reconfigure with "naturecode model"',
           );
-        }
-        throw new Error(
-          `Gemini API error: ${data.error?.message || "Bad request"}`,
-        );
-      case 401:
-        throw new Error(
-          'Invalid API key. Please reconfigure with "naturecode model"',
-        );
-      case 403:
-        throw new Error("Access denied. Check API key permissions");
-      case 429:
-        throw new Error("Rate limit exceeded. Please try again later");
-      case 500:
-        throw new Error("Gemini service internal error");
-      case 503:
-        throw new Error("Gemini service temporarily unavailable");
-      default:
-        throw new Error(
-          `Gemini service error: ${data?.error?.message || error.message}`,
-        );
+        case 403:
+          throw new Error("Access denied. Check API key permissions");
+        case 429:
+          throw new Error("Rate limit exceeded. Please try again later");
+        case 500:
+          throw new Error("Gemini service internal error");
+        case 503:
+          throw new Error("Gemini service temporarily unavailable");
+        default:
+          throw new Error(
+            `Gemini service error: ${data?.error?.message || error.message}`,
+          );
       }
     } else if (error.request) {
       throw new Error("Network error: Cannot connect to Gemini service");

@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-export function formatResponse (response) {
+export function formatResponse(response) {
   console.log(chalk.cyan("Assistant:"));
 
   const lines = response.split("\n");
@@ -39,7 +39,7 @@ export function formatResponse (response) {
   console.log();
 }
 
-export function showWelcome (config) {
+export function showWelcome(config) {
   console.log(
     chalk.cyan("  ____  ____ _/ /___  __________  _________  ____/ /__"),
   );
@@ -81,7 +81,7 @@ export function showWelcome (config) {
   console.log();
 }
 
-export function showHelp () {
+export function showHelp() {
   console.log(chalk.yellow("\nAvailable Commands:"));
   console.log(chalk.white("  help    - Show this help message"));
   console.log(chalk.white("  clear   - Clear the screen and session history"));
@@ -113,7 +113,7 @@ export function showHelp () {
   console.log();
 }
 
-export function formatError (error) {
+export function formatError(error) {
   const errorType = error.message.toLowerCase();
 
   if (errorType.includes("api key") || errorType.includes("unauthorized")) {
@@ -136,7 +136,7 @@ export function formatError (error) {
   }
 }
 
-export function formatLoading (message = "Thinking...") {
+export function formatLoading(message = "Thinking...") {
   const frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
   let i = 0;
 
