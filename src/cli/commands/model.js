@@ -7,6 +7,7 @@ import { OllamaProvider } from "../../providers/ollama.js";
 import { ZhipuAIProvider } from "../../providers/zhipuai.js";
 import { DashScopeProvider } from "../../providers/dashscope.js";
 import { TencentProvider } from "../../providers/tencent.js";
+import { BaiduProvider } from "../../providers/baidu.js";
 
 export async function runModelConfiguration() {
   console.log("NatureCode AI Configuration Wizard\n");
@@ -78,6 +79,11 @@ export async function runModelConfiguration() {
           description: "Tencent Cloud Hunyuan AI models via Tencent Cloud API",
         },
         {
+          name: "Baidu ERNIE (文心一言) - Baidu AI models",
+          value: "baidu",
+          description: "Baidu ERNIE AI models via Baidu Cloud API",
+        },
+        {
           name: "Custom Provider - Connect to any AI API",
           value: "custom",
           description: "Connect to any AI API with custom configuration",
@@ -105,6 +111,8 @@ export async function runModelConfiguration() {
           return "Enter your Zhipu AI API key (leave empty to skip):";
         } else if (answers.provider === "tencent") {
           return "Enter your Tencent Cloud API key (leave empty to skip):";
+        } else if (answers.provider === "baidu") {
+          return "Enter your Baidu ERNIE API key (leave empty to skip):";
         } else if (answers.provider === "custom") {
           return "Enter your Custom Provider API key (leave empty to skip):";
         }
@@ -133,117 +141,8 @@ export async function runModelConfiguration() {
         answers.provider === "anthropic" ||
         answers.provider === "gemini" ||
         answers.provider === "zhipuai" ||
-        answers.provider === "tencent",
-    },
-    {
-      type: "input",
-      name: "azureResourceName",
-      message: "Enter your Azure OpenAI Resource Name:",
-      default: (_answers) => {
-        // Try to extract from existing baseUrl or use default
-        if (
-          currentConfig.baseUrl &&
-          currentConfig.baseUrl.includes(".openai.azure.com")
-        ) {
-          const match = currentConfig.baseUrl.match(
-            /https:\/\/([^.]+)\.openai\.azure\.com/,
-          );
-          if (match) {
-            return match[1];
-          }
-        }
-        return currentConfig.azureResourceName || "";
-      },
-      validate: (input) => {
-        if (!input || input.trim() === "") {
-          return "Azure OpenAI resource name is required";
-        }
-        // Azure resource names can only contain lowercase letters, numbers, and hyphens
-        if (!/^[a-z0-9-]+$/.test(input)) {
-          return "Azure resource name can only contain lowercase letters, numbers, and hyphens";
-        }
-        return true;
-      },
-      when: (answers) => answers.provider === "azure-openai",
-    },
-    {
-      type: "input",
-      name: "azureApiVersion",
-      message: "Enter Azure OpenAI API version:",
-      default: (_answers) => {
-        return currentConfig.azureApiVersion || "2024-08-01-preview";
-      },
-      validate: (input) => {
-        if (!input || input.trim() === "") {
-          return "Azure OpenAI API version is required";
-        }
-        // Validate API version format (YYYY-MM-DD or YYYY-MM-DD-preview)
-        if (!/^\d{4}-\d{2}-\d{2}(-preview)?$/.test(input)) {
-          return "API version must be in format YYYY-MM-DD or YYYY-MM-DD-preview";
-        }
-        return true;
-      },
-      when: (answers) => answers.provider === "azure-openai",
-    },
-    {
-      type: "input",
-      name: "model",
-      message: (answers) => {
-        const providerNames = {
-          deepseek: "DeepSeek",
-          openai: "OpenAI",
-          "azure-openai": "Azure OpenAI",
-          n1n: "n1n.ai",
-          "4sapi": "4SAPI",
-          dashscope: "Qwen (DashScope)",
-          anthropic: "Anthropic (Claude)",
-          gemini: "Google Gemini",
-          ollama: "Ollama",
-          zhipuai: "Zhipu AI (智谱AI)",
-          tencent: "Tencent Hunyuan (腾讯混元)",
-          custom: "Custom Provider",
-        };
-        const providerName =
-          providerNames[answers.provider] || answers.provider;
-
-        return `Enter ${providerName} Model Name (check ${providerName} website for available models):`;
-      },
-      default: (answers) => {
-        // 提供智能默认值，但用户可以修改
-        const smartDefaults = {
-          deepseek: "deepseek-chat",
-          openai: "gpt-5-mini",
-          "azure-openai": "gpt-35-turbo",
-          n1n: "gpt-4o-mini",
-          "4sapi": "gpt-4o-mini",
-          dashscope: "qwen-turbo",
-          anthropic: "claude-3-5-haiku-20241022",
-          gemini: "gemini-2.5-flash",
-          ollama: "llama3.2:latest",
-          zhipuai: "glm-4-flash",
-          tencent: "hunyuan-pro",
-          custom: "custom-model",
-        };
-        return currentConfig.model || smartDefaults[answers.provider] || "";
-      },
-      validate: (input) => {
-        if (!input || input.trim() === "") {
-          return "Model name is required";
-        }
-        return true;
-      },
-      when: (answers) =>
-        answers.provider === "deepseek" ||
-        answers.provider === "openai" ||
-        answers.provider === "azure-openai" ||
-        answers.provider === "n1n" ||
-        answers.provider === "4sapi" ||
-        answers.provider === "dashscope" ||
-        answers.provider === "anthropic" ||
-        answers.provider === "gemini" ||
-        answers.provider === "ollama" ||
-        answers.provider === "zhipuai" ||
         answers.provider === "tencent" ||
+        answers.provider === "baidu" ||
         answers.provider === "custom",
     },
     {
@@ -547,6 +446,79 @@ export async function runModelConfiguration() {
           }
 
           return choices;
+        } else if (answers.provider === "baidu") {
+          // Baidu ERNIE model capabilities
+          const capabilities = BaiduProvider.getStaticModelCapabilities(
+            answers.model,
+          );
+
+          const choices = [];
+
+          if (capabilities.includes("text")) {
+            choices.push({
+              name: "Text Generation - Standard text completion",
+              value: "text",
+              short: "Text",
+            });
+          }
+
+          if (capabilities.includes("chat")) {
+            choices.push({
+              name: "Chat - Interactive conversation (recommended for Baidu ERNIE)",
+              value: "chat",
+              short: "Chat",
+            });
+          }
+
+          if (capabilities.includes("vision")) {
+            choices.push({
+              name: "Vision - Image analysis and understanding",
+              value: "vision",
+              short: "Vision",
+            });
+          }
+
+          if (capabilities.includes("code")) {
+            choices.push({
+              name: "Code - Code generation and analysis",
+              value: "code",
+              short: "Code",
+            });
+          }
+
+          if (capabilities.includes("fast")) {
+            choices.push({
+              name: "Fast - Quick response for simple tasks (ERNIE-Speed/Lite)",
+              value: "fast",
+              short: "Fast",
+            });
+          }
+
+          if (capabilities.includes("balanced")) {
+            choices.push({
+              name: "Balanced - Balanced performance and speed (ERNIE-Turbo)",
+              value: "balanced",
+              short: "Balanced",
+            });
+          }
+
+          if (capabilities.includes("advanced")) {
+            choices.push({
+              name: "Advanced - Complex task handling (ERNIE 4.0/3.5)",
+              value: "advanced",
+              short: "Advanced",
+            });
+          }
+
+          if (choices.length === 0) {
+            choices.push({
+              name: "Chat - Default for Baidu ERNIE models",
+              value: "chat",
+              short: "Chat",
+            });
+          }
+
+          return choices;
         } else if (answers.provider === "custom") {
           // 自定义提供者支持所有模型类型
           return [
@@ -600,6 +572,8 @@ export async function runModelConfiguration() {
           return currentConfig.modelType || "chat";
         } else if (answers.provider === "tencent") {
           return currentConfig.modelType || "chat";
+        } else if (answers.provider === "baidu") {
+          return currentConfig.modelType || "chat";
         } else if (answers.provider === "custom") {
           return currentConfig.modelType || "text";
         }
@@ -617,6 +591,7 @@ export async function runModelConfiguration() {
         answers.provider === "ollama" ||
         answers.provider === "zhipuai" ||
         answers.provider === "tencent" ||
+        answers.provider === "baidu" ||
         answers.provider === "custom",
     },
     {
@@ -770,6 +745,8 @@ export async function runModelConfiguration() {
     // Azure OpenAI specific fields
     azureResourceName: answers.azureResourceName || undefined,
     azureApiVersion: answers.azureApiVersion || undefined,
+    // Baidu ERNIE specific fields
+    secretKey: answers.baiduSecretKey || undefined,
     // Custom provider specific fields
     baseUrl: answers.customBaseUrl || undefined,
     apiVersion: answers.customApiVersion || undefined,

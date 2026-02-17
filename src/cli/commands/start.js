@@ -12,6 +12,7 @@ import { AnthropicProvider } from "../../providers/anthropic.js";
 import { GeminiProvider } from "../../providers/gemini.js";
 import { ZhipuAIProvider } from "../../providers/zhipuai.js";
 import { TencentProvider } from "../../providers/tencent.js";
+import { BaiduProvider } from "../../providers/baidu.js";
 import { CustomProvider } from "../../providers/custom.js";
 import {
   formatResponse,
@@ -81,6 +82,8 @@ function createProvider(config) {
       return new ZhipuAIProvider(config);
     case "tencent":
       return new TencentProvider(config);
+    case "baidu":
+      return new BaiduProvider(config);
     case "custom":
       return new CustomProvider(config);
     default:

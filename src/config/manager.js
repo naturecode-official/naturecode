@@ -26,7 +26,21 @@ const SMART_DEFAULT_MODELS = {
   gemini: "gemini-2.5-flash", // 快速、高效
 };
 
-const VALID_PROVIDERS = ["deepseek", "openai", "ollama", "anthropic", "gemini"];
+const VALID_PROVIDERS = [
+  "deepseek",
+  "openai",
+  "azure-openai",
+  "n1n",
+  "4sapi",
+  "dashscope",
+  "ollama",
+  "anthropic",
+  "gemini",
+  "zhipuai",
+  "tencent",
+  "baidu",
+  "custom",
+];
 const DEEPSEEK_MODELS = ["deepseek-chat", "deepseek-reasoner"];
 const OPENAI_MODELS = [
   // GPT-5系列 (最新)
