@@ -21,17 +21,32 @@
 
 ### Platform-Specific Downloads
 
-| Platform    | Download Link                                                                                                                                  | Installation        |
-| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| **Android** | [📱 naturecode-android-release.apk](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-android-release.apk) | Direct APK install  |
-| **Windows** | [🪟 naturecode-win.exe](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-win.exe)                         | Portable executable |
-| **macOS**   | [🍎 naturecode-macos](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-macos)                             | Native binary       |
-| **Linux**   | [🐧 naturecode-linux](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-linux)                             | Native binary       |
+| Platform    | Download Link                                                                    | Installation        | Status            |
+| ----------- | -------------------------------------------------------------------------------- | ------------------- | ----------------- |
+| **Android** | [📱 GitHub Releases](https://github.com/naturecode-official/naturecode/releases) | Direct APK install  | ✅ Available      |
+| **Windows** | [🪟 GitHub Releases](https://github.com/naturecode-official/naturecode/releases) | Portable executable | ✅ Available      |
+| **macOS**   | [🍎 GitHub Releases](https://github.com/naturecode-official/naturecode/releases) | Native binary       | ✅ Available      |
+| **Linux**   | [🐧 GitHub Releases](https://github.com/naturecode-official/naturecode/releases) | Native binary       | ✅ Available      |
+| **iOS**     | [🍎 App Store](https://apps.apple.com) (Coming Soon)                             | App Store install   | 🔄 In Development |
 
-### All Downloads
+### Download Instructions
 
-- **[GitHub Releases](https://github.com/naturecode-official/naturecode/releases)** - Complete release archive
-- **[Source Code](https://github.com/naturecode-official/naturecode)** - Build from source
+1. **Visit [GitHub Releases](https://github.com/naturecode-official/naturecode/releases)**
+2. **Find the latest release (v1.5.6 or newer)**
+3. **Download the file for your platform:**
+   - Android: `naturecode-android-release.apk`
+   - Windows: `naturecode-win.exe`
+   - macOS: `naturecode-macos`
+   - Linux: `naturecode-linux`
+
+### Direct Download Links (After Release)
+
+_Once a release is created, direct links will be available here._
+
+- Android: `https://github.com/naturecode-official/naturecode/releases/download/v1.5.6/naturecode-android-release.apk`
+- Windows: `https://github.com/naturecode-official/naturecode/releases/download/v1.5.6/naturecode-win.exe`
+- macOS: `https://github.com/naturecode-official/naturecode/releases/download/v1.5.6/naturecode-macos`
+- Linux: `https://github.com/naturecode-official/naturecode/releases/download/v1.5.6/naturecode-linux`
 
 ## Quick Install
 
@@ -549,17 +564,27 @@ NatureCode now has Android compatibility with a dedicated terminal application.
 
 ### Getting the Android App
 
-#### 📱 Direct APK Download
+#### 📱 APK Download Instructions
 
-**Latest Version (v1.5.6)**:
+**Current Version**: v1.5.6
 
-- **[naturecode-android-release.apk](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-android-release.apk)** - Stable release version
-- **[naturecode-android-debug.apk](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-android-debug.apk)** - Debug version for testing
+**Download from GitHub Releases**:
 
-**Alternative Download Options**:
+1. Visit **[GitHub Releases Page](https://github.com/naturecode-official/naturecode/releases)**
+2. Find the latest release (v1.5.6 or newer)
+3. Download the APK files:
+   - `naturecode-android-release.apk` - Stable release version
+   - `naturecode-android-debug.apk` - Debug version for testing
 
-1. **GitHub Releases**: Visit [Releases Page](https://github.com/naturecode-official/naturecode/releases) for all versions
-2. **Build from source**: See `android-app/` directory and `build-android.sh` script
+**Direct Download Links** (Available after release creation):
+
+- Stable: `https://github.com/naturecode-official/naturecode/releases/download/v1.5.6/naturecode-android-release.apk`
+- Debug: `https://github.com/naturecode-official/naturecode/releases/download/v1.5.6/naturecode-android-debug.apk`
+
+**Alternative Options**:
+
+1. **Build from source**: See `android-app/` directory and `build-android.sh` script
+2. **Manual build**: Follow instructions in `dist/android/README-ANDROID.md`
 
 #### 🔧 Installation Instructions
 
