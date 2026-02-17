@@ -15,6 +15,23 @@
 - **Team Collaboration**: Shared projects, member management, and role-based access
 - **Flexible Model Input**: Input any model name manually instead of selecting from pre-defined lists
 - **Provider Guidance**: Smart prompts guide users to check official websites for available models
+- **Android Support**: Native terminal app with full AI capabilities
+
+## 📥 Quick Downloads
+
+### Platform-Specific Downloads
+
+| Platform    | Download Link                                                                                                                                  | Installation        |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| **Android** | [📱 naturecode-android-release.apk](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-android-release.apk) | Direct APK install  |
+| **Windows** | [🪟 naturecode-win.exe](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-win.exe)                         | Portable executable |
+| **macOS**   | [🍎 naturecode-macos](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-macos)                             | Native binary       |
+| **Linux**   | [🐧 naturecode-linux](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-linux)                             | Native binary       |
+
+### All Downloads
+
+- **[GitHub Releases](https://github.com/naturecode-official/naturecode/releases)** - Complete release archive
+- **[Source Code](https://github.com/naturecode-official/naturecode)** - Build from source
 
 ## Quick Install
 
@@ -532,8 +549,33 @@ NatureCode now has Android compatibility with a dedicated terminal application.
 
 ### Getting the Android App
 
-1. **Pre-built APK**: Download from [GitHub Releases](https://github.com/naturecode-official/naturecode/releases)
+#### 📱 Direct APK Download
+
+**Latest Version (v1.5.6)**:
+
+- **[naturecode-android-release.apk](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-android-release.apk)** - Stable release version
+- **[naturecode-android-debug.apk](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-android-debug.apk)** - Debug version for testing
+
+**Alternative Download Options**:
+
+1. **GitHub Releases**: Visit [Releases Page](https://github.com/naturecode-official/naturecode/releases) for all versions
 2. **Build from source**: See `android-app/` directory and `build-android.sh` script
+
+#### 🔧 Installation Instructions
+
+**For Android Devices**:
+
+1. Download the APK file to your device
+2. Enable "Install from unknown sources" in settings
+3. Open the downloaded APK file
+4. Follow the installation prompts
+5. Launch "NatureCode Terminal" from your app drawer
+
+**Verification**:
+
+- **MD5 Checksum**: Verify file integrity after download
+- **VirusTotal Scan**: Recommended for security check
+- **GitHub Signed**: All releases are signed and verified
 
 ### Installation Requirements
 

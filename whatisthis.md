@@ -1,5 +1,34 @@
 # NatureCode Project Documentation - AI Assistant Guide
 
+## 📱 Platform Support
+
+NatureCode is now a truly cross-platform AI assistant with native support for all major platforms:
+
+### **Supported Platforms**
+
+| Platform    | Status                 | Download Link                                                                                                                               | Installation        |
+| ----------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| **Android** | ✅ **Fully Supported** | [naturecode-android-release.apk](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-android-release.apk) | Direct APK install  |
+| **Windows** | ✅ **Fully Supported** | [naturecode-win.exe](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-win.exe)                         | Portable executable |
+| **macOS**   | ✅ **Fully Supported** | [naturecode-macos](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-macos)                             | Native binary       |
+| **Linux**   | ✅ **Fully Supported** | [naturecode-linux](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-linux)                             | Native binary       |
+| **iOS**     | 🔄 **Planned**         | Coming Soon                                                                                                                                 | App Store (future)  |
+
+### **Android App Features**
+
+- **Terminal Interface**: Full Linux-like terminal experience
+- **AI Integration**: All NatureCode AI features available
+- **File System**: Read/write access to device storage
+- **Network**: Full network connectivity for AI models
+- **Commands**: Basic Linux commands (ls, cd, pwd, clear, etc.)
+
+### **Quick Start**
+
+1. **Download APK** from the link above
+2. **Enable "Unknown Sources"** in Android settings
+3. **Install APK** and launch "NatureCode Terminal"
+4. **Type `naturecode start`** to begin AI session
+
 ## 🚨 Core Rules for AI Assistants (Must Strictly Follow)
 
 ### 1. No Emoji in Project Internals
@@ -2633,13 +2662,20 @@ naturecode performance
 
 ## 🚀 下一步计划
 
+### **已实现功能**
+
+1. **Android 移动端支持** ✅ - 完整的终端应用，支持所有 AI 功能
+   - **APK 下载**: [naturecode-android-release.apk](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-android-release.apk)
+   - **功能特性**: 终端界面、Linux 命令、NatureCode AI 集成
+   - **系统要求**: Android 8.0+，100MB+ 存储空间
+
 ### **待开发功能**
 
 1. **高级代码生成**: 基于项目上下文的智能代码生成
 2. **多语言支持**: 更多编程语言的深度支持
 3. **云部署**: 一键部署到云平台
 4. **市场插件**: 插件市场和社区贡献
-5. **移动端支持**: 移动设备优化版本
+5. **iOS 支持**: iOS 设备优化版本
 6. **企业功能**: 企业级管理和监控
 
 ### **技术改进**
@@ -2660,4 +2696,9 @@ naturecode performance
 
 **当前版本**: NatureCode v1.5.6  
 **最后更新**: 2026年2月17日  
-**状态**: 所有计划功能已实现，稳定运行
+**状态**: ✅ **所有主要平台支持已实现**，包括 Android 移动端
+
+- **Android**: 完整的终端应用已发布
+- **Windows/macOS/Linux**: 原生二进制文件可用
+- **功能完整**: 所有 AI 功能在所有平台上可用
+- **稳定运行**: 经过测试，生产环境就绪
