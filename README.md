@@ -236,6 +236,52 @@ naturecode code deps-security
 naturecode code deps-unused
 ```
 
+#### Project Management Commands
+
+NatureCode provides comprehensive project management tools. When you run `naturecode project` without arguments, it automatically performs a comprehensive analysis:
+
+```bash
+# Automatic comprehensive analysis (new feature)
+naturecode project
+
+# Output includes:
+# - Project health assessment
+# - Project structure overview
+# - Dependency status check
+# - Recommendations for next steps
+```
+
+**Detailed project management commands:**
+
+```bash
+# Analyze project structure
+naturecode project analyze
+
+# Show project structure tree
+naturecode project structure --max-depth 3
+
+# Check project health score
+naturecode project health
+
+# Create project from template
+naturecode project create --template nodejs --name my-project
+
+# Automate project setup
+naturecode project setup
+
+# List available project templates
+naturecode project templates
+
+# Check for dependency upgrades
+naturecode project upgrades
+
+# Check for dependency conflicts
+naturecode project conflicts
+
+# Get package manager recommendations
+naturecode project package-manager
+```
+
 ```bash
 naturecode --help
 
