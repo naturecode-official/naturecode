@@ -6,7 +6,7 @@ import { PluginSecurityManager } from "../../plugins/manager/security.js";
 import fs from "fs/promises";
 import path from "path";
 
-export async function runPluginCommand (options) {
+export async function runPluginCommand(options) {
   // Handle both object and positional arguments
   let command = options.command;
   let args = { ...options };
@@ -106,45 +106,54 @@ export async function runPluginCommand (options) {
   await pluginManager.loadPlugins();
 
   // Execute command
+  if (!command) {
+    // 自动运行综合分析
+    return await handleComprehensiveAnalysis(
+      pluginManager,
+      securityManager,
+      args,
+    );
+  }
+
   switch (command) {
-  case "list":
-    return await handleListCommand(pluginManager, args);
-  case "info":
-    return await handleInfoCommand(pluginManager, args);
-  case "install":
-    return await handleInstallCommand(args);
-  case "uninstall":
-    return await handleUninstallCommand(args);
-  case "enable":
-    return await handleEnableCommand(pluginManager, args);
-  case "disable":
-    return await handleDisableCommand(pluginManager, args);
-  case "reload":
-    return await handleReloadCommand(pluginManager, args);
-  case "search":
-    return await handleSearchCommand(args);
-  case "create":
-    return await handleCreateCommand(args);
-  case "permissions":
-    return await handlePermissionsCommand(securityManager, args);
-  default:
-    console.error(`Unknown plugin command: ${command}`);
-    console.log("\nAvailable plugin commands:");
-    console.log("  list        - List installed plugins");
-    console.log("  info <name> - Show plugin information");
-    console.log("  install     - Install a plugin");
-    console.log("  uninstall   - Uninstall a plugin");
-    console.log("  enable      - Enable a plugin");
-    console.log("  disable     - Disable a plugin");
-    console.log("  reload      - Reload a plugin");
-    console.log("  search      - Search for plugins");
-    console.log("  create      - Create a new plugin");
-    console.log("  permissions - Manage plugin permissions");
-    process.exit(1);
+    case "list":
+      return await handleListCommand(pluginManager, args);
+    case "info":
+      return await handleInfoCommand(pluginManager, args);
+    case "install":
+      return await handleInstallCommand(args);
+    case "uninstall":
+      return await handleUninstallCommand(args);
+    case "enable":
+      return await handleEnableCommand(pluginManager, args);
+    case "disable":
+      return await handleDisableCommand(pluginManager, args);
+    case "reload":
+      return await handleReloadCommand(pluginManager, args);
+    case "search":
+      return await handleSearchCommand(args);
+    case "create":
+      return await handleCreateCommand(args);
+    case "permissions":
+      return await handlePermissionsCommand(securityManager, args);
+    default:
+      console.error(`Unknown plugin command: ${command}`);
+      console.log("\nAvailable plugin commands:");
+      console.log("  list        - List installed plugins");
+      console.log("  info <name> - Show plugin information");
+      console.log("  install     - Install a plugin");
+      console.log("  uninstall   - Uninstall a plugin");
+      console.log("  enable      - Enable a plugin");
+      console.log("  disable     - Disable a plugin");
+      console.log("  reload      - Reload a plugin");
+      console.log("  search      - Search for plugins");
+      console.log("  create      - Create a new plugin");
+      console.log("  permissions - Manage plugin permissions");
+      process.exit(1);
   }
 }
 
-async function handleListCommand (pluginManager, args) {
+async function handleListCommand(pluginManager, args) {
   const plugins = pluginManager.listPlugins();
   const commands = pluginManager.listCommands();
 
@@ -188,7 +197,7 @@ async function handleListCommand (pluginManager, args) {
   );
 }
 
-async function handleInfoCommand (pluginManager, args) {
+async function handleInfoCommand(pluginManager, args) {
   const pluginId = args.pluginId;
 
   if (!pluginId) {
@@ -265,7 +274,7 @@ async function handleInfoCommand (pluginManager, args) {
   }
 }
 
-async function handleInstallCommand (args) {
+async function handleInstallCommand(args) {
   const source = args.source;
 
   if (!source) {
@@ -349,7 +358,7 @@ async function handleInstallCommand (args) {
   }
 }
 
-async function handleUninstallCommand (args) {
+async function handleUninstallCommand(args) {
   const pluginId = args.pluginId;
 
   if (!pluginId) {
@@ -404,17 +413,17 @@ async function handleUninstallCommand (args) {
   console.log(`Plugin ${pluginId} uninstalled successfully.`);
 }
 
-async function handleEnableCommand (pluginManager, args) {
+async function handleEnableCommand(pluginManager, args) {
   console.log("Enable command not yet implemented");
   // This would involve updating plugin configuration
 }
 
-async function handleDisableCommand (pluginManager, args) {
+async function handleDisableCommand(pluginManager, args) {
   console.log("Disable command not yet implemented");
   // This would involve updating plugin configuration
 }
 
-async function handleReloadCommand (pluginManager, args) {
+async function handleReloadCommand(pluginManager, args) {
   const pluginId = args.pluginId;
 
   if (!pluginId) {
@@ -433,7 +442,7 @@ async function handleReloadCommand (pluginManager, args) {
   }
 }
 
-async function handleSearchCommand (args) {
+async function handleSearchCommand(args) {
   const query = args.query;
 
   if (!query) {
@@ -450,7 +459,7 @@ async function handleSearchCommand (args) {
   console.log("3. Create your own plugin with 'naturecode plugin create'");
 }
 
-async function handleCreateCommand (args) {
+async function handleCreateCommand(args) {
   const name = args.name;
 
   if (!name) {
@@ -640,7 +649,7 @@ describe("${pluginName}", () => {
   console.log("\nFor more information, see the PLUGIN_SYSTEM_DESIGN.md file.");
 }
 
-async function handlePermissionsCommand (securityManager, args) {
+async function handlePermissionsCommand(securityManager, args) {
   const subcommand = args.subcommand;
 
   if (!subcommand) {
@@ -655,26 +664,26 @@ async function handlePermissionsCommand (securityManager, args) {
   }
 
   switch (subcommand) {
-  case "list":
-    const permissions = securityManager.listPermissions();
-    console.log("Available Permissions:");
-    console.log("=====================");
+    case "list":
+      const permissions = securityManager.listPermissions();
+      console.log("Available Permissions:");
+      console.log("=====================");
 
-    for (const perm of permissions) {
-      console.log(`\n${perm.name}`);
-      console.log(`  Description: ${perm.description}`);
-      console.log(`  Dangerous: ${perm.dangerous ? "Yes" : "No"}`);
-      console.log(`  Default: ${perm.default ? "Granted" : "Denied"}`);
-    }
-    break;
+      for (const perm of permissions) {
+        console.log(`\n${perm.name}`);
+        console.log(`  Description: ${perm.description}`);
+        console.log(`  Dangerous: ${perm.dangerous ? "Yes" : "No"}`);
+        console.log(`  Default: ${perm.default ? "Granted" : "Denied"}`);
+      }
+      break;
 
-  default:
-    console.log(`Permission subcommand '${subcommand}' not yet implemented`);
+    default:
+      console.log(`Permission subcommand '${subcommand}' not yet implemented`);
   }
 }
 
 // Utility functions
-async function fileExists (filePath) {
+async function fileExists(filePath) {
   try {
     await fs.access(filePath);
     return true;
@@ -683,6 +692,132 @@ async function fileExists (filePath) {
   }
 }
 
-function toCamelCase (str) {
+function toCamelCase(str) {
   return str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+}
+
+async function handleComprehensiveAnalysis(
+  pluginManager,
+  securityManager,
+  args,
+) {
+  console.log("Running comprehensive plugin analysis...\n");
+
+  try {
+    // 1. 获取插件列表
+    const plugins = pluginManager.listPlugins();
+    const commands = pluginManager.listCommands();
+
+    console.log("Plugin Ecosystem Overview:");
+    console.log("=========================");
+
+    // 2. 显示插件统计
+    console.log(`Total Plugins: ${plugins.length}`);
+    console.log(`Total Commands: ${commands.length}`);
+
+    // 3. 按状态统计
+    const loadedPlugins = plugins.filter((p) => p.loaded).length;
+    const disabledPlugins = plugins.length - loadedPlugins;
+    console.log(`Loaded Plugins: ${loadedPlugins}`);
+    console.log(`Disabled Plugins: ${disabledPlugins}`);
+
+    // 4. 按类型统计
+    const pluginTypes = {};
+    plugins.forEach((plugin) => {
+      const type = plugin.manifest.type || "unknown";
+      pluginTypes[type] = (pluginTypes[type] || 0) + 1;
+    });
+
+    console.log("\nPlugin Types:");
+    Object.entries(pluginTypes).forEach(([type, count]) => {
+      console.log(`  ${type}: ${count}`);
+    });
+
+    // 5. 显示前几个插件
+    console.log("\nInstalled Plugins:");
+    if (plugins.length === 0) {
+      console.log("  No plugins installed.");
+    } else {
+      const displayPlugins = plugins.slice(0, 5); // 只显示前5个
+      displayPlugins.forEach((plugin) => {
+        console.log(
+          `  ${plugin.manifest.name} v${plugin.manifest.version} (${plugin.loaded ? "Loaded" : "Disabled"})`,
+        );
+      });
+
+      if (plugins.length > 5) {
+        console.log(`  ... and ${plugins.length - 5} more plugins`);
+      }
+    }
+
+    // 6. 权限分析
+    console.log("\nSecurity Analysis:");
+    const permissions = securityManager.listPermissions();
+    console.log(`  Available Permissions: ${permissions.length}`);
+
+    // 检查危险权限使用
+    const dangerousPermissions = permissions.filter((p) => p.dangerous).length;
+    console.log(`  Dangerous Permissions: ${dangerousPermissions}`);
+
+    // 7. 显示摘要和建议
+    console.log("\nSummary & Recommendations:");
+
+    if (plugins.length === 0) {
+      console.log(
+        "  1. Run 'naturecode plugin install' to install your first plugin",
+      );
+      console.log(
+        "  2. Run 'naturecode plugin search <keyword>' to discover plugins",
+      );
+      console.log(
+        "  3. Run 'naturecode plugin create' to create your own plugin",
+      );
+    } else {
+      console.log("  1. Run 'naturecode plugin list' for detailed plugin list");
+      console.log(
+        "  2. Run 'naturecode plugin info <name>' for plugin details",
+      );
+      console.log(
+        "  3. Run 'naturecode plugin search' to discover more plugins",
+      );
+      console.log(
+        "  4. Run 'naturecode plugin permissions' to manage security",
+      );
+    }
+
+    console.log("\nAvailable detailed commands:");
+    console.log("  naturecode plugin list        - List installed plugins");
+    console.log("  naturecode plugin info <name> - Show plugin information");
+    console.log("  naturecode plugin install     - Install a plugin");
+    console.log("  naturecode plugin search      - Search for plugins");
+    console.log("  naturecode plugin create      - Create a new plugin");
+    console.log("  naturecode plugin permissions - Manage plugin permissions");
+
+    console.log("\nQuick start examples:");
+    console.log("  naturecode plugin list              # List all plugins");
+    console.log("  naturecode plugin info <plugin-id>  # Show plugin details");
+    console.log("  naturecode plugin install           # Install new plugin");
+    console.log(
+      "  naturecode plugin search ai         # Search for AI plugins",
+    );
+
+    return null;
+  } catch (error) {
+    console.error("Error during comprehensive plugin analysis:", error.message);
+
+    // 回退到基本帮助
+    console.log("\nAvailable plugin commands:");
+    console.log("  list        - List installed plugins");
+    console.log("  info <name> - Show plugin information");
+    console.log("  install     - Install a plugin");
+    console.log("  uninstall   - Uninstall a plugin");
+    console.log("  enable      - Enable a plugin");
+    console.log("  disable     - Disable a plugin");
+    console.log("  reload      - Reload a plugin");
+    console.log("  search      - Search for plugins");
+    console.log("  create      - Create a new plugin");
+    console.log("  permissions - Manage plugin permissions");
+
+    return null;
+  }
 }

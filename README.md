@@ -324,12 +324,60 @@ naturecode code review file.js
 naturecode review --ai
 ```
 
-#### Plugin System
+#### Plugin Management Commands
+
+NatureCode provides a powerful plugin system for extending functionality. When you run `naturecode plugin` without arguments, it automatically performs a comprehensive analysis:
 
 ```bash
+# Automatic comprehensive analysis (new feature)
+naturecode plugin
+
+# Output includes:
+# - Plugin ecosystem overview (total plugins, commands)
+# - Plugin status analysis (loaded/disabled)
+# - Plugin type distribution
+# - Security analysis (permissions, dangerous permissions)
+# - Recommendations for next steps
+```
+
+**Detailed plugin management commands:**
+
+```bash
+# List installed plugins
+naturecode plugin list
+
+# Show plugin information
+naturecode plugin info <plugin-name>
+
+# Install a plugin (interactive)
+naturecode plugin install
+
+# Uninstall a plugin
+naturecode plugin uninstall <plugin-name>
+
+# Enable a plugin
+naturecode plugin enable <plugin-name>
+
+# Disable a plugin
+naturecode plugin disable <plugin-name>
+
+# Reload a plugin (hot reload)
+naturecode plugin reload <plugin-name>
+
+# Search for plugins
+naturecode plugin search <keyword>
+
+# Create a new plugin
+naturecode plugin create <name>
+
+# Manage plugin permissions
+naturecode plugin permissions
+```
+
 naturecode plugin list
 naturecode plugin install <plugin-url>
-```
+
+````
 
 ### Updating
 
@@ -338,7 +386,7 @@ naturecode plugin install <plugin-url>
 ```bash
 # The installer automatically updates existing installations
 curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-simple.sh | bash
-```
+````
 
 #### Manual Update
 
