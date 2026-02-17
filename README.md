@@ -592,6 +592,93 @@ NatureCode now has Android compatibility with a dedicated terminal application.
 
 For detailed Android installation instructions, see [Android Installation Guide](dist/android/README-ANDROID.md).
 
+## iOS Development Status
+
+NatureCode iOS version is currently in development. The project structure and core implementation are ready.
+
+### 🍎 iOS App Features (Planned)
+
+- **SwiftUI Terminal Interface**: Modern iOS-native terminal experience
+- **NatureCode AI Integration**: Full AI capabilities through API
+- **Sandbox File Access**: Secure file operations within iOS sandbox
+- **Network Connectivity**: Support for all AI providers
+- **iOS-Specific Commands**: Optimized for iOS environment
+
+### Development Requirements
+
+- **Hardware**: Mac computer with macOS
+- **Software**: Xcode 15.0+, iOS SDK 17.0+
+- **Developer Account**: Apple Developer Program ($99/year)
+- **Testing Device**: iPhone/iPad or iOS Simulator
+
+### Project Structure
+
+The iOS project is located in `ios-app/` directory:
+
+```
+ios-app/
+├── NatureCodeTerminal/          # Swift source code
+├── build-ios.sh                 # Build automation script
+├── README.md                    # iOS development guide
+└── ExportOptions.plist          # Build configuration
+```
+
+### Getting Started with iOS Development
+
+1. **Setup Development Environment**:
+
+   ```bash
+   # Run the build script to setup project
+   ./ios-app/build-ios.sh
+   ```
+
+2. **Open in Xcode**:
+
+   ```bash
+   open ios-app/NatureCodeTerminal/NatureCodeTerminal.xcodeproj
+   ```
+
+3. **Configure Code Signing**:
+   - Select your development team
+   - Set Bundle Identifier
+   - Configure provisioning profiles
+
+4. **Build and Run**:
+   - Select simulator or connect device
+   - Click Run (⌘R)
+
+### Current Status
+
+- ✅ **Project Structure**: Complete SwiftUI application structure
+- ✅ **Core Components**: Terminal view, command execution, AI integration
+- ✅ **Build System**: Automated build scripts and configuration
+- 🔄 **Testing**: Unit tests and UI tests framework
+- 🔄 **App Store Submission**: Preparation in progress
+
+### Development Timeline
+
+- **Phase 1 (Complete)**: Project setup and core architecture
+- **Phase 2 (In Progress)**: Feature implementation and testing
+- **Phase 3 (Planned)**: App Store submission and release
+
+### Resources
+
+- [iOS Development Guide](IOS_DEVELOPMENT_GUIDE.md) - Complete development guide
+- [Build Instructions](dist/ios/BUILD_INSTRUCTIONS.md) - Detailed build steps
+- [Swift Documentation](https://docs.swift.org) - Official Swift docs
+- [Apple Developer](https://developer.apple.com) - iOS development resources
+
+### Contributing to iOS Development
+
+If you're an iOS developer interested in contributing:
+
+1. Fork the repository
+2. Set up the iOS development environment
+3. Check the [iOS Development Guide](IOS_DEVELOPMENT_GUIDE.md)
+4. Submit Pull Requests with improvements
+
+**Note**: iOS app requires App Store review and cannot be distributed as direct download like Android APK.
+
 ## Windows Installation Guide
 
 NatureCode fully supports Windows 10/11 with:
