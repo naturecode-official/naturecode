@@ -87,8 +87,14 @@ naturecode team
 # Work with Git repositories
 naturecode git
 
-# Analyze and improve code
+# Analyze and improve code (runs comprehensive analysis if no command specified)
 naturecode code
+
+# Run specific code analysis commands
+naturecode code analyze              # Full code analysis
+naturecode code issues --severity high  # Critical issues only
+naturecode code deps-security        # Security audit
+naturecode code refactor             # Refactoring suggestions
 
 # Project management
 naturecode project
@@ -180,6 +186,55 @@ After installation:
    ```
 
 ### Available Commands
+
+#### Code Analysis Commands
+
+NatureCode provides comprehensive code analysis tools. When you run `naturecode code` without arguments, it automatically performs a comprehensive analysis:
+
+```bash
+# Automatic comprehensive analysis (new feature)
+naturecode code
+
+# Output includes:
+# - Code metrics (files, lines, functions, classes)
+# - Dependency analysis
+# - Quick issues scan
+# - Recommendations for next steps
+```
+
+**Detailed code analysis commands:**
+
+```bash
+# Full code analysis
+naturecode code analyze
+
+# Analyze specific file
+naturecode code analyze-file --file src/utils/git.js
+
+# Calculate code complexity metrics
+naturecode code complexity --file src/cli/index.js
+
+# List code issues and suggestions
+naturecode code issues --severity high
+
+# Show code metrics summary
+naturecode code metrics
+
+# Get refactoring suggestions
+naturecode code refactor
+
+# Analyze project dependencies
+naturecode code deps
+
+# Show dependency tree
+naturecode code deps-tree
+
+# Check for security vulnerabilities
+naturecode code deps-security
+
+# Find unused dependencies
+naturecode code deps-unused
+```
 
 ```bash
 naturecode --help
