@@ -217,7 +217,7 @@ git push https://naturecode-official:TOKEN@github.com/naturecode-official/nature
 - Push command executes successfully
 - Installation command is accessible
 - GitHub repository shows latest code
-- Version number displays correctly (current: 1.4.9)
+- Version number displays correctly (current: 1.5.6)
 - All functionality tests pass
 
 #### Automation Suggestions
@@ -237,7 +237,7 @@ git commit -m "$1"
 
 ## Project Overview
 
-**NatureCode** is a cross-platform terminal AI assistant supporting DeepSeek, OpenAI, and Ollama models. Current version: **v1.4.9**
+**NatureCode** is a cross-platform terminal AI assistant supporting 12+ AI providers including DeepSeek, OpenAI, Anthropic, Google Gemini, Ollama, Baidu ERNIE, and more. Current version: **v1.5.6**
 
 ### 🚨 Essential Rules (AI Assistants Must Follow)
 

@@ -7,6 +7,7 @@ This document describes how to build, package, and release the NatureCode termin
 ## Quick Installation
 
 ### 1. Install NatureCode
+
 ```bash
 # Run the installation script
 ./install.sh
@@ -16,11 +17,13 @@ sudo ./install.sh
 ```
 
 ### 2. Configure API Settings
+
 ```bash
 naturecode model
 ```
 
 Follow the interactive wizard:
+
 1. Select AI provider (DeepSeek or OpenAI)
 2. Enter your API key
 3. Choose a model (19 OpenAI models or 2 DeepSeek models)
@@ -28,6 +31,7 @@ Follow the interactive wizard:
 5. Set temperature and other parameters
 
 ### 3. Start Using
+
 ```bash
 naturecode start
 ```
@@ -35,12 +39,16 @@ naturecode start
 ## Features
 
 ### Main Commands
-- `naturecode model` - Interactive configuration wizard
+
+- `naturecode model` - Interactive configuration wizard (12+ AI providers)
+- `naturecode delmodel` - Delete model configuration by name or all models
 - `naturecode start` - Start interactive session
 - `naturecode config` - View current configuration
 - `naturecode --help` - Show help information
+- `naturecode --version` - Show version information
 
 ### Interactive Session Features
+
 - **Real-time conversation**: Natural language dialogue with AI
 - **Streaming responses**: Real-time display of AI-generated content
 - **Code highlighting**: Automatic code block recognition and formatting
@@ -53,10 +61,12 @@ naturecode start
 ### Supported AI Models
 
 #### DeepSeek
+
 - **DeepSeek Chat**: General conversation model (recommended for daily use)
 - **DeepSeek Reasoner**: Complex reasoning and problem-solving model
 
 #### OpenAI
+
 - **GPT-4 series**: `gpt-4o`, `gpt-4o-mini`, `gpt-4-turbo`, `gpt-4`, `gpt-4-32k`
 - **GPT-3.5 series**: `gpt-3.5-turbo`, `gpt-3.5-turbo-16k`, `gpt-3.5-turbo-instruct`
 - **Specialized models**: `gpt-4o-realtime-preview`, `gpt-4o-audio-preview`, `gpt-4o-vision-preview`
@@ -69,6 +79,7 @@ naturecode start
 Configuration file location: `~/.naturecode/config.json`
 
 Configuration content:
+
 ```json
 {
   "provider": "openai",
@@ -84,6 +95,7 @@ Configuration content:
 ## Getting API Keys
 
 ### DeepSeek
+
 1. Visit [DeepSeek Platform](https://platform.deepseek.com/)
 2. Sign up or log in to your account
 3. Navigate to API Keys section
@@ -91,6 +103,7 @@ Configuration content:
 5. Copy the key for use in NatureCode
 
 ### OpenAI
+
 1. Visit [OpenAI Platform](https://platform.openai.com/)
 2. Sign up or log in to your account
 3. Navigate to API Keys section
@@ -100,6 +113,7 @@ Configuration content:
 ## Development
 
 ### Project Structure
+
 ```
 naturecode/
 ├── src/
@@ -114,6 +128,7 @@ naturecode/
 ```
 
 ### Adding New AI Providers
+
 1. Create new file in `src/providers/`
 2. Extend the `AIProvider` base class
 3. Implement required methods
@@ -124,21 +139,27 @@ naturecode/
 ### Common Issues
 
 1. **Invalid API Key**
+
    ```
    Invalid API key. Please run "naturecode model" to reconfigure.
    ```
+
    Solution: Run `naturecode model` to configure the correct API key
 
 2. **Network Connection Issues**
+
    ```
    Network error. Check your internet connection.
    ```
+
    Solution: Check network connection and ensure API access
 
 3. **No Configuration Found**
+
    ```
    No configuration found. Starting configuration wizard...
    ```
+
    Solution: Follow the wizard to complete configuration
 
 4. **OpenAI Model Not Available**
@@ -148,6 +169,7 @@ naturecode/
    Solution: Ensure you have access to the selected model in your OpenAI account
 
 ### Debug Mode
+
 ```bash
 # View detailed error information
 DEBUG=* naturecode start
@@ -159,16 +181,19 @@ node test_basic.js
 ## Building and Packaging
 
 ### Create macOS DMG Package
+
 ```bash
 ./build_dmg.sh
 ```
 
 ### Package for Distribution
+
 ```bash
 node packager.js
 ```
 
 ### Update Version
+
 ```bash
 # Update version in VERSION file
 echo "1.1.3" > VERSION

@@ -145,7 +145,7 @@ check_command() {
 # Get current version if installed
 get_installed_version() {
     if command -v naturecode &> /dev/null; then
-        naturecode --version 2>/dev/null | head -1 | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+' || echo "unknown"
+        naturecode --version 2>/dev/null | head -1 | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+' || echo "unknown"
     else
         echo "not_installed"
     fi
@@ -413,24 +413,51 @@ show_post_install() {
     echo ""
     echo "  3. Get help:"
     if [ "$COLORS_SUPPORTED" = "true" ]; then
-        echo "     ${CYAN}naturecode help${NC}              # Show help information"
-        echo "     ${CYAN}naturecode start${NC}             # Start AI session (requires AI configuration)"
+        echo "     ${CYAN}naturecode model${NC}             # Configure AI model (12+ providers)"
+        echo "     ${CYAN}naturecode delmodel <name>${NC}   # Delete model configuration"
+        echo "     ${CYAN}naturecode delmodel all${NC}      # Delete all models"
+        echo "     ${CYAN}naturecode config${NC}            # Show current configuration"
     else
-        echo "     naturecode help              # Show help information"
-        echo "     naturecode start             # Start AI session (requires AI configuration)"
+        echo "     naturecode model             # Configure AI model (12+ providers)"
+        echo "     naturecode delmodel <name>   # Delete model configuration"
+        echo "     naturecode delmodel all      # Delete all models"
+        echo "     naturecode config            # Show current configuration"
     fi
     echo ""
-    echo "  4. Check available commands:"
+    echo "  4. Get help and explore features:"
     if [ "$COLORS_SUPPORTED" = "true" ]; then
-        echo "     ${CYAN}naturecode --help${NC}"
+        echo "     ${CYAN}naturecode help${NC}              # Show detailed help information"
+        echo "     ${CYAN}naturecode --help${NC}            # Show all available commands"
+        echo "     ${CYAN}naturecode --version${NC}         # Check version"
     else
-        echo "     naturecode --help"
+        echo "     naturecode help              # Show detailed help information"
+        echo "     naturecode --help            # Show all available commands"
+        echo "     naturecode --version         # Check version"
+    fi
+    echo ""
+    echo "  5. Explore advanced features:"
+    if [ "$COLORS_SUPPORTED" = "true" ]; then
+        echo "     ${CYAN}naturecode code${NC}              # Code analysis and quality tools"
+        echo "     ${CYAN}naturecode project${NC}           # Project management tools"
+        echo "     ${CYAN}naturecode plugin${NC}            # Plugin management"
+        echo "     ${CYAN}naturecode session${NC}           # Session management"
+        echo "     ${CYAN}naturecode review${NC}            # Code review tools"
+        echo "     ${CYAN}naturecode team${NC}              # Team collaboration"
+        echo "     ${CYAN}naturecode performance${NC}       # Performance monitoring"
+    else
+        echo "     naturecode code              # Code analysis and quality tools"
+        echo "     naturecode project           # Project management tools"
+        echo "     naturecode plugin            # Plugin management"
+        echo "     naturecode session           # Session management"
+        echo "     naturecode review            # Code review tools"
+        echo "     naturecode team              # Team collaboration"
+        echo "     naturecode performance       # Performance monitoring"
     fi
     echo ""
     
     echo "Features:"
-    echo "  • Direct AI assistance with Ollama/DeepSeek"
-    echo "  • File system operations"
+    echo "  • 12+ AI providers (OpenAI, DeepSeek, Anthropic, Gemini, Baidu, etc.)"
+    echo "  • File system operations and code editing"
     echo "  • Git integration"
     echo "  • Code analysis and review"
     echo "  • Project management"
