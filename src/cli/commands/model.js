@@ -715,7 +715,10 @@ export async function runModelConfiguration() {
   ];
 
   // 检查是否通过管道输入，避免readline问题
-  if (!process.stdin.isTTY) {
+  // 但在交互式模式中，即使通过管道输入也应该允许配置
+  const isInInteractiveMode = process.env.NATURECODE_INTERACTIVE === "true";
+
+  if (!process.stdin.isTTY && !isInInteractiveMode) {
     console.log("Error: Interactive mode required for configuration.");
     console.log("Please run: naturecode model");
     return;

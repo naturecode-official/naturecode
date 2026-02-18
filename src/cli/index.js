@@ -467,15 +467,16 @@ async function startInteractiveMode() {
     try {
       switch (commandName) {
         case "model":
-          // Run model configuration and return to interactive mode
-          try {
-            await runModelConfiguration();
-            console.log("\nReturning to interactive mode...");
-            console.log(getCommandPrompt());
-          } catch (error) {
-            console.error(`\nError in model configuration: ${error.message}`);
-            console.log(getCommandPrompt());
-          }
+          // 在交互式模式中运行配置向导很复杂，建议用户在终端中运行
+          console.log(
+            "\nModel configuration requires terminal mode for best experience.",
+          );
+          console.log("To configure models:");
+          console.log("1. Exit interactive mode (type 'exit')");
+          console.log("2. Run: naturecode model");
+          console.log(
+            "\nThis ensures proper input handling and avoids conflicts.",
+          );
           rl.prompt();
           return;
         case "start":
