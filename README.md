@@ -6,15 +6,14 @@
 
 ## Features
 
-- **Multi-model AI Support**: DeepSeek, OpenAI, Azure OpenAI, n1n.ai, 4SAPI, Qwen (DashScope), Anthropic, Google Gemini, Ollama, Zhipu AI, Tencent Hunyuan, Custom Provider - 12 providers total with flexible model input
+- **AI-Centric Design**: Pure AI-focused application - users interact naturally with AI, AI internally calls complex functionality
+- **Multi-model AI Support**: DeepSeek, OpenAI, Azure OpenAI, n1n.ai, 4SAPI, Qwen (DashScope), Anthropic, Google Gemini, Ollama, Zhipu AI, Tencent Hunyuan, Custom Provider - 12 providers total
+- **Flexible Model Input**: Input any model name manually instead of selecting from pre-defined lists
 - **One-line Installation**: Simple curl-based installation system
-- **Cross-platform**: Native support for macOS, Linux, and Windows
+- **Cross-platform**: Native support for macOS, Linux, Windows, and Android
 - **Professional Mode**: Advanced diagnostics and developer tools
 - **Secure Configuration**: Encrypted storage for API keys and settings
-- **AI-Centric Design**: Users interact naturally with AI, AI internally calls complex functionality
-- **Flexible Model Input**: Input any model name manually instead of selecting from pre-defined lists
-- **Provider Guidance**: Smart prompts guide users to check official websites for available models
-- **Android Support**: Native terminal app with full AI capabilities
+- **Simplified Interface**: Only 4 core commands for configuration, all advanced features accessible through AI conversation
 
 ## 📥 Quick Downloads
 
@@ -80,55 +79,53 @@ Invoke-WebRequest -Uri "https://raw.githubusercontent.com/naturecode-official/na
 
 ## Usage
 
-### Basic Commands
+### Core Commands (Only 4 Commands)
 
 ```bash
-# Configure AI model and API settings
+# 1. Configure AI model and API settings
 naturecode model
 
-# Start interactive AI session
+# 2. Start interactive AI session (all advanced features accessible here)
 naturecode start
 
-# Delete model configuration
-naturecode delmodel <name>        # Delete specific model
-naturecode delmodel all          # Delete all models
-
-# Show current configuration
+# 3. Show current configuration
 naturecode config
 
-# Get comprehensive help
-naturecode --help
+# 4. Delete model configuration
+naturecode delmodel <name>        # Delete specific model
+naturecode delmodel all          # Delete all models
+naturecode delmodel all --force  # Force delete all models (no confirmation)
 
-# Check current version
-naturecode --version
+# Additional utility commands
+naturecode --help                # Show help information
+naturecode --version             # Check current version
 ```
 
-### Advanced Usage
+### Interactive AI Session Features
+
+Once you start an interactive session with `naturecode start`, you can access all advanced features through natural language conversation:
+
+- **Code Analysis**: "Analyze this code", "Find bugs in my project"
+- **Project Management**: "Create a new React project", "Check project health"
+- **File Operations**: "Read file.txt", "Edit config.js", "List directory contents"
+- **Git Integration**: "Commit my changes", "Check git status", "Create a new branch"
+- **Code Review**: "Review this function", "Suggest improvements"
+- **Performance Monitoring**: "Show performance metrics", "Monitor system resources"
+
+### Model Configuration Examples
 
 ```bash
-# Configure AI provider and model (flexible model name input)
-naturecode model
-
-# Configure specific provider with custom settings
+# Configure with specific provider
 naturecode model --provider openai
 
-# Manage team collaboration
-naturecode team
+# Delete models with various name formats
+naturecode delmodel deepseek              # Delete by provider name
+naturecode delmodel deepseek-chat         # Delete by model name
+naturecode delmodel deepseek-deepseek-chat # Delete by provider-model combination
+naturecode delmodel my-custom-key         # Delete by custom key name
 
-# Work with Git repositories
-naturecode git
-
-# Analyze and improve code (runs comprehensive analysis if no command specified)
-naturecode code
-
-# Run specific code analysis commands
-naturecode code analyze              # Full code analysis
-naturecode code issues --severity high  # Critical issues only
-naturecode code deps-security        # Security audit
-naturecode code refactor             # Refactoring suggestions
-
-# Project management
-naturecode project
+# Force delete without confirmation
+naturecode delmodel ollama --force
 ```
 
 ## Windows Support
@@ -156,14 +153,14 @@ NatureCode is a cross-platform terminal AI assistant with:
 
 #### Core Features
 
-- **Direct AI Chat**: `naturecode help` for immediate AI assistance
-- **Multiple AI Models**: DeepSeek, OpenAI, Azure OpenAI, n1n.ai, 4SAPI, Qwen (DashScope), Anthropic, Google Gemini, Ollama, Zhipu AI, Custom Provider - 11 providers total
-- **File Operations**: Read, edit, create, delete files
-- **Git Integration**: Status, commit, push, pull operations
-- **Code Analysis**: Code review, metrics, refactoring suggestions
-- **Project Management**: Project analysis and dependency management
-- **Plugin System**: Extensible with custom plugins
-- **Session Management**: Save and restore chat sessions
+- **AI-Centric Design**: Only 4 core commands, all advanced features through AI conversation
+- **Multiple AI Models**: DeepSeek, OpenAI, Azure OpenAI, n1n.ai, 4SAPI, Qwen (DashScope), Anthropic, Google Gemini, Ollama, Zhipu AI, Tencent Hunyuan, Custom Provider - 12 providers total
+- **File Operations**: Read, edit, create, delete files through natural language
+- **Git Integration**: Commit, status, branch operations via AI commands
+- **Code Analysis**: Comprehensive code review and metrics through AI
+- **Project Management**: Project creation and health assessment via AI
+- **Performance Monitoring**: System metrics and optimization suggestions
+- **Flexible Model Management**: Delete models by provider, model, or custom names
 
 ### Installation Options
 
@@ -216,221 +213,168 @@ After installation:
    naturecode start                   # Start AI session
    ```
 
-## Code Analysis & Project Management
+## AI-Centric Advanced Features
 
-NatureCode provides two powerful tools for developers: **Code Analysis** (`naturecode code`) and **Project Management** (`naturecode project`). These tools work together to help you understand, improve, and maintain your codebase.
+NatureCode follows an AI-centric design philosophy: users interact naturally with AI through conversation, and the AI internally calls complex functionality. All advanced features are accessible through the interactive AI session.
 
-### 🛠️ Code Analysis (`naturecode code`)
+### 🚀 Accessing Advanced Features
 
-**Comprehensive code quality assessment** - automatically analyzes your codebase to identify issues, measure quality, and provide actionable insights.
-
-**When to use it:**
-
-- Before committing code
-- When joining a new project
-- During code reviews
-- For technical debt assessment
-- When optimizing performance
-
-**Key features:**
-
-- **Automatic analysis** - Run `naturecode code` for instant insights
-- **Code metrics** - Lines, functions, complexity, duplication
-- **Issue detection** - Bugs, security vulnerabilities, performance issues
-- **Dependency analysis** - Security, updates, conflicts
-- **Refactoring suggestions** - Actionable improvement recommendations
-
-### 📊 Project Management (`naturecode project`)
-
-**Complete project health assessment** - analyzes project structure, dependencies, configuration, and overall health.
-
-**When to use it:**
-
-- Starting a new project
-- Assessing project health
-- Planning refactoring
-- Managing dependencies
-- Onboarding new team members
-
-**Key features:**
-
-- **Project health score** - Overall project quality assessment
-- **Structure analysis** - Directory organization and file patterns
-- **Dependency management** - Updates, conflicts, security
-- **Template system** - Quick project creation from templates
-- **Setup automation** - Automated project configuration
-
-### 🚀 Quick Start Examples
+Start an interactive session and use natural language to access all features:
 
 ```bash
-# Get instant code insights
-naturecode code
+# Start interactive AI session
+naturecode start
 
-# Check project health
-naturecode project
-
-# Analyze specific directory
-naturecode code analyze src/
-
-# Check for security issues
-naturecode code deps-security
-
-# Create new project from template
-naturecode project create --template nodejs --name my-app
-
-# Get refactoring suggestions
-naturecode code refactor
+# Then use natural language commands like:
+# - "Analyze the code in src/ directory"
+# - "Create a new React project called my-app"
+# - "Check the health of this project"
+# - "Review this function for improvements"
+# - "Show me performance metrics"
 ```
+
+### 🛠️ Code Analysis (Through AI Conversation)
+
+**Comprehensive code quality assessment** - the AI can analyze your codebase to identify issues, measure quality, and provide actionable insights.
+
+**Ask the AI to:**
+
+- "Analyze this code for bugs"
+- "Find security vulnerabilities in my project"
+- "Calculate code metrics and complexity"
+- "Check dependency security"
+- "Suggest refactoring improvements"
+
+### 📊 Project Management (Through AI Conversation)
+
+**Complete project health assessment** - the AI can analyze project structure, dependencies, configuration, and overall health.
+
+**Ask the AI to:**
+
+- "Create a new Node.js project"
+- "Check the health of this project"
+- "Analyze project dependencies"
+- "Set up project configuration"
+- "Generate project documentation"
+
+### 🔧 Internal AI Functions
+
+The AI has access to powerful internal functions that you can request through conversation:
+
+- **`analyzeCode()`** - Comprehensive code analysis
+- **`manageProject()`** - Project management and creation
+- **`reviewCode()`** - Code review and suggestions
+- **Performance monitoring** - Auto-displays on AI startup
+- **File system operations** - Read, write, edit files
+- **Git integration** - Commit, status, branch operations
 
 ## 📋 Detailed Command Reference
 
-### Code Analysis Commands (`naturecode code`)
+### Complete Command Reference
 
-NatureCode's code analysis tool provides comprehensive insights into your codebase. When run without arguments, it performs automatic analysis of the current directory.
-
-**Basic Usage:**
+#### Core Commands Summary
 
 ```bash
-# Automatic comprehensive analysis (default behavior)
-naturecode code
-
-# Analyze specific directory or file
-naturecode code analyze <path>
-naturecode code analyze src/
-naturecode code analyze package.json
-
-# Get specific analysis types
-naturecode code metrics          # Code metrics (lines, complexity, etc.)
-naturecode code issues           # Code issues and problems
-naturecode code issues --severity high  # Critical issues only
-naturecode code deps             # Dependency analysis
-naturecode code deps-security    # Security audit for dependencies
-naturecode code refactor         # Refactoring suggestions
-naturecode code quality          # Code quality assessment
-```
-
-**Advanced Options:**
-
-```bash
-# Export analysis results
-naturecode code analyze --output report.json
-naturecode code analyze --format json
-
-# Filter analysis
-naturecode code analyze --exclude "**/node_modules/**"
-naturecode code analyze --include "**/*.js,**/*.ts"
-
-# Compare with previous analysis
-naturecode code analyze --compare previous.json
-```
-
-### Project Management Commands (`naturecode project`)
-
-The project management tool helps you understand, create, and maintain projects with comprehensive health assessments.
-
-**Basic Usage:**
-
-```bash
-# Automatic project health assessment (default behavior)
-naturecode project
-
-# Analyze specific project
-naturecode project analyze <path>
-naturecode project analyze .
-
-# Create new projects
-naturecode project create --template <template> --name <project-name>
-naturecode project create --template nodejs --name my-app
-naturecode project create --template python --name data-project
-
-# Project setup and configuration
-naturecode project setup          # Interactive project setup
-naturecode project init           # Initialize project structure
-naturecode project config         # Configure project settings
-```
-
-**Project Templates:**
-
-```bash
-# List available templates
-naturecode project templates
-
-# Create from specific template
-naturecode project create --template nodejs      # Node.js project
-naturecode project create --template python      # Python project
-naturecode project create --template react       # React application
-naturecode project create --template vue         # Vue.js application
-naturecode project create --template static      # Static website
-naturecode project create --template api         # API server
-```
-
-**Advanced Project Analysis:**
-
-```bash
-# Get detailed project report
-naturecode project analyze --detailed
-naturecode project analyze --output report.html
-
-# Dependency management
-naturecode project deps           # Analyze project dependencies
-naturecode project deps-update    # Check for dependency updates
-naturecode project deps-audit     # Security audit for dependencies
-
-# Project health metrics
-naturecode project health         # Overall health score
-naturecode project structure      # Directory structure analysis
-naturecode project documentation  # Documentation assessment
-```
-
-**Project Comparison and Migration:**
-
-```bash
-# Compare projects
-naturecode project compare <path1> <path2>
-
-# Migration assistance
-naturecode project migrate --from <old-version> --to <new-version>
-
-# Best practices check
-naturecode project best-practices
-```
-
-```bash
-naturecode --help
-
-# Main Commands:
-naturecode model     # Configure AI model and API
-naturecode delmodel  # Delete model configuration
+# Only 4 user-facing commands in AI-centric design:
 naturecode model     # Configure AI model and API settings
 naturecode start     # Start interactive AI session
 naturecode config    # Show current configuration
 naturecode delmodel  # Delete model configuration
 
-# Examples:
-naturecode model
-naturecode start
-naturecode config
-naturecode delmodel all --force
+# Utility commands:
+naturecode --help    # Show help information
+naturecode --version # Check current version
 ```
 
-### Advanced Features
+#### Detailed `/delmodel` Usage
+
+The `/delmodel` command supports multiple name formats for flexible model management:
+
+```bash
+# Delete all models (requires confirmation)
+naturecode delmodel all
+
+# Force delete all models (no confirmation)
+naturecode delmodel all --force
+
+# Delete by provider name
+naturecode delmodel deepseek
+naturecode delmodel openai
+naturecode delmodel ollama
+
+# Delete by model name
+naturecode delmodel deepseek-chat
+naturecode delmodel gpt-4
+naturecode delmodel llama3.2
+
+# Delete by provider-model combination
+naturecode delmodel deepseek-deepseek-chat
+naturecode delmodel openai-gpt-4
+
+# Delete by custom key name or ID
+naturecode delmodel my-custom-key
+naturecode delmodel key-12345
+
+# Force delete specific model
+naturecode delmodel ollama --force
+```
+
+#### Interactive Session Examples
+
+Once in interactive mode (`naturecode start`), use natural language:
+
+```
+> read README.md
+> analyze the code in src/
+> create a new React project called my-app
+> check project health
+> review this function for improvements
+> show performance metrics
+> commit my changes with message "fix: update config"
+> list files in current directory
+> edit package.json to add new dependency
+```
+
+### Advanced Features (Through AI Conversation)
+
+All advanced features are accessed through natural language interaction with the AI:
 
 #### File System Operations
 
-```bash
-# In interactive mode, use natural language:
-"read package.json"
-"create newfile.js"
-"edit config.json"
-"list files in src/"
-```
+- Read, write, edit files
+- List directory contents
+- Search for files
+- Manage file permissions
 
-#### AI-Powered Code Review
+#### Code Analysis & Review
 
-```bash
-naturecode code review file.js
-naturecode review --ai
-```
+- Comprehensive code quality assessment
+- Bug detection and security analysis
+- Code metrics and complexity calculation
+- Refactoring suggestions
+- Dependency security audit
+
+#### Project Management
+
+- Project creation from templates
+- Project health assessment
+- Dependency management
+- Configuration setup
+- Documentation generation
+
+#### Git Integration
+
+- Commit changes
+- Check status and history
+- Create and manage branches
+- Merge and rebase operations
+
+#### Performance Monitoring
+
+- System resource monitoring
+- Application performance metrics
+- Memory and CPU usage analysis
+- Performance optimization suggestions
 
 ### Updating
 
