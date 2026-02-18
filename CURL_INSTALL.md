@@ -187,14 +187,10 @@ naturecode help
 naturecode --help
 
 # Main commands:
-naturecode model     # Configure AI model
-naturecode start     # Interactive session
-naturecode help      # AI assistance
-naturecode git       # Git operations
-naturecode code      # Code analysis
-naturecode project   # Project management
-naturecode plugin    # Plugin management
-naturecode session   # Session management
+naturecode model     # Configure AI model and API settings
+naturecode start     # Start interactive AI session
+naturecode config    # Show current configuration
+naturecode delmodel  # Delete model configuration
 ```
 
 ## Uninstallation

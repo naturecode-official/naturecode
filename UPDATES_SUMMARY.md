@@ -102,11 +102,10 @@ curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main
 
 ```bash
 naturecode -v                    # 查看版本
-naturecode help "你是谁"         # 获取AI帮助
-naturecode help "如何开始"       # 获取入门指南
 naturecode start                 # 启动交互会话
 naturecode model                 # 配置AI模型
-naturecode plugin list           # 查看插件
+naturecode config                # 显示当前配置
+naturecode delmodel              # 删除模型配置
 ```
 
 ### 开发命令

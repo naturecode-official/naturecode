@@ -11,8 +11,7 @@
 - **Cross-platform**: Native support for macOS, Linux, and Windows
 - **Professional Mode**: Advanced diagnostics and developer tools
 - **Secure Configuration**: Encrypted storage for API keys and settings
-- **Plugin System**: Extensible architecture for custom functionality
-- **Team Collaboration**: Shared projects, member management, and role-based access
+- **AI-Centric Design**: Users interact naturally with AI, AI internally calls complex functionality
 - **Flexible Model Input**: Input any model name manually instead of selecting from pre-defined lists
 - **Provider Guidance**: Smart prompts guide users to check official websites for available models
 - **Android Support**: Native terminal app with full AI capabilities
@@ -402,18 +401,16 @@ naturecode --help
 # Main Commands:
 naturecode model     # Configure AI model and API
 naturecode delmodel  # Delete model configuration
-naturecode config    # Show current configuration
+naturecode model     # Configure AI model and API settings
 naturecode start     # Start interactive AI session
-naturecode help      # Get AI assistance
-naturecode git       # Git operations
-naturecode code      # Code analysis and review
-naturecode project   # Project management
-naturecode plugin    # Plugin management
+naturecode config    # Show current configuration
+naturecode delmodel  # Delete model configuration
 
 # Examples:
-naturecode git status
-naturecode code analyze src/
-naturecode project analyze .
+naturecode model
+naturecode start
+naturecode config
+naturecode delmodel all --force
 ```
 
 ### Advanced Features
@@ -435,61 +432,6 @@ naturecode code review file.js
 naturecode review --ai
 ```
 
-#### Plugin Management Commands
-
-NatureCode provides a powerful plugin system for extending functionality. When you run `naturecode plugin` without arguments, it automatically performs a comprehensive analysis:
-
-```bash
-# Automatic comprehensive analysis (new feature)
-naturecode plugin
-
-# Output includes:
-# - Plugin ecosystem overview (total plugins, commands)
-# - Plugin status analysis (loaded/disabled)
-# - Plugin type distribution
-# - Security analysis (permissions, dangerous permissions)
-# - Recommendations for next steps
-```
-
-**Detailed plugin management commands:**
-
-```bash
-# List installed plugins
-naturecode plugin list
-
-# Show plugin information
-naturecode plugin info <plugin-name>
-
-# Install a plugin (interactive)
-naturecode plugin install
-
-# Uninstall a plugin
-naturecode plugin uninstall <plugin-name>
-
-# Enable a plugin
-naturecode plugin enable <plugin-name>
-
-# Disable a plugin
-naturecode plugin disable <plugin-name>
-
-# Reload a plugin (hot reload)
-naturecode plugin reload <plugin-name>
-
-# Search for plugins
-naturecode plugin search <keyword>
-
-# Create a new plugin
-naturecode plugin create <name>
-
-# Manage plugin permissions
-naturecode plugin permissions
-```
-
-naturecode plugin list
-naturecode plugin install <plugin-url>
-
-````
-
 ### Updating
 
 #### Update from Any Version
@@ -497,7 +439,7 @@ naturecode plugin install <plugin-url>
 ```bash
 # The installer automatically updates existing installations
 curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-simple.sh | bash
-````
+```
 
 #### Manual Update
 

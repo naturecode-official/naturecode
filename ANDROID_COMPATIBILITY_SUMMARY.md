@@ -63,12 +63,10 @@ android-app/
 
 #### NatureCode 集成
 
-- `naturecode start` - 启动 AI 会话
-- `naturecode model` - 配置 AI 模型
-- `naturecode code` - 代码分析工具
-- `naturecode project` - 项目管理工具
-- `naturecode git` - Git 操作
-- `naturecode plugin` - 插件管理
+- `naturecode model` - 配置 AI 模型和 API 设置
+- `naturecode start` - 启动交互式 AI 会话
+- `naturecode config` - 显示当前配置
+- `naturecode delmodel` - 删除模型配置
 
 #### 系统要求
 

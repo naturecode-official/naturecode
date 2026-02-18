@@ -250,15 +250,6 @@ naturecode config set <key> <value> # Set config value
 naturecode config permission # Set permission level
 ```
 
-### Plugin Commands
-
-```bash
-naturecode plugin list      # List installed plugins
-naturecode plugin info <id> # Show plugin information
-naturecode plugin install <source> # Install plugin
-naturecode plugin uninstall <id> # Uninstall plugin
-```
-
 ### Session Commands
 
 ```bash
@@ -356,53 +347,6 @@ NatureCode uses a hierarchical configuration system:
 3. **full**: Full access (default)
 
 ## Plugins System
-
-### Plugin Types
-
-NatureCode supports 5 types of plugins:
-
-1. **Command Plugins**: Add new CLI commands
-2. **AI Provider Plugins**: Add new AI providers
-3. **File Handler Plugins**: Handle specific file types
-4. **Integration Plugins**: Integrate with external tools
-5. **UI/Theme Plugins**: Customize interface appearance
-
-### Creating a Plugin
-
-```bash
-naturecode plugin create my-plugin
-```
-
-### Plugin Structure
-
-```
-my-plugin/
-├── plugin.json
-├── index.js
-├── commands/
-│   └── hello.js
-└── README.md
-```
-
-### plugin.json Example
-
-```json
-{
-  "name": "my-plugin",
-  "version": "1.0.0",
-  "description": "My custom plugin",
-  "author": "Your Name",
-  "license": "MIT",
-  "commands": [
-    {
-      "name": "hello",
-      "description": "Say hello",
-      "handler": "commands/hello.js"
-    }
-  ],
-  "permissions": ["filesystem.read", "filesystem.write"]
-}
-```
 
 ## Session Management
 
