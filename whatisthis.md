@@ -2822,3 +2822,40 @@ naturecode start
 ```
 
 ```
+
+
+## 🔄 AI-Centric Transformation Update (February 18, 2026)
+
+NatureCode has been transformed into a pure AI-centric application with the following changes:
+
+### Major Changes:
+1. **Only 4 user commands**: , , , 
+2. **All advanced features AI-internal**: Code analysis, project management, Git operations accessible through AI conversation
+3. **Enhanced  command**: Supports multiple name formats (provider, model, combination)
+4. **Removed non-essential features**: Plugin system, team collaboration, standalone code/project commands
+
+### Key Improvements:
+- Simplified user interface with natural language interaction
+- Comprehensive model management with flexible deletion options
+- Clear user guidance and error messages
+- Updated documentation reflecting AI-centric design
+
+### Usage Examples:
+```bash
+# Delete models in various formats
+naturecode delmodel deepseek              # By provider
+naturecode delmodel deepseek-chat         # By model
+naturecode delmodel deepseek-deepseek-chat # Provider-model combination
+naturecode delmodel all --force           # Force delete all
+```
+
+### AI Conversation Examples:
+```
+> analyze the code in src/
+> create a new React project
+> check project health
+> commit my changes with message "fix: update"
+> show performance metrics
+```
+
+See [UPDATE_SUMMARY.md](UPDATE_SUMMARY.md) for complete details.
