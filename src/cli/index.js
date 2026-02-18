@@ -418,8 +418,13 @@ async function startInteractiveMode() {
     // Handle commands with or without slash
     const cmd = command.startsWith("/") ? command.substring(1) : command;
 
+    // Parse command and arguments
+    const parts = cmd.split(/\s+/);
+    const commandName = parts[0];
+    const args = parts.slice(1);
+
     try {
-      switch (cmd) {
+      switch (commandName) {
         case "model":
           // Run model configuration and return to interactive mode
           try {
@@ -450,21 +455,60 @@ async function startInteractiveMode() {
           console.log(JSON.stringify(config, null, 2));
           break;
         case "delmodel":
-          console.log("\nUsage: delmodel <name>");
-          console.log("       delmodel all (to delete all models)");
-          console.log("\nAvailable models:");
-          listAvailableModels();
+          if (args.length === 0) {
+            // No arguments, show usage
+            console.log("\nUsage: delmodel <name>");
+            console.log("       delmodel all (to delete all models)");
+            console.log("\nAvailable models:");
+            listAvailableModels();
+            console.log("\nExamples:");
+            console.log("  delmodel all          - Delete all models");
+            console.log("  delmodel ollama       - Delete ollama model");
+            console.log(
+              "  delmodel all --force  - Delete all without confirmation",
+            );
+            rl.prompt();
+            return;
+          }
 
-          console.log(
-            "\nNote: For safety, model deletion requires terminal mode.",
-          );
-          console.log("To delete models:");
-          console.log("1. Exit interactive mode (type 'exit')");
-          console.log("2. Run: naturecode delmodel <name>");
-          console.log("3. Or: naturecode delmodel all (to delete all)");
-          console.log("4. Use --force flag to skip confirmation");
-          rl.prompt();
-          return;
+          const modelName = args[0];
+          const forceFlag = args.includes("--force");
+
+          try {
+            if (modelName.toLowerCase() === "all") {
+              // Delete all models
+              console.log(
+                "\n⚠️  WARNING: This will delete ALL model configurations.",
+              );
+
+              if (!forceFlag) {
+                console.log("\nTo confirm deletion, please:");
+                console.log("1. Exit interactive mode (type 'exit')");
+                console.log("2. Run: naturecode delmodel all");
+                console.log("3. Or use: naturecode delmodel all --force");
+                rl.prompt();
+                return;
+              } else {
+                // Force delete in interactive mode
+                console.log("\nDeleting all models (force mode)...");
+                deleteAllModels(true);
+                console.log("✅ All models deleted successfully.");
+                rl.prompt();
+                return;
+              }
+            } else {
+              // Delete single model
+              console.log(`\nDeleting model '${modelName}'...`);
+              deleteModelByName(modelName, forceFlag);
+              console.log(`✅ Model '${modelName}' deleted successfully.`);
+              rl.prompt();
+              return;
+            }
+          } catch (error) {
+            console.error(`\n❌ Error: ${error.message}`);
+            rl.prompt();
+            return;
+          }
 
         default:
           console.log(`\nUnknown command: ${command}`);
