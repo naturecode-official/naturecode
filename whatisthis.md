@@ -315,7 +315,7 @@ git commit -m "$1"
 - **One-click Installation System** - Supports curl single-line installation
 - **Multi-model Support** - DeepSeek, OpenAI, Ollama
 - **Smart Installation** - Simple/Professional mode selection
-- **Modular Architecture** - Plugin system, team collaboration
+- **AI-Centric Design** - Users interact naturally with AI, AI internally calls complex functionality
 - **Cross-platform** - macOS, Linux, Windows
 
 ## 📁 File Structure Details
@@ -463,15 +463,6 @@ curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main
 - Command routing (model, start, git, code, project)
 - Error handling
 - Version display
-
-#### `src/cli/commands/help.js`
-
-**Purpose**: Enhanced help command
-**Features**:
-
-- Colored output
-- Command categorization
-- 详细示例
 
 #### `src/utils/ascii-art.js`
 
@@ -626,11 +617,9 @@ naturecode model
 
 ```bash
 naturecode start      # 启动交互会话
-naturecode git        # Git 操作助手
-naturecode code       # 代码分析和重构
-naturecode project    # 项目管理
-
-naturecode team       # 团队协作
+naturecode model      # 配置 AI 模型
+naturecode config     # 显示当前配置
+naturecode delmodel   # 删除模型配置
 naturecode --help     # 查看帮助
 naturecode --version  # 查看版本
 ```
@@ -1047,8 +1036,7 @@ git log --oneline --graph --all
 - `package.json` - 主版本号
 - `package-lock.json` - 依赖版本号
 - `src/utils/ascii-art.js` - UI 显示版本
-- `src/cli/commands/help.js` - 帮助命令版本引用
-- `src/utils/feedback.js` - 反馈系统版本
+
 - `CHANGELOG.md` - 更新日志
 
 #### 2. **文档更新**：
@@ -2534,43 +2522,11 @@ naturecode model
      - `stream`: 是否启用流式响应
      - `fallbackModel`: 备用模型名称
 
-5. **`naturecode feedback`** - 提供NatureCode反馈
-   - 提交使用反馈和建议
-   - 报告问题和错误
+### **AI内部化功能（通过AI会话访问）**
 
-### **团队协作命令**
+以下高级功能已改为AI内部使用，用户通过自然语言与AI交互访问：
 
-7. **`naturecode collaboration`** - 实时协作工具
-   - 实时协同编辑
-   - 团队聊天
-   - 项目共享
-
-8. **`naturecode permissions`** - 基于角色的访问控制和审计日志
-   - 权限管理
-   - 角色分配
-   - 审计跟踪
-
-9. **`naturecode team-review`** - 团队代码审查和协作
-   - 团队审查流程
-   - 审查分配
-   - 审查跟踪
-
-### **集成命令**
-
-10. **`naturecode integration|int`** - 第三方工具集成命令
-    - 支持14+开发工具集成
-    - 工具配置管理
-    - 工作流自动化
-
-### **帮助命令**
-
-11. **`naturecode help`** - 显示NatureCode帮助信息
-    - 专业模式详细帮助
-    - 命令使用示例
-
-12. **`naturecode --help`** - 显示基本帮助信息
-
-13. **`naturecode --version`** - 显示版本信息
+- **代码分析** (`code analyze`, `code metrics`, `code deps`, `code issues`, 等)
 
 ### **AI内部化功能（通过AI会话访问）**
 
@@ -2682,14 +2638,10 @@ naturecode delmodel all --force
 
 
 
-# 6. 团队协作
-naturecode collaboration
-
-# 7. 获取帮助
-naturecode help --simple
+# 6. 获取帮助
 naturecode --help
 
-# 8. 查看版本
+# 7. 查看版本
 naturecode --version
 
 ### **AI内部功能使用示例（通过自然语言）**
@@ -2712,7 +2664,7 @@ AI：开始代码审查...
 AI：性能监控已启动...
 （AI启动时自动显示性能信息）
 
-```
+````
 
 ### **AI提供商选择指南**
 
@@ -2766,12 +2718,69 @@ AI：性能监控已启动...
 
 ---
 
+## 📝 2026-02-18 更新记录
+
+### **AI 中心化改造完成**
+
+**目标**: 将 NatureCode 转变为纯粹的 AI 中心化应用，用户通过自然语言与 AI 交互，AI 内部调用复杂功能
+
+#### **已完成的工作**:
+
+1. **删除插件系统**:
+   - 完全移除插件系统源代码 (`src/plugins/`)
+   - 删除插件命令 (`naturecode plugin`)
+   - 删除插件设计文档
+
+2. **简化用户界面**:
+   - 删除 `collaboration` 命令 (实时协作工具)
+   - 删除 `permissions` 命令 (基于角色的访问控制)
+   - 删除 `team-review` 命令 (团队代码审查)
+   - 删除 `integration` 命令 (第三方工具集成)
+   - 删除 `feedback` 命令 (用户反馈)
+   - 删除 `help` 命令 (简化帮助系统)
+
+3. **保留的核心命令** (用户直接交互):
+   - `model` - 配置 AI 模型和 API 设置
+   - `start` - 启动交互式 AI 会话
+   - `config` - 显示当前配置
+   - `delmodel` - 删除模型配置
+
+4. **AI 内部化功能** (通过 AI 会话访问):
+   - 代码分析 (`analyzeCode()`)
+   - 项目管理 (`manageProject()`)
+   - 代码审查 (`reviewCode()`)
+   - 团队协作 (`teamCollaboration()`)
+   - 性能监控 (AI 启动时自动显示)
+
+#### **设计理念**:
+- **用户友好**: 用户只需与 AI 自然对话，无需记忆复杂命令
+- **AI 驱动**: AI 理解用户意图，自动调用合适的功能模块
+- **简化界面**: 最小化 CLI 命令，最大化 AI 交互体验
+- **功能完整**: 所有高级功能仍然可用，但通过 AI 访问
+
+#### **使用示例**:
+```bash
+# 传统方式 (已删除)
+naturecode code analyze src/
+naturecode project create my-project
+naturecode team add-member alice
+
+# AI 中心化方式 (现在)
+naturecode start
+> 请分析我的代码质量
+> 请帮我创建一个新项目
+> 请添加团队成员 alice
+````
+
 **当前版本**: NatureCode v1.5.6
 **最后更新**: 2026年2月18日
-**状态**: ✅ **所有主要平台支持已实现**，包括 Android 移动端
+**状态**: ✅ **AI 中心化改造完成**，用户体验更自然、更智能
 
-- **Android**: 完整的终端应用已发布
-- **Windows/macOS/Linux**: 原生二进制文件可用
-- **功能完整**: 所有 AI 功能在所有平台上可用
+- **核心功能**: 4个核心命令 + AI 交互
+- **AI 能力**: 所有高级功能通过 AI 访问
+- **平台支持**: Android、Windows、macOS、Linux
 - **稳定运行**: 经过测试，生产环境就绪
+
+```
+
 ```

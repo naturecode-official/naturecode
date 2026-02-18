@@ -3,14 +3,7 @@
 import { Command } from "commander";
 import { runModelConfiguration } from "./commands/model.js";
 import { startInteractiveSession } from "./commands/start.js";
-import { runGitCommand } from "./commands/git.js";
 
-import { createCollaborationCommand } from "./commands/collaboration.js";
-import { createPermissionsCommand } from "./commands/permissions.js";
-import { createTeamReviewCommand } from "./commands/team-review.js";
-import { setupIntegrationCommands } from "./commands/integration.js";
-
-import { createHelpCommand } from "./commands/help.js";
 import { configManager } from "../config/manager.js";
 import { secureStore } from "../config/secure-store.js";
 import {
@@ -19,7 +12,7 @@ import {
   clearScreen,
 } from "../utils/ascii-art.js";
 import { exitWithError } from "../utils/error-handler.js";
-import { handleFeedbackCommand } from "../utils/feedback.js";
+
 import fs from "fs";
 import path from "path";
 import os from "os";
@@ -55,17 +48,6 @@ program
       await startInteractiveSession(options);
     } catch (error) {
       exitWithError(error, "Session");
-    }
-  });
-
-program
-  .command("feedback")
-  .description("Provide feedback about NatureCode")
-  .action(async () => {
-    try {
-      await handleFeedbackCommand();
-    } catch (error) {
-      exitWithError(error, "Feedback");
     }
   });
 
@@ -404,21 +386,6 @@ program
     }
   });
 
-// Add real-time collaboration command
-program.addCommand(createCollaborationCommand());
-
-// Add permissions and audit logging command
-program.addCommand(createPermissionsCommand());
-
-// Add team code review command
-program.addCommand(createTeamReviewCommand());
-
-// Add third-party tool integration command
-program.addCommand(setupIntegrationCommands(program));
-
-// Add help command with AI-powered documentation support
-program.addCommand(createHelpCommand());
-
 // Interactive mode function
 async function startInteractiveMode() {
   clearScreen();
@@ -445,22 +412,6 @@ async function startInteractiveMode() {
       console.log("\nGoodbye!");
       rl.close();
       process.exit(0);
-      return;
-    }
-
-    if (command.startsWith("help")) {
-      // 处理带参数的help命令
-      try {
-        const { HelpCommand } = await import("./commands/help.js");
-        const helpInstance = new HelpCommand();
-
-        // 显示完整的简单帮助
-        await helpInstance.showSimpleHelp();
-      } catch (error) {
-        console.error("Error showing help:", error.message);
-        console.log("\n" + getCommandPrompt());
-      }
-      rl.prompt();
       return;
     }
 
@@ -504,20 +455,10 @@ async function startInteractiveMode() {
           console.log("\nAvailable models:");
           listAvailableModels();
           break;
-        case "help":
-          // 显示完整的简单帮助
-          try {
-            const { HelpCommand } = await import("./commands/help.js");
-            const helpInstance = new HelpCommand();
-            await helpInstance.showSimpleHelp();
-          } catch (error) {
-            console.error("Error showing help:", error.message);
-            console.log("\n" + getCommandPrompt());
-          }
-          break;
+
         default:
           console.log(`\nUnknown command: ${command}`);
-          console.log('Type "help" for available commands.');
+          console.log("Available commands: model, start, config, delmodel");
       }
     } catch (error) {
       console.error(`\nError: ${error.message}`);
