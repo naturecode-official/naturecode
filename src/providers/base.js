@@ -1,6 +1,5 @@
 import { FileSystem } from "../utils/filesystem.js";
 import { performCodeReview } from "../cli/commands/review.js";
-import { createTeamCollaboration } from "../cli/commands/team.js";
 import { codeAnalysis } from "../cli/commands/code.js";
 import { projectManagement } from "../cli/commands/project.js";
 
@@ -230,47 +229,6 @@ export class AIProvider {
       }
     } catch (error) {
       throw new Error(`Code review failed: ${error.message}`);
-    }
-  }
-
-  // Team collaboration functionality for AI internal use
-  async manageTeam(options = {}) {
-    try {
-      const collaboration = await createTeamCollaboration();
-      const action = options.action || "createProject";
-
-      switch (action) {
-        case "createProject":
-          return await collaboration.createProject(options);
-        case "listProjects":
-          return await collaboration.listProjects(options);
-        case "getProjectInfo":
-          return await collaboration.getProjectInfo(options);
-        case "createTask":
-          return await collaboration.createTask(options);
-        case "updateTask":
-          return await collaboration.updateTask(options);
-        case "listTasks":
-          return await collaboration.listTasks(options);
-        case "createTeam":
-          return await collaboration.createTeam(options);
-        case "inviteToTeam":
-          return await collaboration.inviteToTeam(options);
-        case "getProjectAnalytics":
-          return await collaboration.getProjectAnalytics(options);
-        case "getMemberAnalytics":
-          return await collaboration.getMemberAnalytics(options);
-        case "getTeamAnalytics":
-          return await collaboration.getTeamAnalytics(options);
-        case "search":
-          return await collaboration.search(options);
-        case "getDashboard":
-          return await collaboration.getDashboard(options);
-        default:
-          throw new Error(`Unknown team action: ${action}`);
-      }
-    } catch (error) {
-      throw new Error(`Team management failed: ${error.message}`);
     }
   }
 

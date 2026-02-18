@@ -454,7 +454,51 @@ async function startInteractiveMode() {
           console.log("       delmodel all (to delete all models)");
           console.log("\nAvailable models:");
           listAvailableModels();
-          break;
+
+          // 提示用户输入要删除的模型名称
+          const delRl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout,
+          });
+
+          delRl.question(
+            "\nEnter model name to delete (or 'all' to delete all): ",
+            async (modelName) => {
+              delRl.close();
+
+              if (!modelName.trim()) {
+                console.log("No model name provided. Deletion cancelled.");
+                rl.prompt();
+                return;
+              }
+
+              try {
+                // 检查是否要删除所有模型
+                if (modelName.toLowerCase() === "all") {
+                  console.log(
+                    "\nWARNING: This will delete ALL model configurations.",
+                  );
+                  console.log(
+                    "This action requires confirmation in terminal mode.",
+                  );
+                  console.log("\nTo delete all models, please:");
+                  console.log("1. Exit interactive mode (type 'exit')");
+                  console.log("2. Run: naturecode delmodel all");
+                  console.log(
+                    "3. Or use: naturecode delmodel all --force (skip confirmation)",
+                  );
+                } else {
+                  // 删除单个模型
+                  deleteModelByName(modelName.trim(), false);
+                }
+              } catch (error) {
+                console.error(`\nError deleting model: ${error.message}`);
+              }
+
+              rl.prompt();
+            },
+          );
+          return;
 
         default:
           console.log(`\nUnknown command: ${command}`);
