@@ -21,7 +21,7 @@ import {
 } from "../../utils/formatter.js";
 import { formatFileList } from "../../utils/filesystem.js";
 import { handleError } from "../../utils/error-handler.js";
-import { feedbackCollector } from "../../utils/feedback.js";
+
 import { commandRecognizer } from "../../utils/command-recognizer.js";
 import { createPerformanceMonitor } from "./performance.js";
 
