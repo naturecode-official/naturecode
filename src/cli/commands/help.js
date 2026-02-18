@@ -80,12 +80,7 @@ AI Providers:
   - OpenAI: GPT models, requires API key
   - Ollama: Local models, no API key needed
 
-Plugin System:
-  plugin list        List available plugins
-  plugin install <id> Install plugin
-  plugin remove <id> Remove plugin
-  plugin enable <id> Enable plugin
-  plugin disable <id> Disable plugin
+
 
 Options:
   --version          Show version

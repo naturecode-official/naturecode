@@ -4,7 +4,6 @@ import { Command } from "commander";
 import { runModelConfiguration } from "./commands/model.js";
 import { startInteractiveSession } from "./commands/start.js";
 import { runGitCommand } from "./commands/git.js";
-import { runPluginCommand } from "./commands/plugin.js";
 
 import { createCollaborationCommand } from "./commands/collaboration.js";
 import { createPermissionsCommand } from "./commands/permissions.js";
@@ -81,30 +80,6 @@ program
     } catch (error) {
       console.error("Error: Failed to load configuration:", error.message);
       console.log('Run "naturecode model" to configure first.');
-    }
-  });
-
-program
-  .command("plugin")
-  .description("Plugin management and development tools")
-  .argument("[command]", "Plugin command to execute")
-  .argument("[args...]", "Additional arguments")
-  .option("-p, --plugin-id <id>", "Plugin ID for specific operations")
-  .option("-s, --source <source>", "Plugin source for installation")
-  .option("-n, --name <name>", "Plugin name for creation")
-  .option("-q, --query <query>", "Search query")
-  .option("-f, --force", "Force operation without confirmation")
-  .option("-v, --verbose", "Show detailed information")
-  .option("-j, --json", "Output results in JSON format")
-  .action(async (command, args, options) => {
-    try {
-      await runPluginCommand({
-        command,
-        _: args || [],
-        ...options,
-      });
-    } catch (error) {
-      exitWithError(error, "Plugin Management");
     }
   });
 
@@ -557,62 +532,6 @@ async function startInteractiveMode() {
   // Exit is handled explicitly in the exit/quit command
 }
 
-// Initialize and load plugins
-async function initializePlugins() {
-  try {
-    const { PluginManager } = await import("../plugins/manager/index.js");
-    const { PluginCommandRegistry } =
-      await import("../plugins/commands/index.js");
-
-    const pluginManager = new PluginManager();
-    const commandRegistry = new PluginCommandRegistry(pluginManager);
-
-    // Set up basic services
-    pluginManager.setLogger(console);
-    pluginManager.setFileSystem({
-      readFile: async (pluginId, filePath, encoding) => {
-        return await fs.promises.readFile(filePath, encoding);
-      },
-      writeFile: async (pluginId, filePath, content, encoding) => {
-        return await fs.promises.writeFile(filePath, content, encoding);
-      },
-      listFiles: async (pluginId, dirPath, listOptions) => {
-        const files = await fs.promises.readdir(dirPath, {
-          withFileTypes: true,
-        });
-        return files.map((file) => ({
-          name: file.name,
-          type: file.isDirectory() ? "directory" : "file",
-          path: path.join(dirPath, file.name),
-        }));
-      },
-    });
-
-    pluginManager.setAIProvider({
-      generate: async (pluginId, prompt, options) => {
-        return `AI response to: ${prompt.substring(0, 50)}...`;
-      },
-      chat: async (pluginId, messages, options) => {
-        return {
-          role: "assistant",
-          content: "This is a mock AI response from plugin system",
-        };
-      },
-    });
-
-    // Load plugins
-    await pluginManager.loadPlugins();
-
-    // Register plugin commands with CLI
-    commandRegistry.registerWithCLI(program);
-
-    return { pluginManager, commandRegistry };
-  } catch (error) {
-    console.warn("Failed to initialize plugins:", error.message);
-    return null;
-  }
-}
-
 // Main program logic
 const args = process.argv.slice(2);
 
@@ -620,13 +539,6 @@ if (args.length === 0) {
   // Show interactive mode for no arguments
   startInteractiveMode();
 } else {
-  // Initialize plugins and parse command line arguments
-  initializePlugins()
-    .then(() => {
-      program.parse();
-    })
-    .catch((error) => {
-      console.error("Failed to initialize:", error);
-      program.parse();
-    });
+  // Parse command line arguments
+  program.parse();
 }

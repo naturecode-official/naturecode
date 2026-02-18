@@ -544,7 +544,7 @@ make dmg        # macOS DMG（仅 macOS）
 │   ├── teams/         # 团队信息
 │   ├── policies.json  # 权限策略
 │   └── roles.json     # 角色定义
-└── plugins/           # 插件数据
+
 ```
 
 ## 系统架构设计
@@ -629,7 +629,7 @@ naturecode start      # 启动交互会话
 naturecode git        # Git 操作助手
 naturecode code       # 代码分析和重构
 naturecode project    # 项目管理
-naturecode plugin     # 插件管理
+
 naturecode team       # 团队协作
 naturecode --help     # 查看帮助
 naturecode --version  # 查看版本
@@ -2538,16 +2538,6 @@ naturecode model
    - 提交使用反馈和建议
    - 报告问题和错误
 
-### **插件管理命令**
-
-6. **`naturecode plugin [command]`** - 插件管理和开发工具
-   - `list`: 列出所有已安装插件
-   - `info <pluginId>`: 显示插件详细信息
-   - `reload <pluginId>`: 重新加载插件
-   - `unload <pluginId>`: 卸载插件
-   - `install <url>`: 安装插件
-   - `uninstall <pluginId>`: 卸载插件
-
 ### **团队协作命令**
 
 7. **`naturecode collaboration`** - 实时协作工具
@@ -2690,9 +2680,7 @@ naturecode config
 naturecode delmodel my-old-model
 naturecode delmodel all --force
 
-# 5. 插件管理
-naturecode plugin list
-naturecode plugin info my-plugin
+
 
 # 6. 团队协作
 naturecode collaboration
