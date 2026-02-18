@@ -151,9 +151,9 @@ export class ZhipuAIProvider extends AIProvider {
     }
 
     // 如果无法识别格式，返回原始响应
-    console.warn("⚠️  Could not extract response from Zhipu AI format");
+    console.warn("Could not extract response from Zhipu AI format");
     console.warn(
-      "⚠️  Response structure:",
+      "Response structure:",
       JSON.stringify(data, null, 2).substring(0, 500),
     );
     return JSON.stringify(data);

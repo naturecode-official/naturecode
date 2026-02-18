@@ -114,7 +114,7 @@ function listAvailableModels() {
 }
 
 // Function to delete model by name or all models
-function deleteModelByName(name, force = false) {
+function deleteModelByName(name, force = false, exitOnError = true) {
   if (name.toLowerCase() === "all") {
     deleteAllModels(force);
     return;
@@ -155,7 +155,29 @@ function deleteModelByName(name, force = false) {
     console.log(`Error: No model found with name "${name}"`);
     console.log("\nAvailable models:");
     listAvailableModels();
-    process.exit(1);
+    console.log("\nTry one of these names:");
+    console.log(`  - ${config.provider} (provider)`);
+    console.log(`  - ${config.model} (model)`);
+    console.log(`  - ${config.provider}-${config.model} (provider-model)`);
+
+    // 如果有存储的密钥，也显示它们
+    const allKeys = secureStore.listApiKeys();
+    for (const provider in allKeys) {
+      const providerKeys = allKeys[provider];
+      for (const keyId in providerKeys) {
+        const keyInfo = providerKeys[keyId];
+        console.log(`  - ${keyId} (key ID)`);
+        if (keyInfo.metadata && keyInfo.metadata.name) {
+          console.log(`  - ${keyInfo.metadata.name} (custom name)`);
+        }
+      }
+    }
+
+    if (exitOnError) {
+      process.exit(1);
+    } else {
+      throw new Error(`No model found with name "${name}"`);
+    }
   }
 
   if (!force) {
@@ -478,7 +500,7 @@ async function startInteractiveMode() {
             if (modelName.toLowerCase() === "all") {
               // Delete all models
               console.log(
-                "\n⚠️  WARNING: This will delete ALL model configurations.",
+                "\nWARNING: This will delete ALL model configurations.",
               );
 
               if (!forceFlag) {
@@ -492,20 +514,25 @@ async function startInteractiveMode() {
                 // Force delete in interactive mode
                 console.log("\nDeleting all models (force mode)...");
                 deleteAllModels(true);
-                console.log("✅ All models deleted successfully.");
+                console.log("All models deleted successfully.");
                 rl.prompt();
                 return;
               }
             } else {
               // Delete single model
               console.log(`\nDeleting model '${modelName}'...`);
-              deleteModelByName(modelName, forceFlag);
-              console.log(`✅ Model '${modelName}' deleted successfully.`);
+              try {
+                deleteModelByName(modelName, forceFlag);
+                console.log(`Model '${modelName}' deleted successfully.`);
+              } catch (error) {
+                console.error(`\nError: ${error.message}`);
+                // 在交互式模式中不退出进程，只显示错误
+              }
               rl.prompt();
               return;
             }
           } catch (error) {
-            console.error(`\n❌ Error: ${error.message}`);
+            console.error(`\nError: ${error.message}`);
             rl.prompt();
             return;
           }

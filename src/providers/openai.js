@@ -20,7 +20,7 @@ export class OpenAIProvider extends AIProvider {
 
     // 检查 API 密钥格式 - sk-proj- 也是有效的
     if (!config.apiKey.startsWith("sk-")) {
-      console.warn("⚠️  Warning: Your API key doesn't start with 'sk-'");
+      console.warn("Warning: Your API key doesn't start with 'sk-'");
       console.warn("   Valid OpenAI keys start with 'sk-' or 'sk-proj-'");
     }
 
