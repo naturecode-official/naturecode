@@ -296,15 +296,30 @@ class ConfigManager {
     }
 
     if (validated.provider === "deepseek") {
+      // 允许任何 DeepSeek 模型名，不限制为预定义列表
+      // 只检查基本格式
+      if (!validated.model || typeof validated.model !== "string") {
+        throw new Error("DeepSeek model name is required");
+      }
+      // 建议但不强制使用已知模型
       if (!DEEPSEEK_MODELS.includes(validated.model)) {
-        throw new Error(
-          `DeepSeek model must be one of: ${DEEPSEEK_MODELS.join(", ")}`,
+        console.warn(
+          `Note: '${validated.model}' is not in the recommended DeepSeek models list.`,
         );
+        console.warn(`Recommended models: ${DEEPSEEK_MODELS.join(", ")}`);
       }
     } else if (validated.provider === "openai") {
+      // 允许任何 OpenAI 模型名
+      if (!validated.model || typeof validated.model !== "string") {
+        throw new Error("OpenAI model name is required");
+      }
+      // 建议但不强制使用已知模型
       if (!OPENAI_MODELS.includes(validated.model)) {
-        throw new Error(
-          `OpenAI model must be one of: ${OPENAI_MODELS.join(", ")}`,
+        console.warn(
+          `Note: '${validated.model}' is not in the recommended OpenAI models list.`,
+        );
+        console.warn(
+          `Recommended models: ${OPENAI_MODELS.slice(0, 5).join(", ")}...`,
         );
       }
     } else if (validated.provider === "ollama") {
@@ -340,37 +355,19 @@ class ConfigManager {
       validated.fallbackModel !== undefined &&
       validated.fallbackModel !== null
     ) {
-      if (validated.provider === "openai") {
-        if (!OPENAI_MODELS.includes(validated.fallbackModel)) {
-          throw new Error(
-            `OpenAI fallback model must be one of: ${OPENAI_MODELS.join(", ")}`,
-          );
-        }
-      } else if (validated.provider === "deepseek") {
-        if (!DEEPSEEK_MODELS.includes(validated.fallbackModel)) {
-          throw new Error(
-            `DeepSeek fallback model must be one of: ${DEEPSEEK_MODELS.join(", ")}`,
-          );
-        }
-      } else if (validated.provider === "ollama") {
-        if (!OLLAMA_MODELS.includes(validated.fallbackModel)) {
-          throw new Error(
-            `Ollama fallback model must be one of: ${OLLAMA_MODELS.join(", ")}`,
-          );
-        }
-      } else if (validated.provider === "anthropic") {
-        if (!ANTHROPIC_MODELS.includes(validated.fallbackModel)) {
-          throw new Error(
-            `Anthropic fallback model must be one of: ${ANTHROPIC_MODELS.join(", ")}`,
-          );
-        }
-      } else if (validated.provider === "gemini") {
-        if (!GEMINI_MODELS.includes(validated.fallbackModel)) {
-          throw new Error(
-            `Gemini fallback model must be one of: ${GEMINI_MODELS.join(", ")}`,
-          );
-        }
+      // 对于所有提供商，只进行基本验证，不限制为预定义列表
+      if (
+        !validated.fallbackModel ||
+        typeof validated.fallbackModel !== "string"
+      ) {
+        throw new Error("Fallback model name is required");
       }
+
+      // 提供建议但不强制（简化版本）
+      console.warn(
+        `Note: Using custom fallback model '${validated.fallbackModel}' for ${validated.provider}.`,
+      );
+      console.warn("Make sure this model is supported by your provider.");
     }
 
     return validated;
