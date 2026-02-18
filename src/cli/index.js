@@ -114,7 +114,12 @@ function listAvailableModels() {
 }
 
 // Function to delete model by name or all models
-function deleteModelByName(name, force = false, exitOnError = true) {
+function deleteModelByName(
+  name,
+  force = false,
+  exitOnError = true,
+  skipPrompt = false,
+) {
   if (name.toLowerCase() === "all") {
     deleteAllModels(force);
     return;
@@ -125,6 +130,8 @@ function deleteModelByName(name, force = false, exitOnError = true) {
   const isActiveModel =
     config.apiKeyName === name ||
     config.apiKeyId === name ||
+    config.provider === name ||
+    config.model === name ||
     (config.provider &&
       config.model &&
       `${config.provider}-${config.model}` === name);
@@ -156,9 +163,21 @@ function deleteModelByName(name, force = false, exitOnError = true) {
     console.log("\nAvailable models:");
     listAvailableModels();
     console.log("\nTry one of these names:");
-    console.log(`  - ${config.provider} (provider)`);
-    console.log(`  - ${config.model} (model)`);
-    console.log(`  - ${config.provider}-${config.model} (provider-model)`);
+    if (config.provider) {
+      console.log(`  - ${config.provider} (provider)`);
+    }
+    if (config.model) {
+      console.log(`  - ${config.model} (model)`);
+    }
+    if (config.provider && config.model) {
+      console.log(`  - ${config.provider}-${config.model} (provider-model)`);
+    }
+    if (config.apiKeyName) {
+      console.log(`  - ${config.apiKeyName} (key name)`);
+    }
+    if (config.apiKeyId) {
+      console.log(`  - ${config.apiKeyId} (key ID)`);
+    }
 
     // 如果有存储的密钥，也显示它们
     const allKeys = secureStore.listApiKeys();
@@ -180,7 +199,7 @@ function deleteModelByName(name, force = false, exitOnError = true) {
     }
   }
 
-  if (!force) {
+  if (!force && !skipPrompt) {
     console.log(`WARNING: This will delete model configuration "${name}"`);
 
     if (isActiveModel) {
@@ -522,7 +541,7 @@ async function startInteractiveMode() {
               // Delete single model
               console.log(`\nDeleting model '${modelName}'...`);
               try {
-                deleteModelByName(modelName, forceFlag);
+                deleteModelByName(modelName, forceFlag, false, true);
                 console.log(`Model '${modelName}' deleted successfully.`);
               } catch (error) {
                 console.error(`\nError: ${error.message}`);
