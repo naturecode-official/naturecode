@@ -2506,7 +2506,7 @@ naturecode model
 
 ## 🛠️ NatureCode 完整命令列表
 
-### **核心命令**
+### **核心命令（用户可直接使用）**
 
 1. **`naturecode model`** - 配置AI模型和API设置
    - 选择AI提供商（12+选项）
@@ -2514,7 +2514,6 @@ naturecode model
    - 配置模型参数
 
 2. **`naturecode start [options]`** - 启动交互式AI会话
-   - `--session <id>`: 加载特定会话
    - `--project <path>`: 设置项目路径
 
 3. **`naturecode delmodel [name]`** - 删除模型配置
@@ -2523,31 +2522,25 @@ naturecode model
    - `-f, --force`: 强制删除无需确认
 
 4. **`naturecode config`** - 显示当前配置
+   - 查看已配置的AI模型和参数
+   - 显示系统设置和首选项
+   - **输出内容**：
+     - `provider`: 当前使用的AI提供商（如 ollama、openai、deepseek）
+     - `apiKey`: API密钥（敏感信息被隐藏）
+     - `model`: 选择的AI模型名称
+     - `modelType`: 模型类型（chat、completion等）
+     - `temperature`: 生成温度（0.0-1.0）
+     - `maxTokens`: 最大生成令牌数
+     - `stream`: 是否启用流式响应
+     - `fallbackModel`: 备用模型名称
 
 5. **`naturecode feedback`** - 提供NatureCode反馈
+   - 提交使用反馈和建议
+   - 报告问题和错误
 
-### **代码相关命令**
+### **插件管理命令**
 
-6. **`naturecode code [command]`** - 代码分析和质量工具
-   - `analyze`: 代码复杂度和质量分析
-   - `refactor`: 代码重构建议
-   - `review`: 代码审查
-
-7. **`naturecode review [command]`** - 代码审查和质量分析
-   - `file <path>`: 审查单个文件
-   - `project`: 审查整个项目
-   - `git`: 审查Git更改
-
-### **项目管理命令**
-
-8. **`naturecode project [command]`** - 项目管理和结构工具
-   - `analyze`: 分析项目结构
-   - `create`: 创建新项目
-   - `deps`: 依赖管理
-
-### **插件和会话管理**
-
-9. **`naturecode plugin [command]`** - 插件管理和开发工具
+6. **`naturecode plugin [command]`** - 插件管理和开发工具
    - `list`: 列出所有已安装插件
    - `info <pluginId>`: 显示插件详细信息
    - `reload <pluginId>`: 重新加载插件
@@ -2555,57 +2548,131 @@ naturecode model
    - `install <url>`: 安装插件
    - `uninstall <pluginId>`: 卸载插件
 
-10. **`naturecode session [command]`** - 会话管理和上下文跟踪
-    - `list`: 列出所有会话
-    - `create <name>`: 创建新会话
-    - `load <id>`: 加载会话
-    - `delete <id>`: 删除会话
-    - `export <id>`: 导出会话
-    - `import <file>`: 导入会话
-
 ### **团队协作命令**
 
-11. **`naturecode team`** - 团队协作和项目管理
-    - 团队项目管理
-    - 成员管理
-    - 权限控制
+7. **`naturecode collaboration`** - 实时协作工具
+   - 实时协同编辑
+   - 团队聊天
+   - 项目共享
 
-12. **`naturecode collaboration`** - 实时协作工具
-    - 实时协同编辑
-    - 团队聊天
-    - 项目共享
+8. **`naturecode permissions`** - 基于角色的访问控制和审计日志
+   - 权限管理
+   - 角色分配
+   - 审计跟踪
 
-13. **`naturecode permissions`** - 基于角色的访问控制和审计日志
-    - 权限管理
-    - 角色分配
-    - 审计跟踪
+9. **`naturecode team-review`** - 团队代码审查和协作
+   - 团队审查流程
+   - 审查分配
+   - 审查跟踪
 
-14. **`naturecode team-review`** - 团队代码审查和协作
-    - 团队审查流程
-    - 审查分配
-    - 审查跟踪
+### **集成命令**
 
-### **集成和性能命令**
-
-15. **`naturecode integration|int`** - 第三方工具集成命令
+10. **`naturecode integration|int`** - 第三方工具集成命令
     - 支持14+开发工具集成
     - 工具配置管理
     - 工作流自动化
 
-16. **`naturecode performance|perf`** - 性能监控和优化命令
-    - 实时系统指标监控
-    - 性能分析
-    - 优化建议
-
 ### **帮助命令**
 
-17. **`naturecode help`** - 显示NatureCode帮助信息
+11. **`naturecode help`** - 显示NatureCode帮助信息
     - 专业模式详细帮助
     - 命令使用示例
 
-18. **`naturecode --help`** - 显示基本帮助信息
+12. **`naturecode --help`** - 显示基本帮助信息
 
-19. **`naturecode --version`** - 显示版本信息
+13. **`naturecode --version`** - 显示版本信息
+
+### **AI内部化功能（通过AI会话访问）**
+
+以下高级功能已改为AI内部使用，用户通过自然语言与AI交互访问：
+
+- **代码分析** (`code analyze`, `code metrics`, `code deps`, `code issues`, 等)
+- **项目管理** (`project analyze`, `project health`, `project structure`, `project upgrades`, 等)
+- **代码审查** (`review`)
+- **团队协作** (`team`)
+- **性能监控** (`performance`)
+- **会话管理** (`session`)
+
+**使用方式**：
+
+```
+用户：请分析我的代码质量
+AI：我将运行代码分析...
+（AI内部调用相应功能）
+
+用户：检查我的项目健康状况
+AI：正在分析项目结构...
+（AI内部调用相应功能）
+
+用户：监控系统性能
+AI：开始性能监控...
+（AI启动时自动显示性能信息）
+```
+
+### **`naturecode config` 命令详解**
+
+`naturecode config` 命令用于查看和管理 NatureCode 的配置信息。这是了解当前系统设置和诊断配置问题的重要工具。
+
+#### **主要功能**：
+
+1. **查看当前配置**：显示所有已配置的AI模型参数和系统设置
+2. **配置验证**：检查配置是否正确加载和有效
+3. **故障诊断**：帮助识别配置相关的问题
+
+#### **典型输出示例**：
+
+```json
+{
+  "provider": "ollama",
+  "apiKey": "",
+  "model": "deepseek-coder",
+  "modelType": "chat",
+  "temperature": 0.7,
+  "maxTokens": 2000,
+  "stream": true,
+  "fallbackModel": "llama3.2"
+}
+```
+
+#### **配置字段说明**：
+
+- **`provider`**：当前使用的AI提供商
+  - 可选值：`ollama`、`openai`、`deepseek`、`anthropic`、`gemini`、`baidu`、`tencent`、`zhipuai`、`azure-openai`、`n1n`、`4sapi`、`custom`
+- **`apiKey`**：API密钥（敏感信息，显示时被隐藏）
+- **`model`**：选择的AI模型名称
+  - 示例：`deepseek-coder`、`gpt-4`、`claude-3-opus`、`gemini-pro`
+- **`modelType`**：模型类型
+  - `chat`：对话模型
+  - `completion`：补全模型
+- **`temperature`**：生成温度（0.0-1.0）
+  - 较低值：更确定性和一致的输出
+  - 较高值：更多样化和创造性的输出
+- **`maxTokens`**：最大生成令牌数
+  - 控制AI响应的长度
+- **`stream`**：是否启用流式响应
+  - `true`：实时流式输出
+  - `false`：等待完整响应后输出
+- **`fallbackModel`**：备用模型名称
+  - 当主模型不可用时使用的备用模型
+
+#### **使用场景**：
+
+1. **配置验证**：运行 `naturecode config` 确认配置是否正确加载
+2. **问题诊断**：当AI会话出现问题时，检查配置是否正确
+3. **设置查看**：了解当前的AI模型和参数设置
+4. **备份配置**：复制配置信息用于备份或迁移
+
+#### **常见问题**：
+
+- **配置未加载**：如果看到空配置或错误，运行 `naturecode model` 重新配置
+- **API密钥问题**：确保API密钥正确且未过期
+- **模型不可用**：检查选择的模型是否在所选提供商中可用
+
+#### **配置管理**：
+
+- **修改配置**：使用 `naturecode model` 命令修改配置
+- **删除配置**：使用 `naturecode delmodel` 命令删除配置
+- **多配置支持**：支持多个模型配置，通过 `naturecode model` 切换
 
 ### **使用示例**
 
@@ -2616,30 +2683,47 @@ naturecode model
 # 2. 启动AI会话
 naturecode start
 
-# 3. 删除模型配置
+# 3. 查看当前配置
+naturecode config
+
+# 4. 删除模型配置
 naturecode delmodel my-old-model
 naturecode delmodel all --force
 
-# 4. 代码分析
-naturecode code analyze src/
-
-# 5. 项目管理
-naturecode project analyze .
-
-# 6. 插件管理
+# 5. 插件管理
 naturecode plugin list
 naturecode plugin info my-plugin
 
-# 7. 会话管理
-naturecode session list
-naturecode session create my-project
-
-# 8. 团队协作
-naturecode team
+# 6. 团队协作
 naturecode collaboration
 
-# 9. 性能监控
-naturecode performance
+# 7. 获取帮助
+naturecode help --simple
+naturecode --help
+
+# 8. 查看版本
+naturecode --version
+
+### **AI内部功能使用示例（通过自然语言）**
+
+```
+
+用户：请分析我的代码质量
+AI：我将运行代码分析...
+（AI内部调用代码分析功能）
+
+用户：检查我的项目健康状况
+AI：正在分析项目结构...
+（AI内部调用项目管理功能）
+
+用户：帮我审查这段代码
+AI：开始代码审查...
+（AI内部调用代码审查功能）
+
+用户：显示系统性能
+AI：性能监控已启动...
+（AI启动时自动显示性能信息）
+
 ```
 
 ### **AI提供商选择指南**
@@ -2694,11 +2778,12 @@ naturecode performance
 
 ---
 
-**当前版本**: NatureCode v1.5.6  
-**最后更新**: 2026年2月17日  
+**当前版本**: NatureCode v1.5.6
+**最后更新**: 2026年2月18日
 **状态**: ✅ **所有主要平台支持已实现**，包括 Android 移动端
 
 - **Android**: 完整的终端应用已发布
 - **Windows/macOS/Linux**: 原生二进制文件可用
 - **功能完整**: 所有 AI 功能在所有平台上可用
 - **稳定运行**: 经过测试，生产环境就绪
+```
