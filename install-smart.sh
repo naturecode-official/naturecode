@@ -435,21 +435,18 @@ show_post_install() {
         echo "     naturecode --version         # Check version"
     fi
     echo ""
-    echo "  5. Explore advanced features:"
-    if [ "$COLORS_SUPPORTED" = "true" ]; then
-        echo "     ${CYAN}naturecode plugin${NC}            # Plugin management"
-    else
-        echo "     naturecode plugin            # Plugin management"
-    fi
+    echo "  5. AI-powered features (through conversation):"
+    echo "     • Code analysis and review"
+    echo "     • Project management"
+    echo "     • File system operations"
     echo ""
     
     echo "Features:"
     echo "  • 12+ AI providers (OpenAI, DeepSeek, Anthropic, Gemini, Baidu, etc.)"
+    echo "  • AI-centric design: natural language interaction"
     echo "  • File system operations and code editing"
-    echo "  • Git integration"
     echo "  • Code analysis and review"
     echo "  • Project management"
-    echo "  • Plugin system"
     echo ""
     echo "For more information, visit:"
     echo "  https://github.com/naturecode-official/naturecode"
