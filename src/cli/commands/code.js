@@ -1,203 +1,213 @@
-#!/usr/bin/env node
-
 import { codeCommandHandler } from "../../utils/code-commands.js";
-import { exitWithError } from "../../utils/error-handler.js";
 
-export async function runCodeCommand(options) {
-  try {
-    const command = options.command;
-    const args = {
-      dir: options.dir || process.cwd(),
-      file: options.file,
-      recursive: options.recursive !== false,
-      limit: options.limit || 50,
-      extensions: options.extensions,
-      excludeDirs: options.excludeDirs
-        ? options.excludeDirs.split(",")
-        : ["node_modules", ".git", "dist", "build"],
-      severity: options.severity,
-      type: options.type,
-    };
+export class CodeAnalysis {
+  constructor() {
+    this.handler = codeCommandHandler;
+  }
 
-    if (!command) {
-      // 自动运行综合分析
-      console.log("Running comprehensive code analysis...\n");
+  async analyzeCode(options = {}) {
+    try {
+      const command = options.command || "analyze";
+      const args = {
+        dir: options.dir || process.cwd(),
+        file: options.file,
+        recursive: options.recursive !== false,
+        limit: options.limit || 50,
+        extensions: options.extensions,
+        excludeDirs: options.excludeDirs
+          ? options.excludeDirs.split(",")
+          : ["node_modules", ".git", "dist", "build"],
+        severity: options.severity,
+        type: options.type,
+      };
 
-      // 1. 运行代码度量分析
-      console.log("Code Metrics:");
-      try {
-        const metricsResult = await codeCommandHandler.handleCommand(
-          "metrics",
-          args,
-        );
-        if (metricsResult && metricsResult.summary) {
-          console.log(`  Files: ${metricsResult.summary.totalFiles || 0}`);
-          console.log(`  Lines: ${metricsResult.summary.totalLines || 0}`);
-          console.log(
-            `  Functions: ${metricsResult.summary.totalFunctions || 0}`,
-          );
-          console.log(`  Classes: ${metricsResult.summary.totalClasses || 0}`);
-        } else {
-          console.log("  No metrics data available");
-        }
-      } catch (metricsError) {
-        console.log("  Metrics analysis skipped:", metricsError.message);
+      const result = await this.handler.handleCommand(command, args);
+
+      if (options.json) {
+        return JSON.stringify(result, null, 2);
       }
 
-      // 2. 运行依赖分析
-      console.log("\nDependencies:");
+      return this.formatResult(result, command);
+    } catch (error) {
+      throw new Error(`Code analysis failed: ${error.message}`);
+    }
+  }
+
+  async analyzeComprehensive(options = {}) {
+    try {
+      const args = {
+        dir: options.dir || process.cwd(),
+        recursive: options.recursive !== false,
+        limit: options.limit || 50,
+        excludeDirs: options.excludeDirs
+          ? options.excludeDirs.split(",")
+          : ["node_modules", ".git", "dist", "build"],
+      };
+
+      const results = {};
+
+      // 1. 代码度量分析
       try {
-        const depsResult = await codeCommandHandler.handleCommand("deps", args);
-        if (depsResult && depsResult.dependencies) {
-          console.log(
-            `  Total Dependencies: ${depsResult.dependencies.total || 0}`,
-          );
-          console.log(
-            `  Direct Dependencies: ${depsResult.dependencies.direct || 0}`,
-          );
-          console.log(
-            `  Dev Dependencies: ${depsResult.dependencies.dev || 0}`,
-          );
-        } else {
-          console.log("  No dependency data available");
-        }
-      } catch (depsError) {
-        console.log("  Dependency analysis skipped:", depsError.message);
+        results.metrics = await this.handler.handleCommand("metrics", args);
+      } catch (error) {
+        results.metrics = { error: error.message };
       }
 
-      // 3. 运行问题分析
-      console.log("\nQuick Issues Scan:");
+      // 2. 依赖分析
       try {
-        const issuesResult = await codeCommandHandler.handleCommand("issues", {
+        results.dependencies = await this.handler.handleCommand("deps", args);
+      } catch (error) {
+        results.dependencies = { error: error.message };
+      }
+
+      // 3. 问题分析
+      try {
+        results.issues = await this.handler.handleCommand("issues", {
           ...args,
           limit: 10,
         });
-        if (
-          issuesResult &&
-          issuesResult.issues &&
-          issuesResult.issues.length > 0
-        ) {
-          const highIssues = issuesResult.issues.filter(
-            (i) => i.severity === "high",
-          ).length;
-          const mediumIssues = issuesResult.issues.filter(
-            (i) => i.severity === "medium",
-          ).length;
-          console.log(`  High priority issues: ${highIssues}`);
-          console.log(`  Medium priority issues: ${mediumIssues}`);
-          console.log(`  Total issues found: ${issuesResult.issues.length}`);
-        } else {
-          console.log("  No issues found");
-        }
-      } catch (issuesError) {
-        console.log("  Issues analysis skipped:", issuesError.message);
+      } catch (error) {
+        results.issues = { error: error.message };
       }
 
-      // 4. 显示摘要和建议
-      console.log("\nSummary & Recommendations:");
-      console.log("  1. Run 'naturecode code analyze' for detailed analysis");
-      console.log(
-        "  2. Run 'naturecode code issues --severity high' for critical issues",
-      );
-      console.log(
-        "  3. Run 'naturecode code deps-security' for security checks",
-      );
-      console.log(
-        "  4. Run 'naturecode code refactor' for refactoring suggestions",
-      );
-
-      console.log("\nAvailable detailed commands:");
-      const commands = codeCommandHandler.getAvailableCommands();
-      commands.forEach((cmd) => {
-        console.log(
-          `  naturecode code ${cmd.command.padEnd(15)} - ${cmd.description}`,
+      // 4. 复杂度分析
+      try {
+        results.complexity = await this.handler.handleCommand(
+          "complexity",
+          args,
         );
-      });
+      } catch (error) {
+        results.complexity = { error: error.message };
+      }
 
-      console.log("\nQuick start examples:");
-      console.log(
-        "  naturecode code analyze              # Full code analysis",
-      );
-      console.log(
-        "  naturecode code issues --severity high  # Critical issues only",
-      );
-      console.log("  naturecode code deps-security        # Security audit");
+      if (options.json) {
+        return JSON.stringify(results, null, 2);
+      }
 
-      return null;
+      return this.formatComprehensiveResults(results);
+    } catch (error) {
+      throw new Error(`Comprehensive code analysis failed: ${error.message}`);
+    }
+  }
+
+  formatResult(result, command) {
+    switch (command) {
+      case "metrics":
+        return this.formatMetrics(result);
+      case "deps":
+        return this.formatDependencies(result);
+      case "issues":
+        return this.formatIssues(result);
+      case "complexity":
+        return this.formatComplexity(result);
+      case "analyze":
+        return this.formatAnalysis(result);
+      default:
+        return JSON.stringify(result, null, 2);
+    }
+  }
+
+  formatMetrics(metrics) {
+    if (!metrics || !metrics.summary) {
+      return "No metrics data available";
     }
 
-    // 执行指定的子命令
-    const result = await codeCommandHandler.handleCommand(command, args);
+    const summary = metrics.summary;
+    return `Code Metrics Summary:
+Directory: ${summary.directory || "unknown"}
+Total files: ${summary.totalFiles || 0}
+Total lines: ${summary.totalLines || 0}
+Functions: ${summary.totalFunctions || 0}
+Classes: ${summary.totalClasses || 0}
+Average complexity: ${summary.averageComplexity || "N/A"}
+Languages: ${Object.keys(summary.languages || {}).join(", ")}`;
+  }
 
-    if (options.json) {
-      console.log(JSON.stringify(result, null, 2));
+  formatDependencies(deps) {
+    if (!deps || !deps.dependencies) {
+      return "No dependency data available";
     }
 
-    return result;
-  } catch (error) {
-    exitWithError(error, "Code Analysis");
+    const data = deps.dependencies;
+    return `Dependency Analysis:
+Total dependencies: ${data.total || 0}
+Direct dependencies: ${data.direct || 0}
+Dev dependencies: ${data.dev || 0}
+Peer dependencies: ${data.peer || 0}
+Optional dependencies: ${data.optional || 0}`;
+  }
+
+  formatIssues(issues) {
+    if (!issues || !issues.issues || issues.issues.length === 0) {
+      return "No issues found";
+    }
+
+    const issueList = issues.issues
+      .slice(0, 10)
+      .map(
+        (issue) =>
+          `- [${issue.severity}] ${issue.type}: ${issue.message} (${issue.file}:${issue.line})`,
+      )
+      .join("\n");
+
+    return `Top Issues Found (${issues.issues.length} total):
+${issueList}`;
+  }
+
+  formatComplexity(complexity) {
+    if (!complexity || !complexity.summary) {
+      return "No complexity data available";
+    }
+
+    const summary = complexity.summary;
+    return `Code Complexity Analysis:
+Average cyclomatic complexity: ${summary.averageCyclomaticComplexity || "N/A"}
+Max cyclomatic complexity: ${summary.maxCyclomaticComplexity || "N/A"}
+Files with high complexity: ${summary.highComplexityFiles || 0}
+Functions with high complexity: ${summary.highComplexityFunctions || 0}`;
+  }
+
+  formatAnalysis(analysis) {
+    if (!analysis) {
+      return "No analysis data available";
+    }
+
+    return `Code Analysis Complete:
+Files analyzed: ${analysis.filesAnalyzed || 0}
+Issues found: ${analysis.totalIssues || 0}
+High severity issues: ${analysis.highSeverityIssues || 0}
+Medium severity issues: ${analysis.mediumSeverityIssues || 0}`;
+  }
+
+  formatComprehensiveResults(results) {
+    let output = "Comprehensive Code Analysis Results:\n\n";
+
+    if (results.metrics && !results.metrics.error) {
+      output += "1. CODE METRICS:\n";
+      output += this.formatMetrics(results.metrics) + "\n\n";
+    }
+
+    if (results.dependencies && !results.dependencies.error) {
+      output += "2. DEPENDENCIES:\n";
+      output += this.formatDependencies(results.dependencies) + "\n\n";
+    }
+
+    if (results.issues && !results.issues.error) {
+      output += "3. ISSUES:\n";
+      output += this.formatIssues(results.issues) + "\n\n";
+    }
+
+    if (results.complexity && !results.complexity.error) {
+      output += "4. COMPLEXITY:\n";
+      output += this.formatComplexity(results.complexity) + "\n\n";
+    }
+
+    return output;
+  }
+
+  getAvailableCommands() {
+    return this.handler.getAvailableCommands();
   }
 }
 
-// Command definition for CLI
-export function createCodeCommand(program) {
-  const codeCommand = program
-    .command("code [command]")
-    .description(
-      "Code analysis and quality tools (runs comprehensive analysis if no command specified)",
-    )
-    .option(
-      "-d, --dir <directory>",
-      "Directory to analyze (default: current directory)",
-    )
-    .option(
-      "-f, --file <file>",
-      "File to analyze (for analyze-file and complexity commands)",
-    )
-    .option("-r, --no-recursive", "Disable recursive directory scanning")
-    .option("-l, --limit <number>", "Limit number of files analyzed", parseInt)
-    .option(
-      "-e, --extensions <extensions>",
-      "Comma-separated file extensions to include",
-    )
-    .option(
-      "-x, --exclude-dirs <dirs>",
-      "Comma-separated directories to exclude",
-    )
-    .option(
-      "-s, --severity <severity>",
-      "Filter issues by severity (high, medium, low, info)",
-    )
-    .option("-t, --type <type>", "Filter issues by type")
-    .option("-j, --json", "Output results in JSON format")
-    .action(runCodeCommand);
-
-  // Add command-specific help
-  codeCommand.on("--help", () => {
-    console.log("");
-    console.log("Commands:");
-    console.log("  analyze         Analyze code in current directory");
-    console.log("  analyze-file    Analyze specific file");
-    console.log("  complexity      Calculate code complexity metrics");
-    console.log("  issues          List code issues and suggestions");
-    console.log("  metrics         Show code metrics summary");
-    console.log("");
-    console.log("Examples:");
-    console.log("  $ naturecode code analyze");
-    console.log("  $ naturecode code analyze-file --file src/utils/git.js");
-    console.log("  $ naturecode code complexity --file src/cli/index.js");
-    console.log("  $ naturecode code issues --severity high --type security");
-    console.log("  $ naturecode code metrics --dir ./src");
-  });
-
-  return codeCommand;
-}
-
-// For direct testing
-if (import.meta.url === `file://${process.argv[1]}`) {
-  import("commander").then(({ Command }) => {
-    const program = new Command();
-    createCodeCommand(program);
-    program.parse(process.argv);
-  });
-}
+export const codeAnalysis = new CodeAnalysis();

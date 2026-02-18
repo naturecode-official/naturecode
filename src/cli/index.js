@@ -4,8 +4,6 @@ import { Command } from "commander";
 import { runModelConfiguration } from "./commands/model.js";
 import { startInteractiveSession } from "./commands/start.js";
 import { runGitCommand } from "./commands/git.js";
-import { runCodeCommand } from "./commands/code.js";
-import { runProjectCommand } from "./commands/project.js";
 import { runPluginCommand } from "./commands/plugin.js";
 
 import { createCollaborationCommand } from "./commands/collaboration.js";
@@ -87,56 +85,6 @@ program
   });
 
 program
-  .command("code")
-  .description("Code analysis and quality tools")
-  .argument("[command]", "Code analysis command to execute")
-  .option("-d, --dir <directory>", "Directory to analyze (default: current)")
-  .option("-f, --file <file>", "File to analyze")
-  .option("-r, --no-recursive", "Disable recursive directory scanning")
-  .option("-l, --limit <number>", "Limit number of files analyzed")
-  .option(
-    "-e, --extensions <extensions>",
-    "Comma-separated file extensions to include",
-  )
-  .option("-x, --exclude-dirs <dirs>", "Comma-separated directories to exclude")
-  .option("-s, --severity <severity>", "Filter issues by severity")
-  .option("-t, --type <type>", "Filter issues by type")
-  .option("-j, --json", "Output results in JSON format")
-  .action(async (command, options) => {
-    try {
-      await runCodeCommand({ command, ...options });
-    } catch (error) {
-      exitWithError(error, "Code Analysis");
-    }
-  });
-
-program
-  .command("project")
-  .description("Project management and structure tools")
-  .argument("[command]", "Project management command to execute")
-  .option("-d, --dir <directory>", "Project directory (default: current)")
-  .option("-t, --template <template>", "Template type for create command")
-  .option("-n, --name <name>", "Project name for create command")
-  .option(
-    "--description <description>",
-    "Project description for create command",
-  )
-  .option("--author <author>", "Project author for create command")
-  .option("--max-depth <depth>", "Maximum directory depth for analysis")
-  .option("-x, --exclude-dirs <dirs>", "Comma-separated directories to exclude")
-  .option("--no-init-git", "Skip Git initialization in setup")
-  .option("--no-install-deps", "Skip dependency installation in setup")
-  .option("--no-create-initial-commit", "Skip initial commit in setup")
-  .option("-j, --json", "Output results in JSON format")
-  .action(async (command, options) => {
-    try {
-      await runProjectCommand({ command, ...options });
-    } catch (error) {
-      exitWithError(error, "Project Management");
-    }
-  });
-
-program
   .command("plugin")
   .description("Plugin management and development tools")
   .argument("[command]", "Plugin command to execute")
@@ -157,30 +105,6 @@ program
       });
     } catch (error) {
       exitWithError(error, "Plugin Management");
-    }
-  });
-
-program
-  .command("code")
-  .description("Code analysis and quality tools")
-  .argument("[command]", "Code analysis command to execute")
-  .option("-d, --dir <directory>", "Directory to analyze (default: current)")
-  .option("-f, --file <file>", "File to analyze")
-  .option("-r, --no-recursive", "Disable recursive directory scanning")
-  .option("-l, --limit <number>", "Limit number of files analyzed")
-  .option(
-    "-e, --extensions <extensions>",
-    "Comma-separated file extensions to include",
-  )
-  .option("-x, --exclude-dirs <dirs>", "Comma-separated directories to exclude")
-  .option("-s, --severity <severity>", "Filter issues by severity")
-  .option("-t, --type <type>", "Filter issues by type")
-  .option("-j, --json", "Output results in JSON format")
-  .action(async (command, options) => {
-    try {
-      await runCodeCommand({ command, ...options });
-    } catch (error) {
-      exitWithError(error, "Code Analysis");
     }
   });
 

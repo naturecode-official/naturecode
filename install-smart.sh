@@ -437,12 +437,8 @@ show_post_install() {
     echo ""
     echo "  5. Explore advanced features:"
     if [ "$COLORS_SUPPORTED" = "true" ]; then
-        echo "     ${CYAN}naturecode code${NC}              # Code analysis and quality tools"
-        echo "     ${CYAN}naturecode project${NC}           # Project management tools"
         echo "     ${CYAN}naturecode plugin${NC}            # Plugin management"
     else
-        echo "     naturecode code              # Code analysis and quality tools"
-        echo "     naturecode project           # Project management tools"
         echo "     naturecode plugin            # Plugin management"
     fi
     echo ""

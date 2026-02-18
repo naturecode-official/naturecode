@@ -1,6 +1,8 @@
 import { FileSystem } from "../utils/filesystem.js";
 import { performCodeReview } from "../cli/commands/review.js";
 import { createTeamCollaboration } from "../cli/commands/team.js";
+import { codeAnalysis } from "../cli/commands/code.js";
+import { projectManagement } from "../cli/commands/project.js";
 
 export class AIProvider {
   constructor(config) {
@@ -269,6 +271,65 @@ export class AIProvider {
       }
     } catch (error) {
       throw new Error(`Team management failed: ${error.message}`);
+    }
+  }
+
+  // Code analysis functionality for AI internal use
+  async analyzeCode(options = {}) {
+    try {
+      const analysisOptions = {
+        command: options.command || "analyze",
+        dir: options.dir || this.fileContext.currentDirectory,
+        file: options.file,
+        recursive: options.recursive !== false,
+        limit: options.limit || 50,
+        extensions: options.extensions,
+        excludeDirs: options.excludeDirs,
+        severity: options.severity,
+        type: options.type,
+        json: options.format === "json",
+      };
+
+      if (options.comprehensive) {
+        const result = await codeAnalysis.analyzeComprehensive(analysisOptions);
+        return result;
+      } else {
+        const result = await codeAnalysis.analyzeCode(analysisOptions);
+        return result;
+      }
+    } catch (error) {
+      throw new Error(`Code analysis failed: ${error.message}`);
+    }
+  }
+
+  // Project management functionality for AI internal use
+  async manageProject(options = {}) {
+    try {
+      const projectOptions = {
+        command: options.command || "analyze",
+        dir: options.dir || this.fileContext.currentDirectory,
+        template: options.template,
+        name: options.name,
+        description: options.description,
+        author: options.author,
+        maxDepth: options.maxDepth,
+        excludeDirs: options.excludeDirs,
+        initGit: options.initGit !== false,
+        installDeps: options.installDeps !== false,
+        createInitialCommit: options.createInitialCommit !== false,
+        json: options.format === "json",
+      };
+
+      if (options.comprehensive) {
+        const result =
+          await projectManagement.analyzeComprehensive(projectOptions);
+        return result;
+      } else {
+        const result = await projectManagement.manageProject(projectOptions);
+        return result;
+      }
+    } catch (error) {
+      throw new Error(`Project management failed: ${error.message}`);
     }
   }
 

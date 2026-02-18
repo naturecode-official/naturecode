@@ -67,15 +67,7 @@ Git Integration:
   git push           Push to remote
   git pull           Pull from remote
 
-Code Analysis:
-  code analyze       Analyze code quality
-  code review        Code review with AI
-  code metrics       Show code metrics
 
-Project Management:
-  project analyze    Analyze project structure
-  project create     Create new project
-  project deps       Analyze dependencies
 
 Configuration:
   config show        Show configuration
