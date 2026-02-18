@@ -307,6 +307,31 @@ function deleteAllModels(force = false) {
     console.log("  - All model settings");
     console.log("");
 
+    // 检查是否在交互式终端中
+    const isInteractive = process.stdin.isTTY && process.stdout.isTTY;
+
+    if (!isInteractive) {
+      console.log(
+        "ERROR: Cannot request confirmation in non-interactive mode.",
+      );
+      console.log("");
+      console.log(
+        "This command requires direct terminal input for safety reasons.",
+      );
+      console.log("");
+      console.log("To delete all models:");
+      console.log("1. Exit the AI interface (if you're in one)");
+      console.log("2. Run this command directly in your terminal:");
+      console.log("   naturecode delmodel all");
+      console.log("");
+      console.log(
+        "Or use --force flag to skip confirmation (use with caution):",
+      );
+      console.log("   naturecode delmodel all --force");
+      console.log("");
+      process.exit(1);
+    }
+
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
@@ -377,14 +402,22 @@ function performAllDeletion(CONFIG_DIR, CONFIG_FILE) {
 program
   .command("delmodel [name]")
   .description("Delete model configuration by name or all models")
-  .option("-f, --force", "Force delete without confirmation")
+  .option("-f, --force", "Force delete without confirmation (use with caution)")
   .action((name, options) => {
     try {
       if (!name) {
         console.log("Error: Missing model name");
         console.log("Usage: naturecode delmodel <name>");
         console.log("       naturecode delmodel all (to delete all models)");
-        console.log("\nAvailable models:");
+        console.log("");
+        console.log(
+          "Important: For safety, 'delmodel all' requires confirmation.",
+        );
+        console.log(
+          "Run this command directly in terminal, not through AI interface.",
+        );
+        console.log("");
+        console.log("Available models:");
         listAvailableModels();
         process.exit(1);
       }
