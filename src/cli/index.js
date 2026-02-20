@@ -36,6 +36,57 @@ program
   });
 
 program
+  .command("start")
+  .description("Start AI session (will prompt for configuration if needed)")
+  .action(async () => {
+    try {
+      const config = configManager.load();
+
+      // 检查是否有有效的配置
+      if (!config.provider || !config.model || !config.apiKey) {
+        console.log(chalk.yellow("No AI model configured yet."));
+        console.log("");
+        console.log(chalk.bold("To get started:"));
+        console.log(
+          "  1. Run " +
+            chalk.green("naturecode model") +
+            " to configure your AI model",
+        );
+        console.log(
+          "  2. Then run " +
+            chalk.green("naturecode start") +
+            " again to begin",
+        );
+        console.log("");
+        console.log(
+          chalk.italic(
+            "Note: All advanced features are accessed through AI conversation.",
+          ),
+        );
+        process.exit(1);
+      }
+
+      // 如果有配置，显示信息并提示用户通过AI对话使用
+      console.log(chalk.green("✓ AI model configured:"));
+      console.log(`  Provider: ${chalk.cyan(config.provider)}`);
+      console.log(`  Model: ${chalk.cyan(config.model)}`);
+      console.log("");
+      console.log(chalk.bold("To use NatureCode:"));
+      console.log("  1. The AI will handle all complex operations");
+      console.log("  2. Simply talk to the AI naturally");
+      console.log("  3. All features are accessible through conversation");
+      console.log("");
+      console.log(
+        chalk.italic("NatureCode is now ready for AI-powered assistance!"),
+      );
+    } catch (error) {
+      console.error(chalk.red("Error:"), error.message);
+      console.log(chalk.yellow('Run "naturecode model" to configure first.'));
+      process.exit(1);
+    }
+  });
+
+program
   .command("config")
   .description("Show current configuration")
   .action(() => {
@@ -279,15 +330,25 @@ function performNamedDeletion(
   }
 
   if (deletedCount > 0) {
-    console.log(`\nSuccessfully deleted model configuration "${name}"!`);
+    console.log(
+      chalk.green(`\n✓ Successfully deleted model configuration "${name}"!`),
+    );
 
     if (isActiveModel) {
-      console.log("\nYou can now:");
-      console.log('  1. Run "naturecode model" to configure a new model');
-      console.log('  2. Run "naturecode start" will prompt for configuration');
+      console.log(chalk.bold("\nYou can now:"));
+      console.log(
+        "  1. Run " +
+          chalk.green('"naturecode model"') +
+          " to configure a new model",
+      );
+      console.log(
+        "  2. Run " +
+          chalk.green('"naturecode start"') +
+          " to check configuration and begin",
+      );
     }
   } else {
-    console.log(`\nNo changes made for model "${name}".`);
+    console.log(chalk.yellow(`\nNo changes made for model "${name}".`));
   }
 }
 
@@ -398,12 +459,22 @@ function performAllDeletion(CONFIG_DIR, CONFIG_FILE) {
   }
 
   if (deletedCount > 0) {
-    console.log("\nSuccessfully deleted all model configurations!");
-    console.log("\nYou can now:");
-    console.log('  1. Run "naturecode model" to configure new models');
-    console.log('  2. Run "naturecode start" will prompt for configuration');
+    console.log(
+      chalk.green("\n✓ Successfully deleted all model configurations!"),
+    );
+    console.log(chalk.bold("\nYou can now:"));
+    console.log(
+      "  1. Run " +
+        chalk.green('"naturecode model"') +
+        " to configure new models",
+    );
+    console.log(
+      "  2. Run " +
+        chalk.green('"naturecode start"') +
+        " to check configuration and begin",
+    );
   } else {
-    console.log("\nNo model configurations found to delete.");
+    console.log(chalk.yellow("\nNo model configurations found to delete."));
   }
 }
 
@@ -466,6 +537,12 @@ if (args.length === 0) {
   );
   console.log(
     "  " +
+      chalk.green("start") +
+      "                    " +
+      chalk.white("Start AI session (check configuration)"),
+  );
+  console.log(
+    "  " +
       chalk.green("config") +
       "                   " +
       chalk.white("Show current configuration"),
@@ -497,6 +574,12 @@ if (args.length === 0) {
       chalk.cyan("naturecode model") +
       "         " +
       chalk.white("Configure AI settings"),
+  );
+  console.log(
+    "  " +
+      chalk.cyan("naturecode start") +
+      "         " +
+      chalk.white("Start AI session (check config)"),
   );
   console.log(
     "  " +
