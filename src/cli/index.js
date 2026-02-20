@@ -11,6 +11,11 @@ import { exitWithError } from "../utils/error-handler.js";
 import fs from "fs";
 import path from "path";
 import os from "os";
+import readline from "readline";
+import chalk from "chalk";
+
+// 强制启用颜色
+chalk.level = 3;
 
 const program = new Command();
 
@@ -138,24 +143,26 @@ function deleteModelByName(
   }
 
   if (matchingKeys.length === 0 && !isActiveModel) {
-    console.log(`Error: No model found with name "${name}"`);
-    console.log("\nAvailable models:");
+    console.log(chalk.red(`Error: No model found with name "${name}"`));
+    console.log(chalk.bold("\nAvailable models:"));
     listAvailableModels();
-    console.log("\nTry one of these names:");
+    console.log(chalk.bold("\nTry one of these names:"));
     if (config.provider) {
-      console.log(`  - ${config.provider} (provider)`);
+      console.log(`  - ${chalk.green(config.provider)} (provider)`);
     }
     if (config.model) {
-      console.log(`  - ${config.model} (model)`);
+      console.log(`  - ${chalk.green(config.model)} (model)`);
     }
     if (config.provider && config.model) {
-      console.log(`  - ${config.provider}-${config.model} (provider-model)`);
+      console.log(
+        `  - ${chalk.green(`${config.provider}-${config.model}`)} (provider-model)`,
+      );
     }
     if (config.apiKeyName) {
-      console.log(`  - ${config.apiKeyName} (key name)`);
+      console.log(`  - ${chalk.green(config.apiKeyName)} (key name)`);
     }
     if (config.apiKeyId) {
-      console.log(`  - ${config.apiKeyId} (key ID)`);
+      console.log(`  - ${chalk.green(config.apiKeyId)} (key ID)`);
     }
 
     // 如果有存储的密钥，也显示它们
@@ -164,9 +171,11 @@ function deleteModelByName(
       const providerKeys = allKeys[provider];
       for (const keyId in providerKeys) {
         const keyInfo = providerKeys[keyId];
-        console.log(`  - ${keyId} (key ID)`);
+        console.log(`  - ${chalk.green(keyId)} (key ID)`);
         if (keyInfo.metadata && keyInfo.metadata.name) {
-          console.log(`  - ${keyInfo.metadata.name} (custom name)`);
+          console.log(
+            `  - ${chalk.green(keyInfo.metadata.name)} (custom name)`,
+          );
         }
       }
     }
@@ -179,18 +188,26 @@ function deleteModelByName(
   }
 
   if (!force && !skipPrompt) {
-    console.log(`WARNING: This will delete model configuration "${name}"`);
+    console.log(
+      chalk.yellow.bold(
+        `⚠️  WARNING: This will delete model configuration "${name}"`,
+      ),
+    );
 
     if (isActiveModel) {
-      console.log("This is currently your active model configuration.");
+      console.log(
+        chalk.yellow("This is currently your active model configuration."),
+      );
     }
 
     if (matchingKeys.length > 0) {
-      console.log("The following API keys will be deleted:");
+      console.log(chalk.yellow("The following API keys will be deleted:"));
       matchingKeys.forEach((key, index) => {
-        console.log(`  ${index + 1}. ${key.provider} - ${key.keyId}`);
+        console.log(
+          `  ${chalk.red(`${index + 1}.`)} ${chalk.cyan(key.provider)} - ${chalk.cyan(key.keyId)}`,
+        );
         if (key.keyInfo.metadata && key.keyInfo.metadata.name) {
-          console.log(`     Name: ${key.keyInfo.metadata.name}`);
+          console.log(`     Name: ${chalk.green(key.keyInfo.metadata.name)}`);
         }
       });
     }
@@ -203,14 +220,14 @@ function deleteModelByName(
     });
 
     rl.question(
-      "Are you sure you want to delete this model? (yes/NO): ",
+      chalk.yellow("Are you sure you want to delete this model? (yes/NO): "),
       (answer) => {
         rl.close();
 
         if (answer.toLowerCase() === "yes") {
           performNamedDeletion(name, matchingKeys, isActiveModel, config);
         } else {
-          console.log("Deletion cancelled.");
+          console.log(chalk.green("Deletion cancelled."));
           process.exit(0);
         }
       },
@@ -226,7 +243,7 @@ function performNamedDeletion(
   isActiveModel,
   currentConfig,
 ) {
-  console.log(`Deleting model configuration "${name}"...`);
+  console.log(chalk.cyan(`Deleting model configuration "${name}"...`));
 
   let deletedCount = 0;
 
@@ -234,11 +251,16 @@ function performNamedDeletion(
   matchingKeys.forEach((key) => {
     try {
       if (secureStore.deleteApiKey(key.provider, key.keyId)) {
-        console.log(`Deleted API key: ${key.provider} - ${key.keyId}`);
+        console.log(
+          chalk.green(`✓ Deleted API key: ${key.provider} - ${key.keyId}`),
+        );
         deletedCount++;
       }
     } catch (error) {
-      console.log(`Could not delete API key ${key.keyId}:`, error.message);
+      console.log(
+        chalk.red(`✗ Could not delete API key ${key.keyId}:`),
+        error.message,
+      );
     }
   });
 
@@ -276,12 +298,14 @@ function deleteAllModels(force = false) {
 
   if (!force) {
     console.log(
-      "WARNING: This will delete ALL model configurations and API keys.",
+      chalk.red.bold(
+        "⚠️  WARNING: This will delete ALL model configurations and API keys.",
+      ),
     );
-    console.log("The following will be deleted:");
-    console.log("  - All configuration files");
-    console.log("  - All encrypted API keys");
-    console.log("  - All model settings");
+    console.log(chalk.yellow("The following will be deleted:"));
+    console.log(chalk.red("  - All configuration files"));
+    console.log(chalk.red("  - All encrypted API keys"));
+    console.log(chalk.red("  - All model settings"));
     console.log("");
 
     // 检查是否在交互式终端中
@@ -289,22 +313,26 @@ function deleteAllModels(force = false) {
 
     if (!isInteractive) {
       console.log(
-        "ERROR: Cannot request confirmation in non-interactive mode.",
+        chalk.red(
+          "ERROR: Cannot request confirmation in non-interactive mode.",
+        ),
       );
       console.log("");
       console.log(
         "This command requires direct terminal input for safety reasons.",
       );
       console.log("");
-      console.log("To delete all models:");
+      console.log(chalk.bold("To delete all models:"));
       console.log("1. Exit the AI interface (if you're in one)");
       console.log("2. Run this command directly in your terminal:");
-      console.log("   naturecode delmodel all");
+      console.log(chalk.green("   naturecode delmodel all"));
       console.log("");
       console.log(
-        "Or use --force flag to skip confirmation (use with caution):",
+        chalk.yellow(
+          "Or use --force flag to skip confirmation (use with caution):",
+        ),
       );
-      console.log("   naturecode delmodel all --force");
+      console.log(chalk.green("   naturecode delmodel all --force"));
       console.log("");
       process.exit(1);
     }
@@ -314,40 +342,43 @@ function deleteAllModels(force = false) {
       output: process.stdout,
     });
 
-    rl.question('Type "DELETE ALL" to confirm: ', (answer) => {
-      rl.close();
+    rl.question(
+      chalk.yellow.bold('Type "DELETE ALL" to confirm: '),
+      (answer) => {
+        rl.close();
 
-      if (answer === "DELETE ALL") {
-        performAllDeletion(CONFIG_DIR, CONFIG_FILE);
-      } else {
-        console.log("Deletion cancelled.");
-        process.exit(0);
-      }
-    });
+        if (answer === "DELETE ALL") {
+          performAllDeletion(CONFIG_DIR, CONFIG_FILE);
+        } else {
+          console.log(chalk.green("Deletion cancelled."));
+          process.exit(0);
+        }
+      },
+    );
   } else {
     performAllDeletion(CONFIG_DIR, CONFIG_FILE);
   }
 }
 
 function performAllDeletion(CONFIG_DIR, CONFIG_FILE) {
-  console.log("Deleting all model configurations...");
+  console.log(chalk.cyan("Deleting all model configurations..."));
 
   let deletedCount = 0;
 
   // 1. Delete configuration file
   if (fs.existsSync(CONFIG_FILE)) {
     fs.unlinkSync(CONFIG_FILE);
-    console.log("Deleted configuration file");
+    console.log(chalk.green("✓ Deleted configuration file"));
     deletedCount++;
   }
 
   // 2. Delete all API keys from secure storage
   try {
     secureStore.clearAll();
-    console.log("Deleted all encrypted API keys");
+    console.log(chalk.green("✓ Deleted all encrypted API keys"));
     deletedCount++;
   } catch (error) {
-    console.log("Could not delete API keys:", error.message);
+    console.log(chalk.red("✗ Could not delete API keys:"), error.message);
   }
 
   // 3. Delete old API key store if exists
@@ -383,18 +414,27 @@ program
   .action((name, options) => {
     try {
       if (!name) {
-        console.log("Error: Missing model name");
-        console.log("Usage: naturecode delmodel <name>");
-        console.log("       naturecode delmodel all (to delete all models)");
+        console.log(chalk.red("Error: Missing model name"));
+        console.log(
+          chalk.bold("Usage:") +
+            " " +
+            chalk.green("naturecode delmodel <name>"),
+        );
+        console.log(
+          "       " +
+            chalk.green("naturecode delmodel all") +
+            " (to delete all models)",
+        );
         console.log("");
         console.log(
-          "Important: For safety, 'delmodel all' requires confirmation.",
+          chalk.yellow("Important:") +
+            " For safety, 'delmodel all' requires confirmation.",
         );
         console.log(
           "Run this command directly in terminal, not through AI interface.",
         );
         console.log("");
-        console.log("Available models:");
+        console.log(chalk.bold("Available models:"));
         listAvailableModels();
         process.exit(1);
       }
@@ -411,26 +451,70 @@ const args = process.argv.slice(2);
 
 if (args.length === 0) {
   // Show help information for no arguments (like naturecode --help)
-  console.log(getWelcomeArt());
-  console.log("");
-  console.log("Usage: naturecode [command] [options]");
-  console.log("");
-  console.log("Commands:");
-  console.log("  model                    Configure AI model and API settings");
-  console.log("  config                   Show current configuration");
-  console.log("  delmodel [name]          Delete model configuration");
-  console.log("");
-  console.log("Options:");
-  console.log("  -v, --version            Output the version number");
-  console.log("  -h, --help               Display help for command");
-  console.log("");
-  console.log("Examples:");
-  console.log("  naturecode model         Configure AI settings");
-  console.log("  naturecode config        Show current configuration");
-  console.log("  naturecode delmodel all  Delete all model configurations");
+  console.log(chalk.cyan(getWelcomeArt()));
   console.log("");
   console.log(
-    "Note: All advanced features are accessed through AI conversation.",
+    chalk.bold("Usage:") + " " + chalk.green("naturecode [command] [options]"),
+  );
+  console.log("");
+  console.log(chalk.bold("Commands:"));
+  console.log(
+    "  " +
+      chalk.green("model") +
+      "                    " +
+      chalk.white("Configure AI model and API settings"),
+  );
+  console.log(
+    "  " +
+      chalk.green("config") +
+      "                   " +
+      chalk.white("Show current configuration"),
+  );
+  console.log(
+    "  " +
+      chalk.green("delmodel [name]") +
+      "          " +
+      chalk.white("Delete model configuration"),
+  );
+  console.log("");
+  console.log(chalk.bold("Options:"));
+  console.log(
+    "  " +
+      chalk.yellow("-v, --version") +
+      "            " +
+      chalk.white("Output the version number"),
+  );
+  console.log(
+    "  " +
+      chalk.yellow("-h, --help") +
+      "               " +
+      chalk.white("Display help for command"),
+  );
+  console.log("");
+  console.log(chalk.bold("Examples:"));
+  console.log(
+    "  " +
+      chalk.cyan("naturecode model") +
+      "         " +
+      chalk.white("Configure AI settings"),
+  );
+  console.log(
+    "  " +
+      chalk.cyan("naturecode config") +
+      "        " +
+      chalk.white("Show current configuration"),
+  );
+  console.log(
+    "  " +
+      chalk.cyan("naturecode delmodel all") +
+      "  " +
+      chalk.white("Delete all model configurations"),
+  );
+  console.log("");
+  console.log(
+    chalk.italic(
+      "Note: All advanced features are accessed through AI conversation.",
+    ),
   );
 } else {
   // Parse command line arguments
