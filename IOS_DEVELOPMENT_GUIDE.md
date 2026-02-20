@@ -658,4 +658,4 @@ class AIServiceIntegrationTests: XCTestCase {
 
 **最后更新**: 2026年2月17日  
 **当前状态**: iOS 开发框架已建立，等待实际开发实施  
-**目标版本**: NatureCode iOS v2.0.0
+**目标版本**: NatureCode iOS v2.0.1

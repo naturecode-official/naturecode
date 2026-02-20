@@ -1,6 +1,6 @@
 # NatureCode - Cross-platform Terminal AI Assistant
 
-**Version: 2.0.0**
+**Version: 2.0.1**
 
 ## → [agentname.md](agentname.md)
 
@@ -14,9 +14,60 @@
 - **Professional Mode**: Advanced diagnostics and developer tools
 - **Secure Configuration**: Encrypted storage for API keys and settings
 - **Simplified Interface**: Only 4 core commands for configuration, all advanced features accessible through AI conversation
-- **AGENT.md System**: Intelligent project management with automatic requirement tracking, progress monitoring, and multi-session context
+- **AGENT.md System**: Intelligent project management with automatic requirement tracking, progress monitoring, multi-session context, and **automatic project file creation**
 - **Smart Command Handling**: Distinguishes between simple commands (list files, pwd) and complex tasks, preventing infinite loops
 - **Automatic Backup Management**: Keeps only 3 most recent backups, prevents file clutter
+
+## 🚀 AGENT.md System - Intelligent Project Management
+
+### 🔧 **Major Fix: Automatic Project File Creation**
+
+**Fixed Issue**: AGENT.md system now **actually creates project files** instead of just recording requirements.
+
+#### What Was Fixed:
+
+1. **File Creation Bug**: Previously only recorded requirements, didn't create actual files
+2. **Project Type Detection**: Now intelligently detects game, CLI, web, and generic projects
+3. **Automatic Execution**: Triggers file creation when user inputs contain "create" + "project" keywords
+
+#### New Capabilities:
+
+- **🎮 Game Projects**: Automatically creates complete game projects (e.g., Snake game with Python + Pygame)
+- **🛠️ CLI Tools**: Generates command-line tools with argument parsing
+- **🌐 Web Projects**: Records requirements and guides to proper tools
+- **📋 Generic Projects**: Creates project plan documentation
+
+#### Example Usage:
+
+```bash
+# User simply says:
+"开发一个贪吃蛇的python程序"
+
+# AGENT.md system automatically:
+1. Creates "game_project/" directory
+2. Generates complete snake game code (main.py)
+3. Creates requirements.txt with Pygame dependency
+4. Generates README.md with instructions
+5. Updates AGENT.md with completion status
+6. Marks requirement as "已完成"
+```
+
+#### Supported Project Types:
+
+| Project Type | Keywords                    | Generated Files                      |
+| ------------ | --------------------------- | ------------------------------------ |
+| **Game**     | 游戏, game, 贪吃蛇, snake   | main.py, requirements.txt, README.md |
+| **CLI Tool** | 命令行, cli, 工具, tool     | cli_tool.py, README_CLI.md           |
+| **Web**      | 网站, web, 前端, backend    | Project requirements recorded        |
+| **Generic**  | 项目, project, 系统, system | project_plan.md                      |
+
+#### Technical Improvements:
+
+- ✅ **Async File Operations**: Proper ES module imports
+- ✅ **Error Handling**: Comprehensive error handling and recovery
+- ✅ **Smart Detection**: Language-agnostic keyword matching
+- ✅ **Progress Tracking**: Real-time updates to AGENT.md
+- ✅ **Backward Compatibility**: Maintains existing AGENT.md functionality
 
 ## 📥 Quick Downloads
 
@@ -48,7 +99,7 @@ naturecode start
 ### Desktop Downloads
 
 1. **Visit [GitHub Releases](https://github.com/naturecode-official/naturecode/releases)**
-2. **Find the latest release (v2.0.0 or newer)**
+2. **Find the latest release (v2.0.1 or newer)**
 3. **Download for your platform:**
    - Windows: `naturecode-win.exe`
    - macOS: `naturecode-macos`
@@ -56,7 +107,7 @@ naturecode start
 
 ## 🚨 Important Update Notice
 
-**Version 2.0.0 introduces intelligent AI assistant with AGENT.md system:**
+**Version 2.0.1 introduces intelligent AI assistant with AGENT.md system:**
 
 - **Interactive mode removed**: The `/start` command and interactive command interface have been removed
 - **Pure AI-centric design**: All advanced features are now accessed through AI conversation only
@@ -631,20 +682,20 @@ NatureCode now has Android compatibility with a dedicated terminal application.
 
 #### 📱 APK Download Instructions
 
-**Current Version**: v2.0.0
+**Current Version**: v2.0.1
 
 **Download from GitHub Releases**:
 
 1. Visit **[GitHub Releases Page](https://github.com/naturecode-official/naturecode/releases)**
-2. Find the latest release (v2.0.0 or newer)
+2. Find the latest release (v2.0.1 or newer)
 3. Download the APK files:
    - `naturecode-android-release.apk` - Stable release version
    - `naturecode-android-debug.apk` - Debug version for testing
 
 **Direct Download Links** (Available after release creation):
 
-- Stable: `https://github.com/naturecode-official/naturecode/releases/download/v2.0.0/naturecode-android-release.apk`
-- Debug: `https://github.com/naturecode-official/naturecode/releases/download/v2.0.0/naturecode-android-debug.apk`
+- Stable: `https://github.com/naturecode-official/naturecode/releases/download/v2.0.1/naturecode-android-release.apk`
+- Debug: `https://github.com/naturecode-official/naturecode/releases/download/v2.0.1/naturecode-android-debug.apk`
 
 **Alternative Options**:
 

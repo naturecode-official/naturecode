@@ -162,7 +162,7 @@ naturecode delmodel all
 
 ### 版本信息
 
-- **当前版本**: 2.0.0
+- **当前版本**: 2.0.1
 - **供应商数量**: 12个
 - **平台支持**: macOS, Linux, Windows
 - **安装方式**: 一键curl安装

@@ -1,10 +1,10 @@
 # NatureCode 重大更新摘要 (2025-02-20)
 
-## 🎉 版本: 2.0.0 (稳定版)
+## 🎉 版本: 2.0.1 (稳定版)
 
 ## 📋 更新概览
 
-本次更新完成了NatureCode从1.5.6到2.0.0的重大升级，重点解决了用户反馈的关键问题，并引入了智能项目管理系统。
+本次更新完成了NatureCode从1.5.6到2.0.0的重大升级，以及从2.0.0到2.0.1的AGENT.md系统修复，重点解决了用户反馈的关键问题，并引入了智能项目管理系统。
 
 ### **核心成就**
 
@@ -192,7 +192,7 @@ curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main
 
 ## 🎊 总结
 
-NatureCode 2.0.0 经过本次重大更新，已经成为一个成熟、稳定、功能完整的跨平台AI助手。所有用户反馈的关键问题都已解决，新增的AGENT.md系统提供了智能项目管理能力。
+NatureCode 2.0.1 经过本次重大更新，已经成为一个成熟、稳定、功能完整的跨平台AI助手。所有用户反馈的关键问题都已解决，新增的AGENT.md系统提供了智能项目管理能力。
 
 **核心优势:**
 
@@ -217,6 +217,6 @@ naturecode start
 ---
 
 _更新完成时间: 2025-02-20 16:45 UTC_
-_版本: NatureCode 2.0.0 (稳定版)_
+_版本: NatureCode 2.0.1 (稳定版)_
 _状态: ✅ 生产就绪，所有关键bug已修复_
 _GitHub: https://github.com/naturecode-official/naturecode_

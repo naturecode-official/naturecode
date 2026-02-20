@@ -73,8 +73,8 @@ gh auth login
 1. **访问 GitHub**: https://github.com/naturecode-official/naturecode/releases
 2. **点击 "Draft a new release"**
 3. **填写信息**:
-   - Tag version: `v2.0.0`
-   - Release title: `NatureCode 2.0.0`
+   - Tag version: `v2.0.1`
+   - Release title: `NatureCode 2.0.1`
    - Description: 从 `RELEASE_NOTES.md` 复制
 4. **上传文件**:
    - `dist/android/naturecode-android-release.apk`
@@ -88,7 +88,7 @@ gh auth login
 
 ```bash
 # 使用更新脚本
-./update-download-links.sh v2.0.0
+./update-download-links.sh v2.0.1
 
 # 脚本将:
 # - 更新 README.md 中的直接链接
@@ -103,7 +103,7 @@ gh auth login
 ./test-download-links.sh
 
 # 手动测试
-curl -I https://github.com/naturecode-official/naturecode/releases/download/v2.0.0/naturecode-android-release.apk
+curl -I https://github.com/naturecode-official/naturecode/releases/download/v2.0.1/naturecode-android-release.apk
 ```
 
 ## 文件要求
@@ -219,7 +219,7 @@ curl -I https://github.com/naturecode-official/naturecode/releases/download/v2.0
 
 ```bash
 # 更新特定版本的链接
-./update-download-links.sh v2.0.0
+./update-download-links.sh v2.0.1
 
 # 功能:
 # 1. 更新 README.md 链接
@@ -300,7 +300,7 @@ curl -I https://github.com/naturecode-official/naturecode/releases/download/v2.0
 ### 立即行动
 
 1. [ ] 构建实际的 APK 和可执行文件
-2. [ ] 创建 GitHub Release v2.0.0
+2. [ ] 创建 GitHub Release v2.0.1
 3. [ ] 测试所有下载链接
 4. [ ] 更新用户文档
 

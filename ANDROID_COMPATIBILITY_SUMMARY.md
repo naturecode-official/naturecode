@@ -87,7 +87,7 @@ android-app/
 
 - `naturecode-android-debug.apk` - 调试版本
 - `naturecode-android-release.apk` - 发布版本
-- `naturecode-android-v2.0.0.zip` - 完整包
+- `naturecode-android-v2.0.1.zip` - 完整包
 
 ### 5. 使用说明
 
