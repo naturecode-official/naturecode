@@ -19,32 +19,37 @@
 
 ### Platform-Specific Downloads
 
-| Platform    | Download Link                                                                    | Installation        | Status            |
-| ----------- | -------------------------------------------------------------------------------- | ------------------- | ----------------- |
-| **Android** | [📱 GitHub Releases](https://github.com/naturecode-official/naturecode/releases) | Direct APK install  | ✅ Available      |
-| **Windows** | [🪟 GitHub Releases](https://github.com/naturecode-official/naturecode/releases) | Portable executable | ✅ Available      |
-| **macOS**   | [🍎 GitHub Releases](https://github.com/naturecode-official/naturecode/releases) | Native binary       | ✅ Available      |
-| **Linux**   | [🐧 GitHub Releases](https://github.com/naturecode-official/naturecode/releases) | Native binary       | ✅ Available      |
-| **iOS**     | [🍎 App Store](https://apps.apple.com) (Coming Soon)                             | App Store install   | 🔄 In Development |
+| Platform    | Download Link                                                                    | Installation Method     | Status       |
+| ----------- | -------------------------------------------------------------------------------- | ----------------------- | ------------ |
+| **Android** | [Termux + Script](https://github.com/naturecode-official/naturecode#android)     | Termux + install script | ✅ Available |
+| **Windows** | [🪟 GitHub Releases](https://github.com/naturecode-official/naturecode/releases) | Portable executable     | ✅ Available |
+| **macOS**   | [🍎 GitHub Releases](https://github.com/naturecode-official/naturecode/releases) | Native binary           | ✅ Available |
+| **Linux**   | [🐧 GitHub Releases](https://github.com/naturecode-official/naturecode/releases) | Native binary           | ✅ Available |
+| **iOS**     | [🍎 App Store](https://apps.apple.com) (Coming Soon)                             | App Store install       | 🔄 Planned   |
 
-### Download Instructions
+### Android Installation (via Termux)
+
+NatureCode runs natively on Android through **Termux**, providing full terminal experience:
+
+```bash
+# 1. Install Termux from F-Droid or GitHub
+# 2. Run this installation script:
+curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-android.sh | bash
+
+# 3. Start NatureCode:
+naturecode start
+```
+
+[Detailed Android Guide](android.md)
+
+### Desktop Downloads
 
 1. **Visit [GitHub Releases](https://github.com/naturecode-official/naturecode/releases)**
 2. **Find the latest release (v2.0.0 or newer)**
-3. **Download the file for your platform:**
-   - Android: `naturecode-android-release.apk`
+3. **Download for your platform:**
    - Windows: `naturecode-win.exe`
    - macOS: `naturecode-macos`
    - Linux: `naturecode-linux`
-
-### Direct Download Links (After Release)
-
-_Once a release is created, direct links will be available here._
-
-- Android: `https://github.com/naturecode-official/naturecode/releases/download/v2.0.0/naturecode-android-release.apk`
-- Windows: `https://github.com/naturecode-official/naturecode/releases/download/v2.0.0/naturecode-win.exe`
-- macOS: `https://github.com/naturecode-official/naturecode/releases/download/v2.0.0/naturecode-macos`
-- Linux: `https://github.com/naturecode-official/naturecode/releases/download/v2.0.0/naturecode-linux`
 
 ## 🚨 Important Update Notice
 
@@ -94,6 +99,81 @@ Invoke-WebRequest -Uri "https://raw.githubusercontent.com/naturecode-official/na
 1. Download `naturecode-win.exe` from [GitHub Releases](https://github.com/naturecode-official/naturecode/releases)
 2. Add to PATH
 3. Run `naturecode-win.exe --version`
+
+## 📱 Android Detailed Guide
+
+### Why Termux + NatureCode?
+
+NatureCode on Android runs through **Termux**, which provides:
+
+- **Native Linux environment** - Full terminal experience
+- **100% feature compatibility** - All NatureCode features work
+- **Better performance** - No Android runtime overhead
+- **Community support** - Large Termux user base
+
+### Quick Installation
+
+```bash
+# 1. Install Termux from F-Droid or GitHub
+# 2. Run installation script:
+curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-android.sh | bash
+
+# 3. Start using NatureCode:
+naturecode start
+```
+
+### Full Installation Steps
+
+1. **Install Termux** from [F-Droid](https://f-droid.org/en/packages/com.termux/) or [GitHub](https://github.com/termux/termux-app/releases)
+2. **Open Termux** and grant necessary permissions
+3. **Run installation script** (as shown above)
+4. **Configure AI model**: `naturecode model`
+5. **Start AI session**: `naturecode start`
+
+### Android Features
+
+✅ **Full AI Integration**
+
+- All 12+ AI providers supported
+- AGENT.md project management
+- Internet access tools
+- Terminal command execution
+
+✅ **File System Access**
+
+- Read/write to device storage
+- Access shared folders
+- Full Linux file operations
+
+✅ **Performance Optimized**
+
+- Native Node.js execution
+- No virtualization overhead
+- Mobile-optimized interface
+
+### Troubleshooting
+
+**Issue**: "Command not found"
+
+```bash
+cd ~/naturecode
+npm link
+```
+
+**Issue**: "Permission denied"
+
+```bash
+termux-setup-storage
+```
+
+**Issue**: "Network error"
+
+```bash
+pkg update && pkg upgrade
+ping -c 3 google.com
+```
+
+[Complete Android Documentation](android.md)
 
 ## Usage
 

@@ -14,20 +14,27 @@ NatureCode is now a truly cross-platform AI assistant with native support for al
 | **Linux**   | ✅ **Fully Supported** | [naturecode-linux](https://github.com/naturecode-official/naturecode/releases/latest/download/naturecode-linux)                             | Native binary       |
 | **iOS**     | 🔄 **Planned**         | Coming Soon                                                                                                                                 | App Store (future)  |
 
-### **Android App Features**
+### **Android via Termux**
 
-- **Terminal Interface**: Full Linux-like terminal experience
-- **AI Integration**: All NatureCode AI features available
-- **File System**: Read/write access to device storage
-- **Network**: Full network connectivity for AI models
-- **Commands**: Basic Linux commands (ls, cd, pwd, clear, etc.)
+NatureCode runs natively on Android through **Termux**, providing full desktop-like experience:
 
-### **Quick Start**
+- **Terminal Environment**: Complete Linux terminal in Termux
+- **Full AI Integration**: All NatureCode features available
+- **Native Performance**: Runs directly on Linux environment
+- **File System**: Full access to device storage
+- **Network**: Complete connectivity for AI models
 
-1. **Download APK** from the link above
-2. **Enable "Unknown Sources"** in Android settings
-3. **Install APK** and launch "NatureCode Terminal"
-4. **Type `naturecode start`** to begin AI session
+### **Quick Start on Android**
+
+1. **Install Termux** from [F-Droid](https://f-droid.org/en/packages/com.termux/)
+2. **Run installation script**:
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-android.sh | bash
+   ```
+3. **Start NatureCode**:
+   ```bash
+   naturecode start
+   ```
 
 ## 🚨 Core Rules for AI Assistants (Must Strictly Follow)
 
