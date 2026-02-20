@@ -40,48 +40,9 @@ export function formatResponse(response) {
 }
 
 export function showWelcome(config) {
-  console.log(
-    chalk.cyan("  ____  ____ _/ /___  __________  _________  ____/ /__"),
-  );
-  console.log(
-    chalk.cyan(" / __ \\/ __ `/ __/ / / / ___/ _ \\/ ___/ __ \\/ __  / _ \\"),
-  );
-  console.log(
-    chalk.cyan("/ / / / /_/ / /_/ /_/ / /  /  __/ /__/ /_/ / /_/ /  __/"),
-  );
-  console.log(
-    chalk.cyan(
-      "\\_\\_\\_\\__,_/\\__/\\__,_/_/   \\___/\\___/\\____/\\__,_/\\___/",
-    ),
-  );
-  console.log();
-  console.log(chalk.green("┌" + "─".repeat(78)));
-  console.log(chalk.green("│ ") + chalk.bold("AI Assistant"));
-  console.log(chalk.green("├" + "─".repeat(78)));
-  console.log(chalk.green("│ ") + `Provider: ${chalk.cyan(config.provider)}`);
-  console.log(
-    chalk.green("│ ") +
-      `Model: ${chalk.cyan(config.model)} (language interaction)`,
-  );
-  console.log(
-    chalk.green("│ ") + `Temperature: ${chalk.cyan(config.temperature)}`,
-  );
-  console.log(
-    chalk.green("│ ") +
-      `Streaming: ${chalk.cyan(config.stream ? "Enabled" : "Disabled")}`,
-  );
-  console.log(
-    chalk.green("│ ") +
-      `Max Tokens: ${chalk.cyan("2000 (optimal with tools)")}`,
-  );
-  console.log(chalk.green("├" + "─".repeat(78)));
-  console.log(
-    chalk.green("│ ") + chalk.yellow("Type your message and press Enter"),
-  );
-  console.log(
-    chalk.green("│ ") + chalk.yellow("Commands: help, clear, config, exit"),
-  );
-  console.log(chalk.green("└" + "─".repeat(78)));
+  console.log(chalk.cyan("\nNatureCode AI Assistant"));
+  console.log(chalk.gray(`Model: ${config.model}`));
+  console.log(chalk.gray("Type 'help' for commands"));
   console.log();
 }
 

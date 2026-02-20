@@ -182,44 +182,15 @@ function createProvider(config) {
 // Enhanced help with file system commands
 function showEnhancedHelp() {
   console.log("\n" + showHelp());
-  console.log("\nFile System Commands:");
-  console.log(
-    '  • List files: "list files", "show directory", "ls", "what files are here?"',
-  );
-  console.log(
-    '  • Read file: "read filename", "view file.txt", "cat file.js", "show me package.json"',
-  );
-  console.log(
-    '  • Create file: "create newfile.js", "make config.json", "new script.py"',
-  );
-  console.log(
-    '  • Edit file: "edit package.json", "modify script.py", "update config.js"',
-  );
-  console.log('  • Delete file: "delete temp.txt", "remove oldfile.log"');
-  console.log(
-    '  • Change dir: "cd src", "go to utils", "navigate to documents"',
-  );
-  console.log(
-    '  • Search: "find .js files", "search for config", "locate test files"',
-  );
-  console.log('  • Current dir: "pwd", "where am i", "current directory"');
-  console.log("\nSystem Commands:");
-  console.log(
-    '  • Performance: "performance", "perf" - Show detailed performance info',
-  );
-  console.log('  • Configuration: "config" - Show current AI configuration');
-  console.log(
-    '  • AGENT Status: "agent", "status" - Show project progress and TODOs',
-  );
-  console.log('  • Clear screen: "clear" - Clear the terminal');
-  console.log('  • Exit: "exit", "quit" - End the session');
-  console.log(
-    "\nTips: Use natural language - the AI understands commands like:",
-  );
-  console.log('  "What files are in this folder?"');
-  console.log('  "Can you show me the contents of index.html?"');
-  console.log('  "Create a new React component called Button"');
-  console.log('  "Help me fix the error in utils.js"');
+  console.log("\nQuick Commands:");
+  console.log("  ls, cat <file>, cd <dir> - File operations");
+  console.log("  config - Show settings");
+  console.log("  clear - Clean screen");
+  console.log("  exit/quit - End session");
+  console.log("\nJust talk naturally:");
+  console.log('  "show me files here"');
+  console.log('  "read package.json"');
+  console.log('  "help with Python code"');
 }
 
 // Check if input is a file system command
@@ -478,9 +449,6 @@ export async function startInteractiveSession(options = {}) {
   }
 
   showWelcome(config);
-  console.log(
-    '\nType "help" for available commands, including file operations.',
-  );
 
   const rl = readline.createInterface({
     input: process.stdin,
@@ -501,10 +469,8 @@ export async function startInteractiveSession(options = {}) {
   const agentManager = createAgentMdManager();
   const toolManager = createToolManager();
 
-  // Initialize AGENT.md system
-  console.log("\nInitializing AGENT.md system...");
+  // Initialize AGENT.md system (silently)
   agentManager.initialize();
-  console.log("Tools available: internet access, terminal commands");
 
   rl.on("line", async (line) => {
     const input = line.trim();

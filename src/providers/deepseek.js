@@ -27,9 +27,6 @@ export class DeepSeekProvider extends AIProvider {
       throw new Error("DeepSeek model name is required");
     }
 
-    console.log(`ℹ️  Using model: ${config.model}`);
-    console.log("ℹ️  Check platform.deepseek.com for available models");
-
     return true;
   }
 

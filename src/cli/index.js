@@ -566,8 +566,6 @@ if (hasHelpFlag || hasVersionFlag || args.length > 0) {
   program.parse();
 } else {
   // No arguments provided - start interactive mode by default
-  console.log(chalk.cyan("Starting NatureCode AI Assistant..."));
-  console.log("");
 
   // Import and run the start command
   import("./commands/start.js")

@@ -25,10 +25,8 @@ export class AgentMdManager {
     try {
       if (fs.existsSync(this.agentFilePath)) {
         this._loadFromFile();
-        console.log(`Loaded existing AGENT.md from: ${this.agentFilePath}`);
       } else {
         this._createNewAgentFile();
-        console.log(`Created new AGENT.md at: ${this.agentFilePath}`);
       }
       this.lastUpdateTime = new Date();
       return true;
