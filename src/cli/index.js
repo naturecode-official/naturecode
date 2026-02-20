@@ -552,8 +552,28 @@ async function startInteractiveMode() {
 const args = process.argv.slice(2);
 
 if (args.length === 0) {
-  // Show interactive mode for no arguments
-  startInteractiveMode();
+  // Show help information for no arguments (like naturecode --help)
+  console.log(getWelcomeArt());
+  console.log("");
+  console.log("Usage: naturecode [command] [options]");
+  console.log("");
+  console.log("Commands:");
+  console.log("  model                    Configure AI model and API settings");
+  console.log("  start                    Start interactive AI session");
+  console.log("  config                   Show current configuration");
+  console.log("  delmodel [name]          Delete model configuration");
+  console.log("");
+  console.log("Options:");
+  console.log("  -v, --version            Output the version number");
+  console.log("  -h, --help               Display help for command");
+  console.log("");
+  console.log("Examples:");
+  console.log("  naturecode model         Configure AI settings");
+  console.log("  naturecode start         Start interactive session");
+  console.log("  naturecode config        Show current configuration");
+  console.log("  naturecode delmodel all  Delete all model configurations");
+  console.log("");
+  console.log("For interactive mode, run: naturecode start");
 } else {
   // Parse command line arguments
   program.parse();
