@@ -17,12 +17,26 @@ import chalk from "chalk";
 // 强制启用颜色
 chalk.level = 3;
 
+// 读取package.json中的版本号
+const packageJsonPath = path.join(process.cwd(), "package.json");
+let version = "2.0.1"; // 默认值
+
+try {
+  if (fs.existsSync(packageJsonPath)) {
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+    version = packageJson.version || version;
+  }
+} catch (error) {
+  // 如果读取失败，使用默认值
+  console.warn("Warning: Could not read version from package.json");
+}
+
 const program = new Command();
 
 program
   .name("naturecode")
   .description("Cross-platform AI assistant for terminal (Professional Mode)")
-  .version("2.0.0", "-v, --version", "output the version number");
+  .version(version, "-v, --version", "output the version number");
 
 program
   .command("model")

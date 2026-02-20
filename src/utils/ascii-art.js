@@ -1,4 +1,7 @@
 // NatureCode ASCII Art
+import fs from "fs";
+import path from "path";
+
 export function getAsciiArt() {
   return [
     "  ____  ____ _/ /___  __________  _________  ____/ /__",
@@ -10,9 +13,22 @@ export function getAsciiArt() {
 
 export function getWelcomeArt() {
   const asciiArt = getAsciiArt();
+
+  // 动态获取版本号
+  let version = "2.0.1";
+  try {
+    const packageJsonPath = path.join(process.cwd(), "package.json");
+    if (fs.existsSync(packageJsonPath)) {
+      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+      version = packageJson.version || version;
+    }
+  } catch (error) {
+    // 使用默认值
+  }
+
   return `${asciiArt}
 
-    NatureCode v2.0.0 - Intelligent AI Assistant with AGENT.md System
+    NatureCode v${version} - Intelligent AI Assistant with AGENT.md System
 ********************************************************************************`;
 }
 
