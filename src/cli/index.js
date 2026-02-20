@@ -2,21 +2,15 @@
 
 import { Command } from "commander";
 import { runModelConfiguration } from "./commands/model.js";
-import { startInteractiveSession } from "./commands/start.js";
 
 import { configManager } from "../config/manager.js";
 import { secureStore } from "../config/secure-store.js";
-import {
-  getWelcomeArt,
-  getCommandPrompt,
-  clearScreen,
-} from "../utils/ascii-art.js";
+import { getWelcomeArt } from "../utils/ascii-art.js";
 import { exitWithError } from "../utils/error-handler.js";
 
 import fs from "fs";
 import path from "path";
 import os from "os";
-import readline from "readline";
 
 const program = new Command();
 
@@ -33,21 +27,6 @@ program
       await runModelConfiguration();
     } catch (error) {
       exitWithError(error, "Configuration");
-    }
-  });
-
-program
-  .command("start")
-  .description("Start interactive AI session")
-  .option("-m, --model <model>", "Specify model to use")
-  .option("-t, --temperature <temp>", "Set temperature (0.0-2.0)", parseFloat)
-  .option("--stream", "Enable streaming responses", true)
-
-  .action(async (options) => {
-    try {
-      await startInteractiveSession(options);
-    } catch (error) {
-      exitWithError(error, "Session");
     }
   });
 
@@ -427,127 +406,6 @@ program
     }
   });
 
-// Interactive mode function
-async function startInteractiveMode() {
-  clearScreen();
-  console.log(getWelcomeArt());
-
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    prompt: "> ", // 添加>提示符
-  });
-
-  console.log(getCommandPrompt());
-  rl.prompt();
-
-  rl.on("line", async (line) => {
-    const command = line.trim().toLowerCase();
-
-    if (!command) {
-      rl.prompt();
-      return;
-    }
-
-    if (command === "exit" || command === "quit") {
-      console.log("\nGoodbye!");
-      rl.close();
-      process.exit(0);
-      return;
-    }
-
-    // Handle commands with or without slash
-    const cmd = command.startsWith("/") ? command.substring(1) : command;
-
-    // Parse command and arguments
-    const parts = cmd.split(/\s+/);
-    const commandName = parts[0];
-    const args = parts.slice(1);
-
-    try {
-      switch (commandName) {
-        case "model":
-          // 在交互式模式中运行配置向导很复杂，建议用户在终端中运行
-          console.log(
-            "\nModel configuration requires terminal mode for best experience.",
-          );
-          console.log("To configure models:");
-          console.log("1. Exit interactive mode (type 'exit')");
-          console.log("2. Run: naturecode model");
-          console.log(
-            "\nThis ensures proper input handling and avoids conflicts.",
-          );
-          rl.prompt();
-          return;
-        case "start":
-          // Start interactive session
-          try {
-            await startInteractiveSession();
-            console.log("\nReturning to interactive mode...");
-            console.log(getCommandPrompt());
-          } catch (error) {
-            console.error(`\nError starting session: ${error.message}`);
-            console.log(getCommandPrompt());
-          }
-          rl.prompt();
-          return;
-        case "config":
-          const config = configManager.load();
-          console.log("\nCurrent Configuration:");
-          console.log(JSON.stringify(config, null, 2));
-          break;
-        case "delmodel":
-          if (args.length === 0) {
-            // No arguments, show usage
-            console.log("\nUsage: delmodel <name>");
-            console.log("       delmodel all (to delete all models)");
-            console.log("\nAvailable models:");
-            listAvailableModels();
-            console.log("\nExamples:");
-            console.log("  delmodel all          - Delete all models");
-            console.log("  delmodel ollama       - Delete ollama model");
-            console.log(
-              "  delmodel deepseek-chat - Delete deepseek-chat model",
-            );
-            console.log(
-              "  delmodel openai-gpt-5-mini - Delete openai-gpt-5-mini model",
-            );
-            break;
-          }
-
-          try {
-            const result = deleteModelByName(args.join(" "), false);
-            if (result) {
-              console.log(`\n${result}`);
-            }
-          } catch (error) {
-            console.error(`\nError: ${error.message}`);
-          }
-          break;
-
-        case "help":
-          console.log(getCommandPrompt());
-          break;
-
-        default:
-          console.log(`\nUnknown command: ${command}`);
-          console.log(
-            "Available commands: model, start, config, delmodel, help, exit",
-          );
-      }
-    } catch (error) {
-      console.error(`\nError: ${error.message}`);
-    }
-
-    if (cmd !== "start") {
-      rl.prompt();
-    }
-  });
-
-  // Remove close event handler to prevent immediate exit
-  // Exit is handled explicitly in the exit/quit command
-}
-
 // Main program logic
 const args = process.argv.slice(2);
 
@@ -559,7 +417,6 @@ if (args.length === 0) {
   console.log("");
   console.log("Commands:");
   console.log("  model                    Configure AI model and API settings");
-  console.log("  start                    Start interactive AI session");
   console.log("  config                   Show current configuration");
   console.log("  delmodel [name]          Delete model configuration");
   console.log("");
@@ -569,11 +426,12 @@ if (args.length === 0) {
   console.log("");
   console.log("Examples:");
   console.log("  naturecode model         Configure AI settings");
-  console.log("  naturecode start         Start interactive session");
   console.log("  naturecode config        Show current configuration");
   console.log("  naturecode delmodel all  Delete all model configurations");
   console.log("");
-  console.log("For interactive mode, run: naturecode start");
+  console.log(
+    "Note: All advanced features are accessed through AI conversation.",
+  );
 } else {
   // Parse command line arguments
   program.parse();
