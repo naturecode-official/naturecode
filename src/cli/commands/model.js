@@ -146,6 +146,81 @@ export async function runModelConfiguration() {
         answers.provider === "custom",
     },
     {
+      type: "input",
+      name: "model",
+      message: (answers) => {
+        if (answers.provider === "deepseek") {
+          return "Enter DeepSeek model name (e.g., deepseek-chat, deepseek-reasoner):";
+        } else if (answers.provider === "openai") {
+          return "Enter OpenAI model name (e.g., gpt-5-mini, gpt-5.2-pro):";
+        } else if (answers.provider === "azure-openai") {
+          return "Enter Azure OpenAI model name (e.g., gpt-4, gpt-35-turbo):";
+        } else if (answers.provider === "n1n") {
+          return "Enter n1n.ai model name (e.g., gpt-4o-mini, claude-3-5-sonnet):";
+        } else if (answers.provider === "4sapi") {
+          return "Enter 4SAPI model name (e.g., gpt-4o-mini, claude-3-5-sonnet):";
+        } else if (answers.provider === "dashscope") {
+          return "Enter DashScope model name (e.g., qwen-max, qwen-plus):";
+        } else if (answers.provider === "anthropic") {
+          return "Enter Anthropic model name (e.g., claude-3-5-haiku, claude-3-5-sonnet):";
+        } else if (answers.provider === "gemini") {
+          return "Enter Google Gemini model name (e.g., gemini-2.5-flash, gemini-2.0-pro):";
+        } else if (answers.provider === "ollama") {
+          return "Enter Ollama model name (e.g., llama3.2, mistral):";
+        } else if (answers.provider === "zhipuai") {
+          return "Enter Zhipu AI model name (e.g., glm-4-flash, glm-4-plus):";
+        } else if (answers.provider === "tencent") {
+          return "Enter Tencent Hunyuan model name (e.g., hunyuan-standard, hunyuan-lite):";
+        } else if (answers.provider === "baidu") {
+          return "Enter Baidu ERNIE model name (e.g., ernie-4.0, ernie-speed):";
+        } else if (answers.provider === "custom") {
+          return "Enter Custom Provider model name:";
+        }
+        return "Enter model name:";
+      },
+      default: (answers) => {
+        const smartDefaults = {
+          deepseek: "deepseek-chat",
+          openai: "gpt-5-mini",
+          "azure-openai": "gpt-4",
+          n1n: "gpt-4o-mini",
+          "4sapi": "gpt-4o-mini",
+          dashscope: "qwen-max",
+          anthropic: "claude-3-5-haiku",
+          gemini: "gemini-2.5-flash",
+          ollama: "llama3.2",
+          zhipuai: "glm-4-flash",
+          tencent: "hunyuan-standard",
+          baidu: "ernie-4.0",
+          custom: "custom-model",
+        };
+        return currentConfig.model || smartDefaults[answers.provider] || "";
+      },
+      validate: (input) => {
+        if (!input || input.trim().length === 0) {
+          return "Model name cannot be empty";
+        }
+        if (input.trim().length > 100) {
+          return "Model name must be less than 100 characters";
+        }
+        return true;
+      },
+      when: (answers) =>
+        answers.provider === "deepseek" ||
+        answers.provider === "openai" ||
+        answers.provider === "azure-openai" ||
+        answers.provider === "n1n" ||
+        answers.provider === "4sapi" ||
+        answers.provider === "dashscope" ||
+        answers.provider === "anthropic" ||
+        answers.provider === "gemini" ||
+        answers.provider === "ollama" ||
+        answers.provider === "zhipuai" ||
+        answers.provider === "tencent" ||
+        answers.provider === "baidu" ||
+        answers.provider === "custom",
+    },
+    {
       type: "list",
       name: "modelType",
       message: "Select Model Type:",
@@ -176,6 +251,66 @@ export async function runModelConfiguration() {
           const capabilities = OpenAIProvider.getStaticModelCapabilities(
             answers.model,
           );
+
+          const choices = [];
+
+          if (capabilities.includes("text")) {
+            choices.push({
+              name: "Text Generation - Standard text completion",
+              value: "text",
+              short: "Text",
+            });
+          }
+
+          if (capabilities.includes("chat")) {
+            choices.push({
+              name: "Chat - Interactive conversation (recommended for GPT models)",
+              value: "chat",
+              short: "Chat",
+            });
+          }
+
+          if (capabilities.includes("vision")) {
+            choices.push({
+              name: "Vision - Image analysis and understanding",
+              value: "vision",
+              short: "Vision",
+            });
+          }
+
+          if (capabilities.includes("audio")) {
+            choices.push({
+              name: "Audio - Speech recognition and generation",
+              value: "audio",
+              short: "Audio",
+            });
+          }
+
+          if (capabilities.includes("advanced-reasoning")) {
+            choices.push({
+              name: "Reasoner - Advanced reasoning and problem solving",
+              value: "reasoner",
+              short: "Reasoner",
+            });
+          }
+
+          if (capabilities.includes("code")) {
+            choices.push({
+              name: "Code - Code generation and analysis",
+              value: "code",
+              short: "Code",
+            });
+          }
+
+          if (choices.length === 0) {
+            choices.push({
+              name: "Text - Default text generation",
+              value: "text",
+              short: "Text",
+            });
+          }
+
+          return choices;
         } else if (answers.provider === "dashscope") {
           // DashScope model type based on selected model
           const capabilities = DashScopeProvider.getStaticModelCapabilities(
