@@ -78,6 +78,77 @@ function parseToolUsage(response) {
   return null;
 }
 
+// Read AGENT.md content for AI context
+function getAgentMdContent(agentManager) {
+  try {
+    const context = agentManager.getContextSummary();
+    const agentFilePath = agentManager.agentFilePath;
+
+    // Read the actual AGENT.md file for detailed content
+    // Note: fs is already imported at the top of the file
+    if (typeof fs !== "undefined" && fs.existsSync(agentFilePath)) {
+      const content = fs.readFileSync(agentFilePath, "utf8");
+
+      // Extract key sections
+      const sections = {
+        requirements: extractSection(content, "User Requirements Summary"),
+        completed: extractSection(content, "Completed Items"),
+        todos: extractSection(content, "Current TODOs"),
+        plans: extractSection(content, "Future Plans"),
+        recent: extractSection(content, "Recent Conversation"),
+      };
+
+      return {
+        filePath: agentFilePath,
+        summary: context,
+        detailed: sections,
+        rawPreview:
+          content.length > 1000 ? content.substring(0, 1000) + "..." : content,
+      };
+    }
+
+    return {
+      filePath: agentFilePath,
+      summary: context,
+      detailed: null,
+      rawPreview: "AGENT.md file not found or empty",
+    };
+  } catch (error) {
+    return {
+      filePath: agentManager.agentFilePath,
+      summary: agentManager.getContextSummary(),
+      detailed: null,
+      rawPreview: `Error reading AGENT.md: ${error.message}`,
+    };
+  }
+}
+
+// Helper function to extract section from AGENT.md
+function extractSection(content, sectionTitle) {
+  const lines = content.split("\n");
+  let inSection = false;
+  let sectionContent = [];
+
+  for (const line of lines) {
+    if (line.includes(sectionTitle)) {
+      inSection = true;
+      continue;
+    }
+
+    if (inSection) {
+      // Stop at next section or empty line with ---
+      if (line.startsWith("## ") || line.startsWith("---")) {
+        break;
+      }
+      if (line.trim() !== "") {
+        sectionContent.push(line.trim());
+      }
+    }
+  }
+
+  return sectionContent.length > 0 ? sectionContent : ["*No items*"];
+}
+
 // Execute tool operation
 async function executeToolOperation(toolManager, toolUsage) {
   try {
@@ -604,31 +675,60 @@ export async function startInteractiveSession(options = {}) {
       // 4. Get tools context
       const toolsContext = toolManager.getToolsContext();
 
-      // 5. Enhance prompt with AGENT.md context and tools
-      const agentContextPrompt = `AGENT.md CONTEXT:
+      // 5. Get detailed AGENT.md content
+      const agentContent = getAgentMdContent(agentManager);
+
+      // 6. Enhance prompt with AGENT.md context and tools
+      const agentContextPrompt = `=== AGENT.md PRIORITY CONTEXT ===
+IMPORTANT: Always check AGENT.md first for project context. This file tracks ongoing work.
+
+AGENT.md LOCATION: ${agentContent.filePath}
+AGENT.md SUMMARY:
 - Requirements: ${agentContext.requirements.length > 0 ? agentContext.requirements.join(", ") : "None yet"}
 - Completed: ${agentContext.completed.length} items
 - TODOs: ${agentContext.todos.length} items (${newTodos.length} new)
 - Progress: ${agentContext.progress}%
-- Default Workflows: ${agentContext.hasDefaultWorkflows ? "Yes" : "No"}
 
+DETAILED AGENT.md CONTENT:
+1. USER REQUIREMENTS:
+${agentContent.detailed?.requirements?.map((item) => `   • ${item}`).join("\n") || "   *No requirements recorded*"}
+
+2. COMPLETED ITEMS:
+${agentContent.detailed?.completed?.map((item) => `   • ${item}`).join("\n") || "   *Nothing completed yet*"}
+
+3. CURRENT TODOs:
+${agentContent.detailed?.todos?.map((item) => `   • ${item}`).join("\n") || "   *No TODOs defined*"}
+
+4. FUTURE PLANS:
+${agentContent.detailed?.plans?.map((item) => `   • ${item}`).join("\n") || "   *No future plans*"}
+
+5. RECENT CONVERSATION (last 3 entries):
+${
+  agentContent.detailed?.recent
+    ?.slice(-3)
+    .map((item) => `   ${item}`)
+    .join("\n") || "   *No recent conversation*"
+}
+
+=== TOOLS AVAILABLE ===
 ${toolsContext}
 
-EXECUTION MODE: Plan → Execute → Review → Next Step
-1. First create a comprehensive plan and save to AGENT.md
-2. Then provide ONE executable instruction at a time
-3. System will execute it using appropriate tool
-4. System returns results to you
-5. You analyze results and provide next instruction
-6. Continue until TODOs are completed
+=== EXECUTION GUIDELINES ===
+1. FIRST: Check AGENT.md above for existing context
+2. If working on existing TODOs, continue from where left off
+3. If new task, create comprehensive plan in AGENT.md format
+4. Then provide ONE executable instruction at a time
+5. Use tools when needed
+6. Update AGENT.md with progress
 
-USER REQUEST: ${input}
+=== USER REQUEST ===
+${input}
 
-IMPORTANT: 
-1. First create plan for the entire task
-2. Then provide single executable instruction
-3. Use tools when needed: "Use internet to fetch [url]" or "Run command: [safe command]"
-4. Focus on completing TODOs from AGENT.md`;
+=== CRITICAL INSTRUCTIONS ===
+1. PRIORITY: Always reference AGENT.md context first
+2. For multi-session tasks: Continue from existing TODOs
+3. Update AGENT.md with new findings/progress
+4. Use natural language, but be specific about next steps`;
 
       // 6. Further enhance for longer responses
       const enhancedPrompt = longOutputManager.enhancePrompt(
