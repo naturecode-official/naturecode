@@ -408,6 +408,9 @@ export class AgentMdManager {
       const now = new Date();
       const progress = this._calculateProgress();
 
+      // Create backup before saving
+      this._createBackup();
+
       const content = `# AGENT.md - Project Development Log
 
 ## Project Overview
@@ -446,11 +449,30 @@ ${this._formatRecentConversation()}
 
       fs.writeFileSync(this.agentFilePath, content, "utf8");
       this.lastUpdateTime = now;
+
+      // Clean up old backups
+      this.cleanupOldBackups(3);
+
       console.log(`Updated AGENT.md at: ${this.agentFilePath}`);
       return true;
     } catch (error) {
       console.error("Error saving AGENT.md:", error.message);
       return false;
+    }
+  }
+
+  /**
+   * Create backup of current AGENT.md
+   */
+  _createBackup() {
+    try {
+      if (fs.existsSync(this.agentFilePath)) {
+        const backupPath = `${this.agentFilePath}.backup-${Date.now()}`;
+        const content = fs.readFileSync(this.agentFilePath, "utf8");
+        fs.writeFileSync(backupPath, content, "utf8");
+      }
+    } catch (error) {
+      // Silently fail on backup - it's optional
     }
   }
 
@@ -547,6 +569,45 @@ ${this._formatRecentConversation()}
     this.conversationHistory = [];
 
     console.log("Context cleared (saved to AGENT.md)");
+  }
+
+  /**
+   * Clean up old backup files
+   */
+  cleanupOldBackups(maxBackups = 3) {
+    try {
+      const dir = path.dirname(this.agentFilePath);
+      const baseName = path.basename(this.agentFilePath);
+      const files = fs.readdirSync(dir);
+
+      // Find backup files
+      const backupFiles = files
+        .filter(
+          (file) =>
+            file.startsWith(`${baseName}.backup-`) ||
+            file.startsWith(`${baseName}-backup`),
+        )
+        .map((file) => ({
+          name: file,
+          path: path.join(dir, file),
+          time: fs.statSync(path.join(dir, file)).mtime.getTime(),
+        }))
+        .sort((a, b) => b.time - a.time); // Newest first
+
+      // Keep only the newest maxBackups files
+      if (backupFiles.length > maxBackups) {
+        const toDelete = backupFiles.slice(maxBackups);
+        toDelete.forEach((file) => {
+          fs.unlinkSync(file.path);
+          console.log(`Deleted old backup: ${file.name}`);
+        });
+        return toDelete.length;
+      }
+      return 0;
+    } catch (error) {
+      console.error("Error cleaning up backups:", error.message);
+      return 0;
+    }
   }
 }
 
