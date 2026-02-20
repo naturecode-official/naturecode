@@ -577,15 +577,6 @@ export async function startInteractiveSession(options = {}) {
     ),
   );
 
-  // 自动添加用户启动消息
-  console.log(chalk.blue("┃ User: 搞定agent.md"));
-
-  // 自动分析这个用户消息
-  agentManager.analyzeUserInput(
-    "搞定agent.md",
-    "AGENT.md系统已就绪，可以开始记录项目需求和工作进度。",
-  );
-
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
