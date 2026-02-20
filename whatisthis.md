@@ -36,6 +36,58 @@ NatureCode runs natively on Android through **Termux**, providing full desktop-l
    naturecode start
    ```
 
+## 🧠 AGENT.md Intelligent Project Management System
+
+### **What's New in Version 2.0.0**
+
+**AGENT.md System** - Intelligent project management with:
+
+- Automatic requirement tracking from conversations
+- TODO generation and progress monitoring
+- Multi-session context preservation
+- Smart command handling (simple vs complex tasks)
+- Automatic backup management (keeps only 3 most recent)
+
+### **Recent Bug Fixes & Improvements**
+
+✅ **Fixed Critical Issues:**
+
+- **Infinite loop bug**: Simple commands like "list files" no longer cause 10-iteration loops
+- **Too many backup files**: Automatic cleanup prevents file clutter
+- **Startup errors**: Fixed variable declaration and initialization issues
+- **Language consistency**: Better Chinese/English response handling
+
+✅ **Enhanced Features:**
+
+- **Smart command detection**: Distinguishes simple commands from complex tasks
+- **Faster execution**: Simple commands bypass AGENT.md complexity
+- **Better user experience**: Cleaner file management, clearer feedback
+- **More reliable**: Improved error handling and edge case management
+
+### **How AGENT.md Works**
+
+1. **Automatic Context Tracking**: Records user requirements and conversation history
+2. **Intelligent TODO Management**: Creates actionable tasks from requirements
+3. **Progress Visualization**: Shows completion percentage and status
+4. **Multi-session Memory**: Preserves work across different coding sessions
+5. **Smart Execution**: Simple commands execute immediately, complex tasks use planning
+
+### **Example Usage**
+
+```bash
+# Start NatureCode
+naturecode start
+
+# Simple command (executes immediately)
+list files
+
+# Complex task (uses AGENT.md planning)
+create a React app with authentication and database
+
+# Check project status
+agent status
+```
+
 ## 🚨 Core Rules for AI Assistants (Must Strictly Follow)
 
 ### 1. No Emoji in Project Internals

@@ -14,6 +14,9 @@
 - **Professional Mode**: Advanced diagnostics and developer tools
 - **Secure Configuration**: Encrypted storage for API keys and settings
 - **Simplified Interface**: Only 4 core commands for configuration, all advanced features accessible through AI conversation
+- **AGENT.md System**: Intelligent project management with automatic requirement tracking, progress monitoring, and multi-session context
+- **Smart Command Handling**: Distinguishes between simple commands (list files, pwd) and complex tasks, preventing infinite loops
+- **Automatic Backup Management**: Keeps only 3 most recent backups, prevents file clutter
 
 ## 📥 Quick Downloads
 
@@ -225,6 +228,84 @@ naturecode delmodel my-custom-key         # Delete by custom key name
 # Force delete without confirmation
 naturecode delmodel ollama --force
 ```
+
+## 🧠 AGENT.md Intelligent Project Management
+
+### What is AGENT.md?
+
+AGENT.md is NatureCode's intelligent project management system that automatically:
+
+- **Tracks user requirements** from conversations
+- **Manages TODOs** and progress
+- **Preserves context** across sessions
+- **Creates development plans** for complex tasks
+- **Maintains conversation history**
+
+### How It Works
+
+1. **Automatic Requirement Extraction**: When you talk about what you need, AGENT.md records it
+2. **TODO Generation**: Creates actionable tasks from requirements
+3. **Progress Tracking**: Shows completion percentage and status
+4. **Multi-session Context**: Remembers work across different sessions
+5. **Smart Command Handling**: Distinguishes simple commands from complex tasks
+
+### Example Workflow
+
+```bash
+# Start a session
+naturecode start
+
+# Talk about your project
+"I want to create a React app with authentication"
+
+# AGENT.md automatically:
+# 1. Records requirement: "create React app with authentication"
+# 2. Generates TODOs: "Set up React project", "Add authentication", etc.
+# 3. Tracks progress as you work
+# 4. Preserves context for next session
+```
+
+### Key Features
+
+✅ **Smart Command Detection**
+
+- Simple commands (list files, pwd) execute immediately
+- Complex tasks use full AGENT.md planning
+- No infinite loops for basic operations
+
+✅ **Automatic Backup Management**
+
+- Creates backups before saving
+- Keeps only 3 most recent backups
+- Prevents file clutter
+
+✅ **Language Consistency**
+
+- Detects user language (Chinese/English)
+- Responds in same language
+- Maintains conversation consistency
+
+✅ **Progress Visualization**
+
+- Shows completion percentage
+- Lists current TODOs
+- Tracks completed items
+
+### Recent Improvements
+
+**Fixed Issues:**
+
+- ✅ **Infinite loop bug**: Simple commands like "list files" no longer cause loops
+- ✅ **Too many backup files**: Automatic cleanup keeps only 3 backups
+- ✅ **Language switching**: Consistent Chinese/English responses
+- ✅ **Startup errors**: Fixed variable declaration issues
+
+**Enhanced Features:**
+
+- 🚀 **Faster execution**: Simple commands bypass complex processing
+- 🧹 **Cleaner file system**: Automatic backup management
+- 🌐 **Better UX**: Improved error handling and user feedback
+- 🔧 **More reliable**: Fixed critical bugs and edge cases
 
 ## Windows Support
 
