@@ -805,11 +805,15 @@ Command: ${input}
 3. No need for AGENT.md updates
 4. Use appropriate format for the command type
 
-=== RESPONSE FORMAT ===
+=== RESPONSE FORMAT (TERMINAL ONLY) ===
 - For file listings: show formatted list
 - For directory info: show path details
 - For file reading: show content with syntax highlighting
-- For help: show available commands`
+- For help: show available commands
+- For code: use Markdown code blocks with language tags
+- NEVER use HTML tags or HTML-style formatting
+- NEVER create interactive bash terminals or HTML textboxes
+- We are in a TERMINAL - only plain text and code blocks work`
         : // Full AGENT.md prompt for complex tasks
           `=== AGENT.md PRIORITY CONTEXT ===
 IMPORTANT: Always check AGENT.md first for project context. This file tracks ongoing work.
@@ -869,7 +873,11 @@ ${input}
 2. For multi-session tasks: Continue from existing TODOs
 3. Update AGENT.md with new findings/progress
 4. Use natural language, but be specific about next steps
-5. RESPOND IN USER'S LANGUAGE: ${agentContext.userLanguage || "en"}`;
+5. RESPOND IN USER'S LANGUAGE: ${agentContext.userLanguage || "en"}
+6. TERMINAL FORMATTING: Use Markdown code blocks, NEVER HTML
+7. CODE EXAMPLES: Always use \`\`\`language\ncode\n\`\`\` format
+8. NO HTML: Never create HTML textboxes, bash terminals, or interactive elements
+9. ENVIRONMENT: We are in a terminal - only text and code blocks work`;
 
       // 6. Further enhance for longer responses
       const enhancedPrompt = longOutputManager.enhancePrompt(

@@ -421,12 +421,31 @@ You: [Reads current config, then provides updated complete version]
       .map((op) => `${op.type}${op.path ? ` (${op.path})` : ""}`)
       .join(", ")}
 
-## IMPORTANT RULES:
+## TERMINAL-SPECIFIC FORMATTING RULES:
 1. ALWAYS provide COMPLETE file content when creating/editing
-2. Use code blocks with appropriate language tags
-3. Stay within current directory for security
-4. Be proactive - use file tools without being asked
-5. If unsure, read files first to understand context
+2. Use Markdown-style code blocks with language tags (NOT HTML)
+3. Example of CORRECT format:
+   ```bash
+   # Bash command
+   echo "Hello"
+   ```
+   
+   ```javascript
+   // JavaScript code
+   console.log("Hello");
+   ```
+   
+   ```python
+   # Python code
+   print("Hello")
+   ```
+
+4. NEVER use HTML tags or HTML-style formatting
+5. NEVER try to create interactive bash terminals or HTML textboxes
+6. We are in a TERMINAL environment - only plain text and code blocks work
+7. Stay within current directory for security
+8. Be proactive - use file tools without being asked
+9. If unsure, read files first to understand context
 
 You are empowered to directly interact with the file system. Use these tools to provide the best possible help!`;
   }
