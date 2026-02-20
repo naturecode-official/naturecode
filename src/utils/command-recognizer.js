@@ -27,8 +27,9 @@ export class CommandRecognizer {
         patterns: [
           /(read|view|show|open|display).*file.*["']?([^"'\s]+)["']?/i,
           /what.*in.*file.*["']?([^"'\s]+)["']?/i,
-          /content.*of.*["']?([^"'\s]+)["']?/i,
+          /(content|contents).*of.*["']?([^"'\s]+)["']?/i,
           /file.*["']?([^"'\s]+)["']?.*content/i,
+          /(show|display|open).*["']?([^"'\s]+\.[a-z0-9]{1,6})["']?/i,
         ],
         action: "read",
       },
@@ -271,10 +272,14 @@ export class CommandRecognizer {
     // Check against common file/directory names
     const commonFiles = [
       "package.json",
-      "README.md",
+      "readme.md",
       "index.html",
       "main.js",
       "app.py",
+      "test.txt",
+      "config.json",
+      "settings.json",
+      ".env",
       "src",
       "lib",
       "bin",
@@ -284,6 +289,11 @@ export class CommandRecognizer {
     ];
 
     if (commonFiles.includes(path.toLowerCase())) {
+      return true;
+    }
+
+    // Allow any string that looks like a filename with extension
+    if (/^[a-z0-9_-]+\.[a-z0-9]{1,6}$/i.test(path)) {
       return true;
     }
 
