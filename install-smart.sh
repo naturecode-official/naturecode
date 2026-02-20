@@ -352,11 +352,18 @@ install_pro() {
     mkdir -p "$PERMANENT_DIR"
     cp -r . "$PERMANENT_DIR/"
     
-    # 从永久目录安装
+    # 从永久目录安装 - 强制重新安装
     cd "$PERMANENT_DIR"
     echo "Installing from permanent directory: $(pwd)"
     
-    if npm install -g .; then
+    # 先卸载旧版本（如果存在）
+    if npm list -g naturecode &>/dev/null; then
+        log_info "Removing old global installation..."
+        npm uninstall -g naturecode 2>/dev/null || true
+    fi
+    
+    # 强制安装新版本
+    if npm install -g . --force; then
         log_success "NatureCode installed globally"
         echo "Global installation location:"
         npm root -g

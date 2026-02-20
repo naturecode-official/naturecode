@@ -166,7 +166,7 @@ export function formatMessage(message, type = "info") {
  * Format user input with ┃ prefix
  */
 export function formatUserInput(input) {
-  return chalk.cyan(`┃ 👤 ${input}`);
+  return chalk.cyan(`┃ User: ${input}`);
 }
 
 /**

@@ -578,7 +578,7 @@ export async function startInteractiveSession(options = {}) {
   );
 
   // 自动添加用户启动消息
-  console.log(chalk.blue("👤 用户: 搞定agent.md"));
+  console.log(chalk.blue("┃ User: 搞定agent.md"));
 
   // 自动分析这个用户消息
   agentManager.analyzeUserInput(
