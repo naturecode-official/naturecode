@@ -1,6 +1,6 @@
 # NatureCode - Cross-platform Terminal AI Assistant
 
-**Version: 1.5.6**
+**Version: 2.0.0**
 
 ## → [agentname.md](agentname.md)
 
@@ -30,7 +30,7 @@
 ### Download Instructions
 
 1. **Visit [GitHub Releases](https://github.com/naturecode-official/naturecode/releases)**
-2. **Find the latest release (v1.5.6 or newer)**
+2. **Find the latest release (v2.0.0 or newer)**
 3. **Download the file for your platform:**
    - Android: `naturecode-android-release.apk`
    - Windows: `naturecode-win.exe`
@@ -41,14 +41,14 @@
 
 _Once a release is created, direct links will be available here._
 
-- Android: `https://github.com/naturecode-official/naturecode/releases/download/v1.5.6/naturecode-android-release.apk`
-- Windows: `https://github.com/naturecode-official/naturecode/releases/download/v1.5.6/naturecode-win.exe`
-- macOS: `https://github.com/naturecode-official/naturecode/releases/download/v1.5.6/naturecode-macos`
-- Linux: `https://github.com/naturecode-official/naturecode/releases/download/v1.5.6/naturecode-linux`
+- Android: `https://github.com/naturecode-official/naturecode/releases/download/v2.0.0/naturecode-android-release.apk`
+- Windows: `https://github.com/naturecode-official/naturecode/releases/download/v2.0.0/naturecode-win.exe`
+- macOS: `https://github.com/naturecode-official/naturecode/releases/download/v2.0.0/naturecode-macos`
+- Linux: `https://github.com/naturecode-official/naturecode/releases/download/v2.0.0/naturecode-linux`
 
 ## 🚨 Important Update Notice
 
-**Version 1.5.6 introduces major AI-centric redesign:**
+**Version 2.0.0 introduces intelligent AI assistant with AGENT.md system:**
 
 - **Interactive mode removed**: The `/start` command and interactive command interface have been removed
 - **Pure AI-centric design**: All advanced features are now accessed through AI conversation only
@@ -470,20 +470,20 @@ NatureCode now has Android compatibility with a dedicated terminal application.
 
 #### 📱 APK Download Instructions
 
-**Current Version**: v1.5.6
+**Current Version**: v2.0.0
 
 **Download from GitHub Releases**:
 
 1. Visit **[GitHub Releases Page](https://github.com/naturecode-official/naturecode/releases)**
-2. Find the latest release (v1.5.6 or newer)
+2. Find the latest release (v2.0.0 or newer)
 3. Download the APK files:
    - `naturecode-android-release.apk` - Stable release version
    - `naturecode-android-debug.apk` - Debug version for testing
 
 **Direct Download Links** (Available after release creation):
 
-- Stable: `https://github.com/naturecode-official/naturecode/releases/download/v1.5.6/naturecode-android-release.apk`
-- Debug: `https://github.com/naturecode-official/naturecode/releases/download/v1.5.6/naturecode-android-debug.apk`
+- Stable: `https://github.com/naturecode-official/naturecode/releases/download/v2.0.0/naturecode-android-release.apk`
+- Debug: `https://github.com/naturecode-official/naturecode/releases/download/v2.0.0/naturecode-android-debug.apk`
 
 **Alternative Options**:
 

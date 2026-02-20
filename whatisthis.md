@@ -246,7 +246,7 @@ git push https://naturecode-official:TOKEN@github.com/naturecode-official/nature
 - Push command executes successfully
 - Installation command is accessible
 - GitHub repository shows latest code
-- Version number displays correctly (current: 1.5.6)
+- Version number displays correctly (current: 2.0.0)
 - All functionality tests pass
 
 #### Automation Suggestions
@@ -266,7 +266,7 @@ git commit -m "$1"
 
 ## Project Overview
 
-**NatureCode** is a cross-platform terminal AI assistant supporting 12+ AI providers including DeepSeek, OpenAI, Anthropic, Google Gemini, Ollama, Baidu ERNIE, and more. Current version: **v1.5.6**
+**NatureCode** is an intelligent AI assistant with AGENT.md project management system, supporting 12+ AI providers including DeepSeek, OpenAI, Anthropic, Google Gemini, Ollama, Baidu ERNIE, and more. Current version: **v2.0.0**
 
 ### 🚨 Essential Rules (AI Assistants Must Follow)
 
@@ -1755,7 +1755,7 @@ npm run typecheck
 15. 所有更改已推送到GitHub
 16. 模型列表现在干净、合理、实用
 
-🎯 **当前状态 (v1.5.6)**:
+🎯 **当前状态 (v2.0.0)**:
 
 - OpenAI模型列表: 18个纯文本模型
 - Anthropic模型列表: 5个Claude模型
@@ -1794,7 +1794,7 @@ npm run typecheck
 
 ## 📝 2026-02-16 更新记录
 
-### 版本更新: 1.5.5 → 1.5.6
+### 版本更新: 1.5.6 → 2.0.0
 
 #### 1. 添加Tencent Hunyuan (腾讯混元) 提供者支持
 
@@ -1837,7 +1837,7 @@ npm run typecheck
 **文件**: `agentname.md`, `README.md`, `whatisthis.md`
 **内容**:
 
-- **版本更新**: 所有文件版本号更新到1.5.6
+- **版本更新**: 所有文件版本号更新到2.0.0
 - **功能列表**: 更新provider总数到12个
 - **文档完善**: 更新agentname.md添加Tencent Hunyuan详细说明
 - **README更新**: 更新版本号和功能列表
@@ -1848,11 +1848,11 @@ npm run typecheck
 2. ✅ 更新配置向导 (`src/cli/commands/model.js`)
 3. ✅ 更新启动系统 (`src/cli/commands/start.js`)
 4. ✅ 更新文档 (`agentname.md`, `README.md`, `whatisthis.md`)
-5. ✅ 更新版本号到1.5.6
+5. ✅ 更新版本号到2.0.0
 
 #### 4. 项目现状
 
-**当前状态 (v1.5.6)**:
+**当前状态 (v2.0.0)**:
 
 - **总provider数量**: 12个
 - **新增provider**: Tencent Hunyuan (腾讯混元)
@@ -2810,7 +2810,7 @@ naturecode start
 - 修复了交互模式中 `delmodel` 命令不工作的问题
 - 现在交互模式中可以直接输入 `delmodel <name>` 删除模型
 
-**当前版本**: NatureCode v1.5.6
+**当前版本**: NatureCode v2.0.0
 **最后更新**: 2026年2月18日
 **状态**: ✅ **极致简化完成**，专注于核心 AI 助手功能
 
@@ -2823,24 +2823,26 @@ naturecode start
 
 ```
 
-
 ## 🔄 AI-Centric Transformation Update (February 18, 2026)
 
 NatureCode has been transformed into a pure AI-centric application with the following changes:
 
 ### Major Changes:
-1. **Only 4 user commands**: , , , 
+
+1. **Only 4 user commands**: , , ,
 2. **All advanced features AI-internal**: Code analysis, project management, Git operations accessible through AI conversation
-3. **Enhanced  command**: Supports multiple name formats (provider, model, combination)
+3. **Enhanced command**: Supports multiple name formats (provider, model, combination)
 4. **Removed non-essential features**: Plugin system, team collaboration, standalone code/project commands
 
 ### Key Improvements:
+
 - Simplified user interface with natural language interaction
 - Comprehensive model management with flexible deletion options
 - Clear user guidance and error messages
 - Updated documentation reflecting AI-centric design
 
 ### Usage Examples:
+
 ```bash
 # Delete models in various formats
 naturecode delmodel deepseek              # By provider
@@ -2850,6 +2852,7 @@ naturecode delmodel all --force           # Force delete all
 ```
 
 ### AI Conversation Examples:
+
 ```
 > analyze the code in src/
 > create a new React project

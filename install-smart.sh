@@ -97,7 +97,7 @@ show_banner() {
     echo "╔══════════════════════════════════════════════════════════════════╗"
     echo "║                NatureCode Professional Installer                 ║"
     echo "║           Cross-platform AI Assistant for Developers             ║"
-    echo "║                       Version: 1.5.6                             ║"
+    echo "║                       Version: 2.0.0                             ║"
     echo "╚══════════════════════════════════════════════════════════════════╝"
     if [ "$COLORS_SUPPORTED" = "true" ]; then
         printf "%b\n" "${NC}"
@@ -160,7 +160,7 @@ get_latest_version() {
     
     if [ -z "$version" ]; then
         # 如果无法获取，使用默认版本
-        echo "1.5.6"
+        echo "2.0.0"
     else
         echo "$version"
     fi

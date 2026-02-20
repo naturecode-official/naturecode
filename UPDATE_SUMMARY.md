@@ -4,7 +4,7 @@
 
 NatureCode has been successfully transformed into a pure AI-centric terminal application. This update removes all non-essential features and focuses on natural language interaction with AI.
 
-## Version: 1.5.6 (AI-Centric Edition)
+## Version: 2.0.0 (AI-Centric Edition)
 
 ## Major Changes
 

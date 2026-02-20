@@ -7,7 +7,7 @@ set -e
 
 echo "========================================"
 echo "NatureCode Android APK 构建工具"
-echo "版本: 1.5.6"
+echo "版本: 2.0.0"
 echo "========================================"
 
 # 检查是否在项目根目录
@@ -141,7 +141,7 @@ cat > "../$OUTPUT_DIR/VERSION.md" << EOF
 ## 应用信息
 - 应用名称: NatureCode Terminal
 - 包名: com.naturecode.terminal
-- 版本: 1.5.6
+- 版本: 2.0.0
 - 版本代码: 1
 - 构建时间: $(date)
 
@@ -171,7 +171,7 @@ md5sum *.apk > MD5SUMS
 sha256sum *.apk > SHA256SUMS
 
 echo "创建压缩包..."
-zip -r "naturecode-android-v1.5.6.zip" ./*
+zip -r "naturecode-android-v2.0.0.zip" ./*
 
 cd ../..
 
@@ -185,6 +185,6 @@ echo "========================================"
 echo "APK 文件已准备好："
 echo "1. 调试版: $OUTPUT_DIR/naturecode-android-debug.apk"
 echo "2. 发布版: $OUTPUT_DIR/naturecode-android-release.apk"
-echo "3. 压缩包: $OUTPUT_DIR/naturecode-android-v1.5.6.zip"
+echo "3. 压缩包: $OUTPUT_DIR/naturecode-android-v2.0.0.zip"
 echo ""
 echo "请查看 $OUTPUT_DIR/INSTALL.md 获取安装说明"

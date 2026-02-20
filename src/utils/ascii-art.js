@@ -12,7 +12,7 @@ export function getWelcomeArt() {
   const asciiArt = getAsciiArt();
   return `${asciiArt}
 
-    NatureCode v1.5.6 - Cross-platform AI Assistant for Terminal
+    NatureCode v2.0.0 - Intelligent AI Assistant with AGENT.md System
 ********************************************************************************`;
 }
 
