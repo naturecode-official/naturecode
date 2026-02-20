@@ -46,6 +46,24 @@ _Once a release is created, direct links will be available here._
 - macOS: `https://github.com/naturecode-official/naturecode/releases/download/v1.5.6/naturecode-macos`
 - Linux: `https://github.com/naturecode-official/naturecode/releases/download/v1.5.6/naturecode-linux`
 
+## 🚨 Important Update Notice
+
+**Version 1.5.6 introduces major AI-centric redesign:**
+
+- **Interactive mode removed**: The `/start` command and interactive command interface have been removed
+- **Pure AI-centric design**: All advanced features are now accessed through AI conversation only
+- **Simplified commands**: Only 3 core commands remain for configuration management
+
+**If you have a previous version installed, you need to reinstall:**
+
+```bash
+# Uninstall old version
+npm uninstall -g naturecode
+
+# Install latest version
+curl -fsSL https://raw.githubusercontent.com/naturecode-official/naturecode/main/install-smart.sh | bash
+```
+
 ## Quick Install
 
 ### macOS/Linux
