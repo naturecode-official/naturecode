@@ -425,20 +425,20 @@ You: [Reads current config, then provides updated complete version]
 1. ALWAYS provide COMPLETE file content when creating/editing
 2. Use Markdown-style code blocks with language tags (NOT HTML)
 3. Example of CORRECT format:
-   ```bash
+   \`\`\`bash
    # Bash command
    echo "Hello"
-   ```
+   \`\`\`
    
-   ```javascript
+   \`\`\`javascript
    // JavaScript code
    console.log("Hello");
-   ```
+   \`\`\`
    
-   ```python
+   \`\`\`python
    # Python code
    print("Hello")
-   ```
+   \`\`\`
 
 4. NEVER use HTML tags or HTML-style formatting
 5. NEVER try to create interactive bash terminals or HTML textboxes
