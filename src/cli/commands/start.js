@@ -1,4 +1,6 @@
 import readline from "readline";
+import chalk from "chalk";
+import fs from "fs";
 import { configManager } from "../../config/manager.js";
 import { secureStore } from "../../config/secure-store.js";
 import { DeepSeekProvider } from "../../providers/deepseek.js";
@@ -521,6 +523,50 @@ export async function startInteractiveSession(options = {}) {
 
   showWelcome(config);
 
+  let conversationHistory = [];
+  const longOutputManager = createLongOutputManager();
+  const agentManager = createAgentMdManager();
+  const toolManager = createToolManager();
+
+  // AI INITIALIZATION PHASE - Run basic functions first
+  console.log("\n" + chalk.cyan("AI Initialization Phase..."));
+
+  // 1. Initialize AGENT.md system
+  console.log("1. Initializing AGENT.md system...");
+  agentManager.initialize();
+
+  // 2. Check for existing project context
+  const agentContext = agentManager.getContextSummary();
+  console.log(
+    `2. Project context loaded: ${agentContext.requirements.length} requirements, ${agentContext.todos.length} TODOs`,
+  );
+
+  // 3. Run basic setup if needed
+  if (
+    agentContext.todos.length === 0 &&
+    agentContext.requirements.length === 0
+  ) {
+    console.log("3. No existing context found. AI will start fresh.");
+  } else {
+    console.log(
+      `3. Continuing from previous session (${agentContext.progress}% complete)`,
+    );
+
+    // Show current TODOs
+    if (agentContext.todos.length > 0) {
+      console.log("\nCurrent TODOs:");
+      agentContext.todos.forEach((todo, index) => {
+        console.log(`  ${index + 1}. ${todo}`);
+      });
+    }
+  }
+
+  console.log(
+    chalk.green(
+      "\n✓ AI initialization complete. Ready for user interaction.\n",
+    ),
+  );
+
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -534,14 +580,6 @@ export async function startInteractiveSession(options = {}) {
   };
 
   updatePrompt();
-
-  let conversationHistory = [];
-  const longOutputManager = createLongOutputManager();
-  const agentManager = createAgentMdManager();
-  const toolManager = createToolManager();
-
-  // Initialize AGENT.md system (silently)
-  agentManager.initialize();
 
   rl.on("line", async (line) => {
     const input = line.trim();
@@ -688,6 +726,14 @@ AGENT.md SUMMARY:
 - Completed: ${agentContext.completed.length} items
 - TODOs: ${agentContext.todos.length} items (${newTodos.length} new)
 - Progress: ${agentContext.progress}%
+- User Language: ${agentContext.userLanguage || "en"}
+
+=== LANGUAGE INSTRUCTION ===
+CRITICAL: Respond in the same language as the user. 
+- If user writes in Chinese, respond in Chinese.
+- If user writes in English, respond in English.
+- Code blocks and technical terms remain in English.
+- Keep conversation language consistent.
 
 DETAILED AGENT.md CONTENT:
 1. USER REQUIREMENTS:
@@ -728,7 +774,8 @@ ${input}
 1. PRIORITY: Always reference AGENT.md context first
 2. For multi-session tasks: Continue from existing TODOs
 3. Update AGENT.md with new findings/progress
-4. Use natural language, but be specific about next steps`;
+4. Use natural language, but be specific about next steps
+5. RESPOND IN USER'S LANGUAGE: ${agentContext.userLanguage || "en"}`;
 
       // 6. Further enhance for longer responses
       const enhancedPrompt = longOutputManager.enhancePrompt(

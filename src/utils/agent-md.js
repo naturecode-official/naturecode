@@ -16,6 +16,7 @@ export class AgentMdManager {
     this.futurePlans = [];
     this.defaultWorkflows = [];
     this.lastUpdateTime = null;
+    this.userLanguage = "en"; // Default to English
   }
 
   /**
@@ -95,6 +96,9 @@ export class AgentMdManager {
       sections["Default Workflows"] || "",
     );
 
+    // Extract conversation history from Recent Conversation section
+    this._parseConversationHistory(sections["Recent Conversation"] || "");
+
     // Extract last update time
     const progressSection = sections["Progress Tracking"] || "";
     const lastUpdateMatch = progressSection.match(/Last Updated[:\-]\s*(.+)/i);
@@ -150,9 +154,87 @@ export class AgentMdManager {
   }
 
   /**
+   * Parse conversation history from Recent Conversation section
+   */
+  _parseConversationHistory(content) {
+    this.conversationHistory = [];
+
+    if (!content || content.includes("*No recent conversation*")) {
+      return;
+    }
+
+    const lines = content.split("\n");
+    let currentEntry = null;
+
+    for (const line of lines) {
+      // Look for timestamp pattern: [HH:MM AM/PM]
+      const timestampMatch = line.match(/^\[(.+?)\]\s+(.+)$/);
+      if (timestampMatch) {
+        const timeStr = timestampMatch[1];
+        const rest = timestampMatch[2];
+
+        // Check if this is a user message
+        if (rest.startsWith("User:")) {
+          if (currentEntry) {
+            this.conversationHistory.push(currentEntry);
+          }
+          currentEntry = {
+            timestamp: this._parseTimestamp(timeStr),
+            user: rest.substring(5).trim(),
+            ai: "",
+          };
+        } else if (rest.startsWith("AI:")) {
+          if (currentEntry) {
+            currentEntry.ai = rest.substring(3).trim();
+            this.conversationHistory.push(currentEntry);
+            currentEntry = null;
+          }
+        }
+      } else if (currentEntry && line.trim().startsWith("AI:")) {
+        // Multi-line AI response
+        currentEntry.ai += "\n" + line.substring(3).trim();
+      }
+    }
+
+    if (currentEntry) {
+      this.conversationHistory.push(currentEntry);
+    }
+  }
+
+  /**
+   * Parse timestamp from string
+   */
+  _parseTimestamp(timeStr) {
+    try {
+      // Try to parse as locale time string
+      const now = new Date();
+      const [time, period] = timeStr.split(" ");
+      const [hours, minutes] = time.split(":");
+
+      let hour = parseInt(hours);
+      if (period === "PM" && hour < 12) hour += 12;
+      if (period === "AM" && hour === 12) hour = 0;
+
+      const date = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        hour,
+        parseInt(minutes),
+      );
+      return date;
+    } catch (error) {
+      return new Date();
+    }
+  }
+
+  /**
    * Analyze user input and extract requirements
    */
   analyzeUserInput(userInput, aiResponse = "") {
+    // Detect user language
+    this._detectLanguage(userInput);
+
     // Add to conversation history
     this.conversationHistory.push({
       timestamp: new Date(),
@@ -171,6 +253,19 @@ export class AgentMdManager {
     });
 
     return requirements;
+  }
+
+  /**
+   * Detect user language from input
+   */
+  _detectLanguage(userInput) {
+    // Simple language detection based on Chinese characters
+    const chineseCharPattern = /[\u4e00-\u9fff]/;
+    if (chineseCharPattern.test(userInput)) {
+      this.userLanguage = "zh";
+    } else {
+      this.userLanguage = "en";
+    }
   }
 
   /**
@@ -375,35 +470,26 @@ ${this._formatRecentConversation()}
     return recent
       .map((entry) => {
         const time = this._formatTimeAgo(entry.timestamp);
-        return `**${time}**\n👤 ${entry.user}\n🤖 ${entry.ai || "(No response yet)"}\n`;
+        return `[${time}] User: ${entry.user}\n      AI: ${entry.ai || "(waiting for response)"}`;
       })
-      .join("\n");
+      .join("\n\n");
   }
 
   /**
-   * Format time ago in xm xxs format
+   * Format simple timestamp
    */
   _formatTimeAgo(timestamp) {
-    const now = new Date();
-    const diffMs = now - timestamp;
-    const diffSec = Math.floor(diffMs / 1000);
+    if (!timestamp) return "Just now";
 
-    if (diffSec < 60) {
-      return `${diffSec}s ago`;
+    try {
+      const timeStr = timestamp.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      return timeStr;
+    } catch (error) {
+      return "Recent";
     }
-
-    const diffMin = Math.floor(diffSec / 60);
-    if (diffMin < 60) {
-      return `${diffMin}m ago`;
-    }
-
-    const diffHour = Math.floor(diffMin / 60);
-    if (diffHour < 24) {
-      return `${diffHour}h ago`;
-    }
-
-    const diffDay = Math.floor(diffHour / 24);
-    return `${diffDay}d ago`;
   }
 
   /**
@@ -417,6 +503,7 @@ ${this._formatRecentConversation()}
       progress: this._calculateProgress(),
       hasDefaultWorkflows: this.defaultWorkflows.length > 0,
       lastUpdated: this.lastUpdateTime,
+      userLanguage: this.userLanguage,
     };
   }
 
