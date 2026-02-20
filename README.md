@@ -2,7 +2,7 @@
 
 **Version: 2.0.1**
 
-## → [agentname.md](agentname.md)
+## → [AI Provider List](agentname_EN.md) | [中文版](agentname.md)
 
 ## Features
 
