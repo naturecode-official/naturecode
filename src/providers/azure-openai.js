@@ -50,8 +50,8 @@ export class AzureOpenAIProvider extends OpenAIProvider {
     // Azure OpenAI使用不同的端点格式
     // /openai/deployments/{deployment-name}/chat/completions?api-version={api-version}
     const deploymentName = config.model;
-    const endpoint =
-      config.modelType === "chat" ? "/chat/completions" : "/completions";
+    // 只使用聊天端点（language interaction only）
+    const endpoint = "/chat/completions";
 
     return `${baseUrl}/openai/deployments/${deploymentName}${endpoint}?api-version=${apiVersion}`;
   }

@@ -12,7 +12,7 @@ const DEFAULT_CONFIG = {
   model: "deepseek-chat",
   modelType: "chat",
   temperature: 0.7,
-  maxTokens: 2000,
+  maxTokens: 2000, // Optimal for AI responses with tools
   stream: true,
   // fallbackModel 由 autoConfigureDefaults 设置
 };
@@ -189,6 +189,9 @@ class ConfigManager {
         );
       }
 
+      // Ensure maxTokens is always 2000 for optimal responses with tools
+      autoConfigured.maxTokens = 2000;
+
       return autoConfigured;
     } catch (error) {
       console.error(
@@ -196,13 +199,18 @@ class ConfigManager {
         error.message,
       );
       const defaultConfig = { ...DEFAULT_CONFIG };
-      return this.autoConfigureDefaults(defaultConfig);
+      const configured = this.autoConfigureDefaults(defaultConfig);
+      configured.maxTokens = 2000; // Ensure maxTokens is 2000
+      return configured;
     }
   }
 
   save(config) {
     try {
       const validatedConfig = this._validateConfig(config);
+
+      // Ensure maxTokens is always 2000 for optimal responses with tools
+      validatedConfig.maxTokens = 2000;
 
       // Store API key in encrypted storage if provided
       if (validatedConfig.apiKey && validatedConfig.apiKey.trim() !== "") {
@@ -346,8 +354,8 @@ class ConfigManager {
       throw new Error("Temperature must be between 0.0 and 2.0");
     }
 
-    if (validated.maxTokens < 1 || validated.maxTokens > 4000) {
-      throw new Error("Max tokens must be between 1 and 4000");
+    if (validated.maxTokens < 1 || validated.maxTokens > 2000) {
+      throw new Error("Max tokens must be between 1 and 2000");
     }
 
     // Validate fallback model if provided

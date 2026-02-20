@@ -61,7 +61,7 @@ export function showWelcome(config) {
   console.log(chalk.green("│ ") + `Provider: ${chalk.cyan(config.provider)}`);
   console.log(
     chalk.green("│ ") +
-      `Model: ${chalk.cyan(config.model)} (${config.modelType})`,
+      `Model: ${chalk.cyan(config.model)} (language interaction)`,
   );
   console.log(
     chalk.green("│ ") + `Temperature: ${chalk.cyan(config.temperature)}`,
@@ -69,6 +69,9 @@ export function showWelcome(config) {
   console.log(
     chalk.green("│ ") +
       `Streaming: ${chalk.cyan(config.stream ? "Enabled" : "Disabled")}`,
+  );
+  console.log(
+    chalk.green("│ ") + `Max Tokens: ${chalk.cyan("4000 (long responses)")}`,
   );
   console.log(chalk.green("├" + "─".repeat(78)));
   console.log(

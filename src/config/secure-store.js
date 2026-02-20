@@ -113,7 +113,7 @@ class SecureStore {
       metadata: {
         name: metadata.name || `${provider}-${keyId}`,
         model: metadata.model || "default",
-        modelType: metadata.modelType || "text",
+        modelType: metadata.modelType || "chat", // Always use chat for language interaction
         ...metadata,
       },
       createdAt: new Date().toISOString(),

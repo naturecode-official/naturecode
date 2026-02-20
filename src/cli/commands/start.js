@@ -24,6 +24,94 @@ import { handleError } from "../../utils/error-handler.js";
 
 import { commandRecognizer } from "../../utils/command-recognizer.js";
 import { createPerformanceMonitor } from "./performance.js";
+import { createLongOutputManager } from "../../utils/long-output.js";
+import { createAgentMdManager } from "../../utils/agent-md.js";
+import { createToolManager } from "../../utils/ai-tools.js";
+
+// Parse AI response for tool usage
+function parseToolUsage(response) {
+  const toolPatterns = [
+    {
+      pattern:
+        /Use internet to (fetch|search|check)\s+(.+?)(?:\s+with\s+parameters?\s+(.+))?$/i,
+      tool: "internet",
+      extract: (match) => ({
+        operation: match[1].toLowerCase(),
+        params: match[2] ? { query: match[2].trim() } : {},
+      }),
+    },
+    {
+      pattern: /Run command:\s*(.+)$/i,
+      tool: "terminal",
+      extract: (match) => ({
+        operation: "execute",
+        params: { command: match[1].trim() },
+      }),
+    },
+    {
+      pattern: /Fetch\s+(https?:\/\/\S+)/i,
+      tool: "internet",
+      extract: (match) => ({
+        operation: "fetch",
+        params: { url: match[1].trim() },
+      }),
+    },
+    {
+      pattern: /Search for\s+(.+)/i,
+      tool: "internet",
+      extract: (match) => ({
+        operation: "search",
+        params: { query: match[1].trim() },
+      }),
+    },
+  ];
+
+  for (const pattern of toolPatterns) {
+    const match = response.match(pattern.pattern);
+    if (match) {
+      return {
+        tool: pattern.tool,
+        ...pattern.extract(match),
+      };
+    }
+  }
+  return null;
+}
+
+// Execute tool operation
+async function executeToolOperation(toolManager, toolUsage) {
+  try {
+    console.log(`\nExecuting: ${toolUsage.tool} ${toolUsage.operation}...`);
+    const result = await toolManager.executeTool(
+      toolUsage.tool,
+      toolUsage.operation,
+      toolUsage.params,
+    );
+
+    if (result.success) {
+      console.log(`✓ ${toolUsage.tool} operation completed`);
+      return {
+        success: true,
+        result: result,
+        summary: `Tool execution successful: ${toolUsage.tool} ${toolUsage.operation}`,
+      };
+    } else {
+      console.log(`✗ ${toolUsage.tool} operation failed: ${result.error}`);
+      return {
+        success: false,
+        error: result.error,
+        summary: `Tool execution failed: ${result.error}`,
+      };
+    }
+  } catch (error) {
+    console.log(`✗ Tool execution error: ${error.message}`);
+    return {
+      success: false,
+      error: error.message,
+      summary: `Tool execution error: ${error.message}`,
+    };
+  }
+}
 
 // Get available models from secure storage
 function getAvailableModels() {
@@ -48,7 +136,7 @@ function getAvailableModels() {
           keyId: keyId,
           name: keyInfo.metadata?.name || `${provider}-${keyId}`,
           model: keyInfo.metadata?.model || "default",
-          description: keyInfo.metadata?.modelType || "No description",
+          description: "Language interaction", // Always chat mode
         });
       }
     }
@@ -120,6 +208,9 @@ function showEnhancedHelp() {
     '  • Performance: "performance", "perf" - Show detailed performance info',
   );
   console.log('  • Configuration: "config" - Show current AI configuration');
+  console.log(
+    '  • AGENT Status: "agent", "status" - Show project progress and TODOs',
+  );
   console.log('  • Clear screen: "clear" - Clear the terminal');
   console.log('  • Exit: "exit", "quit" - End the session');
   console.log(
@@ -345,7 +436,7 @@ export async function startInteractiveSession(options = {}) {
             apiKey: keyInfo.key,
             apiKeyName: keyInfo.metadata?.name,
             model: keyInfo.metadata?.model || "default",
-            modelType: keyInfo.metadata?.modelType || "text",
+            modelType: "chat", // Always chat for language interaction
             temperature: config.temperature || 0.7,
             maxTokens: config.maxTokens || 2000,
             stream: config.stream !== false,
@@ -381,17 +472,9 @@ export async function startInteractiveSession(options = {}) {
   try {
     performanceMonitor = await createPerformanceMonitor();
     await performanceMonitor.startMonitoring();
-
-    // Show performance info in top-left corner
-    const performanceInfo = performanceMonitor.formatStatsForDisplay();
-    console.log(`\x1b[1;37;44m${" ".repeat(80)}\x1b[0m`);
-    console.log(
-      `\x1b[1;37;44m Performance: ${performanceInfo.padEnd(66)} \x1b[0m`,
-    );
-    console.log(`\x1b[1;37;44m${" ".repeat(80)}\x1b[0m\n`);
+    // Performance monitoring started silently - no banner displayed
   } catch (error) {
     // Silently fail - performance monitoring is optional
-    console.log("\x1b[1;37;44m Performance monitoring unavailable \x1b[0m\n");
   }
 
   showWelcome(config);
@@ -414,6 +497,14 @@ export async function startInteractiveSession(options = {}) {
   updatePrompt();
 
   let conversationHistory = [];
+  const longOutputManager = createLongOutputManager();
+  const agentManager = createAgentMdManager();
+  const toolManager = createToolManager();
+
+  // Initialize AGENT.md system
+  console.log("\nInitializing AGENT.md system...");
+  agentManager.initialize();
+  console.log("Tools available: internet access, terminal commands");
 
   rl.on("line", async (line) => {
     const input = line.trim();
@@ -439,17 +530,6 @@ export async function startInteractiveSession(options = {}) {
     if (input.toLowerCase() === "clear") {
       console.clear();
       conversationHistory.length = 0;
-
-      // Re-display performance info after clear
-      if (performanceMonitor) {
-        const performanceInfo = performanceMonitor.formatStatsForDisplay();
-        console.log(`\x1b[1;37;44m${" ".repeat(80)}\x1b[0m`);
-        console.log(
-          `\x1b[1;37;44m Performance: ${performanceInfo.padEnd(66)} \x1b[0m`,
-        );
-        console.log(`\x1b[1;37;44m${" ".repeat(80)}\x1b[0m\n`);
-      }
-
       updatePrompt();
       return;
     }
@@ -457,6 +537,29 @@ export async function startInteractiveSession(options = {}) {
     if (input.toLowerCase() === "config") {
       console.log("\nCurrent Configuration:");
       console.log(JSON.stringify(config, null, 2));
+      updatePrompt();
+      return;
+    }
+
+    if (input.toLowerCase() === "agent" || input.toLowerCase() === "status") {
+      console.log("\nAGENT.md Status:");
+      const context = agentManager.getContextSummary();
+      console.log(`Location: ${agentManager.agentFilePath}`);
+      console.log(`Requirements: ${context.requirements.length}`);
+      console.log(`Completed: ${context.completed.length}`);
+      console.log(`TODOs: ${context.todos.length}`);
+      console.log(`Progress: ${context.progress}%`);
+
+      if (context.todos.length > 0) {
+        console.log("\nCurrent TODOs:");
+        context.todos.forEach((todo, index) => {
+          console.log(`  ${index + 1}. ${todo}`);
+        });
+      }
+
+      console.log(
+        `\nLast Updated: ${context.lastUpdated ? context.lastUpdated.toLocaleTimeString() : "Never"}`,
+      );
       updatePrompt();
       return;
     }
@@ -508,7 +611,6 @@ export async function startInteractiveSession(options = {}) {
       }
 
       // Check if it's a file system command
-      const isFileCommand = isFileSystemCommand(input);
       const recognition = getCommandRecognition(input);
 
       if (recognition.type !== "unknown" && recognition.confidence > 0.5) {
@@ -520,25 +622,163 @@ export async function startInteractiveSession(options = {}) {
 
       const startTime = Date.now();
 
-      if (config.stream) {
-        let fullResponse = "";
-        process.stdout.write("Assistant: ");
+      // 1. Analyze user input with AGENT.md system
+      agentManager.analyzeUserInput(input);
 
-        for await (const chunk of provider.streamGenerate(input, options)) {
-          process.stdout.write(chunk);
-          fullResponse += chunk;
+      // 2. Generate TODOs based on requirements and default workflows
+      const newTodos = agentManager.generateTodos(
+        conversationHistory.length > 0
+          ? conversationHistory[conversationHistory.length - 1].content
+          : "",
+      );
+
+      // 3. Get context summary for AI
+      const agentContext = agentManager.getContextSummary();
+
+      // 4. Get tools context
+      const toolsContext = toolManager.getToolsContext();
+
+      // 5. Enhance prompt with AGENT.md context and tools
+      const agentContextPrompt = `AGENT.md CONTEXT:
+- Requirements: ${agentContext.requirements.length > 0 ? agentContext.requirements.join(", ") : "None yet"}
+- Completed: ${agentContext.completed.length} items
+- TODOs: ${agentContext.todos.length} items (${newTodos.length} new)
+- Progress: ${agentContext.progress}%
+- Default Workflows: ${agentContext.hasDefaultWorkflows ? "Yes" : "No"}
+
+${toolsContext}
+
+EXECUTION MODE: Plan → Execute → Review → Next Step
+1. First create a comprehensive plan and save to AGENT.md
+2. Then provide ONE executable instruction at a time
+3. System will execute it using appropriate tool
+4. System returns results to you
+5. You analyze results and provide next instruction
+6. Continue until TODOs are completed
+
+USER REQUEST: ${input}
+
+IMPORTANT: 
+1. First create plan for the entire task
+2. Then provide single executable instruction
+3. Use tools when needed: "Use internet to fetch [url]" or "Run command: [safe command]"
+4. Focus on completing TODOs from AGENT.md`;
+
+      // 6. Further enhance for longer responses
+      const enhancedPrompt = longOutputManager.enhancePrompt(
+        agentContextPrompt,
+        conversationHistory.length > 0
+          ? conversationHistory[conversationHistory.length - 1].content
+          : "",
+      );
+
+      // EXECUTION LOOP: Plan → Execute → Review → Next Step
+      let executionComplete = false;
+      let iteration = 0;
+      const maxIterations = 10; // Safety limit
+      let lastResponse = "";
+
+      while (!executionComplete && iteration < maxIterations) {
+        iteration++;
+
+        // Get AI response
+        let aiResponse = "";
+        if (config.stream) {
+          process.stdout.write(`\nAssistant (Step ${iteration}): `);
+          for await (const chunk of provider.streamGenerate(
+            iteration === 1 ? enhancedPrompt : lastResponse,
+            options,
+          )) {
+            process.stdout.write(chunk);
+            aiResponse += chunk;
+          }
+          process.stdout.write("\n");
+        } else {
+          const response = await provider.generate(
+            iteration === 1 ? enhancedPrompt : lastResponse,
+            options,
+          );
+          formatResponse(response);
+          aiResponse = response;
         }
 
-        process.stdout.write("\n\n");
-        conversationHistory.push({ role: "assistant", content: fullResponse });
-      } else {
-        const response = await provider.generate(input, options);
-        formatResponse(response);
-        conversationHistory.push({ role: "assistant", content: response });
+        conversationHistory.push({ role: "assistant", content: aiResponse });
+        lastResponse = aiResponse;
+
+        // Check for tool usage in response
+        const toolUsage = parseToolUsage(aiResponse);
+
+        if (toolUsage) {
+          // Execute tool
+          const toolResult = await executeToolOperation(toolManager, toolUsage);
+
+          // Prepare next prompt with tool results
+          lastResponse = `Tool execution result: ${toolResult.summary}\n\n${aiResponse}\n\nWhat's the next step?`;
+
+          // Add tool result to conversation
+          conversationHistory.push({
+            role: "system",
+            content: `Tool executed: ${toolUsage.tool} ${toolUsage.operation}. Result: ${toolResult.summary}`,
+          });
+        } else {
+          // Check if execution is complete
+          if (
+            aiResponse.toLowerCase().includes("completed") ||
+            aiResponse.toLowerCase().includes("done") ||
+            aiResponse.toLowerCase().includes("finished") ||
+            aiResponse.toLowerCase().includes("all steps complete")
+          ) {
+            executionComplete = true;
+            console.log("\n✓ Execution completed");
+
+            // Update AGENT.md with completion
+            agentContext.todos.forEach((todo, index) => {
+              if (
+                aiResponse
+                  .toLowerCase()
+                  .includes(todo.toLowerCase().substring(0, 20))
+              ) {
+                const completed = agentManager.completeTodo(index);
+                if (completed) {
+                  console.log(`Marked as completed: ${completed}`);
+                }
+              }
+            });
+          } else {
+            // Ask for next step
+            lastResponse = `${aiResponse}\n\nPlease provide the next executable instruction. If done, say "Completed".`;
+          }
+        }
+      }
+
+      if (iteration >= maxIterations) {
+        console.log(
+          "\n⚠️  Reached maximum iterations. Stopping execution loop.",
+        );
       }
 
       const endTime = Date.now();
-      console.log(`Response time: ${endTime - startTime}ms\n`);
+
+      // Update AGENT.md with final response
+      agentManager.analyzeUserInput(
+        input,
+        conversationHistory[conversationHistory.length - 1].content,
+      );
+
+      // Save AGENT.md
+      agentManager.save();
+
+      // Check if context needs clearing
+      if (conversationHistory.length > 15) {
+        console.log("Context getting large, consider summarizing to AGENT.md");
+      }
+
+      const responseTime = endTime - startTime;
+      const seconds = Math.floor(responseTime / 1000);
+      const milliseconds = responseTime % 1000;
+      console.log(`\nTotal execution time: ${seconds}s ${milliseconds}ms`);
+      console.log(`Steps executed: ${iteration}`);
+      console.log(`Messages exchanged: ${conversationHistory.length}\n`);
     } catch (error) {
       console.error(`\nError: ${error.message}`);
 

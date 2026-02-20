@@ -1,13 +1,6 @@
 import inquirer from "inquirer";
 import { configManager } from "../../config/manager.js";
 import { secureStore } from "../../config/secure-store.js";
-import { OpenAIProvider } from "../../providers/openai.js";
-import { GeminiProvider } from "../../providers/gemini.js";
-import { OllamaProvider } from "../../providers/ollama.js";
-import { ZhipuAIProvider } from "../../providers/zhipuai.js";
-import { DashScopeProvider } from "../../providers/dashscope.js";
-import { TencentProvider } from "../../providers/tencent.js";
-import { BaiduProvider } from "../../providers/baidu.js";
 
 export async function runModelConfiguration() {
   console.log("NatureCode AI Configuration Wizard\n");
@@ -221,13 +214,6 @@ export async function runModelConfiguration() {
         answers.provider === "custom",
     },
     {
-      type: "confirm",
-      name: "advancedSettings",
-      message: "Configure advanced settings?",
-      default: false,
-      description: "Temperature, token limits, streaming, etc.",
-    },
-    {
       type: "number",
       name: "temperature",
       message: "Set temperature (0.0-2.0, press Enter for default 0.7):",
@@ -248,31 +234,6 @@ export async function runModelConfiguration() {
         }
         return parseFloat(input);
       },
-      when: (answers) => answers.advancedSettings,
-    },
-    {
-      type: "number",
-      name: "maxTokens",
-      message:
-        "Set maximum tokens per response (1-4000, press Enter for default 2000):",
-      default: currentConfig.maxTokens || 2000,
-      validate: (input) => {
-        if (input === "" || input === undefined) {
-          return true; // Allow empty input to use default
-        }
-        const value = parseInt(input);
-        if (isNaN(value) || value < 1 || value > 4000) {
-          return "Max tokens must be between 1 and 4000";
-        }
-        return true;
-      },
-      filter: (input) => {
-        if (input === "" || input === undefined) {
-          return currentConfig.maxTokens || 2000;
-        }
-        return parseInt(input);
-      },
-      when: (answers) => answers.advancedSettings,
     },
     {
       type: "confirm",
@@ -280,7 +241,13 @@ export async function runModelConfiguration() {
       message: "Enable streaming responses?",
       default: currentConfig.stream !== false,
       description: "Stream responses show text as it's generated (recommended)",
-      when: (answers) => answers.advancedSettings,
+    },
+    {
+      type: "confirm",
+      name: "advancedSettings",
+      message: "Configure advanced settings?",
+      default: false,
+      description: "Custom endpoints, organization ID, etc.",
     },
     {
       type: "input",
@@ -365,7 +332,7 @@ export async function runModelConfiguration() {
     model: answers.model,
     modelType: "chat", // Always use chat mode for language interaction
     temperature: answers.temperature || currentConfig.temperature || 0.7,
-    maxTokens: answers.maxTokens || currentConfig.maxTokens || 2000,
+    maxTokens: 4000, // Fixed to allow longer AI responses
     stream:
       answers.stream !== undefined
         ? answers.stream
@@ -402,8 +369,8 @@ export async function runModelConfiguration() {
     console.log(`  Provider: ${config.provider}`);
     console.log(`  Model: ${config.model} (language interaction)`);
     console.log(`  Temperature: ${config.temperature}`);
-    console.log(`  Max Tokens: ${config.maxTokens}`);
     console.log(`  Streaming: ${config.stream ? "Enabled" : "Disabled"}`);
+    console.log(`  Max Tokens: 4000 (fixed for longer AI responses)`);
 
     console.log("\nYou can now start using NatureCode:");
     console.log("  naturecode start     - Start interactive session");

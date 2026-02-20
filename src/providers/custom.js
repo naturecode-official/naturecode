@@ -97,9 +97,8 @@ export class CustomProvider extends AIProvider {
     const baseUrl = config.baseUrl;
     const apiVersion = config.apiVersion || "2024-01-01";
 
-    // 根据模型类型确定端点
-    const endpoint =
-      config.modelType === "chat" ? "/chat/completions" : "/completions";
+    // 只使用聊天端点（language interaction only）
+    const endpoint = "/chat/completions";
 
     return `${baseUrl}${endpoint}`;
   }
@@ -137,20 +136,8 @@ export class CustomProvider extends AIProvider {
       stream: options.stream || config.stream || false,
     };
 
-    // 根据模型类型调整请求格式
-    if (config.modelType === "chat") {
-      // 聊天格式已经设置
-    } else if (config.modelType === "code") {
-      body.messages[0].role = "developer";
-    } else if (config.modelType === "vision") {
-      // 视觉模型可能需要不同的格式
-      body.messages[0].content = [
-        {
-          type: "text",
-          text: prompt,
-        },
-      ];
-    }
+    // 只使用聊天格式（language interaction only）
+    // 聊天格式已经设置，无需调整
 
     return body;
   }

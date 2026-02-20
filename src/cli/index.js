@@ -36,8 +36,8 @@ program
   });
 
 program
-  .command("start")
-  .description("Start AI session (will prompt for configuration if needed)")
+  .command("check")
+  .description("Check AI configuration status")
   .action(async () => {
     try {
       const config = configManager.load();
@@ -54,8 +54,8 @@ program
         );
         console.log(
           "  2. Then run " +
-            chalk.green("naturecode start") +
-            " again to begin",
+            chalk.green("naturecode") +
+            " to start AI conversation",
         );
         console.log("");
         console.log(
@@ -63,37 +63,55 @@ program
             "Note: All advanced features are accessed through AI conversation.",
           ),
         );
-        process.exit(1);
+        return;
       }
 
-      // 如果有配置，显示信息并提示用户通过AI对话使用
+      // 显示配置信息
       console.log(chalk.green("✓ AI model configured:"));
-      console.log(`  Provider: ${chalk.cyan(config.provider)}`);
-      console.log(`  Model: ${chalk.cyan(config.model)}`);
+      console.log(`  Provider: ${config.provider}`);
+      console.log(`  Model: ${config.model}`);
+      console.log(`  Temperature: ${config.temperature || 0.7}`);
+      console.log(
+        `  Streaming: ${config.stream !== false ? "Enabled" : "Disabled"}`,
+      );
+      console.log(`  Max Tokens: 4000 (fixed for longer AI responses)`);
       console.log("");
       console.log(chalk.bold("To use NatureCode:"));
-      console.log("  1. The AI will handle all complex operations");
-      console.log("  2. Simply talk to the AI naturally");
-      console.log("  3. All features are accessible through conversation");
+      console.log(
+        "  1. Run " + chalk.green("naturecode") + " to start AI conversation",
+      );
+      console.log("  2. The AI will handle all complex operations");
+      console.log("  3. Simply talk to the AI naturally");
+      console.log("  4. All features are accessible through conversation");
       console.log("");
       console.log(
-        chalk.italic("NatureCode is now ready for AI-powered assistance!"),
+        chalk.green("NatureCode is now ready for AI-powered assistance!"),
       );
     } catch (error) {
-      console.error(chalk.red("Error:"), error.message);
-      console.log(chalk.yellow('Run "naturecode model" to configure first.'));
-      process.exit(1);
+      exitWithError(error, "Check");
     }
   });
 
 program
   .command("config")
-  .description("Show current configuration")
+  .description("Show current configuration (API keys hidden)")
   .action(() => {
     try {
       const config = configManager.load();
       console.log("Current Configuration:");
-      console.log(JSON.stringify(config, null, 2));
+
+      // Create a safe copy of config with hidden API keys
+      const safeConfig = { ...config };
+
+      // Hide sensitive information
+      if (safeConfig.apiKey) {
+        safeConfig.apiKey = "******** (hidden for security)";
+      }
+      if (safeConfig.secretKey) {
+        safeConfig.secretKey = "******** (hidden for security)";
+      }
+
+      console.log(JSON.stringify(safeConfig, null, 2));
     } catch (error) {
       console.error("Error: Failed to load configuration:", error.message);
       console.log('Run "naturecode model" to configure first.');
@@ -343,8 +361,11 @@ function performNamedDeletion(
       );
       console.log(
         "  2. Run " +
-          chalk.green('"naturecode start"') +
-          " to check configuration and begin",
+          chalk.green('"naturecode check"') +
+          " to verify configuration",
+      );
+      console.log(
+        "  3. Run " + chalk.green('"naturecode"') + " to start AI conversation",
       );
     }
   } else {
@@ -470,8 +491,11 @@ function performAllDeletion(CONFIG_DIR, CONFIG_FILE) {
     );
     console.log(
       "  2. Run " +
-        chalk.green('"naturecode start"') +
-        " to check configuration and begin",
+        chalk.green('"naturecode check"') +
+        " to verify configuration",
+    );
+    console.log(
+      "  3. Run " + chalk.green('"naturecode"') + " to start AI conversation",
     );
   } else {
     console.log(chalk.yellow("\nNo model configurations found to delete."));
@@ -520,86 +544,28 @@ program
 // Main program logic
 const args = process.argv.slice(2);
 
-if (args.length === 0) {
-  // Show help information for no arguments (like naturecode --help)
-  console.log(chalk.cyan(getWelcomeArt()));
-  console.log("");
-  console.log(
-    chalk.bold("Usage:") + " " + chalk.green("naturecode [command] [options]"),
-  );
-  console.log("");
-  console.log(chalk.bold("Commands:"));
-  console.log(
-    "  " +
-      chalk.green("model") +
-      "                    " +
-      chalk.white("Configure AI model and API settings"),
-  );
-  console.log(
-    "  " +
-      chalk.green("start") +
-      "                    " +
-      chalk.white("Start AI session (check configuration)"),
-  );
-  console.log(
-    "  " +
-      chalk.green("config") +
-      "                   " +
-      chalk.white("Show current configuration"),
-  );
-  console.log(
-    "  " +
-      chalk.green("delmodel [name]") +
-      "          " +
-      chalk.white("Delete model configuration"),
-  );
-  console.log("");
-  console.log(chalk.bold("Options:"));
-  console.log(
-    "  " +
-      chalk.yellow("-v, --version") +
-      "            " +
-      chalk.white("Output the version number"),
-  );
-  console.log(
-    "  " +
-      chalk.yellow("-h, --help") +
-      "               " +
-      chalk.white("Display help for command"),
-  );
-  console.log("");
-  console.log(chalk.bold("Examples:"));
-  console.log(
-    "  " +
-      chalk.cyan("naturecode model") +
-      "         " +
-      chalk.white("Configure AI settings"),
-  );
-  console.log(
-    "  " +
-      chalk.cyan("naturecode start") +
-      "         " +
-      chalk.white("Start AI session (check config)"),
-  );
-  console.log(
-    "  " +
-      chalk.cyan("naturecode config") +
-      "        " +
-      chalk.white("Show current configuration"),
-  );
-  console.log(
-    "  " +
-      chalk.cyan("naturecode delmodel all") +
-      "  " +
-      chalk.white("Delete all model configurations"),
-  );
-  console.log("");
-  console.log(
-    chalk.italic(
-      "Note: All advanced features are accessed through AI conversation.",
-    ),
-  );
-} else {
-  // Parse command line arguments
+// Check for help or version flags
+const hasHelpFlag = args.includes("-h") || args.includes("--help");
+const hasVersionFlag = args.includes("-v") || args.includes("--version");
+
+if (hasHelpFlag || hasVersionFlag || args.length > 0) {
+  // Parse command line arguments if flags or commands are provided
   program.parse();
+} else {
+  // No arguments provided - start interactive mode by default
+  console.log(chalk.cyan("Starting NatureCode AI Assistant..."));
+  console.log("");
+
+  // Import and run the start command
+  import("./commands/start.js")
+    .then((module) => {
+      module.startInteractiveSession();
+    })
+    .catch((error) => {
+      console.error(
+        chalk.red("Error starting interactive mode:"),
+        error.message,
+      );
+      process.exit(1);
+    });
 }

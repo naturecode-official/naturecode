@@ -29,8 +29,8 @@ export class N1NProvider extends OpenAIProvider {
 
   _getApiUrl(config) {
     // n1n.ai使用固定的base URL
-    const endpoint =
-      config.modelType === "chat" ? "/chat/completions" : "/completions";
+    // 只使用聊天端点（language interaction only）
+    const endpoint = "/chat/completions";
     return `${this.baseUrl}${endpoint}`;
   }
 

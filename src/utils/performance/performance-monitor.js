@@ -61,7 +61,7 @@ export class PerformanceMonitor {
       this.collectSystemMetrics();
     }, this.config.samplingInterval);
 
-    console.log("Performance monitoring started");
+    // Performance monitoring started silently
   }
 
   stopMonitoring() {
@@ -75,7 +75,7 @@ export class PerformanceMonitor {
     }
 
     this.monitoring = false;
-    console.log("Performance monitoring stopped");
+    // Performance monitoring stopped silently
   }
 
   collectSystemMetrics() {
