@@ -507,59 +507,33 @@ async function startInteractiveMode() {
             console.log("  delmodel all          - Delete all models");
             console.log("  delmodel ollama       - Delete ollama model");
             console.log(
-              "  delmodel all --force  - Delete all without confirmation",
+              "  delmodel deepseek-chat - Delete deepseek-chat model",
             );
-            rl.prompt();
-            return;
+            console.log(
+              "  delmodel openai-gpt-5-mini - Delete openai-gpt-5-mini model",
+            );
+            break;
           }
 
-          const modelName = args[0];
-          const forceFlag = args.includes("--force");
-
           try {
-            if (modelName.toLowerCase() === "all") {
-              // Delete all models
-              console.log(
-                "\nWARNING: This will delete ALL model configurations.",
-              );
-
-              if (!forceFlag) {
-                console.log("\nTo confirm deletion, please:");
-                console.log("1. Exit interactive mode (type 'exit')");
-                console.log("2. Run: naturecode delmodel all");
-                console.log("3. Or use: naturecode delmodel all --force");
-                rl.prompt();
-                return;
-              } else {
-                // Force delete in interactive mode
-                console.log("\nDeleting all models (force mode)...");
-                deleteAllModels(true);
-                console.log("All models deleted successfully.");
-                rl.prompt();
-                return;
-              }
-            } else {
-              // Delete single model
-              console.log(`\nDeleting model '${modelName}'...`);
-              try {
-                deleteModelByName(modelName, forceFlag, false, true);
-                console.log(`Model '${modelName}' deleted successfully.`);
-              } catch (error) {
-                console.error(`\nError: ${error.message}`);
-                // 在交互式模式中不退出进程，只显示错误
-              }
-              rl.prompt();
-              return;
+            const result = deleteModelByName(args.join(" "), false);
+            if (result) {
+              console.log(`\n${result}`);
             }
           } catch (error) {
             console.error(`\nError: ${error.message}`);
-            rl.prompt();
-            return;
           }
+          break;
+
+        case "help":
+          console.log(getCommandPrompt());
+          break;
 
         default:
           console.log(`\nUnknown command: ${command}`);
-          console.log("Available commands: model, start, config, delmodel");
+          console.log(
+            "Available commands: model, start, config, delmodel, help, exit",
+          );
       }
     } catch (error) {
       console.error(`\nError: ${error.message}`);
