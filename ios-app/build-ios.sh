@@ -7,7 +7,7 @@ set -e
 
 echo "========================================"
 echo "NatureCode iOS 构建工具"
-echo "版本: 2.0.0"
+echo "版本: 2.0.1"
 echo "========================================"
 
 # 检查是否在项目根目录
@@ -88,7 +88,7 @@ create_xcode_project() {
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>2.0.0</string>
+    <string>2.0.1</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>LSRequiresIPhoneOS</key>

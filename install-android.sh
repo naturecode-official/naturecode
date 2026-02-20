@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # NatureCode Android Installation Script
-# Version: 2.0.0
+# Version: 2.0.1
 # For Termux on Android
 
 set -e
 
 echo "========================================"
 echo "NatureCode Android Installation"
-echo "Version: 2.0.0"
+echo "Version: 2.0.1"
 echo "========================================"
 
 # Colors for output
