@@ -373,6 +373,10 @@ async function handleQuickFileCommands(input, provider) {
       const content = await provider.readFile(filePath);
       return `${filePath}:\n\`\`\`\n${content}\n\`\`\``;
     } catch (error) {
+      // Check if it's a version number or other false positive
+      if (/^\d+\.\d+/.test(filePath) || filePath.length < 3) {
+        return `"${filePath}" doesn't appear to be a valid file path. Please specify a filename with extension.`;
+      }
       return `Unable to read "${filePath}": ${error.message}`;
     }
   }

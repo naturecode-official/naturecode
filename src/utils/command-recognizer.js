@@ -221,7 +221,73 @@ export class CommandRecognizer {
       path = path.replace(cleanup.pattern, cleanup.replacement);
     }
 
-    return path.trim() || null;
+    path = path.trim();
+
+    // Validate that this looks like a real file path
+    // Reject common false positives like version numbers, single words, etc.
+    if (!this._isValidFilePath(path)) {
+      return null;
+    }
+
+    return path || null;
+  }
+
+  // Check if a string looks like a valid file path
+  _isValidFilePath(path) {
+    if (!path || path.length < 2) {
+      return false;
+    }
+
+    // Common false positives to reject
+    const falsePositives = [
+      /^\d+\.\d+$/, // Version numbers like "1.0", "2.5"
+      /^v?\d+\.\d+\.\d+$/, // Version numbers like "v1.0.0"
+      /^[a-z]+$/i, // Single words without extensions
+      /^\d+$/, // Just numbers
+      /^[a-z]+\d+$/i, // Word followed by number
+    ];
+
+    for (const pattern of falsePositives) {
+      if (pattern.test(path)) {
+        return false;
+      }
+    }
+
+    // Should contain at least one dot (for extension) or slash (for path)
+    // or be a common file/directory name
+    const validPatterns = [
+      /\.[a-z0-9]+$/i, // Has file extension
+      /[\/\\]/, // Contains path separator
+      /^[a-z0-9_-]+\.[a-z0-9]+$/i, // Simple filename with extension
+      /^[a-z0-9_-]+\/[a-z0-9_-]+/i, // Simple path
+    ];
+
+    for (const pattern of validPatterns) {
+      if (pattern.test(path)) {
+        return true;
+      }
+    }
+
+    // Check against common file/directory names
+    const commonFiles = [
+      "package.json",
+      "README.md",
+      "index.html",
+      "main.js",
+      "app.py",
+      "src",
+      "lib",
+      "bin",
+      "dist",
+      "build",
+      "node_modules",
+    ];
+
+    if (commonFiles.includes(path.toLowerCase())) {
+      return true;
+    }
+
+    return false;
   }
 
   // Suggest corrections for misrecognized commands
