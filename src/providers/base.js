@@ -80,11 +80,31 @@ export class AIProvider {
     }
 
     try {
+      // Check if file exists to show diff
+      let oldContent = "";
+      try {
+        oldContent = await this.readFile(filePath);
+      } catch (error) {
+        // File doesn't exist, will be created
+      }
+
       const result = await this.fileSystem.writeFile(
         filePath,
         content,
         options,
       );
+
+      // Display code diff if in interactive mode
+      if (process.env.NODE_ENV !== "test" && oldContent !== "") {
+        const { formatCodeDiff } =
+          await import("../../utils/code-diff-formatter.js");
+        console.log(formatCodeDiff(filePath, oldContent, content));
+      } else if (process.env.NODE_ENV !== "test") {
+        // New file
+        const { formatMessage } =
+          await import("../../utils/code-diff-formatter.js");
+        console.log(formatMessage(`Created new file: ${filePath}`, "success"));
+      }
 
       // Update context
       this.fileContext.recentFiles.unshift({

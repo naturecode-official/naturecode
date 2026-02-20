@@ -21,6 +21,12 @@ import {
   showWelcome,
   showHelp,
 } from "../../utils/formatter.js";
+import {
+  formatCodeDiff,
+  formatUserInput,
+  formatCommandResult,
+  formatMessage,
+} from "../../utils/code-diff-formatter.js";
 import { formatFileList } from "../../utils/filesystem.js";
 import { handleError } from "../../utils/error-handler.js";
 
@@ -571,6 +577,15 @@ export async function startInteractiveSession(options = {}) {
     ),
   );
 
+  // 自动添加用户启动消息
+  console.log(chalk.blue("👤 用户: 搞定agent.md"));
+
+  // 自动分析这个用户消息
+  agentManager.analyzeUserInput(
+    "搞定agent.md",
+    "AGENT.md系统已就绪，可以开始记录项目需求和工作进度。",
+  );
+
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -593,8 +608,29 @@ export async function startInteractiveSession(options = {}) {
       return;
     }
 
+    // Display user input with ┃ prefix
+    console.log(formatUserInput(input));
+
     if (input.toLowerCase() === "exit" || input.toLowerCase() === "quit") {
-      console.log("\nGoodbye!");
+      // 添加会话总结
+      console.log("\n" + chalk.cyan("=== 会话总结 ==="));
+
+      const agentContext = agentManager.getContextSummary();
+      console.log(chalk.green(`✓ 本次会话完成:`));
+      console.log(`  - 需求记录: ${agentContext.requirements.length} 个`);
+      console.log(`  - 完成任务: ${agentContext.completed.length} 个`);
+      console.log(`  - 待办事项: ${agentContext.todos.length} 个`);
+      console.log(`  - 总体进度: ${agentContext.progress}%`);
+
+      if (agentContext.todos.length > 0) {
+        console.log(chalk.yellow("\n📋 剩余待办事项:"));
+        agentContext.todos.forEach((todo, index) => {
+          console.log(`  ${index + 1}. ${todo}`);
+        });
+      }
+
+      console.log(chalk.cyan("================\n"));
+      console.log("Goodbye!");
       rl.close();
       return;
     }
@@ -703,7 +739,7 @@ export async function startInteractiveSession(options = {}) {
         ) {
           const files = await provider.listFiles();
           const result = `Current directory: ${provider.getCurrentDirectory().relative}\n\n${formatFileList(files)}`;
-          console.log("\n" + result);
+          console.log(formatCommandResult(result));
           conversationHistory.push({ role: "assistant", content: result });
           updatePrompt();
           return;
@@ -716,7 +752,7 @@ export async function startInteractiveSession(options = {}) {
         ) {
           const dirInfo = provider.getCurrentDirectory();
           const result = `Current directory: ${dirInfo.relative}\nAbsolute path: ${dirInfo.absolute}`;
-          console.log("\n" + result);
+          console.log(formatCommandResult(result));
           conversationHistory.push({ role: "assistant", content: result });
           updatePrompt();
           return;
@@ -863,7 +899,9 @@ ${input}
         // Simple command mode - just get one response
         let aiResponse = "";
         if (config.stream) {
-          process.stdout.write("\nAssistant: ");
+          // Use user-configured AI name as prefix
+          const aiName = config.aiName || "AI";
+          process.stdout.write(`\n${aiName}: `);
           for await (const chunk of provider.streamGenerate(
             enhancedPrompt,
             options,
@@ -874,6 +912,7 @@ ${input}
           process.stdout.write("\n");
         } else {
           const response = await provider.generate(enhancedPrompt, options);
+          // AI responses are displayed normally (no ┃ prefix)
           formatResponse(response);
           aiResponse = response;
         }
@@ -888,7 +927,9 @@ ${input}
           // Get AI response
           let aiResponse = "";
           if (config.stream) {
-            process.stdout.write(`\nAssistant (Step ${iteration}): `);
+            // Use user-configured AI name as prefix
+            const aiName = config.aiName || "AI";
+            process.stdout.write(`\n${aiName}: `);
             for await (const chunk of provider.streamGenerate(
               iteration === 1 ? enhancedPrompt : lastResponse,
               options,
@@ -902,6 +943,7 @@ ${input}
               iteration === 1 ? enhancedPrompt : lastResponse,
               options,
             );
+            // AI responses are displayed normally (no ┃ prefix)
             formatResponse(response);
             aiResponse = response;
           }

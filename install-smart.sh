@@ -373,7 +373,7 @@ install_pro() {
     
     # Verify installation
     if command -v naturecode &> /dev/null; then
-        INSTALLED_VERSION=$(naturecode --version 2>/dev/null | head -1 | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+' || echo "unknown")
+        INSTALLED_VERSION=$(naturecode --version 2>/dev/null | head -1 | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+' || echo "unknown")
         if [ "$INSTALLED_VERSION" = "$TARGET_VERSION" ]; then
             log_success "Successfully installed NatureCode v$INSTALLED_VERSION"
         else

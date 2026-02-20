@@ -5,7 +5,7 @@ import fs from "fs";
 import path from "path";
 
 export class AgentMdManager {
-  constructor (projectDir = process.cwd()) {
+  constructor(projectDir = process.cwd()) {
     this.projectDir = projectDir;
     this.agentFilePath = path.join(projectDir, "AGENT.md");
     this.conversationHistory = [];
@@ -21,7 +21,7 @@ export class AgentMdManager {
   /**
    * Initialize or load existing AGENT.md
    */
-  initialize () {
+  initialize() {
     try {
       if (fs.existsSync(this.agentFilePath)) {
         this._loadFromFile();
@@ -39,7 +39,7 @@ export class AgentMdManager {
   /**
    * Create a new AGENT.md file with template
    */
-  _createNewAgentFile () {
+  _createNewAgentFile() {
     const template = `# AGENT.md - Project Development Log
 
 ## Project Overview
@@ -79,7 +79,7 @@ export class AgentMdManager {
   /**
    * Load existing AGENT.md content
    */
-  _loadFromFile () {
+  _loadFromFile() {
     const content = fs.readFileSync(this.agentFilePath, "utf8");
 
     // Parse sections
@@ -109,7 +109,7 @@ export class AgentMdManager {
   /**
    * Parse AGENT.md sections
    */
-  _parseSections (content) {
+  _parseSections(content) {
     const sections = {};
     const lines = content.split("\n");
     let currentSection = null;
@@ -138,7 +138,7 @@ export class AgentMdManager {
   /**
    * Parse list items from section content
    */
-  _parseList (content) {
+  _parseList(content) {
     const items = [];
     const lines = content.split("\n");
 
@@ -155,7 +155,7 @@ export class AgentMdManager {
   /**
    * Parse conversation history from Recent Conversation section
    */
-  _parseConversationHistory (content) {
+  _parseConversationHistory(content) {
     this.conversationHistory = [];
 
     if (!content || content.includes("*No recent conversation*")) {
@@ -203,7 +203,7 @@ export class AgentMdManager {
   /**
    * Parse timestamp from string
    */
-  _parseTimestamp (timeStr) {
+  _parseTimestamp(timeStr) {
     try {
       // Handle different time string formats
       if (timeStr === "Just now" || timeStr === "Recent") {
@@ -284,7 +284,7 @@ export class AgentMdManager {
   /**
    * Get month number from month string
    */
-  _getMonthNumber (monthStr) {
+  _getMonthNumber(monthStr) {
     const months = {
       jan: 0,
       feb: 1,
@@ -305,7 +305,7 @@ export class AgentMdManager {
   /**
    * Analyze user input and extract requirements
    */
-  async analyzeUserInput (userInput, aiResponse = "") {
+  async analyzeUserInput(userInput, aiResponse = "") {
     // Detect user language
     this._detectLanguage(userInput);
 
@@ -353,7 +353,7 @@ export class AgentMdManager {
   /**
    * Detect user language from input
    */
-  _detectLanguage (userInput) {
+  _detectLanguage(userInput) {
     // Simple language detection based on Chinese characters
     const chineseCharPattern = /[\u4e00-\u9fff]/;
     if (chineseCharPattern.test(userInput)) {
@@ -366,7 +366,7 @@ export class AgentMdManager {
   /**
    * Check if should auto-create project based on user input
    */
-  _shouldAutoCreateProject (userInput) {
+  _shouldAutoCreateProject(userInput) {
     // 检查用户输入是否包含创建项目的关键词
     const createKeywords = [
       "创建",
@@ -423,7 +423,7 @@ export class AgentMdManager {
   /**
    * Extract requirements from user input
    */
-  _extractRequirements (userInput) {
+  _extractRequirements(userInput) {
     const requirements = [];
     const lowerInput = userInput.toLowerCase();
 
@@ -456,7 +456,7 @@ export class AgentMdManager {
   /**
    * Check if input is a simple command that should be executed immediately
    */
-  isSimpleCommand (input) {
+  isSimpleCommand(input) {
     const simpleCommands = [
       "list files",
       "ls",
@@ -485,7 +485,7 @@ export class AgentMdManager {
   /**
    * Generate TODOs based on requirements and context
    */
-  generateTodos (context = "") {
+  generateTodos(context = "") {
     const newTodos = [];
 
     // Check default workflows first
@@ -527,7 +527,7 @@ export class AgentMdManager {
   /**
    * Mark a TODO as completed
    */
-  completeTodo (todoIndex) {
+  completeTodo(todoIndex) {
     if (todoIndex >= 0 && todoIndex < this.todos.length) {
       const completed = this.todos.splice(todoIndex, 1)[0];
       this.completedItems.push(completed);
@@ -539,7 +539,7 @@ export class AgentMdManager {
   /**
    * Add future plan
    */
-  addFuturePlan (plan) {
+  addFuturePlan(plan) {
     if (!this.futurePlans.includes(plan)) {
       this.futurePlans.push(plan);
     }
@@ -548,14 +548,14 @@ export class AgentMdManager {
   /**
    * Check if all TODOs are completed
    */
-  areAllTodosCompleted () {
+  areAllTodosCompleted() {
     return this.todos.length === 0;
   }
 
   /**
    * Save AGENT.md with current state
    */
-  save () {
+  save() {
     try {
       const now = new Date();
       const progress = this._calculateProgress();
@@ -616,13 +616,14 @@ ${this._formatRecentConversation()}
   /**
    * Create backup of current AGENT.md
    */
-  _createBackup () {
+  _createBackup() {
     try {
-      if (fs.existsSync(this.agentFilePath)) {
-        const backupPath = `${this.agentFilePath}.backup-${Date.now()}`;
-        const content = fs.readFileSync(this.agentFilePath, "utf8");
-        fs.writeFileSync(backupPath, content, "utf8");
-      }
+      // DISABLE BACKUP FILES - User requested no backup files
+      // if (fs.existsSync(this.agentFilePath)) {
+      //   const backupPath = `${this.agentFilePath}.backup-${Date.now()}`;
+      //   const content = fs.readFileSync(this.agentFilePath, "utf8");
+      //   fs.writeFileSync(backupPath, content, "utf8");
+      // }
     } catch (error) {
       // Silently fail on backup - it's optional
     }
@@ -631,7 +632,7 @@ ${this._formatRecentConversation()}
   /**
    * Format list items for markdown
    */
-  _formatList (items) {
+  _formatList(items) {
     if (items.length === 0) {
       return "*No items*";
     }
@@ -641,7 +642,7 @@ ${this._formatRecentConversation()}
   /**
    * Format timestamp
    */
-  _formatTimestamp (date) {
+  _formatTimestamp(date) {
     return date.toLocaleString("en-US", {
       year: "numeric",
       month: "short",
@@ -655,7 +656,7 @@ ${this._formatRecentConversation()}
   /**
    * Calculate progress percentage
    */
-  _calculateProgress () {
+  _calculateProgress() {
     const total = this.requirements.length + this.todos.length;
     if (total === 0) return 0;
 
@@ -666,7 +667,7 @@ ${this._formatRecentConversation()}
   /**
    * Format recent conversation
    */
-  _formatRecentConversation () {
+  _formatRecentConversation() {
     const recent = this.conversationHistory.slice(-5); // Last 5 exchanges
     if (recent.length === 0) return "*No recent conversation*";
 
@@ -686,7 +687,7 @@ ${this._formatRecentConversation()}
   /**
    * Format timestamp with date and time
    */
-  _formatTimeAgo (timestamp) {
+  _formatTimeAgo(timestamp) {
     if (!timestamp) return "Just now";
 
     try {
@@ -719,7 +720,7 @@ ${this._formatRecentConversation()}
   /**
    * Get summary for AI context
    */
-  getContextSummary () {
+  getContextSummary() {
     return {
       requirements: this.requirements,
       completed: this.completedItems,
@@ -734,7 +735,7 @@ ${this._formatRecentConversation()}
   /**
    * Clear context when needed (but save to AGENT.md first)
    */
-  clearContext () {
+  clearContext() {
     // Ensure everything is saved
     this.save();
 
@@ -747,7 +748,7 @@ ${this._formatRecentConversation()}
   /**
    * Clean up old backup files
    */
-  cleanupOldBackups (maxBackups = 3) {
+  cleanupOldBackups(maxBackups = 3) {
     try {
       const dir = path.dirname(this.agentFilePath);
       const baseName = path.basename(this.agentFilePath);
@@ -786,7 +787,7 @@ ${this._formatRecentConversation()}
   /**
    * Execute project creation based on requirements
    */
-  async executeProjectCreation () {
+  async executeProjectCreation() {
     try {
       console.log("执行项目创建...");
 
@@ -826,7 +827,7 @@ ${this._formatRecentConversation()}
   /**
    * 根据需求创建项目文件
    */
-  async _createProjectFiles (requirement) {
+  async _createProjectFiles(requirement) {
     console.log(`处理需求: "${requirement}"`);
 
     // 检测项目类型并创建相应文件
@@ -844,7 +845,7 @@ ${this._formatRecentConversation()}
   /**
    * 检测是否为游戏项目
    */
-  _isGameProject (requirement) {
+  _isGameProject(requirement) {
     const gameKeywords = [
       "游戏",
       "game",
@@ -880,7 +881,7 @@ ${this._formatRecentConversation()}
   /**
    * 创建游戏项目
    */
-  async _createGameProject (requirement) {
+  async _createGameProject(requirement) {
     console.log("检测到游戏项目需求，创建游戏文件...");
 
     try {
@@ -926,7 +927,7 @@ ${this._formatRecentConversation()}
   /**
    * 生成游戏代码
    */
-  _generateGameCode (requirement) {
+  _generateGameCode(requirement) {
     // 根据需求生成不同的游戏代码
     if (
       requirement.includes("贪吃蛇") ||
@@ -1148,7 +1149,7 @@ if __name__ == "__main__":
   /**
    * 生成游戏README
    */
-  _generateGameReadme (requirement) {
+  _generateGameReadme(requirement) {
     return `# 游戏项目
 
 ## 项目描述
@@ -1193,7 +1194,7 @@ MIT License`;
   /**
    * 检测是否为Web项目
    */
-  _isWebProject (requirement) {
+  _isWebProject(requirement) {
     const webKeywords = [
       "网站",
       "web",
@@ -1225,7 +1226,7 @@ MIT License`;
   /**
    * 创建Web项目
    */
-  _createWebProject (requirement) {
+  _createWebProject(requirement) {
     // 简化实现，返回成功但需要手动创建
     return {
       success: true,
@@ -1239,7 +1240,7 @@ MIT License`;
   /**
    * 检测是否为CLI项目
    */
-  _isCLIProject (requirement) {
+  _isCLIProject(requirement) {
     const cliKeywords = [
       "命令行",
       "cli",
@@ -1263,7 +1264,7 @@ MIT License`;
   /**
    * 创建CLI项目
    */
-  async _createCLIProject (requirement) {
+  async _createCLIProject(requirement) {
     try {
       const fs = await import("fs");
       const path = await import("path");
@@ -1335,7 +1336,7 @@ python cli_tool.py --help
   /**
    * 创建通用项目
    */
-  async _createGenericProject (requirement) {
+  async _createGenericProject(requirement) {
     try {
       const fs = await import("fs");
       const path = await import("path");
@@ -1387,7 +1388,7 @@ ${requirement}
   /**
    * 标记需求为已完成
    */
-  _markRequirementAsCompleted (requirement) {
+  _markRequirementAsCompleted(requirement) {
     // 从requirements中移除
     const index = this.requirements.indexOf(requirement);
     if (index !== -1) {
@@ -1411,6 +1412,6 @@ ${requirement}
 /**
  * Create an AGENT.md manager instance
  */
-export function createAgentMdManager (projectDir = process.cwd()) {
+export function createAgentMdManager(projectDir = process.cwd()) {
   return new AgentMdManager(projectDir);
 }

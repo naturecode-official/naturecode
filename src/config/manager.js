@@ -14,6 +14,7 @@ const DEFAULT_CONFIG = {
   temperature: 0.7,
   maxTokens: 2000, // Optimal for AI responses with tools
   stream: true,
+  aiName: "AI", // Default AI name for responses
   // fallbackModel 由 autoConfigureDefaults 设置
 };
 

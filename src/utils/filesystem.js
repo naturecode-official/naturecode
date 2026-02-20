@@ -221,18 +221,15 @@ export class FileSystem {
   // Write file content with automatic backup
   async writeFile(filePath, content, options = {}) {
     const resolvedPath = this.validatePath(filePath);
-    const backupPath =
-      options.backup !== false ? `${resolvedPath}.backup-${Date.now()}` : null;
+
+    // DISABLE BACKUP FILES - User requested no backup files
+    const backupPath = null; // Always null to prevent backup file creation
 
     try {
-      // Backup existing file if it exists
-      if (backupPath) {
-        try {
-          await fs.access(resolvedPath);
-          await fs.copyFile(resolvedPath, backupPath);
-        } catch (error) {
-          // File doesn't exist, no backup needed
-        }
+      // Show code diff before writing (if file exists and we're in interactive mode)
+      if (process.env.NODE_ENV !== "test" && fs.existsSync(resolvedPath)) {
+        const oldContent = await fs.readFile(resolvedPath, "utf-8");
+        // We'll display the diff in the calling code, not here
       }
 
       // Ensure directory exists

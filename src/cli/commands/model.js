@@ -236,6 +236,14 @@ export async function runModelConfiguration() {
       },
     },
     {
+      type: "input",
+      name: "aiName",
+      message: "Enter AI assistant name (for display prefix):",
+      default: currentConfig.aiName || "AI",
+      description:
+        "This name will appear before AI responses (e.g., 'DeepSeek:', 'GPT:', etc.)",
+    },
+    {
       type: "confirm",
       name: "stream",
       message: "Enable streaming responses?",
