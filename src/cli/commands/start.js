@@ -685,6 +685,43 @@ export async function startInteractiveSession(options = {}) {
         return;
       }
 
+      // Check if it's a simple command that should bypass AGENT.md complexity
+      if (agentManager.isSimpleCommand(input)) {
+        // For simple commands, just execute them directly
+        console.log("\nExecuting simple command...");
+
+        // Handle simple commands directly
+        if (
+          input.toLowerCase().includes("list files") ||
+          input.toLowerCase().includes("ls") ||
+          input.toLowerCase().includes("dir") ||
+          input.toLowerCase().includes("show files")
+        ) {
+          const files = await provider.listFiles();
+          const result = `Current directory: ${provider.getCurrentDirectory().relative}\n\n${formatFileList(files)}`;
+          console.log("\n" + result);
+          conversationHistory.push({ role: "assistant", content: result });
+          updatePrompt();
+          return;
+        }
+
+        if (
+          input.toLowerCase().includes("pwd") ||
+          input.toLowerCase().includes("where am i") ||
+          input.toLowerCase().includes("current directory")
+        ) {
+          const dirInfo = provider.getCurrentDirectory();
+          const result = `Current directory: ${dirInfo.relative}\nAbsolute path: ${dirInfo.absolute}`;
+          console.log("\n" + result);
+          conversationHistory.push({ role: "assistant", content: result });
+          updatePrompt();
+          return;
+        }
+
+        // For other simple commands, let AI handle them but with simplified prompt
+        console.log("\nProcessing simple command...");
+      }
+
       // Check if it's a file system command
       const recognition = getCommandRecognition(input);
 
@@ -717,7 +754,33 @@ export async function startInteractiveSession(options = {}) {
       const agentContent = getAgentMdContent(agentManager);
 
       // 6. Enhance prompt with AGENT.md context and tools
-      const agentContextPrompt = `=== AGENT.md PRIORITY CONTEXT ===
+      // Check if this is a simple command that doesn't need full AGENT.md context
+      const isSimpleCmd = agentManager.isSimpleCommand(input);
+
+      const agentContextPrompt = isSimpleCmd
+        ? // Simplified prompt for simple commands
+          `=== SIMPLE COMMAND MODE ===
+You are helping with a simple command. Just execute it directly.
+
+Command: ${input}
+
+=== CURRENT DIRECTORY ===
+- Location: ${provider.getCurrentDirectory().relative}
+- Absolute: ${provider.getCurrentDirectory().absolute}
+
+=== INSTRUCTIONS ===
+1. Execute the command directly
+2. Provide clear, concise output
+3. No need for AGENT.md updates
+4. Use appropriate format for the command type
+
+=== RESPONSE FORMAT ===
+- For file listings: show formatted list
+- For directory info: show path details
+- For file reading: show content with syntax highlighting
+- For help: show available commands`
+        : // Full AGENT.md prompt for complex tasks
+          `=== AGENT.md PRIORITY CONTEXT ===
 IMPORTANT: Always check AGENT.md first for project context. This file tracks ongoing work.
 
 AGENT.md LOCATION: ${agentContent.filePath}
@@ -791,15 +854,14 @@ ${input}
       const maxIterations = 10; // Safety limit
       let lastResponse = "";
 
-      while (!executionComplete && iteration < maxIterations) {
-        iteration++;
-
-        // Get AI response
+      // For simple commands, skip the complex execution loop
+      if (isSimpleCmd) {
+        // Simple command mode - just get one response
         let aiResponse = "";
         if (config.stream) {
-          process.stdout.write(`\nAssistant (Step ${iteration}): `);
+          process.stdout.write("\nAssistant: ");
           for await (const chunk of provider.streamGenerate(
-            iteration === 1 ? enhancedPrompt : lastResponse,
+            enhancedPrompt,
             options,
           )) {
             process.stdout.write(chunk);
@@ -807,67 +869,101 @@ ${input}
           }
           process.stdout.write("\n");
         } else {
-          const response = await provider.generate(
-            iteration === 1 ? enhancedPrompt : lastResponse,
-            options,
-          );
+          const response = await provider.generate(enhancedPrompt, options);
           formatResponse(response);
           aiResponse = response;
         }
 
         conversationHistory.push({ role: "assistant", content: aiResponse });
-        lastResponse = aiResponse;
+        executionComplete = true;
+      } else {
+        // Complex task mode - use execution loop
+        while (!executionComplete && iteration < maxIterations) {
+          iteration++;
 
-        // Check for tool usage in response
-        const toolUsage = parseToolUsage(aiResponse);
+          // Get AI response
+          let aiResponse = "";
+          if (config.stream) {
+            process.stdout.write(`\nAssistant (Step ${iteration}): `);
+            for await (const chunk of provider.streamGenerate(
+              iteration === 1 ? enhancedPrompt : lastResponse,
+              options,
+            )) {
+              process.stdout.write(chunk);
+              aiResponse += chunk;
+            }
+            process.stdout.write("\n");
+          } else {
+            const response = await provider.generate(
+              iteration === 1 ? enhancedPrompt : lastResponse,
+              options,
+            );
+            formatResponse(response);
+            aiResponse = response;
+          }
 
-        if (toolUsage) {
-          // Execute tool
-          const toolResult = await executeToolOperation(toolManager, toolUsage);
+          conversationHistory.push({ role: "assistant", content: aiResponse });
+          lastResponse = aiResponse;
 
-          // Prepare next prompt with tool results
-          lastResponse = `Tool execution result: ${toolResult.summary}\n\n${aiResponse}\n\nWhat's the next step?`;
+          // Check for tool usage in response
+          const toolUsage = parseToolUsage(aiResponse);
 
-          // Add tool result to conversation
-          conversationHistory.push({
-            role: "system",
-            content: `Tool executed: ${toolUsage.tool} ${toolUsage.operation}. Result: ${toolResult.summary}`,
-          });
-        } else {
-          // Check if execution is complete
-          if (
-            aiResponse.toLowerCase().includes("completed") ||
-            aiResponse.toLowerCase().includes("done") ||
-            aiResponse.toLowerCase().includes("finished") ||
-            aiResponse.toLowerCase().includes("all steps complete")
-          ) {
-            executionComplete = true;
-            console.log("\n✓ Execution completed");
+          if (toolUsage) {
+            // Execute tool
+            const toolResult = await executeToolOperation(
+              toolManager,
+              toolUsage,
+            );
 
-            // Update AGENT.md with completion
-            agentContext.todos.forEach((todo, index) => {
-              if (
-                aiResponse
-                  .toLowerCase()
-                  .includes(todo.toLowerCase().substring(0, 20))
-              ) {
-                const completed = agentManager.completeTodo(index);
-                if (completed) {
-                  console.log(`Marked as completed: ${completed}`);
-                }
-              }
+            // Prepare next prompt with tool results
+            lastResponse = `Tool execution result: ${toolResult.summary}\n\n${aiResponse}\n\nWhat's the next step?`;
+
+            // Add tool result to conversation
+            conversationHistory.push({
+              role: "system",
+              content: `Tool executed: ${toolUsage.tool} ${toolUsage.operation}. Result: ${toolResult.summary}`,
             });
           } else {
-            // Ask for next step
-            lastResponse = `${aiResponse}\n\nPlease provide the next executable instruction. If done, say "Completed".`;
+            // Check if execution is complete
+            if (
+              aiResponse.toLowerCase().includes("completed") ||
+              aiResponse.toLowerCase().includes("done") ||
+              aiResponse.toLowerCase().includes("finished") ||
+              aiResponse.toLowerCase().includes("all steps complete") ||
+              aiResponse.toLowerCase().includes("here are the files") ||
+              aiResponse.toLowerCase().includes("current directory") ||
+              aiResponse.toLowerCase().includes("command executed")
+            ) {
+              executionComplete = true;
+              console.log("\n✓ Command executed");
+
+              // Update AGENT.md with completion for complex tasks only
+              if (!isSimpleCmd && agentContext.todos.length > 0) {
+                agentContext.todos.forEach((todo, index) => {
+                  if (
+                    aiResponse
+                      .toLowerCase()
+                      .includes(todo.toLowerCase().substring(0, 20))
+                  ) {
+                    const completed = agentManager.completeTodo(index);
+                    if (completed) {
+                      console.log(`Marked as completed: ${completed}`);
+                    }
+                  }
+                });
+              }
+            } else {
+              // Ask for next step
+              lastResponse = `${aiResponse}\n\nPlease provide the next executable instruction. If done, say "Completed".`;
+            }
           }
         }
-      }
 
-      if (iteration >= maxIterations) {
-        console.log(
-          "\n⚠️  Reached maximum iterations. Stopping execution loop.",
-        );
+        if (iteration >= maxIterations) {
+          console.log(
+            "\n⚠️  Reached maximum iterations. Stopping execution loop.",
+          );
+        }
       }
 
       const endTime = Date.now();

@@ -302,6 +302,35 @@ export class AgentMdManager {
   }
 
   /**
+   * Check if input is a simple command that should be executed immediately
+   */
+  isSimpleCommand(input) {
+    const simpleCommands = [
+      "list files",
+      "ls",
+      "dir",
+      "show files",
+      "what's here",
+      "pwd",
+      "where am i",
+      "current directory",
+      "cd ",
+      "change directory",
+      "read ",
+      "cat ",
+      "view ",
+      "show ",
+      "help",
+      "clear",
+      "exit",
+      "quit",
+    ];
+
+    const lowerInput = input.toLowerCase().trim();
+    return simpleCommands.some((cmd) => lowerInput.includes(cmd));
+  }
+
+  /**
    * Generate TODOs based on requirements and context
    */
   generateTodos(context = "") {
