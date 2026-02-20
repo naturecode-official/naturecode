@@ -71,7 +71,8 @@ export function showWelcome(config) {
       `Streaming: ${chalk.cyan(config.stream ? "Enabled" : "Disabled")}`,
   );
   console.log(
-    chalk.green("│ ") + `Max Tokens: ${chalk.cyan("4000 (long responses)")}`,
+    chalk.green("│ ") +
+      `Max Tokens: ${chalk.cyan("2000 (optimal with tools)")}`,
   );
   console.log(chalk.green("├" + "─".repeat(78)));
   console.log(

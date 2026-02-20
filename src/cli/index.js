@@ -36,6 +36,19 @@ program
   });
 
 program
+  .command("start")
+  .description("Start interactive AI conversation")
+  .action(async () => {
+    try {
+      // Import and run the start command
+      const { startInteractiveSession } = await import("./commands/start.js");
+      await startInteractiveSession();
+    } catch (error) {
+      exitWithError(error, "Start Command");
+    }
+  });
+
+program
   .command("check")
   .description("Check AI configuration status")
   .action(async () => {
@@ -74,7 +87,7 @@ program
       console.log(
         `  Streaming: ${config.stream !== false ? "Enabled" : "Disabled"}`,
       );
-      console.log(`  Max Tokens: 4000 (fixed for longer AI responses)`);
+      console.log(`  Max Tokens: 2000 (optimal with tools)`);
       console.log("");
       console.log(chalk.bold("To use NatureCode:"));
       console.log(

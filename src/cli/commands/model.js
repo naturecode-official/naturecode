@@ -370,7 +370,7 @@ export async function runModelConfiguration() {
     console.log(`  Model: ${config.model} (language interaction)`);
     console.log(`  Temperature: ${config.temperature}`);
     console.log(`  Streaming: ${config.stream ? "Enabled" : "Disabled"}`);
-    console.log(`  Max Tokens: 4000 (fixed for longer AI responses)`);
+    console.log(`  Max Tokens: 2000 (optimal with tools)`);
 
     console.log("\nYou can now start using NatureCode:");
     console.log("  naturecode start     - Start interactive session");
